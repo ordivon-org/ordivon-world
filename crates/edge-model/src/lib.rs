@@ -4,6 +4,35 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+#[derive(
+    Debug, Clone, Copy, Default, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
+#[serde(rename_all = "snake_case")]
+pub enum ProbeKind {
+    #[default]
+    Reachability,
+    Transfer,
+    ConnectionLifetime,
+}
+
+impl fmt::Display for ProbeKind {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Reachability => formatter.write_str("reachability"),
+            Self::Transfer => formatter.write_str("transfer"),
+            Self::ConnectionLifetime => formatter.write_str("connection_lifetime"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum ProbeTermination {
+    Completed,
+    DeadlineReached,
+    Failed,
+}
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[serde(rename_all = "snake_case")]
 pub enum ProbeProtocol {
@@ -65,6 +94,8 @@ pub enum FailureClass {
     TlsHandshake,
     QuicHandshake,
     Http,
+    Transfer,
+    ConnectionLifetime,
     Timeout,
     Tool,
     Unknown,
@@ -73,6 +104,12 @@ pub enum FailureClass {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ProbeResult {
     pub schema_version: u32,
+    #[serde(default)]
+    pub probe_kind: ProbeKind,
+    #[serde(default)]
+    pub collection_id: Option<String>,
+    #[serde(default)]
+    pub sample_index: Option<u32>,
     pub target: String,
     pub url: String,
     pub network: String,
@@ -84,10 +121,22 @@ pub struct ProbeResult {
     pub tls_ms: Option<f64>,
     pub ttfb_ms: Option<f64>,
     pub total_ms: Option<f64>,
+    #[serde(default)]
+    pub requested_duration_ms: Option<u64>,
+    #[serde(default)]
+    pub bytes_downloaded: Option<u64>,
+    #[serde(default)]
+    pub speed_download_bps: Option<f64>,
+    #[serde(default)]
+    pub connection_count: Option<u32>,
+    #[serde(default)]
+    pub http_version: Option<String>,
     pub http_status: Option<u16>,
     pub remote_ip: Option<String>,
     pub success: bool,
     pub failure_class: Option<FailureClass>,
+    #[serde(default)]
+    pub termination: Option<ProbeTermination>,
     pub tool_exit_code: Option<i32>,
     pub error: Option<String>,
 }
@@ -205,5 +254,33 @@ mod tests {
             target.validate(),
             Err(ValidationError::NonHttpsUrl("example".into()))
         );
+    }
+
+    #[test]
+    fn old_probe_result_defaults_to_reachability() {
+        let raw = r#"{
+          "schema_version":1,
+          "target":"example",
+          "url":"https://example.com/",
+          "network":"test",
+          "route":"direct-process",
+          "protocol":"http_tls",
+          "started_at":"2026-07-23T00:00:00Z",
+          "dns_ms":1.0,
+          "connect_ms":2.0,
+          "tls_ms":3.0,
+          "ttfb_ms":4.0,
+          "total_ms":5.0,
+          "http_status":200,
+          "remote_ip":null,
+          "success":true,
+          "failure_class":null,
+          "tool_exit_code":0,
+          "error":null
+        }"#;
+
+        let result: ProbeResult = serde_json::from_str(raw).expect("deserialize old result");
+        assert_eq!(result.probe_kind, ProbeKind::Reachability);
+        assert_eq!(result.bytes_downloaded, None);
     }
 }

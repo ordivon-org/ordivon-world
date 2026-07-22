@@ -2,38 +2,38 @@
 
 ## Implemented
 
-Phase 1 establishes a measurement-only foundation:
+The P0/P1 foundation currently provides:
 
 - Rust workspace with `edge-model` and `edge-probe`;
 - minimum domain objects for devices, edges, targets, transports, probe results, and route decisions;
-- TOML target registry validation;
-- HTTP/1.1 over TLS probes;
-- HTTP/3-only probes as the initial QUIC observation path;
-- phase timing extraction from `curl` JSON output;
-- stable NDJSON observations;
-- grouped JSON comparison summaries;
-- Markdown reports;
-- unit and command-runner tests that do not depend on the public network.
+- validated TOML registries for service targets, a bounded transfer target, and a QUIC control target;
+- HTTP/1.1 over TLS and HTTP/3-only over QUIC observations through the system `curl` data plane;
+- three explicit probe kinds: reachability, transfer, and connection lifetime;
+- repeated collection with collection identity, sample index, and start-to-start cadence;
+- DNS, connect, TLS, TTFB, completion, bytes, throughput, connection count, and HTTP-version fields;
+- stable NDJSON observations, grouped JSON summaries, and Markdown reports;
+- backward reading of the first observation schema;
+- tests that do not require public network access.
+
+## Measurement meaning
+
+`connection_lifetime` currently means one response-body connection remained active until the requested deadline while data continued to flow. It does not prove idle connection survival, application-session continuity, stream migration, or task recovery.
+
+A live result describes only the named process, network label, route label, and time window. `--no-env-proxy` disables application proxy environment variables but cannot prove that Windows, WSL, a VPN, a TUN device, the router, the ISP, or an upstream provider did not alter the packet path.
 
 ## Not implemented
 
+- seven completed days of evidence;
+- controlled home, school, hotspot, mobile, VPN, and WARP comparisons;
+- packet-loss and retransmission telemetry;
+- idle long-connection, network-migration, or application-session tests;
 - Edge A or Edge B;
 - sing-box, Xray-core, Hysteria2, or NaiveProxy adapters;
-- route selection or automatic failover;
-- node bootstrap, deployment, secret rotation, rollback, or backup;
-- GitHub ephemeral runners;
-- WARP or VPN lifecycle control;
-- packet-loss, retransmission, sustained-throughput, or long-connection tests;
-- continuous seven-day collection;
-- any custom transport or cryptographic primitive.
+- route selection, automatic failover, deployment, secrets, runners, backups, or custom transport work.
 
-## Current evidence boundary
+## Next evidence gate
 
-A live baseline produced from WSL describes only that process and time window. `--no-env-proxy` disables application proxy environment variables for `curl`, but cannot prove that Windows, WSL, a VPN, a TUN device, the router, the ISP, or an upstream provider did not alter the path.
-
-## Next admissible work
-
-1. Collect repeated baselines from named network conditions.
-2. Add sustained transfer and connection-lifetime probes.
-3. Compare direct-process, inherited-proxy, current VPN, and WARP only when those routes can be explicitly controlled and named.
-4. Create two experimental Edge nodes only after the measurement format is stable enough to compare them.
+1. Collect repeated named-network samples without relabeling uncontrolled paths.
+2. Compare reachability, transfer, and sustained-response lifetime under the same conditions.
+3. Add packet-loss/retransmission and network-transition probes only when their collection method is explicit.
+4. Create experimental Edge nodes only after the evidence format is stable enough to compare them fairly.

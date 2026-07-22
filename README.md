@@ -23,43 +23,65 @@ Desired state
 - **Ordivon Runtime** remains the local Agent task execution and recovery system.
 - **ordivon-web** remains the public website and release surface.
 
-## Phase 1: facts before infrastructure
+## Current phase: facts before infrastructure
 
-The first phase implements P0 and P1 only:
+P0 and P1 establish a measurement-only foundation:
 
-- a thin domain model;
-- a target registry;
-- reproducible HTTP/TLS and HTTP/3/QUIC probes using the system `curl` data plane;
-- NDJSON observations;
-- JSON comparison summaries;
-- Markdown reports;
-- a current WSL network baseline.
+- a thin domain model and validated target registries;
+- HTTP/TLS and HTTP/3/QUIC reachability observations;
+- repeated collection with a start-to-start cadence;
+- bounded object-transfer measurements;
+- single-response connection-lifetime measurements;
+- NDJSON evidence, JSON comparisons, and Markdown reports.
 
-It does **not** deploy nodes, install proxy cores, alter host routes, manage secrets, or change the running Ordivon Runtime.
+The project does **not** yet deploy nodes, install proxy cores, alter host routes, manage secrets, or change the running Ordivon Runtime.
 
 ## Quick start
 
+Reachability:
+
 ```bash
-cargo test --workspace
 cargo run -p edge-probe -- run \
-  --targets config/targets/default.toml \
   --network wsl-current \
   --route direct-process \
   --protocol all \
+  --repeat 3 \
+  --interval-seconds 60 \
   --no-env-proxy \
-  --output artifacts/baseline/current.ndjson
-
-cargo run -p edge-probe -- compare \
-  --input artifacts/baseline/current.ndjson \
-  --output artifacts/baseline/current-summary.json
-
-cargo run -p edge-probe -- report \
-  --input artifacts/baseline/current.ndjson \
-  --output artifacts/baseline/current-report.md
+  --truncate-output \
+  --output artifacts/baseline/reachability.ndjson
 ```
 
-`direct-process` means that the probe disables application-level proxy environment variables. A host VPN, WSL route, TUN adapter, carrier policy, or upstream network may still affect the physical path. Route labels are observations, not claims about the complete packet path.
+Transfer and sustained-response lifetime:
 
-## Current status
+```bash
+cargo run -p edge-probe -- transfer \
+  --network wsl-current \
+  --route direct-process \
+  --protocol http-tls \
+  --no-env-proxy \
+  --truncate-output \
+  --output artifacts/baseline/transfer.ndjson
 
-See [`docs/current-state.md`](docs/current-state.md). Architecture and operating semantics are in [`docs/architecture.md`](docs/architecture.md) and [`docs/operations.md`](docs/operations.md).
+cargo run -p edge-probe -- lifetime \
+  --network wsl-current \
+  --route direct-process \
+  --protocol http-tls \
+  --duration-seconds 15 \
+  --rate-limit-bytes-per-second 65536 \
+  --no-env-proxy \
+  --truncate-output \
+  --output artifacts/baseline/lifetime.ndjson
+```
+
+Reports:
+
+```bash
+cargo run -p edge-probe -- report \
+  --input artifacts/baseline/reachability.ndjson \
+  --output artifacts/baseline/reachability.md
+```
+
+`direct-process` means only that application-level proxy environment variables are disabled for `curl`. A host VPN, WSL route, TUN adapter, carrier policy, or upstream network may still affect the physical path. Route labels are observations, not claims about the complete packet path.
+
+See [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).
