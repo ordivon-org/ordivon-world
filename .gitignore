@@ -1,0 +1,6 @@
+/target
+/artifacts/baseline/*.ndjson
+/artifacts/baseline/*.json
+/artifacts/baseline/*.md
+!/artifacts/baseline/.gitkeep
+.DS_Store
