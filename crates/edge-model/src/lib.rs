@@ -156,6 +156,10 @@ pub struct TargetConfig {
     pub protocols: Vec<ProbeProtocol>,
 }
 
+const MAX_TARGETS: usize = 64;
+const MAX_TARGET_ID_BYTES: usize = 64;
+const MAX_TARGET_URL_BYTES: usize = 2048;
+
 const fn default_enabled() -> bool {
     true
 }
@@ -167,6 +171,12 @@ impl TargetRegistry {
         }
         if self.targets.is_empty() {
             return Err(ValidationError::EmptyRegistry);
+        }
+        if self.targets.len() > MAX_TARGETS {
+            return Err(ValidationError::TooManyTargets {
+                count: self.targets.len(),
+                maximum: MAX_TARGETS,
+            });
         }
 
         let mut ids = std::collections::BTreeSet::new();
@@ -185,6 +195,27 @@ impl TargetConfig {
         if self.id.trim().is_empty() {
             return Err(ValidationError::EmptyTargetId);
         }
+        if self.id.len() > MAX_TARGET_ID_BYTES {
+            return Err(ValidationError::TargetIdTooLong(self.id.clone()));
+        }
+        let mut characters = self.id.chars();
+        let valid_first = characters
+            .next()
+            .is_some_and(|character| character.is_ascii_lowercase());
+        let valid_rest = characters.all(|character| {
+            character.is_ascii_lowercase()
+                || character.is_ascii_digit()
+                || matches!(character, '-' | '_')
+        });
+        if !valid_first || !valid_rest {
+            return Err(ValidationError::UnsafeTargetId(self.id.clone()));
+        }
+        if self.url.len() > MAX_TARGET_URL_BYTES {
+            return Err(ValidationError::TargetUrlTooLong(self.id.clone()));
+        }
+        if self.url.chars().any(char::is_whitespace) {
+            return Err(ValidationError::UnsafeTargetUrl(self.id.clone()));
+        }
         if !self.url.starts_with("https://") {
             return Err(ValidationError::NonHttpsUrl(self.id.clone()));
         }
@@ -201,8 +232,20 @@ pub enum ValidationError {
     UnsupportedSchema(u32),
     #[error("target registry is empty")]
     EmptyRegistry,
+    #[error("target registry has {count} targets; maximum is {maximum}")]
+    TooManyTargets { count: usize, maximum: usize },
     #[error("target id is empty")]
     EmptyTargetId,
+    #[error("target id is too long: {0}")]
+    TargetIdTooLong(String),
+    #[error(
+        "target id must start with a lowercase letter and contain only lowercase letters, digits, '-' or '_': {0}"
+    )]
+    UnsafeTargetId(String),
+    #[error("target URL is too long for {0}")]
+    TargetUrlTooLong(String),
+    #[error("target URL contains whitespace for {0}")]
+    UnsafeTargetUrl(String),
     #[error("target {0} does not use https")]
     NonHttpsUrl(String),
     #[error("target {0} has no protocols")]
@@ -254,6 +297,49 @@ mod tests {
             target.validate(),
             Err(ValidationError::NonHttpsUrl("example".into()))
         );
+    }
+
+    #[test]
+    fn target_id_is_a_bounded_public_label() {
+        for id in ["192.168.1.1", "UserName", "private name", "-leading"] {
+            let target = TargetConfig {
+                id: id.into(),
+                url: "https://example.com/".into(),
+                enabled: true,
+                protocols: vec![ProbeProtocol::HttpTls],
+            };
+            assert!(matches!(
+                target.validate(),
+                Err(ValidationError::UnsafeTargetId(_))
+            ));
+        }
+        let valid = TargetConfig {
+            id: "openai-api_1".into(),
+            url: "https://example.com/".into(),
+            enabled: true,
+            protocols: vec![ProbeProtocol::HttpTls],
+        };
+        assert_eq!(valid.validate(), Ok(()));
+    }
+
+    #[test]
+    fn registry_rejects_unbounded_target_count() {
+        let targets = (0..=MAX_TARGETS)
+            .map(|index| TargetConfig {
+                id: format!("target-{index}"),
+                url: "https://example.com/".into(),
+                enabled: true,
+                protocols: vec![ProbeProtocol::HttpTls],
+            })
+            .collect();
+        let registry = TargetRegistry {
+            schema_version: 1,
+            targets,
+        };
+        assert!(matches!(
+            registry.validate(),
+            Err(ValidationError::TooManyTargets { .. })
+        ));
     }
 
     #[test]

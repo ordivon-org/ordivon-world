@@ -57,8 +57,8 @@ impl EdgeRuntime {
             sleep(interval).await;
             match self.refresh().await {
                 Ok(snapshot) => info!(health = ?snapshot.health, "edge snapshot refreshed"),
-                Err(error) => {
-                    warn!(%error, "edge snapshot refresh failed; retaining last known state")
+                Err(_) => {
+                    warn!("edge snapshot refresh failed; retaining last known state")
                 }
             }
         }

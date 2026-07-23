@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 use std::sync::Mutex;
+use std::time::Duration;
 
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
@@ -29,11 +30,13 @@ impl Store {
     }
 
     fn from_connection(connection: Connection) -> Result<Self> {
+        connection.busy_timeout(Duration::from_secs(5))?;
         connection.execute_batch(
             r#"
             PRAGMA journal_mode = WAL;
             PRAGMA synchronous = NORMAL;
             PRAGMA foreign_keys = ON;
+            PRAGMA trusted_schema = OFF;
 
             CREATE TABLE IF NOT EXISTS metadata (
                 key TEXT PRIMARY KEY,
@@ -391,6 +394,88 @@ mod tests {
             )
             .expect("corrupt row");
         assert_eq!(store.latest_snapshot().expect("fallback"), Some(second));
+    }
+
+    #[test]
+    fn concurrent_reads_and_writes_remain_consistent() {
+        use std::sync::Arc;
+        use std::thread;
+
+        let store = Arc::new(Store::open_in_memory().expect("store"));
+        let mut workers = Vec::new();
+        for worker in 0..4 {
+            let store = Arc::clone(&store);
+            workers.push(thread::spawn(move || {
+                for index in 0..50 {
+                    let mut value = snapshot(HealthState::Healthy, true);
+                    value.observed_at =
+                        Utc::now() + chrono::Duration::milliseconds(i64::from(worker * 50 + index));
+                    store.record_snapshot(&value, None).expect("write");
+                }
+            }));
+        }
+        for _ in 0..4 {
+            let store = Arc::clone(&store);
+            workers.push(thread::spawn(move || {
+                for _ in 0..100 {
+                    let _ = store.recent_events(20).expect("read events");
+                    let _ = store.latest_snapshot().expect("read snapshot");
+                }
+            }));
+        }
+        for worker in workers {
+            worker.join().expect("worker");
+        }
+        assert!(store.latest_snapshot().expect("latest").is_some());
+        assert_eq!(store.recent_events(200).expect("events").len(), 200);
+    }
+
+    #[test]
+    fn busy_timeout_allows_a_short_external_writer_lock() {
+        use std::sync::Arc;
+        use std::thread;
+        use std::time::{Duration, Instant};
+
+        let directory = tempfile::tempdir().expect("tempdir");
+        let path = directory.path().join("edge.db");
+        let store = Arc::new(Store::open(&path).expect("store"));
+        let blocker = Connection::open(&path).expect("blocker");
+        blocker
+            .execute_batch("PRAGMA journal_mode = WAL; BEGIN IMMEDIATE;")
+            .expect("begin lock");
+
+        let writer_store = Arc::clone(&store);
+        let started = Instant::now();
+        let writer = thread::spawn(move || {
+            writer_store
+                .record_snapshot(&snapshot(HealthState::Healthy, true), None)
+                .expect("write after lock")
+        });
+        thread::sleep(Duration::from_millis(200));
+        blocker.execute_batch("COMMIT;").expect("release lock");
+        writer.join().expect("writer");
+        assert!(started.elapsed() >= Duration::from_millis(150));
+        assert!(store.latest_snapshot().expect("latest").is_some());
+    }
+
+    #[test]
+    fn rejects_unknown_database_schema() {
+        let connection = Connection::open_in_memory().expect("connection");
+        connection
+            .execute_batch(
+                "CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
+                 INSERT INTO metadata(key, value) VALUES ('schema_version', '999');",
+            )
+            .expect("metadata");
+        let error = match Store::from_connection(connection) {
+            Ok(_) => panic!("schema must fail"),
+            Err(error) => error,
+        };
+        assert!(
+            error
+                .to_string()
+                .contains("unsupported Edge database schema")
+        );
     }
 
     #[test]

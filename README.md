@@ -20,7 +20,7 @@ The repository now contains three usable layers:
 
 - `edge-model`: stable observations and path-domain types;
 - `edge-probe`: HTTP/TLS, HTTP/3, transfer, and connection-lifetime evidence;
-- `edge-runtime` + `edge-server`: a read-only local Web control plane with WSL/Surfshark observation, sanitized service health, SQLite history, state-change events, and SSE updates.
+- `edge-runtime` + `edge-server`: a read-only local Web control plane with WSL/Surfshark observation, sanitized service health, SQLite history, state-change events, explicit freshness, and SSE updates.
 
 The Web plane is intentionally a modular monolith:
 
@@ -44,7 +44,7 @@ Private identity is excluded by design. The Web API and SQLite store do not reta
 - raw PowerShell, route, DNS, or probe output;
 - target URLs or remote endpoint addresses.
 
-The server binds to `127.0.0.1` by default and rejects all non-loopback binds. See [`docs/privacy.md`](docs/privacy.md).
+The server binds to `127.0.0.1`, rejects non-loopback binds and untrusted Host headers, and validates the raw request target before routing. See [`docs/privacy.md`](docs/privacy.md).
 
 ## Run the local Web plane
 
@@ -65,12 +65,12 @@ Read-only endpoints:
 
 ```text
 GET /api/v1/health
-GET /api/v1/status
+GET /api/v1/status   # { snapshot, freshness }
 GET /api/v1/events?limit=50
 GET /events
 ```
 
-The initial release observes and verifies only. It does not reconnect Surfshark, alter routes, change DNS, or expose the Web plane through Cloudflare.
+The initial release observes and verifies only. A retained snapshot is marked stale when refreshes stop succeeding; the health endpoint then returns 503 while the last sanitized status remains readable. It does not reconnect Surfshark, alter routes, change DNS, or expose the Web plane through Cloudflare.
 
 ## Measurement CLI
 

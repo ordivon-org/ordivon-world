@@ -28,13 +28,13 @@ Open:
 http://127.0.0.1:8787/
 ```
 
-The first snapshot completes before the server starts accepting requests. Each later refresh retains the previous known state if collection fails.
+The first snapshot completes before the server starts accepting requests. Each later refresh retains the previous known state if collection fails. A snapshot older than `max(3 × interval, 60 seconds)` is returned with `freshness.stale=true`; `/api/v1/health` then returns HTTP 503 while `/api/v1/status` remains readable.
 
 ### API
 
 ```bash
 curl -fsS http://127.0.0.1:8787/api/v1/health
-curl -fsS http://127.0.0.1:8787/api/v1/status | jq
+curl -fsS http://127.0.0.1:8787/api/v1/status | jq '{snapshot, freshness}'
 curl -fsS 'http://127.0.0.1:8787/api/v1/events?limit=20' | jq
 curl -N http://127.0.0.1:8787/events
 ```
@@ -43,7 +43,7 @@ The API is sanitized. Do not add raw route output, IP addresses, target URLs, ho
 
 ### Binding policy
 
-The listener is hard-restricted to loopback addresses. Non-loopback binds are rejected and there is no override in this phase. A future reverse proxy or authenticated tunnel must connect to the loopback listener. The current phase must not be added to Cloudflare Tunnel.
+The listener is hard-restricted to loopback addresses. Non-loopback binds are rejected and there is no override in this phase. Requests must also use a loopback Host value and an unambiguous raw path; DNS-rebinding names, encoded paths, dot segments, backslashes, and absolute-form request targets are rejected. A future reverse proxy or authenticated tunnel must connect to the loopback listener and requires a separate boundary design. The current phase must not be added to Cloudflare Tunnel.
 
 ### Database
 
@@ -53,7 +53,7 @@ Default development path:
 artifacts/runtime/edge.db
 ```
 
-The database uses WAL, bounded retention, and sanitized records. It may be deleted during development to start with an empty history. Production state belongs outside the repository, such as `/var/lib/ordivon-edge/edge.db`.
+The database uses WAL, a five-second busy timeout, `trusted_schema=OFF`, explicit schema metadata, bounded retention, and sanitized records. It may be deleted during development to start with an empty history. Production state belongs outside the repository, such as `/var/lib/ordivon-edge/edge.db`.
 
 ### systemd example
 
@@ -79,6 +79,9 @@ The Web registry uses HTTP HEAD checks through `edge-probe`:
 - success does not imply authorization or business-level success;
 - a successful result at or above eight seconds is `degraded`;
 - a transport/tool failure is `failed`;
+- the Web runtime accepts at most 32 enabled HTTP/TLS targets; the shared registry accepts at most 64 targets;
+- target IDs are bounded public labels: lowercase ASCII letters, digits, `-`, and `_`, beginning with a lowercase letter;
+- each probe process has a hard deadline, captures at most 64 KiB stdout and 8 KiB stderr, and still drains both pipes completely;
 - remote IPs, target URLs, and stderr are discarded before persistence.
 
 ## Reachability evidence collection

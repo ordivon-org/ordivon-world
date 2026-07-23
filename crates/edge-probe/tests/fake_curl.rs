@@ -4,10 +4,11 @@ mod unix {
     use std::io::Write;
     use std::os::unix::fs::PermissionsExt;
     use std::path::Path;
+    use std::process::Stdio;
     use std::thread;
-    use std::time::Duration;
+    use std::time::{Duration, Instant};
 
-    use edge_model::{ProbeKind, ProbeProtocol, ProbeTermination, TargetConfig};
+    use edge_model::{FailureClass, ProbeKind, ProbeProtocol, ProbeTermination, TargetConfig};
     use edge_probe::{ProbeOptions, run_probe};
     use tempfile::tempdir;
 
@@ -100,6 +101,39 @@ printf '%s' '{"response_code":200,"time_namelookup":0.001,"time_connect":0.004,"
         assert_eq!(result.bytes_downloaded, Some(1_048_576));
         assert_eq!(result.speed_download_bps, Some(419_430.0));
         assert_eq!(result.termination, Some(ProbeTermination::Completed));
+    }
+
+    #[test]
+    fn hung_probe_process_is_killed_by_the_hard_timeout() {
+        let directory = tempdir().expect("temp directory");
+        let script = directory.path().join("fake-curl");
+        let pid_path = directory.path().join("fake-curl.pid");
+        write_script(
+            &script,
+            &format!("echo $$ > '{}'; exec sleep 60", pid_path.display()),
+        );
+
+        let mut options = options(&script, ProbeKind::Reachability);
+        options.timeout = Duration::from_secs(1);
+        let started = Instant::now();
+        let result = run_probe(&target(), ProbeProtocol::HttpTls, &options);
+        assert!(started.elapsed() < Duration::from_secs(4));
+        assert!(!result.success);
+        assert_eq!(result.failure_class, Some(FailureClass::Timeout));
+        assert_eq!(
+            result.error.as_deref(),
+            Some("probe process exceeded its hard timeout")
+        );
+
+        thread::sleep(Duration::from_millis(100));
+        let pid = fs::read_to_string(&pid_path).expect("pid");
+        let status = std::process::Command::new("kill")
+            .args(["-0", pid.trim()])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status()
+            .expect("process check");
+        assert!(!status.success(), "timed-out probe process still exists");
     }
 
     #[test]

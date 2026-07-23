@@ -72,12 +72,24 @@ Raw route output, PowerShell output, target URLs, endpoint IPs, and probe stderr
 ## High-availability behavior
 
 - the server performs an initial observation before accepting requests;
-- periodic refresh failures retain the last known snapshot;
-- SQLite uses WAL and normal synchronous mode;
+- periodic refresh failures retain the last known snapshot and expose its age; snapshots older than `max(3 × interval, 60 seconds)` are explicitly stale;
+- SQLite uses WAL, normal synchronous mode, a five-second busy timeout, `trusted_schema=OFF`, schema metadata, and fallback past a corrupt newest snapshot;
 - snapshot and event retention are bounded;
-- SSE consumers can reconnect without affecting collection;
-- systemd may restart the single process after failure;
+- SSE consumers can reconnect without affecting collection and receive a periodic freshness update even when no new snapshot is committed;
+- probes have a hard process deadline, bounded stdout/stderr retention, and no orphan child process after timeout;
+- systemd may restart the single process after failure under a validated `DynamicUser` sandbox;
 - no automatic network mutation exists in this phase, preventing a faulty control loop from disconnecting the host.
+
+
+## Local HTTP boundary
+
+The Edge listener is loopback-only. Before requests reach Axum routing, an outer Tower service:
+
+- allows only `localhost`, `127.0.0.1`, and `[::1]` Host values with optional numeric ports;
+- rejects absolute-form requests, percent-encoded paths, dot segments, backslashes, non-ASCII paths, and unexpected path characters;
+- leaves parser-level malformed requests to Hyper, which fails closed before the application service.
+
+All application responses, including rejected requests, receive the same privacy and browser-security headers. No CORS origin is enabled.
 
 ## External dependencies
 

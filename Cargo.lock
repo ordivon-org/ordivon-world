@@ -309,6 +309,7 @@ dependencies = [
  "anyhow",
  "async-stream",
  "axum",
+ "chrono",
  "clap",
  "edge-runtime",
  "futures-core",

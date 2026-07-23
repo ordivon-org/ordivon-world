@@ -16,7 +16,7 @@ const labels = {
 
 function pretty(value) {
   return labels[value] || String(value || "unknown")
-    .replaceAll("_", " ")
+    .replace(/[-_]+/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
@@ -26,16 +26,20 @@ function boolState(value) {
   return "Unknown";
 }
 
-function renderSnapshot(snapshot) {
-  const health = snapshot.health || "unknown";
+function renderSnapshot(payload) {
+  const snapshot = payload.snapshot || payload;
+  const freshness = payload.freshness || null;
+  const health = freshness?.stale ? "degraded" : (snapshot.health || "unknown");
   const badge = $("health-badge");
-  badge.textContent = pretty(health);
+  badge.textContent = freshness?.stale ? "Stale" : pretty(health);
   badge.className = `badge ${health}`;
 
   $("path-title").textContent = `${pretty(snapshot.path_state)} · ${pretty(snapshot.provider.protocol || "provider observed")}`;
-  $("path-summary").textContent = snapshot.provider.connected
-    ? "The host VPN and WSL IPv4 tunnel route are observed independently. Sensitive network identity remains redacted."
-    : "The Edge observer cannot verify an active Surfshark tunnel. No automatic network mutation is performed.";
+  $("path-summary").textContent = freshness?.stale
+    ? `This is the last known sanitized state and is ${freshness.snapshot_age_seconds} seconds old.`
+    : snapshot.provider.connected
+      ? "The host VPN and WSL IPv4 tunnel route are observed independently. Sensitive network identity remains redacted."
+      : "The Edge observer cannot verify an active Surfshark tunnel. No automatic network mutation is performed.";
   $("observed-at").textContent = new Date(snapshot.observed_at).toLocaleString();
 
   $("provider").textContent = pretty(snapshot.provider.name);

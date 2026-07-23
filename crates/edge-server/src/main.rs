@@ -13,16 +13,20 @@ use axum::response::sse::{Event, KeepAlive, Sse};
 use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use axum::{Json, Router};
+use chrono::{DateTime, Utc};
 use clap::Parser;
 use edge_runtime::{EdgeEvent, EdgeRuntime, EdgeSnapshot, SystemObserver};
+use serde::Serialize;
 use serde_json::json;
 use tokio::net::TcpListener;
+use tower::{ServiceBuilder, make::Shared, util::BoxCloneService};
 use tracing::{info, warn};
 use tracing_subscriber::EnvFilter;
 
 const INDEX_HTML: &str = include_str!("../assets/index.html");
 const APP_JS: &str = include_str!("../assets/app.js");
 const STYLES_CSS: &str = include_str!("../assets/styles.css");
+const SSE_SNAPSHOT_INTERVAL: Duration = Duration::from_secs(15);
 
 #[derive(Debug, Parser)]
 #[command(
@@ -46,6 +50,20 @@ struct Cli {
 #[derive(Clone)]
 struct AppState {
     runtime: Arc<EdgeRuntime>,
+    stale_after: Duration,
+}
+
+#[derive(Debug, Clone, Serialize)]
+struct FreshnessStatus {
+    served_at: DateTime<Utc>,
+    snapshot_age_seconds: u64,
+    stale: bool,
+}
+
+#[derive(Debug, Clone, Serialize)]
+struct StatusResponse {
+    snapshot: EdgeSnapshot,
+    freshness: FreshnessStatus,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -77,24 +95,22 @@ async fn main() -> Result<()> {
         }
         warn!("live observation failed; serving the last sanitized snapshot");
     }
-    tokio::spawn(
-        runtime
-            .clone()
-            .run(Duration::from_secs(cli.interval_seconds)),
-    );
+    let interval = Duration::from_secs(cli.interval_seconds);
+    let stale_after = Duration::from_secs(cli.interval_seconds.saturating_mul(3).max(60));
+    tokio::spawn(runtime.clone().run(interval));
 
-    let app = router(runtime);
+    let app = app(runtime, stale_after);
     let listener = TcpListener::bind(cli.bind)
         .await
         .with_context(|| format!("failed to bind {}", cli.bind))?;
     info!(bind = %cli.bind, "Ordivon Edge Web plane listening");
-    axum::serve(listener, app)
+    axum::serve(listener, Shared::new(app))
         .with_graceful_shutdown(shutdown_signal())
         .await?;
     Ok(())
 }
 
-fn router(runtime: Arc<EdgeRuntime>) -> Router {
+fn routes(runtime: Arc<EdgeRuntime>, stale_after: Duration) -> Router {
     Router::new()
         .route("/", get(index))
         .route("/assets/app.js", get(app_js))
@@ -103,8 +119,22 @@ fn router(runtime: Arc<EdgeRuntime>) -> Router {
         .route("/api/v1/status", get(status))
         .route("/api/v1/events", get(events))
         .route("/events", get(event_stream))
-        .with_state(AppState { runtime })
-        .layer(middleware::from_fn(security_headers))
+        .with_state(AppState {
+            runtime,
+            stale_after,
+        })
+}
+
+fn app(
+    runtime: Arc<EdgeRuntime>,
+    stale_after: Duration,
+) -> BoxCloneService<Request<axum::body::Body>, Response, Infallible> {
+    BoxCloneService::new(
+        ServiceBuilder::new()
+            .layer(middleware::from_fn(security_headers))
+            .layer(middleware::from_fn(require_local_request))
+            .service(routes(runtime, stale_after)),
+    )
 }
 
 async fn index() -> Html<&'static str> {
@@ -125,16 +155,40 @@ async fn styles_css() -> impl IntoResponse {
     )
 }
 
-async fn health() -> Json<serde_json::Value> {
-    Json(json!({"status": "ok", "privacy": "redacted"}))
+async fn health(State(state): State<AppState>) -> (StatusCode, Json<serde_json::Value>) {
+    let Some(snapshot) = state.runtime.latest().await else {
+        return (
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(json!({
+                "status": "starting",
+                "ready": false,
+                "privacy": "redacted"
+            })),
+        );
+    };
+    let freshness = freshness(&snapshot, state.stale_after);
+    let code = if freshness.stale {
+        StatusCode::SERVICE_UNAVAILABLE
+    } else {
+        StatusCode::OK
+    };
+    (
+        code,
+        Json(json!({
+            "status": if freshness.stale { "stale" } else { "ok" },
+            "ready": !freshness.stale,
+            "snapshot_age_seconds": freshness.snapshot_age_seconds,
+            "privacy": "redacted"
+        })),
+    )
 }
 
-async fn status(State(state): State<AppState>) -> Result<Json<EdgeSnapshot>, StatusCode> {
+async fn status(State(state): State<AppState>) -> Result<Json<StatusResponse>, StatusCode> {
     state
         .runtime
         .latest()
         .await
-        .map(Json)
+        .map(|snapshot| Json(status_response(snapshot, state.stale_after)))
         .ok_or(StatusCode::SERVICE_UNAVAILABLE)
 }
 
@@ -152,23 +206,47 @@ async fn events(
 async fn event_stream(
     State(state): State<AppState>,
 ) -> Sse<impl futures_core::Stream<Item = Result<Event, Infallible>>> {
-    let initial = state.runtime.latest().await;
+    let mut latest = state.runtime.latest().await;
     let mut updates = state.runtime.subscribe();
+    let mut heartbeat = tokio::time::interval(SSE_SNAPSHOT_INTERVAL);
+    heartbeat.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
     let output = stream! {
-        if let Some(snapshot) = initial
-            && let Ok(event) = Event::default().event("snapshot").json_data(snapshot)
+        if let Some(snapshot) = latest.clone()
+            && let Ok(event) = Event::default()
+                .event("snapshot")
+                .json_data(status_response(snapshot, state.stale_after))
         {
             yield Ok(event);
         }
+        heartbeat.tick().await;
         loop {
-            match updates.recv().await {
-                Ok(snapshot) => {
-                    if let Ok(event) = Event::default().event("snapshot").json_data(snapshot) {
+            tokio::select! {
+                update = updates.recv() => {
+                    match update {
+                        Ok(snapshot) => {
+                            latest = Some(snapshot.clone());
+                            if let Ok(event) = Event::default()
+                                .event("snapshot")
+                                .json_data(status_response(snapshot, state.stale_after))
+                            {
+                                yield Ok(event);
+                            }
+                        }
+                        Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
+                            latest = state.runtime.latest().await;
+                        }
+                        Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+                    }
+                }
+                _ = heartbeat.tick() => {
+                    if let Some(snapshot) = latest.clone()
+                        && let Ok(event) = Event::default()
+                            .event("snapshot")
+                            .json_data(status_response(snapshot, state.stale_after))
+                    {
                         yield Ok(event);
                     }
                 }
-                Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => continue,
-                Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
             }
         }
     };
@@ -177,6 +255,69 @@ async fn event_stream(
             .interval(Duration::from_secs(15))
             .text("edge-keepalive"),
     )
+}
+
+async fn require_local_request(request: Request<axum::body::Body>, next: Next) -> Response {
+    let allowed_host = request
+        .headers()
+        .get(header::HOST)
+        .and_then(|value| value.to_str().ok())
+        .is_some_and(is_allowed_host);
+    if !allowed_host {
+        return StatusCode::MISDIRECTED_REQUEST.into_response();
+    }
+    if !is_unambiguous_request_target(request.uri()) {
+        return StatusCode::BAD_REQUEST.into_response();
+    }
+    next.run(request).await
+}
+
+fn is_unambiguous_request_target(uri: &axum::http::Uri) -> bool {
+    if uri.scheme().is_some() || uri.authority().is_some() {
+        return false;
+    }
+    let path = uri.path();
+    if !path.is_ascii()
+        || path.bytes().any(|byte| {
+            !(byte.is_ascii_alphanumeric() || matches!(byte, b'/' | b'.' | b'-' | b'_'))
+        })
+    {
+        return false;
+    }
+    !path.split('/').any(|segment| matches!(segment, "." | ".."))
+}
+
+fn is_allowed_host(raw: &str) -> bool {
+    let host = raw.trim().to_ascii_lowercase();
+    ["localhost", "127.0.0.1", "[::1]"].iter().any(|allowed| {
+        host == *allowed
+            || host
+                .strip_prefix(allowed)
+                .and_then(|suffix| suffix.strip_prefix(':'))
+                .is_some_and(|port| !port.is_empty() && port.chars().all(|c| c.is_ascii_digit()))
+    })
+}
+
+fn freshness(snapshot: &EdgeSnapshot, stale_after: Duration) -> FreshnessStatus {
+    let served_at = Utc::now();
+    let snapshot_age_seconds = served_at
+        .signed_duration_since(snapshot.observed_at)
+        .to_std()
+        .unwrap_or(Duration::ZERO)
+        .as_secs();
+    FreshnessStatus {
+        served_at,
+        snapshot_age_seconds,
+        stale: snapshot_age_seconds > stale_after.as_secs(),
+    }
+}
+
+fn status_response(snapshot: EdgeSnapshot, stale_after: Duration) -> StatusResponse {
+    let freshness = freshness(&snapshot, stale_after);
+    StatusResponse {
+        snapshot,
+        freshness,
+    }
 }
 
 async fn security_headers(request: Request<axum::body::Body>, next: Next) -> Response {
@@ -198,6 +339,14 @@ async fn security_headers(request: Request<axum::body::Body>, next: Next) -> Res
         HeaderValue::from_static("no-referrer"),
     );
     headers.insert(header::CACHE_CONTROL, HeaderValue::from_static("no-store"));
+    headers.insert(
+        axum::http::HeaderName::from_static("cross-origin-opener-policy"),
+        HeaderValue::from_static("same-origin"),
+    );
+    headers.insert(
+        axum::http::HeaderName::from_static("cross-origin-resource-policy"),
+        HeaderValue::from_static("same-origin"),
+    );
     headers.insert(
         axum::http::HeaderName::from_static("permissions-policy"),
         HeaderValue::from_static("camera=(), microphone=(), geolocation=(), payment=()"),
@@ -221,7 +370,72 @@ mod tests {
     use axum::body::{Body, to_bytes};
     use tower::ServiceExt;
 
+    use chrono::Duration as ChronoDuration;
+    use edge_runtime::{
+        DnsSnapshot, HealthState, Ipv6Risk, LocalRuntimeSnapshot, PathState, PrivacyStatus,
+        ProviderSnapshot, RouteSnapshot, ServiceState,
+    };
+
     use super::*;
+
+    fn sample_snapshot(observed_at: DateTime<Utc>) -> EdgeSnapshot {
+        EdgeSnapshot {
+            schema_version: 1,
+            observed_at,
+            health: HealthState::Healthy,
+            path_state: PathState::Tunneled,
+            provider: ProviderSnapshot {
+                name: "surfshark".into(),
+                detected: true,
+                connected: true,
+                protocol: Some("wireguard".into()),
+            },
+            route: RouteSnapshot {
+                effective_interface_class: "tunnel".into(),
+                ipv4_tunnel_route: true,
+                mtu: Some(1380),
+                ipv6_default_route: false,
+                ipv6_tunnel_route: false,
+                ipv6_risk: Ipv6Risk::NoneObserved,
+            },
+            dns: DnsSnapshot {
+                mode: "wsl_dns_tunneling".into(),
+                resolver_count: 1,
+            },
+            local_runtime: LocalRuntimeSnapshot {
+                cloudflare_tunnel_running: Some(true),
+                ordivon_mcp_running: Some(true),
+            },
+            services: vec![edge_runtime::ServiceCheck {
+                id: "github-web".into(),
+                state: ServiceState::Healthy,
+                latency_ms: Some(200.0),
+                failure_class: None,
+            }],
+            reasons: Vec::new(),
+            privacy: PrivacyStatus {
+                sensitive_fields_redacted: true,
+                network_binding: "loopback_only".into(),
+                raw_command_output_retained: false,
+            },
+        }
+    }
+
+    #[test]
+    fn stale_snapshots_are_explicitly_marked() {
+        let snapshot = sample_snapshot(Utc::now() - ChronoDuration::seconds(121));
+        let response = status_response(snapshot, Duration::from_secs(60));
+        assert!(response.freshness.stale);
+        assert!(response.freshness.snapshot_age_seconds >= 120);
+    }
+
+    #[test]
+    fn future_clock_skew_does_not_underflow_snapshot_age() {
+        let snapshot = sample_snapshot(Utc::now() + ChronoDuration::seconds(30));
+        let response = status_response(snapshot, Duration::from_secs(60));
+        assert_eq!(response.freshness.snapshot_age_seconds, 0);
+        assert!(!response.freshness.stale);
+    }
 
     #[test]
     fn loopback_is_allowed_by_default() {
@@ -243,10 +457,11 @@ mod tests {
             &directory.path().join("edge.db"),
         )
         .expect("runtime");
-        let response = router(runtime)
+        let response = app(runtime, Duration::from_secs(60))
             .oneshot(
                 Request::builder()
                     .uri("/")
+                    .header(header::HOST, "localhost:8787")
                     .body(Body::empty())
                     .expect("request"),
             )
@@ -270,6 +485,102 @@ mod tests {
         assert!(body.contains("Ordivon Edge"));
         assert!(!body.contains("https://"));
         assert!(!body.contains("http://"));
+    }
+
+    #[test]
+    fn request_target_rejects_encoded_or_absolute_paths() {
+        for target in ["/", "/api/v1/status", "/assets/styles.css"] {
+            let uri: axum::http::Uri = target.parse().expect("uri");
+            assert!(
+                is_unambiguous_request_target(&uri),
+                "expected safe {target}"
+            );
+        }
+        for target in [
+            "/assets/%2e%2e/api/v1/status",
+            "/api/../api/v1/status",
+            r"/api\v1\status",
+            "http://attacker.example/api/v1/status",
+        ] {
+            let uri: axum::http::Uri = target.parse().expect("uri");
+            assert!(
+                !is_unambiguous_request_target(&uri),
+                "unexpected safe target {target}"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn encoded_traversal_is_rejected_before_routing() {
+        let directory = tempfile::tempdir().expect("tempdir");
+        let runtime = EdgeRuntime::open(
+            SystemObserver::new(directory.path().join("missing-targets.toml")),
+            &directory.path().join("edge.db"),
+        )
+        .expect("runtime");
+        let response = app(runtime, Duration::from_secs(60))
+            .oneshot(
+                Request::builder()
+                    .uri("/assets/%2e%2e/api/v1/status")
+                    .header(header::HOST, "localhost:8787")
+                    .body(Body::empty())
+                    .expect("request"),
+            )
+            .await
+            .expect("response");
+        assert_eq!(response.status(), StatusCode::BAD_REQUEST);
+        assert!(
+            response
+                .headers()
+                .contains_key(header::CONTENT_SECURITY_POLICY)
+        );
+    }
+
+    #[test]
+    fn host_allowlist_rejects_dns_rebinding_names() {
+        for host in [
+            "localhost",
+            "localhost:8787",
+            "127.0.0.1:8787",
+            "[::1]:8787",
+        ] {
+            assert!(is_allowed_host(host), "expected allowed host {host}");
+        }
+        for host in [
+            "attacker.example",
+            "127.0.0.1.attacker.example",
+            "localhost.attacker.example",
+            "localhost:bad",
+            "",
+        ] {
+            assert!(!is_allowed_host(host), "unexpected allowed host {host}");
+        }
+    }
+
+    #[tokio::test]
+    async fn untrusted_host_is_rejected_with_security_headers() {
+        let directory = tempfile::tempdir().expect("tempdir");
+        let runtime = EdgeRuntime::open(
+            SystemObserver::new(directory.path().join("missing-targets.toml")),
+            &directory.path().join("edge.db"),
+        )
+        .expect("runtime");
+        let response = app(runtime, Duration::from_secs(60))
+            .oneshot(
+                Request::builder()
+                    .uri("/api/v1/status")
+                    .header(header::HOST, "attacker.example")
+                    .body(Body::empty())
+                    .expect("request"),
+            )
+            .await
+            .expect("response");
+        assert_eq!(response.status(), StatusCode::MISDIRECTED_REQUEST);
+        assert!(
+            response
+                .headers()
+                .contains_key(header::CONTENT_SECURITY_POLICY)
+        );
     }
 
     #[test]

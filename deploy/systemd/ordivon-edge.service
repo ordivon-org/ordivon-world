@@ -17,14 +17,23 @@ RestartSec=3
 Environment=RUST_LOG=ordivon_edge=info,edge_runtime=info
 
 NoNewPrivileges=yes
+CapabilityBoundingSet=
 PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
 ProtectSystem=strict
-ProtectHome=read-only
+ProtectHome=yes
+ProtectClock=yes
+ProtectHostname=yes
 ProtectKernelTunables=yes
 ProtectKernelModules=yes
+ProtectKernelLogs=yes
 ProtectControlGroups=yes
 LockPersonality=yes
 RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK AF_VSOCK
 UMask=0077
 
