@@ -2,85 +2,91 @@
 
 ## Boundary
 
-Ordivon Edge / Link owns observation, selection, deployment, verification, failover, and recovery. Mature TLS, QUIC, certificate validation, and proxy implementations remain replaceable dependencies.
+Ordivon owns path observation, state reduction, service semantics, decision history, recovery policy, and the user-facing control plane. Mature implementations continue to own TLS, QUIC, WireGuard, OpenVPN, DNS serving, and public ingress.
 
 ```text
-Target registry + network label + route label
+Windows / WSL facts              Web target registry
+        │                                │
+        ▼                                ▼
+  SystemObserver                    edge-probe
+        │                                │
+        └──────────────┬─────────────────┘
+                       ▼
+                 EdgeSnapshot
+                       │
+              ┌────────┴────────┐
+              ▼                 ▼
+        SQLite event store   broadcast channel
+              │                 │
+              └────────┬────────┘
+                       ▼
+              Axum API + SSE
                        │
                        ▼
-                   edge-probe
-       ┌───────────────┼────────────────┐
-       ▼               ▼                ▼
- reachability       transfer     connection lifetime
-       │               │                │
-       └───────────────┴────────────────┘
-                       ▼
-              ProbeResult NDJSON
-                       │
-               ┌───────┴────────┐
-               ▼                ▼
-          compare JSON      report Markdown
+             embedded local Web UI
 ```
 
-The wire-level TLS and QUIC behavior is delegated to the system `curl` build. Ordivon owns the target declaration, collection semantics, observation schema, failure classification, aggregation, and future path decision logic.
+## Runtime shape
 
-## Minimum domain model
+The production target is one modular Rust process:
 
-- `Device`: a client under the user's control.
-- `Edge`: a future overseas execution or transport endpoint.
-- `Target`: a real service whose reachability matters.
-- `Transport`: a replaceable data-plane implementation and protocol.
-- `ProbeResult`: one immutable observation from one target, network, route, protocol, probe kind, and collection round.
-- `RouteDecision`: a future explainable selection result; modeled but not executed in P1.
+```text
+edge-runtime
+├── host observer
+├── service probes
+├── path-state reducer
+├── sanitized event derivation
+└── SQLite store
 
-## Probe kinds
+edge-server
+├── REST API
+├── SSE stream
+├── security headers
+└── embedded static assets
+```
 
-### Reachability
+There is no internal message broker, separate frontend server, metrics database, or container dependency.
 
-Issues an HTTP HEAD request and measures DNS, connect, TLS/QUIC, TTFB, response status, and completion without downloading the response body. Any HTTP response status from 100 through 599 proves an HTTP response was reached; it does not imply application authorization or business success.
+## State model
 
-### Transfer
+Current path states:
 
-Downloads a declared object to `/dev/null` and requires a completed response with non-zero bytes. It records bytes and average download throughput. It is not a full congestion-control benchmark.
+- `unknown`: provider state cannot be observed;
+- `direct`: Surfshark is detected but no active tunnel is observed;
+- `tunneled`: Surfshark and the WSL IPv4 tunnel route are independently observed;
+- `degraded`: provider and effective route disagree;
+- `failed`: no public IPv4 route can be observed.
 
-### Connection lifetime
+Service health is separate from path health. A reachable application does not prove that the intended tunnel is active.
 
-Uses a sufficiently large object plus a configured rate limit to keep one response-body connection active. Reaching at least 95% of the requested duration with one connection and non-zero bytes is success. Curl deadline exit 28 is expected when the requested duration is reached.
+## Persistence
 
-This test does not cover idle timeout, bidirectional streams, path migration, or recovery after interface changes.
+SQLite stores only reduced, sanitized data:
 
-## Timing and transfer fields
+- `snapshots`: complete sanitized Edge snapshots;
+- `service_checks`: target ID, state, latency, and failure class;
+- `events`: meaningful state transitions.
 
-All timings are milliseconds:
+Raw route output, PowerShell output, target URLs, endpoint IPs, and probe stderr are discarded before persistence. NDJSON remains the explicit import/export format for lower-level measurement evidence, not the Web plane database.
 
-- `dns_ms`: name resolution;
-- `connect_ms`: transport connection after DNS;
-- `tls_ms`: TLS handshake after transport connect;
-- `ttfb_ms`: cumulative start-to-first-byte time;
-- `total_ms`: cumulative completion or deadline time.
+## High-availability behavior
 
-Additional fields include downloaded bytes, average bytes per second, connection count, HTTP version, requested duration, collection identity, and sample index. Values may be absent when a failure occurs before a phase completes.
+- the server performs an initial observation before accepting requests;
+- periodic refresh failures retain the last known snapshot;
+- SQLite uses WAL and normal synchronous mode;
+- snapshot and event retention are bounded;
+- SSE consumers can reconnect without affecting collection;
+- systemd may restart the single process after failure;
+- no automatic network mutation exists in this phase, preventing a faulty control loop from disconnecting the host.
 
-## Failure model
+## External dependencies
 
-The intentionally small taxonomy is:
+Retained data planes:
 
-- `configuration`;
-- `dns`;
-- `tcp_connect`;
-- `tls_handshake`;
-- `quic_handshake`;
-- `http`;
-- `transfer`;
-- `connection_lifetime`;
-- `timeout`;
-- `tool`;
-- `unknown`.
+- system `curl` for HTTP/TLS/HTTP3 behavior;
+- Windows Surfshark services and adapters;
+- WSL/Linux routing and resolver facilities;
+- systemd for process supervision;
+- optional Cloudflare Tunnel for other Ordivon management surfaces.
 
-It classifies the observed failure surface and does not claim a deeper root cause without additional evidence.
-
-## Trust boundary
-
-P1 does not handle secrets or mutate networking. Future credentials must remain outside Git. Raw evidence can reveal IP addresses, timestamps, route labels, and service availability, so baseline artifacts remain ignored by default.
-
-The project is for lawful administration of user-controlled personal infrastructure. It does not provide public proxy access, multi-user subscriptions, traffic resale, credential interception, or unreviewed cryptographic mechanisms.
+The new local Web plane does not require Gatus, Grafana, Prometheus, Caddy, CoreDNS, or Docker.

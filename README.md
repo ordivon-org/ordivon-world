@@ -1,49 +1,85 @@
 # Ordivon Edge / Link
 
-Ordivon Edge / Link is a single-user transport control and overseas execution project. It is not a proxy subscription service, a multi-user panel, or a new cryptographic protocol.
+Ordivon Edge is a private, single-user control plane for network paths, critical Web services, and recovery. It does not implement a new VPN, proxy protocol, DNS server, or public multi-user panel.
 
-The project owns the layer above replaceable transport implementations:
+The project owns the layer above replaceable data planes:
 
 ```text
 Desired state
-→ Probe
 → Observe
-→ Select
-→ Render
-→ Execute
 → Verify
-→ Fail over
+→ Select
+→ Execute
+→ Verify again
 → Recover
 ```
 
-## Product boundary
+## Current implementation
 
-- **Ordivon Link** observes local network paths, chooses routes, and recovers from path failures.
-- **Ordivon Edge** manages overseas nodes, deployment workers, ephemeral CI runners, backups, and long-running operations.
-- **Ordivon Runtime** remains the local Agent task execution and recovery system.
-- **ordivon-web** remains the public website and release surface.
+The repository now contains three usable layers:
 
-## Current phase: facts before infrastructure
+- `edge-model`: stable observations and path-domain types;
+- `edge-probe`: HTTP/TLS, HTTP/3, transfer, and connection-lifetime evidence;
+- `edge-runtime` + `edge-server`: a read-only local Web control plane with WSL/Surfshark observation, sanitized service health, SQLite history, state-change events, and SSE updates.
 
-P0 and P1 establish a measurement-only foundation:
+The Web plane is intentionally a modular monolith:
 
-- a thin domain model and validated target registries;
-- HTTP/TLS and HTTP/3/QUIC reachability observations;
-- repeated collection with a start-to-start cadence;
-- bounded object-transfer measurements;
-- single-response connection-lifetime measurements;
-- NDJSON evidence, JSON comparisons, and Markdown reports.
+```text
+one Rust process
+one SQLite file
+one loopback HTTP listener
+embedded HTML/CSS/JavaScript
+```
 
-The project does **not** yet deploy nodes, install proxy cores, alter host routes, manage secrets, or change the running Ordivon Runtime.
+It does not require Gatus, Grafana, Prometheus, Caddy, Node.js, or a separate database at runtime.
 
-## Quick start
+## Privacy boundary
 
-Reachability:
+Private identity is excluded by design. The Web API and SQLite store do not retain or return:
+
+- public or private IP addresses;
+- usernames or hostnames;
+- MAC addresses;
+- Windows account paths;
+- raw PowerShell, route, DNS, or probe output;
+- target URLs or remote endpoint addresses.
+
+The server binds to `127.0.0.1` by default and rejects all non-loopback binds. See [`docs/privacy.md`](docs/privacy.md).
+
+## Run the local Web plane
+
+```bash
+cargo run -p edge-server -- \
+  --bind 127.0.0.1:8787 \
+  --database artifacts/runtime/edge.db \
+  --targets config/targets/web.toml
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8787/
+```
+
+Read-only endpoints:
+
+```text
+GET /api/v1/health
+GET /api/v1/status
+GET /api/v1/events?limit=50
+GET /events
+```
+
+The initial release observes and verifies only. It does not reconnect Surfshark, alter routes, change DNS, or expose the Web plane through Cloudflare.
+
+## Measurement CLI
+
+The lower-level evidence collector remains available:
 
 ```bash
 cargo run -p edge-probe -- run \
   --network wsl-current \
-  --route direct-process \
+  --route host-current \
   --protocol all \
   --repeat 3 \
   --interval-seconds 60 \
@@ -52,36 +88,13 @@ cargo run -p edge-probe -- run \
   --output artifacts/baseline/reachability.ndjson
 ```
 
-Transfer and sustained-response lifetime:
+`--no-env-proxy` disables process-level proxy environment variables only. Windows, WSL, Surfshark, TUN adapters, routers, carriers, and upstream networks may still affect the physical path.
 
-```bash
-cargo run -p edge-probe -- transfer \
-  --network wsl-current \
-  --route direct-process \
-  --protocol http-tls \
-  --no-env-proxy \
-  --truncate-output \
-  --output artifacts/baseline/transfer.ndjson
+## Product boundary
 
-cargo run -p edge-probe -- lifetime \
-  --network wsl-current \
-  --route direct-process \
-  --protocol http-tls \
-  --duration-seconds 15 \
-  --rate-limit-bytes-per-second 65536 \
-  --no-env-proxy \
-  --truncate-output \
-  --output artifacts/baseline/lifetime.ndjson
-```
-
-Reports:
-
-```bash
-cargo run -p edge-probe -- report \
-  --input artifacts/baseline/reachability.ndjson \
-  --output artifacts/baseline/reachability.md
-```
-
-`direct-process` means only that application-level proxy environment variables are disabled for `curl`. A host VPN, WSL route, TUN adapter, carrier policy, or upstream network may still affect the physical path. Route labels are observations, not claims about the complete packet path.
+- **Ordivon Link** observes local paths, chooses routes, and recovers from path failures.
+- **Ordivon Edge** provides the local control plane and later manages user-controlled remote anchors.
+- **Ordivon Runtime** remains the local Agent execution and recovery system.
+- **ordivon-web** remains the public project and release website.
 
 See [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).

@@ -2,5 +2,6 @@
 /artifacts/baseline/*.ndjson
 /artifacts/baseline/*.json
 /artifacts/baseline/*.md
+/artifacts/runtime*/
 !/artifacts/baseline/.gitkeep
 .DS_Store

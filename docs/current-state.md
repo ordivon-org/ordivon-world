@@ -2,38 +2,66 @@
 
 ## Implemented
 
-The P0/P1 foundation currently provides:
+### Evidence layer
 
 - Rust workspace with `edge-model` and `edge-probe`;
-- minimum domain objects for devices, edges, targets, transports, probe results, and route decisions;
-- validated TOML registries for service targets, a bounded transfer target, and a QUIC control target;
-- HTTP/1.1 over TLS and HTTP/3-only over QUIC observations through the system `curl` data plane;
-- three explicit probe kinds: reachability, transfer, and connection lifetime;
-- repeated collection with collection identity, sample index, and start-to-start cadence;
-- DNS, connect, TLS, TTFB, completion, bytes, throughput, connection count, and HTTP-version fields;
-- stable NDJSON observations, grouped JSON summaries, and Markdown reports;
-- backward reading of the first observation schema;
+- validated TOML target registries;
+- HTTP/TLS and HTTP/3 observations through the system `curl` data plane;
+- reachability, bounded transfer, and sustained-response lifetime probes;
+- repeated collection with collection identity and start-to-start cadence;
+- NDJSON evidence, grouped JSON summaries, and Markdown reports;
 - tests that do not require public network access.
 
-## Measurement meaning
+### Read-only Web plane
 
-`connection_lifetime` currently means one response-body connection remained active until the requested deadline while data continued to flow. It does not prove idle connection survival, application-session continuity, stream migration, or task recovery.
+- `edge-runtime` host observer for WSL route, MTU, DNS mode, Surfshark Windows services/adapters, Cloudflare Tunnel process state, and Ordivon MCP service state;
+- independent verification that Surfshark is connected and that WSL IPv4 traffic has the expected split-tunnel route;
+- explicit IPv6 route-risk classification without claiming a leak that was not observed;
+- parallel HTTP/TLS checks for the minimal Web target registry;
+- sanitized `EdgeSnapshot` state reduction;
+- SQLite storage for snapshots, service checks, and state-change events;
+- bounded retention of 25,000 snapshots and 5,000 events;
+- Axum HTTP API, SSE updates, and embedded local Web UI;
+- hard loopback-only binding with a non-loopback rejection guard;
+- CSP, frame denial, no-referrer, no-store, and restrictive browser permissions headers;
+- systemd deployment example with restart and sandboxing controls.
 
-A live result describes only the named process, network label, route label, and time window. `--no-env-proxy` disables application proxy environment variables but cannot prove that Windows, WSL, a VPN, a TUN device, the router, the ISP, or an upstream provider did not alter the packet path.
+## Privacy guarantees in this phase
+
+The API and SQLite store contain no public/private IP, remote IP, hostname, username, MAC address, local address, raw command output, or target URL. Probe results are converted into a smaller sanitized service-health type before persistence.
+
+No Cloudflare route is created for the Web plane. Any future remote exposure requires a separate authentication and disclosure review.
+
+## Current meaning
+
+A `tunneled` path means both conditions were observed:
+
+1. Surfshark service plus a WireGuard/OpenVPN adapter are active on Windows;
+2. WSL has both IPv4 `/1` routes through the effective public interface.
+
+It does not prove every packet took a particular physical route. It does not reveal the exit IP.
+
+An IPv6 physical default without an IPv6 tunnel route is reported as a latent risk. The runtime does not call it a confirmed leak without a successful public IPv6 observation.
 
 ## Not implemented
 
-- seven completed days of evidence;
-- controlled home, school, hotspot, mobile, VPN, and WARP comparisons;
-- packet-loss and retransmission telemetry;
-- idle long-connection, network-migration, or application-session tests;
-- Edge A or Edge B;
-- sing-box, Xray-core, Hysteria2, or NaiveProxy adapters;
-- route selection, automatic failover, deployment, secrets, runners, backups, or custom transport work.
+- Surfshark reconnect, profile, protocol, or location control;
+- route, DNS, firewall, adapter, or MTU mutation;
+- automatic failover or rollback;
+- WARP or remote Edge provider adapters;
+- authenticated remote Web access;
+- ntfy delivery from the new runtime;
+- migration of historical Gatus/Prometheus data;
+- retirement of the existing workstation monitoring stack.
 
-## Next evidence gate
+## Next gate
 
-1. Collect repeated named-network samples without relabeling uncontrolled paths.
-2. Compare reachability, transfer, and sustained-response lifetime under the same conditions.
-3. Add packet-loss/retransmission and network-transition probes only when their collection method is explicit.
-4. Create experimental Edge nodes only after the evidence format is stable enough to compare them fairly.
+Run the new Web plane beside the current workstation stack and compare:
+
+1. Surfshark/path-state accuracy across connect, disconnect, and reconnect;
+2. service failure and recovery detection;
+3. false-degraded rate under normal China-to-overseas latency;
+4. SQLite growth and restart recovery;
+5. privacy scans of API, database, logs, and browser output.
+
+Only after parallel validation should Gatus, Grafana, Prometheus, or the old shell diagnostics be retired.

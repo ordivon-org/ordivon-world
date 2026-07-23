@@ -1,8 +1,10 @@
 #[cfg(unix)]
 mod unix {
-    use std::fs;
+    use std::fs::{self, File};
+    use std::io::Write;
     use std::os::unix::fs::PermissionsExt;
     use std::path::Path;
+    use std::thread;
     use std::time::Duration;
 
     use edge_model::{ProbeKind, ProbeProtocol, ProbeTermination, TargetConfig};
@@ -10,10 +12,18 @@ mod unix {
     use tempfile::tempdir;
 
     fn write_script(path: &Path, body: &str) {
-        fs::write(path, format!("#!/bin/sh\n{body}\n")).expect("write fake curl");
+        let mut file = File::create(path).expect("create fake curl");
+        file.write_all(format!("#!/bin/sh\n{body}\n").as_bytes())
+            .expect("write fake curl");
+        file.sync_all().expect("sync fake curl");
+        drop(file);
+
         let mut permissions = fs::metadata(path).expect("metadata").permissions();
         permissions.set_mode(0o755);
         fs::set_permissions(path, permissions).expect("permissions");
+        // WSL/overlay filesystems can briefly return ETXTBSY when a newly
+        // written file is executed immediately by parallel tests.
+        thread::sleep(Duration::from_millis(10));
     }
 
     fn target() -> TargetConfig {

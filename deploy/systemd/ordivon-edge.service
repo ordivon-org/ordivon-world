@@ -1,0 +1,32 @@
+[Unit]
+Description=Ordivon Edge local control plane
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=ordivon-edge
+ExecStart=/usr/local/bin/ordivon-edge \
+  --bind 127.0.0.1:8787 \
+  --database /var/lib/ordivon-edge/edge.db \
+  --targets /etc/ordivon-edge/targets.toml \
+  --interval-seconds 60
+Restart=on-failure
+RestartSec=3
+Environment=RUST_LOG=ordivon_edge=info,edge_runtime=info
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK AF_VSOCK
+UMask=0077
+
+[Install]
+WantedBy=default.target
