@@ -42,6 +42,44 @@ Pinned upstream revision + license + source status
 
 The catalog does not import, execute, or endorse an upstream implementation. Runtime adapters remain a later phase and must report exact implementation identity independently of the generic protocol family.
 
+Baseline v0 introduces a pure wire-contract layer:
+
+```text
+edge-wire
+  ├─ QUIC varint codec
+  ├─ bounded control frames
+  ├─ TCP open preface and response
+  ├─ UDP association datagrams
+  ├─ stable protocol errors
+  ├─ negotiated limits
+  └─ connection and relay state transitions
+
+edge-transport-quic reference adapter
+  ├─ Quinn QUIC v1 + rustls TLS 1.3
+  ├─ mandatory client certificate authentication
+  ├─ SHA-256 certificate-bound device identity
+  ├─ exact Baseline ALPN and no early application data
+  ├─ control stream lifecycle and negotiated limits
+  ├─ strict TCP socket relay
+  ├─ confirmed UDP socket associations
+  ├─ disabled server migration
+  └─ loopback-only target policy by default
+```
+
+`edge-wire` performs no network, filesystem, certificate, route, or process mutation. This keeps the protocol contract independently testable before a public Edge exists.
+
+The deployment topology separates Cloudflare-reachable control traffic from the custom QUIC data plane:
+
+```text
+Cloudflare HTTPS / ordinary HTTP/3
+  → bootstrap, status, releases, signed manifests, controls
+
+Direct Edge UDP/443 + custom ALPN
+  → Ordivon Baseline data plane
+```
+
+A Cloudflare-proxied HTTP/3 hostname is a path control, not a transparent carrier for the custom Baseline ALPN.
+
 ## Minimum domain model
 
 - `Device`: a client under the user's control.

@@ -33,7 +33,9 @@ P0 and P1 establish a measurement-only foundation:
 - bounded object-transfer measurements;
 - single-response connection-lifetime measurements;
 - NDJSON evidence, JSON comparisons, and Markdown reports;
-- a pinned, validated source catalog and code-navigation study for replaceable transports.
+- a pinned, validated source catalog and code-navigation study for replaceable transports;
+- the first executable Ordivon Baseline v0 wire contract in `edge-wire`, including bounded frames, addresses, errors, limits, and state transitions;
+- a localhost-only `edge-transport-quic` reference adapter using Quinn and rustls for exact-ALPN TLS 1.3 mTLS, certificate-bound device identity, strict TCP relay, confirmed UDP associations, liveness, cleanup, and loopback-only targets.
 
 The project does **not** yet deploy nodes, install proxy cores, alter host routes, manage secrets, or change the running Ordivon Runtime.
 
@@ -93,4 +95,4 @@ The catalog covers WireGuard, OpenVPN, Shadowsocks, VLESS/REALITY, Hysteria2, TU
 
 `direct-process` means only that application-level proxy environment variables are disabled for `curl`. A host VPN, WSL route, TUN adapter, carrier policy, or upstream network may still affect the physical path. Route labels are observations, not claims about the complete packet path.
 
-See [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).
+See [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), [`docs/operations.md`](docs/operations.md), and the Baseline v0 documents: [`charter`](docs/protocol-charter.md), [`wire specification`](docs/protocol-spec-v0.md), [`security model`](docs/protocol-security.md), and [`test plan`](docs/protocol-test-plan.md).

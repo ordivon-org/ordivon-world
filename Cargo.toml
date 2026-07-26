@@ -2,6 +2,8 @@
 members = [
   "crates/edge-model",
   "crates/edge-probe",
+  "crates/edge-wire",
+  "crates/edge-transport-quic",
 ]
 resolver = "2"
 
@@ -19,3 +21,9 @@ serde_json = "1.0.141"
 tempfile = "3.20.0"
 thiserror = "2.0.12"
 toml = "0.9.2"
+bytes = "1.12.1"
+quinn = { version = "0.11.11", default-features = false, features = ["runtime-tokio", "rustls-ring", "bloom"] }
+rustls = { version = "0.23.34", default-features = false, features = ["std", "ring"] }
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "sync"] }
+rcgen = { version = "0.14.8", default-features = false, features = ["crypto", "ring"] }
+sha2 = "0.11.0"
