@@ -32,7 +32,8 @@ P0 and P1 establish a measurement-only foundation:
 - repeated collection with a start-to-start cadence;
 - bounded object-transfer measurements;
 - single-response connection-lifetime measurements;
-- NDJSON evidence, JSON comparisons, and Markdown reports.
+- NDJSON evidence, JSON comparisons, and Markdown reports;
+- a pinned, validated source catalog and code-navigation study for replaceable transports.
 
 The project does **not** yet deploy nodes, install proxy cores, alter host routes, manage secrets, or change the running Ordivon Runtime.
 
@@ -81,6 +82,14 @@ cargo run -p edge-probe -- report \
   --input artifacts/baseline/reachability.ndjson \
   --output artifacts/baseline/reachability.md
 ```
+
+Pinned protocol source study:
+
+```bash
+cargo run -p edge-probe -- catalog
+```
+
+The catalog covers WireGuard, OpenVPN, Shadowsocks, VLESS/REALITY, Hysteria2, TUIC, NaiveProxy, and sing-box. It records exact upstream revisions, licenses, architectural roles, code entry points, strengths, and failure surfaces without vendoring upstream source.
 
 `direct-process` means only that application-level proxy environment variables are disabled for `curl`. A host VPN, WSL route, TUN adapter, carrier policy, or upstream network may still affect the physical path. Route labels are observations, not claims about the complete packet path.
 

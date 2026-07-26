@@ -8,8 +8,8 @@ use chrono::Utc;
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use edge_model::{ProbeKind, ProbeProtocol};
 use edge_probe::{
-    ProbeOptions, append_results, load_registry, read_results, run_probe, summaries_json,
-    summaries_markdown, summarize, write_text,
+    ProbeOptions, append_results, load_registry, load_transport_catalog, read_results, run_probe,
+    summaries_json, summaries_markdown, summarize, transport_catalog_markdown, write_text,
 };
 
 #[derive(Debug, Parser)]
@@ -35,6 +35,8 @@ enum Command {
     Compare(InputOutputArgs),
     /// Render one or more NDJSON collections as Markdown.
     Report(InputOutputArgs),
+    /// Validate and render the pinned transport source catalog.
+    Catalog(CatalogArgs),
 }
 
 #[derive(Debug, Args)]
@@ -102,6 +104,14 @@ struct InputOutputArgs {
     output: Option<PathBuf>,
 }
 
+#[derive(Debug, Args)]
+struct CatalogArgs {
+    #[arg(long, default_value = "config/transports/protocols.toml")]
+    input: PathBuf,
+    #[arg(long)]
+    output: Option<PathBuf>,
+}
+
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum ProtocolSelection {
     All,
@@ -163,6 +173,7 @@ fn main() -> Result<()> {
         }
         Command::Compare(args) => compare(args),
         Command::Report(args) => report(args),
+        Command::Catalog(args) => catalog(args),
     }
 }
 
@@ -256,6 +267,11 @@ fn report(args: InputOutputArgs) -> Result<()> {
     let results = read_results(&args.input)?;
     let content = summaries_markdown(&summarize(&results));
     emit(content, args.output)
+}
+
+fn catalog(args: CatalogArgs) -> Result<()> {
+    let catalog = load_transport_catalog(&args.input)?;
+    emit(transport_catalog_markdown(&catalog), args.output)
 }
 
 fn emit(content: String, output: Option<PathBuf>) -> Result<()> {

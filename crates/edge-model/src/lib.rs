@@ -1,6 +1,6 @@
 use std::fmt;
 
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -195,6 +195,165 @@ impl TargetConfig {
     }
 }
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[serde(rename_all = "snake_case")]
+pub enum StudyRole {
+    Baseline,
+    Candidate,
+    Comparator,
+    Platform,
+    Reference,
+}
+
+impl fmt::Display for StudyRole {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(match self {
+            Self::Baseline => "baseline",
+            Self::Candidate => "candidate",
+            Self::Comparator => "comparator",
+            Self::Platform => "platform",
+            Self::Reference => "reference",
+        })
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[serde(rename_all = "snake_case")]
+pub enum SourceStatus {
+    OpenSource,
+    SpecificationOnly,
+}
+
+impl fmt::Display for SourceStatus {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(match self {
+            Self::OpenSource => "open_source",
+            Self::SpecificationOnly => "specification_only",
+        })
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[serde(rename_all = "snake_case")]
+pub enum TransportLayer {
+    IpTunnel,
+    StreamProxy,
+    DatagramProxy,
+    MultiprotocolPlatform,
+    Specification,
+}
+
+impl fmt::Display for TransportLayer {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(match self {
+            Self::IpTunnel => "ip_tunnel",
+            Self::StreamProxy => "stream_proxy",
+            Self::DatagramProxy => "datagram_proxy",
+            Self::MultiprotocolPlatform => "multiprotocol_platform",
+            Self::Specification => "specification",
+        })
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[serde(rename_all = "snake_case")]
+pub enum TransportCarrier {
+    Tcp,
+    Udp,
+    Quic,
+    Tls,
+    Http2,
+    Http3,
+}
+
+impl fmt::Display for TransportCarrier {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(match self {
+            Self::Tcp => "tcp",
+            Self::Udp => "udp",
+            Self::Quic => "quic",
+            Self::Tls => "tls",
+            Self::Http2 => "http2",
+            Self::Http3 => "http3",
+        })
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct TransportCatalog {
+    pub schema_version: u32,
+    pub inspected_at: NaiveDate,
+    pub transports: Vec<TransportProfile>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct TransportProfile {
+    pub id: String,
+    pub family: String,
+    pub implementation: String,
+    pub role: StudyRole,
+    pub source_url: String,
+    pub source_revision: String,
+    pub license: String,
+    pub source_status: SourceStatus,
+    pub language: String,
+    pub layers: Vec<TransportLayer>,
+    pub carriers: Vec<TransportCarrier>,
+    pub primary_security: String,
+    pub camouflage: String,
+    pub strengths: Vec<String>,
+    pub limitations: Vec<String>,
+    pub code_paths: Vec<String>,
+}
+
+impl TransportCatalog {
+    pub fn validate(&self) -> Result<(), ValidationError> {
+        if self.schema_version != 1 {
+            return Err(ValidationError::UnsupportedTransportCatalogSchema(
+                self.schema_version,
+            ));
+        }
+        if self.transports.is_empty() {
+            return Err(ValidationError::EmptyTransportCatalog);
+        }
+
+        let mut ids = std::collections::BTreeSet::new();
+        for transport in &self.transports {
+            transport.validate()?;
+            if !ids.insert(transport.id.as_str()) {
+                return Err(ValidationError::DuplicateTransport(transport.id.clone()));
+            }
+        }
+        Ok(())
+    }
+}
+
+impl TransportProfile {
+    pub fn validate(&self) -> Result<(), ValidationError> {
+        if self.id.trim().is_empty() {
+            return Err(ValidationError::EmptyTransportId);
+        }
+        if !self.source_url.starts_with("https://") {
+            return Err(ValidationError::InvalidTransportSourceUrl(self.id.clone()));
+        }
+        if self.source_revision.len() != 40
+            || !self
+                .source_revision
+                .bytes()
+                .all(|byte| byte.is_ascii_hexdigit())
+        {
+            return Err(ValidationError::InvalidTransportRevision(self.id.clone()));
+        }
+        if self.layers.is_empty() || self.carriers.is_empty() {
+            return Err(ValidationError::MissingTransportShape(self.id.clone()));
+        }
+        if self.strengths.is_empty() || self.limitations.is_empty() || self.code_paths.is_empty() {
+            return Err(ValidationError::IncompleteTransportStudy(self.id.clone()));
+        }
+        Ok(())
+    }
+}
+
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum ValidationError {
     #[error("unsupported target registry schema version {0}")]
@@ -209,6 +368,22 @@ pub enum ValidationError {
     NoProtocols(String),
     #[error("duplicate target id {0}")]
     DuplicateTarget(String),
+    #[error("unsupported transport catalog schema version {0}")]
+    UnsupportedTransportCatalogSchema(u32),
+    #[error("transport catalog is empty")]
+    EmptyTransportCatalog,
+    #[error("transport id is empty")]
+    EmptyTransportId,
+    #[error("transport {0} source URL must use https")]
+    InvalidTransportSourceUrl(String),
+    #[error("transport {0} source revision must be a 40-character hexadecimal commit")]
+    InvalidTransportRevision(String),
+    #[error("transport {0} must declare at least one layer and carrier")]
+    MissingTransportShape(String),
+    #[error("transport {0} study must include strengths, limitations, and code paths")]
+    IncompleteTransportStudy(String),
+    #[error("duplicate transport id {0}")]
+    DuplicateTransport(String),
 }
 
 #[cfg(test)]

@@ -24,6 +24,24 @@ Target registry + network label + route label
 
 The wire-level TLS and QUIC behavior is delegated to the system `curl` build. Ordivon owns the target declaration, collection semantics, observation schema, failure classification, aggregation, and future path decision logic.
 
+Transport study metadata is a separate control-plane input:
+
+```text
+Pinned upstream revision + license + source status
+                         │
+                         ▼
+              TransportCatalog TOML
+                         │
+             validate + render only
+                         ▼
+             source/code navigation study
+                         │
+                         ▼
+         future adapter and evidence design
+```
+
+The catalog does not import, execute, or endorse an upstream implementation. Runtime adapters remain a later phase and must report exact implementation identity independently of the generic protocol family.
+
 ## Minimum domain model
 
 - `Device`: a client under the user's control.

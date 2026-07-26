@@ -13,6 +13,8 @@ The P0/P1 foundation currently provides:
 - DNS, connect, TLS, TTFB, completion, bytes, throughput, connection count, and HTTP-version fields;
 - stable NDJSON observations, grouped JSON summaries, and Markdown reports;
 - backward reading of the first observation schema;
+- a validated transport catalog with pinned upstream revisions, source status, licenses, protocol layers, carriers, limitations, and code entry points;
+- a source-level protocol study covering WireGuard, OpenVPN, Shadowsocks, VLESS/REALITY, Hysteria2, TUIC, NaiveProxy, and sing-box;
 - tests that do not require public network access.
 
 ## Measurement meaning
