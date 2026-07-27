@@ -73,4 +73,4 @@ python3 scripts/ordivon_edge_release.py release \
   --message "resume release"
 ```
 
-The controller accepts a resumed candidate only when its `workers/tag` begins with the exact current Git commit prefix. The candidate still starts at 0% ordinary traffic and must pass the complete propagation, Policy, Retention, Fetch, and Browser smoke sequence.
+The controller reads the candidate's Git source tag. It accepts an older source commit only when the Worker release inputs (`src`, policy, Wrangler config, package/lock files, and TypeScript config) are byte-equivalent to current `main`; documentation, tests, or release-controller-only changes do not force a duplicate Worker upload. The candidate still starts at 0% ordinary traffic and must pass the complete propagation, Policy, Retention, Fetch, and Browser smoke sequence.

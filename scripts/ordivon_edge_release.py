@@ -11,6 +11,7 @@ import hmac
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import time
@@ -28,6 +29,14 @@ EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
 POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
 WRANGLER_CONFIG = ROOT / "wrangler.jsonc"
 RELEASE_DIR = pathlib.Path("/root/backups/ordivon-edge/releases")
+WORKER_RELEASE_INPUTS = (
+    "src",
+    "config/edge-policy.json",
+    "wrangler.jsonc",
+    "package.json",
+    "pnpm-lock.yaml",
+    "tsconfig.json",
+)
 
 
 class ReleaseError(RuntimeError):
@@ -246,10 +255,44 @@ def deployments(environment: dict[str, str]) -> list[dict[str, Any]]:
     )
 
 
+def worker_source_equivalent(candidate_ref: str, current_commit: str) -> bool:
+    resolved = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{candidate_ref}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if resolved.returncode != 0:
+        raise ReleaseError(
+            f"Cannot resolve candidate source commit: {candidate_ref}"
+        )
+    candidate_commit = resolved.stdout.strip()
+    comparison = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--quiet",
+            candidate_commit,
+            current_commit,
+            "--",
+            *WORKER_RELEASE_INPUTS,
+        ],
+        cwd=ROOT,
+        check=False,
+    )
+    if comparison.returncode not in {0, 1}:
+        raise ReleaseError("Cannot compare candidate Worker release inputs")
+    return comparison.returncode == 0
+
+
 def resumable_candidate(
     version_list: list[dict[str, Any]],
     version_id: str,
     commit: str,
+    *,
+    source_equivalent: Any = worker_source_equivalent,
 ) -> dict[str, Any]:
     candidate = next(
         (item for item in version_list if item.get("id") == version_id),
@@ -259,11 +302,21 @@ def resumable_candidate(
         fail(f"Candidate Worker Version does not exist: {version_id}")
     annotations = candidate.get("annotations")
     tag = annotations.get("workers/tag") if isinstance(annotations, dict) else None
-    expected_prefix = f"git-{commit[:12]}-"
-    if not isinstance(tag, str) or not tag.startswith(expected_prefix):
+    match = re.fullmatch(r"git-([0-9a-f]{12})-[0-9]+", tag or "")
+    if match is None:
         fail(
-            "Candidate Worker Version is not bound to the current Git commit: "
-            f"version={version_id}, tag={tag!r}, expected_prefix={expected_prefix!r}"
+            "Candidate Worker Version has no valid Git source tag: "
+            f"version={version_id}, tag={tag!r}"
+        )
+    candidate_ref = match.group(1)
+    if candidate_ref != commit[:12] and not source_equivalent(
+        candidate_ref,
+        commit,
+    ):
+        fail(
+            "Candidate Worker Version does not match the current Worker release inputs: "
+            f"version={version_id}, candidate_ref={candidate_ref}, "
+            f"current_commit={commit[:12]}"
         )
     return candidate
 

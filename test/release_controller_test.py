@@ -70,7 +70,35 @@ class ReleaseControllerTests(unittest.TestCase):
                 versions,
                 "candidate",
                 "0000000000000000000000000000000000000000",
+                source_equivalent=lambda *_: False,
             )
+
+    def test_resumable_candidate_accepts_equivalent_worker_inputs(self) -> None:
+        versions = [
+            {
+                "id": "candidate",
+                "annotations": {
+                    "workers/tag": "git-abcdef123456-1234567890"
+                },
+            }
+        ]
+        comparisons: list[tuple[str, str]] = []
+
+        def equivalent(candidate_ref: str, current_commit: str) -> bool:
+            comparisons.append((candidate_ref, current_commit))
+            return True
+
+        candidate = release_controller.resumable_candidate(
+            versions,
+            "candidate",
+            "0000000000000000000000000000000000000000",
+            source_equivalent=equivalent,
+        )
+        self.assertEqual(candidate["id"], "candidate")
+        self.assertEqual(
+            comparisons,
+            [("abcdef123456", "0" * 40)],
+        )
 
     def test_release_can_resume_existing_candidate_without_upload(self) -> None:
         reports: list[tuple[str, dict[str, object]]] = []
