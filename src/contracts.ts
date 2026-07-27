@@ -28,17 +28,33 @@ export interface ArtifactReference {
   readonly sha256: string;
   readonly bytes: number;
   readonly media_type: string;
+  readonly etag?: string;
+}
+
+export interface FetchReceiptDetails {
+  readonly requested_url: string;
+  readonly final_url: string;
+  readonly http_status: number;
+  readonly redirect_count: number;
 }
 
 export interface EdgeReceipt {
   readonly schema_version: typeof EDGE_SCHEMA_VERSION;
   readonly receipt_id: string;
+  readonly request_digest: string;
   readonly operation: EdgeOperation;
   readonly status: ReceiptStatus;
   readonly started_at: string;
   readonly completed_at: string;
+  readonly duration_ms: number;
   readonly artifact?: ArtifactReference;
+  readonly fetch?: FetchReceiptDetails;
   readonly error_code?: string;
+}
+
+export interface EdgeReceiptEnvelope {
+  readonly receipt: EdgeReceipt;
+  readonly replayed: boolean;
 }
 
 export const CAPABILITIES: EdgeCapabilitiesDocument = {
@@ -48,32 +64,32 @@ export const CAPABILITIES: EdgeCapabilitiesDocument = {
     {
       id: "artifact.put",
       state: "ready",
-      reason: "The production Worker is bound to the private Ordivon R2 artifact bucket."
+      reason: "Bounded Edge operations can persist private artifacts in R2."
     },
     {
       id: "artifact.get",
       state: "ready",
-      reason: "Artifact reads are owned by the Edge storage adapter; no public route is exposed yet."
+      reason: "Authenticated clients can retrieve validated private artifact keys."
     },
     {
       id: "artifact.delete",
-      state: "ready",
-      reason: "Artifact deletion is available to internal adapters after authentication is designed."
+      state: "planned",
+      reason: "Deletion remains internal until a receipt-backed deletion contract is added."
     },
     {
       id: "fetch",
-      state: "planned",
-      reason: "Bounded external fetch requires an allow policy, response limits, and receipt persistence."
+      state: "ready",
+      reason: "Signed requests can execute allowlisted, bounded HTTPS fetches with R2 receipts."
     },
     {
       id: "browser.run",
       state: "planned",
-      reason: "Browser Run requires an explicit binding, budgets, and artifact output policy."
+      reason: "Browser Run requires an explicit binding, action policy, and browser-time budgets."
     },
     {
       id: "receipt",
       state: "ready",
-      reason: "Receipt schema v1 is implemented independently from transport and HTTP exposure."
+      reason: "Receipt schema v1, idempotency locks, replay, and conflict detection are implemented."
     }
   ]
 };
