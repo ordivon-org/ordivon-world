@@ -156,12 +156,16 @@ async function handleArtifactGet(
   if (object === null || object.body === undefined) {
     return jsonResponse({ error: "artifact_not_found" }, 404);
   }
+  const originalMediaType =
+    object.httpMetadata?.contentType ?? "application/octet-stream";
   const headers = new Headers({
-    "cache-control": "no-store",
-    "content-type": object.httpMetadata?.contentType ?? "application/octet-stream",
+    "cache-control": "no-store, no-transform",
+    "content-type": "application/octet-stream",
+    "content-disposition": "attachment; filename=artifact.bin",
     "content-length": String(object.size),
     etag: object.httpEtag,
     "x-content-type-options": "nosniff",
+    "x-ordivon-media-type": originalMediaType,
     "content-security-policy": "default-src 'none'; frame-ancestors 'none'"
   });
   const sha256 = object.customMetadata?.sha256;

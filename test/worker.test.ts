@@ -191,5 +191,9 @@ test("authenticated clients can retrieve persisted artifacts", async () => {
   );
   assert.equal(response.status, 200);
   assert.equal(await response.text(), "artifact-body");
+  assert.equal(response.headers.get("content-type"), "application/octet-stream");
+  assert.equal(response.headers.get("content-disposition"), "attachment; filename=artifact.bin");
+  assert.equal(response.headers.get("cache-control"), "no-store, no-transform");
+  assert.equal(response.headers.get("x-ordivon-media-type"), "text/plain");
   assert.equal(response.headers.get("x-ordivon-sha256"), "b".repeat(64));
 });

@@ -180,8 +180,10 @@ def command_artifact_get(config: Config, args: argparse.Namespace) -> int:
         "sha256": hashlib.sha256(body).hexdigest(),
         "edge_sha256": headers.get("X-Ordivon-Sha256")
         or headers.get("x-ordivon-sha256"),
-        "content_type": headers.get("Content-Type")
+        "download_content_type": headers.get("Content-Type")
         or headers.get("content-type"),
+        "media_type": headers.get("X-Ordivon-Media-Type")
+        or headers.get("x-ordivon-media-type"),
     }
     print(json.dumps(receipt, indent=2))
     return 0
