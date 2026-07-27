@@ -435,48 +435,63 @@ def release(args: argparse.Namespace) -> int:
     environment = cloudflare_environment()
     edge = load_edge_config()
     commit = verify_release_source()
-    run(["pnpm", "install", "--frozen-lockfile", "--offline"])
-    run(["pnpm", "run", "ci"])
-
-    before_versions = {item.get("id") for item in versions(environment)}
-    previous_deployments = deployments(environment)
-    previous_version = active_version(previous_deployments)
-    tag = f"git-{commit[:12]}-{int(time.time())}"
     message = args.message or f"Ordivon Edge {commit[:12]}"
-    wrangler(
-        environment,
-        "versions",
-        "upload",
-        "--name",
-        WORKER_NAME,
-        "--tag",
-        tag,
-        "--message",
-        message,
-        "--keep-vars",
-        "--strict",
-    )
-    after = versions(environment)
-    new_versions = [
-        item
-        for item in after
-        if item.get("id") not in before_versions and isinstance(item.get("id"), str)
-    ]
-    if len(new_versions) != 1:
-        fail(f"Expected one newly uploaded version, found {len(new_versions)}")
-    new_version = new_versions[0]["id"]
-
     report: dict[str, Any] = {
-        "status": "smoke_pending",
+        "status": "preflight",
         "started_at": dt.datetime.now(dt.UTC).isoformat(),
         "git_commit": commit,
-        "tag": tag,
-        "previous_version": previous_version,
-        "candidate_version": new_version,
         "message": message,
     }
+    previous_version: str | None = None
+    new_version: str | None = None
     zero_deployed = False
+
     try:
+        run(["pnpm", "install", "--frozen-lockfile", "--offline"])
+        run(["pnpm", "run", "ci"])
+        report["status"] = "ci_passed"
+
+        before_versions = {item.get("id") for item in versions(environment)}
+        previous_deployments = deployments(environment)
+        previous_version = active_version(previous_deployments)
+        tag = f"git-{commit[:12]}-{int(time.time())}"
+        report.update(
+            {
+                "tag": tag,
+                "previous_version": previous_version,
+                "status": "upload_pending",
+            }
+        )
+        wrangler(
+            environment,
+            "versions",
+            "upload",
+            "--name",
+            WORKER_NAME,
+            "--tag",
+            tag,
+            "--message",
+            message,
+            "--keep-vars",
+            "--strict",
+        )
+        after = versions(environment)
+        new_versions = [
+            item
+            for item in after
+            if item.get("id") not in before_versions
+            and isinstance(item.get("id"), str)
+        ]
+        if len(new_versions) != 1:
+            fail(f"Expected one newly uploaded version, found {len(new_versions)}")
+        new_version = new_versions[0]["id"]
+        report.update(
+            {
+                "candidate_version": new_version,
+                "status": "smoke_pending",
+            }
+        )
+
         deploy_versions(
             environment,
             [f"{previous_version}@100", f"{new_version}@0"],
@@ -524,23 +539,27 @@ def release(args: argparse.Namespace) -> int:
             {
                 "status": "failed",
                 "failed_at": dt.datetime.now(dt.UTC).isoformat(),
+                "failed_stage": report.get("status", "unknown"),
                 "error": str(error),
+                "candidate_version": new_version,
+                "previous_version": previous_version,
             }
         )
-        if zero_deployed:
+        if zero_deployed and previous_version is not None:
             try:
                 deploy_versions(
                     environment,
                     [f"{previous_version}@100"],
-                    f"Restore previous version after failed smoke {commit[:12]}",
+                    f"Restore previous version after failed release {commit[:12]}",
                 )
                 report["restored_previous_version"] = True
             except Exception as restore_error:
                 report["restored_previous_version"] = False
                 report["restore_error"] = str(restore_error)
         receipt_path = write_receipt("release-failed", report)
-        raise ReleaseError(f"Release failed; receipt: {receipt_path}\n{error}") from error
-
+        raise ReleaseError(
+            f"Release failed; receipt: {receipt_path}\n{error}"
+        ) from error
 
 def rollback(args: argparse.Namespace) -> int:
     environment = cloudflare_environment()
