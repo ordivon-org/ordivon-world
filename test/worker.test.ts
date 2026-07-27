@@ -197,3 +197,162 @@ test("authenticated clients can retrieve persisted artifacts", async () => {
   assert.equal(response.headers.get("x-ordivon-media-type"), "text/plain");
   assert.equal(response.headers.get("x-ordivon-sha256"), "b".repeat(64));
 });
+
+
+test("bounded browser run stores screenshot, content, manifest, and replays", async () => {
+  const memory = new MemoryR2();
+  const environment = makeEnv(memory);
+  const requestId = "request_browser_001";
+  const signedAt = Math.floor(Date.now() / 1000);
+  const requestBody = JSON.stringify({
+    url: "https://allowed.example.org/page",
+    viewport_width: 1280,
+    viewport_height: 720,
+    full_page: false,
+    timeout_ms: 5000
+  });
+  const screenshot = Uint8Array.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  let browserCount = 0;
+  const browserRunner = {
+    async quickAction(action: "snapshot", options: BrowserRunSnapshotOptions) {
+      browserCount += 1;
+      assert.equal(action, "snapshot");
+      assert.equal("url" in options ? options.url : "", "https://allowed.example.org/page");
+      assert.deepEqual(options.viewport, { width: 1280, height: 720 });
+      assert.deepEqual(options.allowRequestPattern, [
+        "^https://allowed\\.example\\.org(?::443)?(?:/|$)"
+      ]);
+      return new Response(
+        JSON.stringify({
+          success: true,
+          result: {
+            content: "<!doctype html><title>Browser Test</title><p>rendered</p>",
+            screenshot: Buffer.from(screenshot).toString("base64")
+          },
+          meta: { status: 200, title: "Browser Test" }
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json",
+            "x-browser-ms-used": "321"
+          }
+        }
+      );
+    }
+  };
+
+  const first = await handleRequest(
+    signedRequest("https://edge.invalid/v1/browser/run", {
+      method: "POST",
+      body: requestBody,
+      requestId,
+      timestamp: signedAt
+    }),
+    environment,
+    { browserRunner }
+  );
+  assert.equal(first.status, 200);
+  const envelope = (await first.json()) as EdgeReceiptEnvelope;
+  assert.equal(envelope.replayed, false);
+  assert.equal(envelope.receipt.operation, "browser.run");
+  assert.equal(envelope.receipt.status, "succeeded");
+  assert.equal(envelope.receipt.browser?.page_title, "Browser Test");
+  assert.equal(envelope.receipt.browser?.browser_ms, 321);
+  assert.equal(envelope.receipt.artifacts?.length, 3);
+  assert.equal(
+    envelope.receipt.artifact?.key,
+    `browser/v1/${requestId}/manifest.json`
+  );
+  assert.equal(browserCount, 1);
+
+  const screenshotObject = await environment.ARTIFACTS.get(
+    `browser/v1/${requestId}/screenshot.png`
+  );
+  assert.notEqual(screenshotObject, null);
+  assert.deepEqual(
+    new Uint8Array(await screenshotObject!.arrayBuffer()),
+    screenshot
+  );
+  assert.ok(memory.objects.has(`browser/v1/${requestId}/content.html`));
+  assert.ok(memory.objects.has(`browser/v1/${requestId}/manifest.json`));
+  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
+
+  const replay = await handleRequest(
+    signedRequest("https://edge.invalid/v1/browser/run", {
+      method: "POST",
+      body: requestBody,
+      requestId,
+      timestamp: signedAt + 1
+    }),
+    environment,
+    { browserRunner }
+  );
+  const replayEnvelope = (await replay.json()) as EdgeReceiptEnvelope;
+  assert.equal(replayEnvelope.replayed, true);
+  assert.deepEqual(replayEnvelope.receipt, envelope.receipt);
+  assert.equal(browserCount, 1);
+});
+
+test("browser policy rejection is receipted before Browser Run executes", async () => {
+  const memory = new MemoryR2();
+  const environment = makeEnv(memory);
+  let browserCount = 0;
+  const browserRunner = {
+    async quickAction() {
+      browserCount += 1;
+      return new Response(null, { status: 500 });
+    }
+  };
+  const requestId = "request_browser_reject_001";
+  const response = await handleRequest(
+    signedRequest("https://edge.invalid/v1/browser/run", {
+      method: "POST",
+      body: JSON.stringify({
+        url: "https://forbidden.example.org/",
+        add_script_tag: "not-allowed"
+      }),
+      requestId
+    }),
+    environment,
+    { browserRunner }
+  );
+  assert.equal(response.status, 422);
+  const envelope = (await response.json()) as EdgeReceiptEnvelope;
+  assert.equal(envelope.receipt.status, "rejected");
+  assert.equal(envelope.receipt.error_code, "unsupported_browser_option");
+  assert.equal(browserCount, 0);
+  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
+});
+
+test("Browser Run rate limits produce failed receipts without upstream details", async () => {
+  const memory = new MemoryR2();
+  const environment = makeEnv(memory);
+  const requestId = "request_browser_rate_001";
+  const browserRunner = {
+    async quickAction() {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          errors: [{ message: "internal provider detail" }]
+        }),
+        { status: 429, headers: { "content-type": "application/json" } }
+      );
+    }
+  };
+  const response = await handleRequest(
+    signedRequest("https://edge.invalid/v1/browser/run", {
+      method: "POST",
+      body: JSON.stringify({ url: "https://allowed.example.org/" }),
+      requestId
+    }),
+    environment,
+    { browserRunner }
+  );
+  assert.equal(response.status, 429);
+  const text = await response.text();
+  assert.doesNotMatch(text, /internal provider detail/);
+  const envelope = JSON.parse(text) as EdgeReceiptEnvelope;
+  assert.equal(envelope.receipt.status, "failed");
+  assert.equal(envelope.receipt.error_code, "browser_rate_limited");
+});

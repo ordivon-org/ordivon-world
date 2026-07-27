@@ -148,7 +148,18 @@ export class MemoryR2 {
 export function makeEnv(memory = new MemoryR2()): Env {
   return {
     ...TEST_ENV_BASE,
-    ARTIFACTS: memory.asBucket()
+    ARTIFACTS: memory.asBucket(),
+    BROWSER: {
+      async quickAction() {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            errors: [{ message: "Browser runner was not injected in the test." }]
+          }),
+          { status: 503, headers: { "content-type": "application/json" } }
+        );
+      }
+    } as unknown as BrowserRun
   };
 }
 

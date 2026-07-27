@@ -38,6 +38,18 @@ export interface FetchReceiptDetails {
   readonly redirect_count: number;
 }
 
+export interface BrowserReceiptDetails {
+  readonly requested_url: string;
+  readonly page_title: string;
+  readonly page_status: number;
+  readonly browser_ms: number;
+  readonly viewport: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly full_page: boolean;
+}
+
 export interface EdgeReceipt {
   readonly schema_version: typeof EDGE_SCHEMA_VERSION;
   readonly receipt_id: string;
@@ -48,7 +60,9 @@ export interface EdgeReceipt {
   readonly completed_at: string;
   readonly duration_ms: number;
   readonly artifact?: ArtifactReference;
+  readonly artifacts?: readonly ArtifactReference[];
   readonly fetch?: FetchReceiptDetails;
+  readonly browser?: BrowserReceiptDetails;
   readonly error_code?: string;
 }
 
@@ -83,8 +97,8 @@ export const CAPABILITIES: EdgeCapabilitiesDocument = {
     },
     {
       id: "browser.run",
-      state: "planned",
-      reason: "Browser Run requires an explicit binding, action policy, and browser-time budgets."
+      state: "ready",
+      reason: "Signed requests can capture allowlisted same-origin browser snapshots with bounded artifacts."
     },
     {
       id: "receipt",

@@ -5,6 +5,12 @@ import {
 } from "./auth.js";
 import { validateArtifactKey } from "./artifacts.js";
 import { parseJsonObject, readBodyLimited } from "./body.js";
+import { validateBrowserRunRequest } from "./browser-policy.js";
+import {
+  executeBrowserRun,
+  type BrowserExecutionEnvironment,
+  type BrowserSnapshotRunner
+} from "./browser-run.js";
 import {
   CAPABILITIES,
   EDGE_SCHEMA_VERSION,
@@ -33,12 +39,15 @@ const MAX_REQUEST_BODY_BYTES = 8_192;
 const RECEIPT_PREFIX = "/v1/receipts/";
 const ARTIFACT_PREFIX = "/v1/artifacts/";
 
-export interface Env extends AuthEnvironment, FetchExecutionEnvironment {
+export interface Env
+  extends AuthEnvironment, FetchExecutionEnvironment, BrowserExecutionEnvironment {
   readonly ARTIFACTS: R2Bucket;
+  readonly BROWSER: BrowserRun;
 }
 
 export interface HandlerDependencies {
   readonly fetcher?: ExternalFetcher;
+  readonly browserRunner?: BrowserSnapshotRunner;
   readonly now?: () => Date;
 }
 
@@ -98,6 +107,65 @@ async function handleFetchOperation(
     const edgeError = asEdgeError(error);
     const receipt = createReceipt({
       operation: "fetch",
+      status: edgeError.receiptStatus,
+      requestDigest,
+      receiptId: requestId,
+      startedAt,
+      completedAt: nowFrom(dependencies),
+      errorCode: edgeError.code
+    });
+    await storeReceipt(environment.ARTIFACTS, receipt);
+    return envelopeResponse(
+      { receipt, replayed: false },
+      edgeError.httpStatus
+    );
+  }
+}
+
+async function handleBrowserOperation(
+  environment: Env,
+  body: Uint8Array,
+  requestId: string,
+  requestDigest: string,
+  dependencies: HandlerDependencies
+): Promise<Response> {
+  const begin = await beginRequest(
+    environment.ARTIFACTS,
+    requestId,
+    requestDigest,
+    "browser.run",
+    nowFrom(dependencies)
+  );
+  if (begin.kind === "replayed") {
+    return envelopeResponse({ receipt: begin.receipt, replayed: true });
+  }
+
+  const startedAt = nowFrom(dependencies);
+  try {
+    const input = validateBrowserRunRequest(parseJsonObject(body), environment);
+    const result = await executeBrowserRun(
+      environment,
+      dependencies.browserRunner ?? environment.BROWSER,
+      requestId,
+      input
+    );
+    const receipt = createReceipt({
+      operation: "browser.run",
+      status: "succeeded",
+      requestDigest,
+      receiptId: requestId,
+      startedAt,
+      completedAt: nowFrom(dependencies),
+      artifact: result.artifact,
+      artifacts: result.artifacts,
+      browser: result.browser
+    });
+    await storeReceipt(environment.ARTIFACTS, receipt);
+    return envelopeResponse({ receipt, replayed: false });
+  } catch (error) {
+    const edgeError = asEdgeError(error);
+    const receipt = createReceipt({
+      operation: "browser.run",
       status: edgeError.receiptStatus,
       requestDigest,
       receiptId: requestId,
@@ -208,6 +276,19 @@ export async function handleRequest(
         return methodNotAllowed("POST");
       }
       return await handleFetchOperation(
+        environment,
+        body,
+        auth.requestId,
+        auth.requestDigest,
+        dependencies
+      );
+    }
+
+    if (url.pathname === "/v1/browser/run") {
+      if (request.method !== "POST") {
+        return methodNotAllowed("POST");
+      }
+      return await handleBrowserOperation(
         environment,
         body,
         auth.requestId,

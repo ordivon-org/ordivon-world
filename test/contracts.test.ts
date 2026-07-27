@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { validateArtifactKey } from "../src/artifacts.js";
+import { browserRunOptions, validateBrowserRunRequest } from "../src/browser-policy.js";
 import { CAPABILITIES } from "../src/contracts.js";
 import { validateExternalUrl, validateFetchRequest } from "../src/fetch-policy.js";
 import { createReceipt } from "../src/receipts.js";
@@ -14,7 +15,7 @@ test("capabilities expose only the Edge execution surface", () => {
   );
   assert.equal(states.get("fetch"), "ready");
   assert.equal(states.get("artifact.get"), "ready");
-  assert.equal(states.get("browser.run"), "planned");
+  assert.equal(states.get("browser.run"), "ready");
 });
 
 test("receipt timestamps and request digests are explicit", () => {
@@ -98,4 +99,42 @@ test("fetch policy is HTTPS-only, allowlisted, and bounded", () => {
   );
   assert.equal(request.maximumBytes, 1024);
   assert.equal(request.timeoutMs, 2000);
+});
+
+
+test("browser policy exposes only bounded navigation and same-origin resources", () => {
+  const environment = { FETCH_ALLOWED_HOSTS: "allowed.example.org" };
+  const request = validateBrowserRunRequest(
+    {
+      url: "https://allowed.example.org/page#section",
+      viewport_width: 1280,
+      viewport_height: 720,
+      full_page: true,
+      wait_until: "domcontentloaded",
+      timeout_ms: 5000,
+      wait_after_ms: 250
+    },
+    environment
+  );
+  const options = browserRunOptions(request);
+  assert.equal(request.url.toString(), "https://allowed.example.org/page");
+  assert.deepEqual(request.viewport, { width: 1280, height: 720 });
+  assert.equal(options.setJavaScriptEnabled, true);
+  assert.equal(options.cacheTTL, 0);
+  assert.deepEqual(options.allowRequestPattern, [
+    "^https://allowed\\.example\\.org(?::443)?(?:/|$)"
+  ]);
+  assert.equal(options.screenshotOptions?.fullPage, true);
+  assert.throws(() =>
+    validateBrowserRunRequest(
+      { url: "https://allowed.example.org/", cookies: [] },
+      environment
+    )
+  );
+  assert.throws(() =>
+    validateBrowserRunRequest(
+      { url: "https://forbidden.example.org/" },
+      environment
+    )
+  );
 });
