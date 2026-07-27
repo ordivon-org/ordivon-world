@@ -1,0 +1,313 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROGRAM="ordivon-vpn"
+NAMESPACE="${ORDIVON_VPN_NAMESPACE:-ordivon-vpn}"
+HOST_VETH="${ORDIVON_VPN_HOST_VETH:-ovpn-host}"
+NS_VETH="${ORDIVON_VPN_NS_VETH:-ovpn-ns}"
+WG_INTERFACE="${ORDIVON_VPN_WG_INTERFACE:-wg0}"
+HOST_ADDRESS="${ORDIVON_VPN_HOST_ADDRESS:-10.203.47.1/30}"
+NS_ADDRESS="${ORDIVON_VPN_NS_ADDRESS:-10.203.47.2/30}"
+GATEWAY="${ORDIVON_VPN_GATEWAY:-10.203.47.1}"
+SUBNET="${ORDIVON_VPN_SUBNET:-10.203.47.0/30}"
+CONFIG_DIR="${ORDIVON_VPN_CONFIG_DIR:-/root/.config/ordivon/secrets/surfshark/rendered}"
+STATE_DIR="${ORDIVON_VPN_STATE_DIR:-/run/ordivon-vpn}"
+STATE_FILE="$STATE_DIR/state"
+RESOLV_DIR="/etc/netns/$NAMESPACE"
+NAT_TABLE="ordivon_vpn_nat"
+FILTER_TABLE="ordivon_vpn_filter"
+
+log() { printf '%s: %s\n' "$PROGRAM" "$*" >&2; }
+die() { log "$*"; exit 1; }
+require_root() { [[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root"; }
+require_command() { command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"; }
+namespace_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$NAMESPACE"; }
+
+usage() {
+  cat <<'EOF'
+Usage:
+  ordivon-vpn doctor [profile]
+  ordivon-vpn list
+  ordivon-vpn up <profile>
+  ordivon-vpn down
+  ordivon-vpn status
+  ordivon-vpn egress
+  ordivon-vpn exec <command> [args...]
+
+Profiles are configuration basenames without the .conf suffix. Private keys and
+endpoint addresses are never printed by this controller.
+EOF
+}
+
+profile_name() {
+  local value=${1:-}
+  [[ $value =~ ^[a-z0-9][a-z0-9-]{0,30}$ ]] || die "invalid profile name"
+  printf '%s' "$value"
+}
+
+config_path() {
+  local profile
+  profile=$(profile_name "$1")
+  printf '%s/%s.conf' "$CONFIG_DIR" "$profile"
+}
+
+validate_config() {
+  local config=$1
+  [[ -f $config ]] || die "profile config not found"
+  [[ ! -L $config ]] || die "profile config must not be a symlink"
+  [[ $(stat -c %a "$config") == 600 ]] || die "profile config must have mode 0600"
+  grep -q '<insert_your_private_key_here>' "$config" && die "profile config still contains a private-key placeholder"
+  wg-quick strip "$config" >/dev/null || die "profile config is not a valid WireGuard configuration"
+}
+
+state_value() {
+  local key=$1
+  [[ -f $STATE_FILE ]] || return 1
+  awk -F= -v wanted="$key" '$1 == wanted { print substr($0, index($0, "=") + 1); exit }' "$STATE_FILE"
+}
+
+write_state() {
+  local profile=$1 original_forward=$2 uplink=$3
+  install -d -m 700 "$STATE_DIR"
+  local temporary
+  temporary=$(mktemp "$STATE_DIR/.state.XXXXXX")
+  chmod 600 "$temporary"
+  {
+    printf 'profile=%s\n' "$profile"
+    printf 'original_ip_forward=%s\n' "$original_forward"
+    printf 'uplink=%s\n' "$uplink"
+    printf 'created_at=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  } > "$temporary"
+  mv -f "$temporary" "$STATE_FILE"
+}
+
+cleanup_network() {
+  local restore_forward=${1:-}
+  set +e
+  ip netns del "$NAMESPACE" 2>/dev/null
+  ip link del "$HOST_VETH" 2>/dev/null
+  nft delete table ip "$NAT_TABLE" 2>/dev/null
+  nft delete table inet "$FILTER_TABLE" 2>/dev/null
+  rm -rf "$RESOLV_DIR"
+  rm -f "$STATE_FILE"
+  if [[ $restore_forward =~ ^[01]$ ]]; then
+    sysctl -q -w net.ipv4.ip_forward="$restore_forward" >/dev/null 2>&1
+  fi
+  set -e
+}
+
+resolve_endpoint() {
+  local config=$1 endpoint host port address ip
+  endpoint=$(awk -F= '/^[[:space:]]*Endpoint[[:space:]]*=/{gsub(/[[:space:]]/,"",$2); print $2; exit}' "$config")
+  address=$(awk -F= '/^[[:space:]]*Address[[:space:]]*=/{gsub(/[[:space:]]/,"",$2); print $2; exit}' "$config")
+  [[ -n $endpoint && -n $address ]] || die "profile config is missing Address or Endpoint"
+  host=${endpoint%:*}
+  port=${endpoint##*:}
+  [[ $port =~ ^[0-9]+$ ]] || die "profile endpoint port is invalid"
+  ip=$(getent ahostsv4 "$host" | awk 'NR == 1 { print $1 }')
+  [[ -n $ip ]] || die "profile endpoint could not be resolved"
+  printf '%s\t%s\t%s\n' "$ip" "$port" "${address%%,*}"
+}
+
+write_resolver() {
+  local config=$1 dns
+  dns=$(awk -F= '/^[[:space:]]*DNS[[:space:]]*=/{print $2; exit}' "$config" | tr ',' '\n' | xargs -n1 2>/dev/null || true)
+  install -d -m 755 "$RESOLV_DIR"
+  : > "$RESOLV_DIR/resolv.conf"
+  while IFS= read -r server; do
+    [[ $server =~ ^[0-9a-fA-F:.]+$ ]] && printf 'nameserver %s\n' "$server" >> "$RESOLV_DIR/resolv.conf"
+  done <<< "$dns"
+  [[ -s $RESOLV_DIR/resolv.conf ]] || printf 'nameserver 1.1.1.1\n' > "$RESOLV_DIR/resolv.conf"
+  printf 'options timeout:2 attempts:2\n' >> "$RESOLV_DIR/resolv.conf"
+}
+
+probe_trace() {
+  local prefix=("$@") result=''
+  for _ in $(seq 1 8); do
+    result=$("${prefix[@]}" curl -4fsS --connect-timeout 6 --max-time 15 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null || true)
+    grep -q '^ip=' <<< "$result" && { printf '%s' "$result"; return 0; }
+    sleep 2
+  done
+  return 1
+}
+
+command_list() {
+  [[ -d $CONFIG_DIR ]] || return 0
+  find "$CONFIG_DIR" -maxdepth 1 -type f -name '*.conf' -printf '%f\n' \
+    | sed 's/\.conf$//' | LC_ALL=C sort
+}
+
+command_doctor() {
+  local profile=${1:-jp-tok} config
+  config=$(config_path "$profile")
+  local missing=() command
+  for command in ip wg wg-quick nft curl getent sysctl awk sed grep stat python3 flock; do
+    command -v "$command" >/dev/null 2>&1 || missing+=("$command")
+  done
+  local config_ok=false placeholder=false mode=null
+  if [[ -f $config && ! -L $config ]]; then
+    mode=$(stat -c %a "$config" 2>/dev/null || printf null)
+    grep -q '<insert_your_private_key_here>' "$config" && placeholder=true
+    if [[ $mode == 600 && $placeholder == false ]] && wg-quick strip "$config" >/dev/null 2>&1; then
+      config_ok=true
+    fi
+  fi
+  python3 - "$profile" "$config_ok" "$placeholder" "$mode" "${#missing[@]}" "${missing[*]:-}" <<'PY'
+import json,sys
+profile,config_ok,placeholder,mode,count,missing=sys.argv[1:]
+print(json.dumps({
+  "profile": profile,
+  "config_valid": config_ok == "true",
+  "private_key_placeholder": placeholder == "true",
+  "config_mode": None if mode == "null" else mode,
+  "missing_commands": [] if int(count) == 0 else missing.split(),
+}, indent=2))
+PY
+  [[ ${#missing[@]} -eq 0 && $config_ok == true ]]
+}
+
+command_up() {
+  require_root
+  local profile config current_profile
+  profile=$(profile_name "${1:-}")
+  config=$(config_path "$profile")
+  validate_config "$config"
+  probe_trace >/dev/null || die "root namespace HTTPS egress is unavailable"
+  if namespace_exists; then
+    current_profile=$(state_value profile 2>/dev/null || true)
+    [[ $current_profile == "$profile" ]] || die "namespace is already active with another or unknown profile; run down first"
+    command_status
+    return 0
+  fi
+
+  local uplink original_forward endpoint_ip endpoint_port tunnel_address temporary success=false
+  uplink=$(ip -4 route show default | awk 'NR == 1 { print $5 }')
+  [[ -n $uplink ]] || die "root namespace has no IPv4 default route"
+  original_forward=$(sysctl -n net.ipv4.ip_forward)
+  IFS=$'\t' read -r endpoint_ip endpoint_port tunnel_address < <(resolve_endpoint "$config")
+  temporary=$(mktemp /run/ordivon-vpn.XXXXXX.conf)
+  chmod 600 "$temporary"
+  wg-quick strip "$config" > "$temporary"
+  sed -i -E "s#^[[:space:]]*Endpoint[[:space:]]*=.*#Endpoint = ${endpoint_ip}:${endpoint_port}#" "$temporary"
+
+  rollback() {
+    rm -f "$temporary"
+    if [[ $success != true ]]; then cleanup_network "$original_forward"; fi
+  }
+  trap rollback EXIT
+
+  ip netns add "$NAMESPACE"
+  ip link add "$HOST_VETH" type veth peer name "$NS_VETH"
+  ip link set "$NS_VETH" netns "$NAMESPACE"
+  ip addr add "$HOST_ADDRESS" dev "$HOST_VETH"
+  ip link set "$HOST_VETH" up
+  ip netns exec "$NAMESPACE" ip link set lo up
+  ip netns exec "$NAMESPACE" ip addr add "$NS_ADDRESS" dev "$NS_VETH"
+  ip netns exec "$NAMESPACE" ip link set "$NS_VETH" up
+  ip netns exec "$NAMESPACE" ip route add default via "$GATEWAY" dev "$NS_VETH"
+  write_resolver "$config"
+
+  sysctl -q -w net.ipv4.ip_forward=1 >/dev/null
+  nft add table ip "$NAT_TABLE"
+  nft "add chain ip $NAT_TABLE postrouting { type nat hook postrouting priority srcnat; policy accept; }"
+  nft add rule ip "$NAT_TABLE" postrouting ip saddr "$SUBNET" oifname "$uplink" masquerade
+  nft add table inet "$FILTER_TABLE"
+  nft "add chain inet $FILTER_TABLE forward { type filter hook forward priority -100; policy accept; }"
+
+  ip netns exec "$NAMESPACE" ip link add "$WG_INTERFACE" type wireguard
+  ip netns exec "$NAMESPACE" wg setconf "$WG_INTERFACE" "$temporary"
+  ip netns exec "$NAMESPACE" ip addr add "$tunnel_address" dev "$WG_INTERFACE"
+  ip netns exec "$NAMESPACE" ip link set mtu 1280 up dev "$WG_INTERFACE"
+  ip netns exec "$NAMESPACE" ip route add "${endpoint_ip}/32" via "$GATEWAY" dev "$NS_VETH"
+  ip netns exec "$NAMESPACE" ip route replace default dev "$WG_INTERFACE"
+
+  local trace handshake=0 now age=999999
+  trace=$(probe_trace ip netns exec "$NAMESPACE" || true)
+  handshake=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" latest-handshakes | awk 'NR == 1 { print $2 }')
+  now=$(date +%s)
+  [[ ${handshake:-0} -gt 0 ]] && age=$((now - handshake))
+  [[ -n $trace && $age -lt 120 ]] || die "WireGuard handshake or egress verification failed"
+
+  write_state "$profile" "$original_forward" "$uplink"
+  success=true
+  rm -f "$temporary"
+  trap - EXIT
+  command_status
+}
+
+command_down() {
+  require_root
+  local original_forward
+  original_forward=$(state_value original_ip_forward 2>/dev/null || true)
+  cleanup_network "$original_forward"
+  printf '{"active":false,"namespace":"%s"}\n' "$NAMESPACE"
+}
+
+command_status() {
+  local active=false profile='' handshake=0 now age=null rx=0 tx=0 trace='' ip='' country=''
+  if namespace_exists && ip netns exec "$NAMESPACE" ip link show "$WG_INTERFACE" >/dev/null 2>&1; then
+    active=true
+    profile=$(state_value profile 2>/dev/null || true)
+    handshake=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" latest-handshakes | awk 'NR == 1 { print $2 }')
+    rx=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" transfer | awk 'NR == 1 { print $2 }')
+    tx=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" transfer | awk 'NR == 1 { print $3 }')
+    if [[ ${handshake:-0} -gt 0 ]]; then now=$(date +%s); age=$((now - handshake)); fi
+    trace=$(ip netns exec "$NAMESPACE" curl -4fsS --connect-timeout 4 --max-time 10 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null || true)
+    ip=$(awk -F= '$1 == "ip" { print $2 }' <<< "$trace")
+    country=$(awk -F= '$1 == "loc" { print $2 }' <<< "$trace")
+  fi
+  python3 - "$active" "$profile" "$age" "$rx" "$tx" "$ip" "$country" "$NAMESPACE" <<'PY'
+import json,sys
+active,profile,age,rx,tx,ip,country,namespace=sys.argv[1:]
+print(json.dumps({
+  "active": active == "true",
+  "namespace": namespace,
+  "profile": profile or None,
+  "latest_handshake_age_seconds": None if age == "null" else int(age),
+  "received_bytes": int(rx),
+  "sent_bytes": int(tx),
+  "egress": None if not ip else {"ip": ip, "country": country or None},
+}, indent=2))
+PY
+}
+
+command_egress() {
+  namespace_exists || die "namespace is not active"
+  ip netns exec "$NAMESPACE" curl -4fsS --connect-timeout 6 --max-time 15 https://www.cloudflare.com/cdn-cgi/trace \
+    | awk -F= '$1 == "ip" || $1 == "loc" || $1 == "colo" || $1 == "warp" { print }'
+}
+
+command_exec() {
+  namespace_exists || die "namespace is not active"
+  [[ $# -gt 0 ]] || die "exec requires a command"
+  exec ip netns exec "$NAMESPACE" "$@"
+}
+
+main() {
+  local command=${1:-}
+  [[ -n $command ]] || { usage; exit 2; }
+  shift
+  case "$command" in
+    doctor) command_doctor "$@" ;;
+    list) command_list ;;
+    up)
+      require_command flock
+      exec 9> /run/ordivon-vpn.lock
+      flock -x 9
+      command_up "$@"
+      ;;
+    down)
+      require_command flock
+      exec 9> /run/ordivon-vpn.lock
+      flock -x 9
+      command_down
+      ;;
+    status) command_status ;;
+    egress) command_egress ;;
+    exec) command_exec "$@" ;;
+    help|-h|--help) usage ;;
+    *) usage >&2; exit 2 ;;
+  esac
+}
+
+main "$@"

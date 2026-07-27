@@ -6,6 +6,7 @@
 - system `curl`;
 - WSL networking commands (`ip`);
 - Windows PowerShell interop for Surfshark observation;
+- `wireguard-tools`, `iproute2`, and `nftables` for optional isolated VPN execution;
 - outbound DNS and TCP/443 for Web target checks.
 
 HTTP/3 measurement additionally requires a `curl` build whose feature list contains `HTTP3`.
@@ -159,3 +160,24 @@ cargo run -p link-probe -- report \
 Raw measurement artifacts can contain endpoint IPs, timestamps, labels, URLs, and stderr. They remain ignored by Git and must be reviewed before sharing.
 
 The Web plane has a stricter boundary: it stores only sanitized reduced state. See [`privacy.md`](privacy.md).
+
+
+## Isolated VPN namespace
+
+Install the explicit control-plane script and systemd template:
+
+```bash
+sudo scripts/install-ordivon-vpn
+ordivon-vpn doctor jp-tok
+```
+
+Start one profile and run only selected commands through it:
+
+```bash
+sudo ordivon-vpn up jp-tok
+ordivon-vpn status
+sudo ordivon-vpn exec curl -fsS https://www.cloudflare.com/cdn-cgi/trace
+sudo ordivon-vpn down
+```
+
+The configuration directory is outside the repository. Do not copy private keys, rendered configuration, endpoint inventory, or egress evidence into Git. See [`vpn-namespace.md`](vpn-namespace.md).

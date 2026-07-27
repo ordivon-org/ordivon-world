@@ -16,6 +16,8 @@ Ordivon Link owns local network observation, evidence, selection inputs, replace
 8. The console remains loopback-only and read-only unless a separate authenticated boundary is approved.
 9. Tests must not require public network access or mutate host networking.
 10. Use maintained TLS, QUIC, and proxy implementations; do not create cryptographic primitives.
+11. Explicit VPN mutation must be isolated to a dedicated namespace, remain root-only, preserve the WSL root default route, and roll back transactionally.
+12. CI may syntax-check the VPN controller but must never create namespaces, interfaces, routes, firewall rules, or public probes.
 
 ## Required checks
 
