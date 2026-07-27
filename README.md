@@ -2,55 +2,52 @@
 
 Ordivon Edge is the externally hosted execution layer of the Ordivon stack.
 
-It runs bounded network-side capabilities close to public infrastructure and returns explicit receipts or artifacts:
-
 ```text
 Ordivon Runtime / Agent
-        │ authenticated request
+        │ signed bounded request
         ▼
 Ordivon Edge
-  ├─ bounded external fetch
-  ├─ Browser Run
-  ├─ R2 artifact storage
-  ├─ task receipts
+  ├─ allowlisted external fetch
+  ├─ private R2 artifacts
+  ├─ idempotent task receipts
+  ├─ Browser Run (next phase)
   └─ optional remote node lifecycle
 ```
 
 ## Strict boundary
 
-Ordivon Edge owns:
+Ordivon Edge owns Cloudflare Worker execution, external fetch and Browser Run policy, private R2 artifacts, execution budgets, receipts, and future remote Edge-node lifecycle.
 
-- Cloudflare Worker request handling;
-- external fetch and Browser Run policy;
-- private R2 artifact storage;
-- execution budgets, receipts, and externally hosted capability status;
-- future lifecycle management for user-controlled remote Edge nodes.
+It does **not** own local route, VPN, DNS, WARP, path measurement, transport selection, QUIC relay clients, or failover; those belong to `ordivon-link`. Local Agent tasks, workspaces, process supervision, and recovery belong to `ordivon-runtime`.
 
-It does **not** own:
+## Implemented P0 execution plane
 
-- local route, VPN, DNS, WARP, path measurement, transport selection, QUIC relay clients, or failover — those belong to `ordivon-link`;
-- local Agent tasks, workspaces, process supervision, or recovery — those belong to `ordivon-runtime`;
-- public project presentation — that belongs to `ordivon-web`.
+- HMAC-SHA256 service authentication with a five-minute timestamp window;
+- signed method, path, query, Request ID, timestamp, and body digest;
+- R2-backed atomic request locks;
+- deterministic receipt replay and Request-ID conflict detection;
+- HTTPS-only exact/wildcard hostname allowlists;
+- validated redirects, fixed GET semantics, and no caller credentials forwarded;
+- bounded request, response, redirect, and time budgets;
+- private response artifacts and success/failure/rejection receipts;
+- authenticated health, capability, receipt, and artifact reads;
+- Workers.dev, preview URLs, and R2 public access disabled;
+- machine-enforced repository boundary checks.
 
-## Current phase
-
-The repository contains the clean Cloudflare Worker foundation:
-
-- exact health and capability routes;
-- fail-closed HTTP behavior and restrictive response headers;
-- R2 binding to the private `ordivon-artifacts` bucket;
-- artifact-key validation;
-- Receipt schema v1;
-- build-time boundary checks preventing Link/network code from returning;
-- no public Worker route, mutation endpoint, external fetch, or Browser Run exposure yet.
-
-## Commands
+## Verification
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run ci
+python -m py_compile scripts/ordivon_edge_client.py
 ```
 
-`wrangler.jsonc` deliberately sets `workers_dev=false` and `preview_urls=false`. Deployment must not create an unauthenticated public surface by accident.
+## Local client
 
-See [`docs/boundary.md`](docs/boundary.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/security.md`](docs/security.md).
+```bash
+scripts/install-edge-client
+ordivon-edge health
+ordivon-edge fetch https://developers.cloudflare.com/
+```
+
+See [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).

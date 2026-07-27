@@ -3,27 +3,38 @@ import {
   type ArtifactReference,
   type EdgeOperation,
   type EdgeReceipt,
+  type FetchReceiptDetails,
   type ReceiptStatus
 } from "./contracts.js";
 
 export interface ReceiptFactoryOptions {
   readonly operation: EdgeOperation;
   readonly status: ReceiptStatus;
+  readonly requestDigest: string;
   readonly startedAt: Date;
   readonly completedAt: Date;
-  readonly receiptId?: string;
+  readonly receiptId: string;
   readonly artifact?: ArtifactReference;
+  readonly fetch?: FetchReceiptDetails;
   readonly errorCode?: string;
 }
 
 const ERROR_CODE_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
+const DIGEST_PATTERN = /^[a-f0-9]{64}$/;
 
 export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
-  if (options.completedAt.getTime() < options.startedAt.getTime()) {
+  const durationMs = options.completedAt.getTime() - options.startedAt.getTime();
+  if (durationMs < 0) {
     throw new Error("completedAt must not precede startedAt");
+  }
+  if (!DIGEST_PATTERN.test(options.requestDigest)) {
+    throw new Error("requestDigest must be a SHA-256 digest");
   }
   if (options.status === "succeeded" && options.errorCode !== undefined) {
     throw new Error("a succeeded receipt cannot carry an error code");
+  }
+  if (options.status !== "succeeded" && options.errorCode === undefined) {
+    throw new Error("a non-succeeded receipt requires an error code");
   }
   if (
     options.errorCode !== undefined &&
@@ -32,18 +43,17 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
     throw new Error("errorCode must be a bounded snake_case identifier");
   }
 
-  const receipt: EdgeReceipt = {
+  return {
     schema_version: EDGE_SCHEMA_VERSION,
-    receipt_id: options.receiptId ?? crypto.randomUUID(),
+    receipt_id: options.receiptId,
+    request_digest: options.requestDigest,
     operation: options.operation,
     status: options.status,
     started_at: options.startedAt.toISOString(),
-    completed_at: options.completedAt.toISOString()
-  };
-
-  return {
-    ...receipt,
+    completed_at: options.completedAt.toISOString(),
+    duration_ms: durationMs,
     ...(options.artifact === undefined ? {} : { artifact: options.artifact }),
+    ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
     ...(options.errorCode === undefined ? {} : { error_code: options.errorCode })
   };
 }

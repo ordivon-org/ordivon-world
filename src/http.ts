@@ -1,3 +1,5 @@
+import { EdgeError } from "./errors.js";
+
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
@@ -17,5 +19,16 @@ export function jsonResponse(value: unknown, status = 200): Response {
 export function methodNotAllowed(allow: string): Response {
   const response = jsonResponse({ error: "method_not_allowed", allow }, 405);
   response.headers.set("allow", allow);
+  return response;
+}
+
+export function errorResponse(error: EdgeError): Response {
+  const response = jsonResponse(
+    { error: error.code, message: error.message },
+    error.httpStatus
+  );
+  if (error.httpStatus === 401) {
+    response.headers.set("www-authenticate", 'Ordivon-HMAC realm="ordivon-edge"');
+  }
   return response;
 }
