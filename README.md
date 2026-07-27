@@ -83,6 +83,7 @@ The separate `ordivon-vpn` controller creates a root-only network namespace for 
 
 ```bash
 sudo scripts/install-ordivon-vpn
+sudo ordivon-vpn-keypair
 sudo ordivon-vpn up jp-tok
 sudo ordivon-vpn exec curl -fsS https://www.cloudflare.com/cdn-cgi/trace
 sudo ordivon-vpn down

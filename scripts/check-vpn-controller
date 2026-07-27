@@ -1,26 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
+
 bash -n "$root/scripts/ordivon-vpn"
+bash -n "$root/scripts/ordivon-vpn-keypair"
+bash -n "$root/scripts/test-vpn-keypair"
 bash -n "$root/scripts/install-ordivon-vpn"
+
 python3 - "$root" <<'PY'
 from pathlib import Path
-import re,sys
-root=Path(sys.argv[1])
-files=[
- root/'scripts/ordivon-vpn',
- root/'scripts/install-ordivon-vpn',
- root/'deploy/systemd/ordivon-vpn@.service',
- root/'docs/vpn-namespace.md',
+import re
+import sys
+
+root = Path(sys.argv[1])
+files = [
+    root / "scripts/ordivon-vpn",
+    root / "scripts/ordivon-vpn-keypair",
+    root / "scripts/install-ordivon-vpn",
+    root / "deploy/systemd/ordivon-vpn@.service",
+    root / "docs/vpn-namespace.md",
 ]
-text='\n'.join(path.read_text() for path in files)
-patterns=[
- r'(?im)^\s*PrivateKey\s*=\s*\S+',
- r'(?im)^\s*PresharedKey\s*=\s*\S+',
- r'(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{43}=(?![A-Za-z0-9+/])',
+text = "\n".join(path.read_text() for path in files)
+patterns = [
+    r"(?im)^\s*PrivateKey\s*=\s*\S+",
+    r"(?im)^\s*PresharedKey\s*=\s*\S+",
+    r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{43}=(?![A-Za-z0-9+/])",
 ]
 for pattern in patterns:
-    if re.search(pattern,text):
-        raise SystemExit('secret-like material found in VPN controller files')
-print('vpn_controller_static_checks=passed')
+    if re.search(pattern, text):
+        raise SystemExit("secret-like material found in VPN controller files")
+print("vpn_controller_static_checks=passed")
 PY
+
+if [[ ${EUID:-$(id -u)} -eq 0 ]]; then
+  "$root/scripts/test-vpn-keypair"
+elif command -v sudo >/dev/null 2>&1; then
+  sudo "$root/scripts/test-vpn-keypair"
+else
+  printf 'vpn key-pair tests require root or passwordless sudo\n' >&2
+  exit 1
+fi

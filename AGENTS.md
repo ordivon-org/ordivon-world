@@ -17,7 +17,8 @@ Ordivon Link owns local network observation, evidence, selection inputs, replace
 9. Tests must not require public network access or mutate host networking.
 10. Use maintained TLS, QUIC, and proxy implementations; do not create cryptographic primitives.
 11. Explicit VPN mutation must be isolated to a dedicated namespace, remain root-only, preserve the WSL root default route, and roll back transactionally.
-12. CI may syntax-check the VPN controller but must never create namespaces, interfaces, routes, firewall rules, or public probes.
+12. CI may syntax-check the VPN controller and exercise key-pair rendering only against temporary fixtures, but must never create namespaces, interfaces, routes, firewall rules, or public probes.
+13. VPN key input must not place key values in command arguments, process listings, repository content, or normal output; mismatched pairs must leave existing state unchanged.
 
 ## Required checks
 

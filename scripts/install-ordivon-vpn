@@ -2,6 +2,7 @@
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
 install -Dm755 "$root/scripts/ordivon-vpn" /usr/local/sbin/ordivon-vpn
+install -Dm755 "$root/scripts/ordivon-vpn-keypair" /usr/local/sbin/ordivon-vpn-keypair
 install -Dm644 "$root/deploy/systemd/ordivon-vpn@.service" /etc/systemd/system/ordivon-vpn@.service
 systemctl daemon-reload
-printf 'installed /usr/local/sbin/ordivon-vpn and ordivon-vpn@.service\n'
+printf 'installed /usr/local/sbin/ordivon-vpn, /usr/local/sbin/ordivon-vpn-keypair, and ordivon-vpn@.service\n'
