@@ -299,19 +299,76 @@ def signed_request(
     return status, response_headers, value
 
 
+def observed_version(value: Any) -> str | None:
+    if not isinstance(value, dict):
+        return None
+    metadata = value.get("worker_version")
+    if isinstance(metadata, dict) and isinstance(metadata.get("id"), str):
+        return metadata["id"]
+    receipt = value.get("receipt")
+    execution = receipt.get("execution") if isinstance(receipt, dict) else None
+    actual = execution.get("worker_version_id") if isinstance(execution, dict) else None
+    return actual if isinstance(actual, str) else None
+
+
 def assert_version(value: Any, version_id: str, context: str) -> None:
     if not isinstance(value, dict):
         fail(f"{context} did not return a JSON object")
-    metadata = value.get("worker_version")
-    if isinstance(metadata, dict):
-        actual = metadata.get("id")
-    else:
-        receipt = value.get("receipt")
-        execution = receipt.get("execution") if isinstance(receipt, dict) else None
-        actual = execution.get("worker_version_id") if isinstance(execution, dict) else None
+    actual = observed_version(value)
     if actual != version_id:
         fail(f"{context} reached Worker version {actual!r}, expected {version_id}")
 
+
+def wait_for_version_propagation(
+    config: EdgeConfig,
+    version_id: str,
+    *,
+    use_override: bool,
+    timeout_seconds: float = 120.0,
+    interval_seconds: float = 3.0,
+    consecutive_required: int = 5,
+    sleep: Any = time.sleep,
+    monotonic: Any = time.monotonic,
+) -> dict[str, Any]:
+    if timeout_seconds <= 0 or interval_seconds <= 0 or consecutive_required < 1:
+        fail("Version propagation parameters are invalid")
+    deadline = monotonic() + timeout_seconds
+    consecutive = 0
+    observations: list[dict[str, Any]] = []
+    while True:
+        status, headers, health = signed_request(
+            config,
+            "GET",
+            "/health",
+            version_override=version_id if use_override else None,
+        )
+        actual = observed_version(health)
+        normalized = {key.lower(): value for key, value in headers.items()}
+        observations.append(
+            {
+                "status": status,
+                "worker_version_id": actual,
+                "cf_ray": normalized.get("cf-ray"),
+            }
+        )
+        if status == 200 and actual == version_id:
+            consecutive += 1
+        else:
+            consecutive = 0
+        if consecutive >= consecutive_required:
+            return {
+                "target_version": version_id,
+                "use_override": use_override,
+                "consecutive_required": consecutive_required,
+                "attempts": len(observations),
+                "observations": observations[-20:],
+            }
+        if monotonic() >= deadline:
+            fail(
+                "Worker version propagation did not stabilize: "
+                f"target={version_id}, last={actual}, attempts={len(observations)}"
+            )
+        sleep(interval_seconds)
 
 def smoke_operation(
     config: EdgeConfig,
@@ -498,7 +555,11 @@ def release(args: argparse.Namespace) -> int:
             f"P1.5 smoke candidate {commit[:12]}",
         )
         zero_deployed = True
-        time.sleep(3)
+        report["candidate_propagation"] = wait_for_version_propagation(
+            edge,
+            new_version,
+            use_override=True
+        )
         report["smoke"] = smoke_version(edge, new_version)
         report["status"] = "smoke_passed"
         deploy_versions(
@@ -506,7 +567,11 @@ def release(args: argparse.Namespace) -> int:
             [f"{new_version}@100"],
             f"Promote verified Ordivon Edge {commit[:12]}",
         )
-        time.sleep(3)
+        report["promotion_propagation"] = wait_for_version_propagation(
+            edge,
+            new_version,
+            use_override=False
+        )
         status, _, health = signed_request(edge, "GET", "/health")
         if status != 200:
             fail(f"Post-promotion health returned HTTP {status}: {health}")

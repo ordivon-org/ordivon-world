@@ -28,6 +28,37 @@ class ReleaseControllerTests(unittest.TestCase):
             result = release_controller.deployments({})
         self.assertEqual([item["id"] for item in result], ["old", "new"])
 
+    def test_wait_for_version_propagation_requires_consecutive_matches(self) -> None:
+        responses = [
+            (200, {"CF-Ray": "old"}, {"worker_version": {"id": "old"}}),
+            (200, {"CF-Ray": "one"}, {"worker_version": {"id": "candidate"}}),
+            (200, {"CF-Ray": "two"}, {"worker_version": {"id": "candidate"}}),
+            (200, {"CF-Ray": "three"}, {"worker_version": {"id": "candidate"}}),
+        ]
+        calls: list[dict[str, object]] = []
+
+        def signed(*args: object, **kwargs: object):
+            calls.append(dict(kwargs))
+            return responses.pop(0)
+
+        with mock.patch.object(release_controller, "signed_request", side_effect=signed):
+            result = release_controller.wait_for_version_propagation(
+                release_controller.EdgeConfig(
+                    endpoint="https://edge.invalid",
+                    key_id="runtime-v1",
+                    secret=b"x" * 32,
+                ),
+                "candidate",
+                use_override=True,
+                consecutive_required=3,
+                sleep=lambda _: None,
+                monotonic=lambda: 0.0,
+            )
+
+        self.assertEqual(result["attempts"], 4)
+        self.assertEqual(result["observations"][-1]["cf_ray"], "three")
+        self.assertTrue(all(call["version_override"] == "candidate" for call in calls))
+
     def test_upload_failure_writes_failure_receipt(self) -> None:
         reports: list[tuple[str, dict[str, object]]] = []
 
