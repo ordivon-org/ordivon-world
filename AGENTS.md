@@ -21,6 +21,7 @@ Ordivon Edge owns externally hosted bounded execution, R2 artifacts, Browser Run
 13. Cleanup tasks may delete only matching-generation `fetch/v2` or `browser/v2` Artifacts.
 14. Execution bounds, retention, and expected rate limits belong in `config/edge-policy.json`; do not introduce parallel constants.
 15. Artifact downloads must fail closed on missing or mismatched SHA-256 metadata and must not partially replace destinations.
+16. Prefer Cloudflare REST control-plane APIs for reads, lifecycle, promotion, and rollback. Wrangler may remain only where the public API cannot express the required operation, and every such effect must be time-bounded and reconciled against API state.
 
 ## Required checks
 
