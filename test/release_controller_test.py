@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import pathlib
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -23,6 +24,179 @@ class ReleaseControllerTests(unittest.TestCase):
         version, retention = release_controller.expected_policy()
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
         self.assertGreater(retention["artifacts"], retention["idempotency"])
+
+    def test_control_plane_json_query_retries_transient_failure(self) -> None:
+        sleeps: list[float] = []
+        completed = subprocess.CompletedProcess(
+            args=["wrangler"],
+            returncode=0,
+            stdout='[{"id":"candidate"}]',
+            stderr="",
+        )
+        with mock.patch.object(
+            release_controller,
+            "run",
+            side_effect=[
+                release_controller.ReleaseError("Cloudflare API timed out"),
+                completed,
+            ],
+        ):
+            value = release_controller.run_json(
+                ["wrangler", "versions", "list"],
+                {},
+                attempts=2,
+                sleep=sleeps.append,
+            )
+        self.assertEqual(value, [{"id": "candidate"}])
+        self.assertEqual(sleeps, [2.0])
+
+    def test_resumable_candidate_must_match_current_commit(self) -> None:
+        versions = [
+            {
+                "id": "candidate",
+                "annotations": {
+                    "workers/tag": "git-abcdef123456-1234567890"
+                },
+            }
+        ]
+        candidate = release_controller.resumable_candidate(
+            versions,
+            "candidate",
+            "abcdef1234567890abcdef1234567890abcdef12",
+        )
+        self.assertEqual(candidate["id"], "candidate")
+        with self.assertRaises(release_controller.ReleaseError):
+            release_controller.resumable_candidate(
+                versions,
+                "candidate",
+                "0000000000000000000000000000000000000000",
+                source_equivalent=lambda *_: False,
+            )
+
+    def test_resumable_candidate_accepts_equivalent_worker_inputs(self) -> None:
+        versions = [
+            {
+                "id": "candidate",
+                "annotations": {
+                    "workers/tag": "git-abcdef123456-1234567890"
+                },
+            }
+        ]
+        comparisons: list[tuple[str, str]] = []
+
+        def equivalent(candidate_ref: str, current_commit: str) -> bool:
+            comparisons.append((candidate_ref, current_commit))
+            return True
+
+        candidate = release_controller.resumable_candidate(
+            versions,
+            "candidate",
+            "0000000000000000000000000000000000000000",
+            source_equivalent=equivalent,
+        )
+        self.assertEqual(candidate["id"], "candidate")
+        self.assertEqual(
+            comparisons,
+            [("abcdef123456", "0" * 40)],
+        )
+
+    def test_release_can_resume_existing_candidate_without_upload(self) -> None:
+        reports: list[tuple[str, dict[str, object]]] = []
+
+        def capture_receipt(prefix: str, report: dict[str, object]) -> pathlib.Path:
+            reports.append((prefix, dict(report)))
+            return pathlib.Path("/tmp/release.json")
+
+        commit = "a" * 40
+        args = argparse.Namespace(
+            message="resume candidate",
+            candidate_version_id="candidate-version",
+        )
+        edge_config = release_controller.EdgeConfig(
+            endpoint="https://edge.invalid",
+            key_id="runtime-v1",
+            secret=b"x" * 32,
+        )
+        version_payload = [
+            {
+                "id": "candidate-version",
+                "annotations": {
+                    "workers/tag": "git-aaaaaaaaaaaa-1234567890"
+                },
+            }
+        ]
+        old_deployment = [
+            {
+                "created_on": "2026-07-27T00:00:00Z",
+                "versions": [
+                    {"version_id": "old-version", "percentage": 100}
+                ],
+            }
+        ]
+        new_deployment = [
+            {
+                "created_on": "2026-07-27T01:00:00Z",
+                "versions": [
+                    {"version_id": "candidate-version", "percentage": 100}
+                ],
+            }
+        ]
+        health = {
+            "policy_version": "p1.6.test",
+            "worker_version": {"id": "candidate-version"},
+        }
+
+        with (
+            mock.patch.object(release_controller, "cloudflare_environment", return_value={}),
+            mock.patch.object(release_controller, "load_edge_config", return_value=edge_config),
+            mock.patch.object(release_controller, "verify_release_source", return_value=commit),
+            mock.patch.object(
+                release_controller,
+                "expected_policy",
+                return_value=(
+                    "p1.6.test",
+                    {
+                        "idempotency": 90,
+                        "request_state": 90,
+                        "receipt_mirror": 90,
+                        "artifacts": 91,
+                        "cleanup_tasks": 90,
+                    },
+                ),
+            ),
+            mock.patch.object(release_controller, "run"),
+            mock.patch.object(release_controller, "versions", return_value=version_payload),
+            mock.patch.object(
+                release_controller,
+                "deployments",
+                side_effect=[old_deployment, new_deployment],
+            ),
+            mock.patch.object(release_controller, "deploy_versions") as deploy_versions,
+            mock.patch.object(
+                release_controller,
+                "wait_for_version_propagation",
+                return_value={"attempts": 1},
+            ),
+            mock.patch.object(release_controller, "smoke_version", return_value={}),
+            mock.patch.object(
+                release_controller,
+                "signed_request",
+                return_value=(200, {}, health),
+            ),
+            mock.patch.object(release_controller, "write_receipt", side_effect=capture_receipt),
+            mock.patch.object(release_controller, "wrangler") as wrangler,
+        ):
+            result = release_controller.release(args)
+
+        self.assertEqual(result, 0)
+        self.assertEqual(deploy_versions.call_count, 2)
+        wrangler.assert_not_called()
+        self.assertEqual(reports[0][0], "release")
+        self.assertTrue(reports[0][1]["candidate_reused"])
+        self.assertEqual(
+            reports[0][1]["candidate_version"],
+            "candidate-version",
+        )
 
     def test_deployments_are_sorted_by_created_time(self) -> None:
         payload = [
