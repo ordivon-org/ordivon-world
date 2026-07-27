@@ -59,3 +59,20 @@ POST /v1/browser/run
 ```
 
 Arbitrary actions remain outside P1. Browser Run cannot call back into local network selection. Link decides connectivity; Edge executes external capabilities.
+
+
+## P1.5 execution coordinator
+
+`src/idempotency.ts` now implements a single-object request state machine rather than a separately written lock and Receipt. `src/execution.ts` derives bounded lease durations and execution metadata. `src/version.ts` is the explicit policy and capability version registry.
+
+```text
+HMAC request
+  → requests/v2 pending state
+  → rate-limit budget
+  → capability adapter
+  → generation-scoped Artifacts
+  → ETag-fenced committed state
+  → best-effort receipt mirror
+```
+
+`src/observability.ts` emits bounded structured events that carry execution identity but omit target URLs, request bodies, credentials, lease tokens, and R2 ETags.

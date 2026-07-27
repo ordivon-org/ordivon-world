@@ -1,5 +1,6 @@
 import { sha256Hex } from "./auth.js";
 import type { ArtifactReference, FetchReceiptDetails } from "./contracts.js";
+import type { ExecutionLease } from "./execution.js";
 import { EdgeError } from "./errors.js";
 import {
   validateExternalUrl,
@@ -16,6 +17,7 @@ export interface FetchExecutionEnvironment extends FetchPolicyEnvironment {
 
 export interface FetchExecutionResult {
   readonly artifact: ArtifactReference;
+  readonly artifacts: readonly ArtifactReference[];
   readonly fetch: FetchReceiptDetails;
 }
 
@@ -89,7 +91,7 @@ function mediaType(response: Response): string {
 
 export async function executeExternalFetch(
   environment: FetchExecutionEnvironment,
-  requestId: string,
+  lease: ExecutionLease,
   request: ValidatedFetchRequest,
   fetcher: ExternalFetcher = fetch
 ): Promise<FetchExecutionResult> {
@@ -144,15 +146,19 @@ export async function executeExternalFetch(
 
     const body = await readResponseLimited(response, request.maximumBytes);
     const sha256 = await sha256Hex(body);
-    const artifactKey = `fetch/v1/${requestId}.body`;
+    const artifactKey = `fetch/v2/${lease.request_id}/g${lease.lease_generation}/body`;
     const contentType = mediaType(response);
     const stored = await environment.ARTIFACTS.put(artifactKey, body, {
       httpMetadata: { contentType },
       customMetadata: {
-        receipt_id: requestId,
+        receipt_id: lease.request_id,
         sha256,
         source_host: currentUrl.hostname,
-        http_status: String(response.status)
+        http_status: String(response.status),
+        policy_version: lease.policy_version,
+        capability_version: lease.capability_version,
+        worker_version_id: lease.worker_version_id,
+        lease_generation: String(lease.lease_generation)
       }
     });
     if (stored === null) {
@@ -167,6 +173,15 @@ export async function executeExternalFetch(
         media_type: contentType,
         etag: stored.etag
       },
+      artifacts: [
+        {
+          key: artifactKey,
+          sha256,
+          bytes: body.byteLength,
+          media_type: contentType,
+          etag: stored.etag
+        }
+      ],
       fetch: {
         requested_url: requestedUrl,
         final_url: currentUrl.toString(),

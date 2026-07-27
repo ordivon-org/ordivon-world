@@ -8,6 +8,14 @@ import { validateExternalUrl, validateFetchRequest } from "../src/fetch-policy.j
 import { createReceipt } from "../src/receipts.js";
 
 const DIGEST = "a".repeat(64);
+const EXECUTION = {
+  policy_version: "test-policy",
+  capability_version: "test-capability",
+  worker_version_id: "test-worker-version",
+  worker_version_tag: "test",
+  worker_version_timestamp: "2026-07-27T00:00:00.000Z",
+  lease_generation: 1
+} as const;
 
 test("capabilities expose only the Edge execution surface", () => {
   const states = new Map(
@@ -25,7 +33,8 @@ test("receipt timestamps and request digests are explicit", () => {
     requestDigest: DIGEST,
     startedAt: new Date("2026-07-27T00:00:00.000Z"),
     completedAt: new Date("2026-07-27T00:00:01.000Z"),
-    receiptId: "receipt-test"
+    receiptId: "receipt-test",
+    execution: EXECUTION
   });
   assert.equal(receipt.receipt_id, "receipt-test");
   assert.equal(receipt.request_digest, DIGEST);
@@ -41,7 +50,8 @@ test("receipt rejects invalid outcome combinations", () => {
       receiptId: "receipt-test",
       startedAt: new Date("2026-07-27T00:00:01.000Z"),
       completedAt: new Date("2026-07-27T00:00:00.000Z"),
-      errorCode: "timeout"
+      errorCode: "timeout",
+      execution: EXECUTION
     })
   );
   assert.throws(() =>
@@ -52,7 +62,8 @@ test("receipt rejects invalid outcome combinations", () => {
       receiptId: "receipt-test",
       startedAt: new Date("2026-07-27T00:00:00.000Z"),
       completedAt: new Date("2026-07-27T00:00:01.000Z"),
-      errorCode: "unexpected"
+      errorCode: "unexpected",
+      execution: EXECUTION
     })
   );
 });

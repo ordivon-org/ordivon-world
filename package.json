@@ -10,10 +10,11 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/**/*.test.ts",
-    "check:client": "python3 -m py_compile scripts/ordivon_edge_client.py",
+    "check:client": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py",
+    "check:operations": "scripts/check-operations",
     "check:boundary": "node scripts/check-boundary.mjs",
     "build": "node scripts/wrangler-dry-run.mjs",
-    "ci": "pnpm typecheck && pnpm test && pnpm check:client && pnpm check:boundary && pnpm build"
+    "ci": "pnpm typecheck && pnpm test && pnpm check:client && pnpm check:operations && pnpm check:boundary && pnpm build"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "5.20260727.1",
