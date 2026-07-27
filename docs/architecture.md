@@ -44,15 +44,18 @@ POST /v1/fetch
 
 The production Worker has one private R2 binding named `ARTIFACTS`. Artifact keys are normalized, bounded, and namespaced. No public `r2.dev` access exists. Authenticated artifact reads expose only the stored body, safe content type, length, ETag, and SHA-256.
 
-## Next adapter
+## Browser Run adapter
+
+`src/browser-policy.ts` accepts only bounded navigation fields and generates a same-origin Browser Run policy. `src/browser-run.ts` invokes the Cloudflare Browser binding's `snapshot` Quick Action, validates and bounds its response, then writes three R2 objects.
 
 ```text
-Browser Run adapter
-  → action allowlist
-  → navigation and browser-time budget
-  → screenshot / extracted result
-  → R2 artifact
-  → receipt
+POST /v1/browser/run
+  → HMAC authentication
+  → Request-ID lock
+  → URL, viewport, wait, and timeout policy
+  → same-origin Browser Run snapshot
+  → PNG + rendered HTML + manifest
+  → R2 receipt
 ```
 
-Browser Run cannot call back into local network selection. Link decides connectivity; Edge executes external capabilities.
+Arbitrary actions remain outside P1. Browser Run cannot call back into local network selection. Link decides connectivity; Edge executes external capabilities.

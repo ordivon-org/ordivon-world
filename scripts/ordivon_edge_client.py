@@ -160,6 +160,28 @@ def command_fetch(config: Config, args: argparse.Namespace) -> int:
     return 0 if 200 <= status < 300 else 1
 
 
+def command_browser_run(config: Config, args: argparse.Namespace) -> int:
+    payload: dict[str, Any] = {
+        "url": args.url,
+        "viewport_width": args.viewport_width,
+        "viewport_height": args.viewport_height,
+        "full_page": args.full_page,
+        "wait_until": args.wait_until,
+        "timeout_ms": args.timeout_ms,
+        "wait_after_ms": args.wait_after_ms,
+    }
+    body = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    status, _, response = request(
+        config,
+        "POST",
+        "/v1/browser/run",
+        body=body,
+        request_id=args.request_id,
+    )
+    print_json_bytes(response)
+    return 0 if 200 <= status < 300 else 1
+
+
 def command_artifact_get(config: Config, args: argparse.Namespace) -> int:
     encoded = "/".join(urllib.parse.quote(segment, safe="") for segment in args.key.split("/"))
     status, headers, body = request(
@@ -206,6 +228,20 @@ def parser() -> argparse.ArgumentParser:
     fetch.add_argument("--accept")
     fetch.add_argument("--request-id", default=make_request_id())
 
+    browser = commands.add_parser("browser-run")
+    browser.add_argument("url")
+    browser.add_argument("--viewport-width", type=int, default=1365)
+    browser.add_argument("--viewport-height", type=int, default=768)
+    browser.add_argument("--full-page", action="store_true")
+    browser.add_argument(
+        "--wait-until",
+        choices=("load", "domcontentloaded", "networkidle0", "networkidle2"),
+        default="domcontentloaded",
+    )
+    browser.add_argument("--timeout-ms", type=int, default=15_000)
+    browser.add_argument("--wait-after-ms", type=int, default=0)
+    browser.add_argument("--request-id", default=make_request_id())
+
     receipt = commands.add_parser("receipt")
     receipt.add_argument("receipt_id")
 
@@ -225,6 +261,8 @@ def main() -> int:
             return command_json(config, "/v1/capabilities")
         if args.command == "fetch":
             return command_fetch(config, args)
+        if args.command == "browser-run":
+            return command_browser_run(config, args)
         if args.command == "receipt":
             return command_json(config, f"/v1/receipts/{args.receipt_id}")
         if args.command == "artifact-get":

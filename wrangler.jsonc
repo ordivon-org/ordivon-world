@@ -9,6 +9,9 @@
   "observability": {
     "enabled": true
   },
+  "browser": {
+    "binding": "BROWSER"
+  },
   "vars": {
     "EDGE_HMAC_KEY_ID": "runtime-v1",
     "FETCH_ALLOWED_HOSTS": "developers.cloudflare.com,api.github.com,raw.githubusercontent.com,github.com,example.com,openai.com"

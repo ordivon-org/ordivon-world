@@ -1,6 +1,7 @@
 import {
   EDGE_SCHEMA_VERSION,
   type ArtifactReference,
+  type BrowserReceiptDetails,
   type EdgeOperation,
   type EdgeReceipt,
   type FetchReceiptDetails,
@@ -15,7 +16,9 @@ export interface ReceiptFactoryOptions {
   readonly completedAt: Date;
   readonly receiptId: string;
   readonly artifact?: ArtifactReference;
+  readonly artifacts?: readonly ArtifactReference[];
   readonly fetch?: FetchReceiptDetails;
+  readonly browser?: BrowserReceiptDetails;
   readonly errorCode?: string;
 }
 
@@ -42,6 +45,9 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
   ) {
     throw new Error("errorCode must be a bounded snake_case identifier");
   }
+  if (options.artifacts !== undefined && options.artifacts.length === 0) {
+    throw new Error("artifacts must not be empty");
+  }
 
   return {
     schema_version: EDGE_SCHEMA_VERSION,
@@ -53,7 +59,9 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
     completed_at: options.completedAt.toISOString(),
     duration_ms: durationMs,
     ...(options.artifact === undefined ? {} : { artifact: options.artifact }),
+    ...(options.artifacts === undefined ? {} : { artifacts: options.artifacts }),
     ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
+    ...(options.browser === undefined ? {} : { browser: options.browser }),
     ...(options.errorCode === undefined ? {} : { error_code: options.errorCode })
   };
 }
