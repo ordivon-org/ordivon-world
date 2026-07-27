@@ -2,6 +2,8 @@
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
 bash -n "$root/scripts/ordivon-vpn"
+bash -n "$root/scripts/ordivon-vpn-keypair"
+bash -n "$root/scripts/test-vpn-keypair"
 bash -n "$root/scripts/install-ordivon-vpn"
 python3 - "$root" <<'PY'
 from pathlib import Path
@@ -9,6 +11,7 @@ import re,sys
 root=Path(sys.argv[1])
 files=[
  root/'scripts/ordivon-vpn',
+ root/'scripts/ordivon-vpn-keypair',
  root/'scripts/install-ordivon-vpn',
  root/'deploy/systemd/ordivon-vpn@.service',
  root/'docs/vpn-namespace.md',
@@ -24,3 +27,4 @@ for pattern in patterns:
         raise SystemExit('secret-like material found in VPN controller files')
 print('vpn_controller_static_checks=passed')
 PY
+"$root/scripts/test-vpn-keypair"

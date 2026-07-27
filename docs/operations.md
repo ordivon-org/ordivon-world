@@ -164,12 +164,15 @@ The Web plane has a stricter boundary: it stores only sanitized reduced state. S
 
 ## Isolated VPN namespace
 
-Install the explicit control-plane script and systemd template:
+Install the explicit control-plane scripts and systemd template:
 
 ```bash
 sudo scripts/install-ordivon-vpn
+sudo ordivon-vpn-keypair
 ordivon-vpn doctor jp-tok
 ```
+
+`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile.
 
 Start one profile and run only selected commands through it:
 

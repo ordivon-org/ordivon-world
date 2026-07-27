@@ -25,6 +25,19 @@ WSL root namespace
 
 ```bash
 sudo scripts/install-ordivon-vpn
+```
+
+Install or replace the Surfshark key pair interactively:
+
+```bash
+sudo ordivon-vpn-keypair
+```
+
+Paste the Surfshark public key at the first prompt. Paste the matching private key at the second prompt; input is hidden. The script validates that both keys form one WireGuard pair, backs up the previous local state, renders every downloaded profile, and never prints either key. A mismatch changes nothing.
+
+Then validate a profile:
+
+```bash
 ordivon-vpn doctor jp-tok
 ```
 
