@@ -14,14 +14,14 @@
 
 ## Idempotency and receipts
 
-`src/idempotency.ts` owns R2 request locks and stored receipts:
+`src/idempotency.ts` owns the authoritative R2 request state and Receipt replay:
 
 ```text
 signed request
-  → receipt lookup
-  → request-lock lookup / conditional create
-  → execute once
-  → persist success, failure, or rejection receipt
+  → requests/v2 lookup / conditional Pending create
+  → execute under a generation lease
+  → ETag-fenced final Receipt commit
+  → best-effort receipts/v2 mirror
   → deterministic replay
 ```
 
@@ -76,3 +76,8 @@ HMAC request
 ```
 
 `src/observability.ts` emits bounded structured events that carry execution identity but omit target URLs, request bodies, credentials, lease tokens, and R2 ETags.
+
+
+## Policy source
+
+`config/edge-policy.json` is consumed by Worker policy adapters, release validation, CI drift checks, and R2 lifecycle configuration. `src/policy.ts` derives the effective policy fingerprint using the actual hostname allowlist binding. This removes the previous manual coupling between policy constants, Wrangler variables, lifecycle rules, and stale-lease fencing.

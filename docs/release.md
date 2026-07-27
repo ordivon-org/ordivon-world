@@ -26,7 +26,7 @@ Cloudflare-Workers-Version-Overrides:
   ordivon-edge="<candidate-version-id>"
 ```
 
-Health and execution Receipts must report the candidate Worker version through `CF_VERSION_METADATA`; otherwise promotion is refused.
+Health, Capabilities, and execution Receipts must report the candidate Worker version through `CF_VERSION_METADATA`; otherwise promotion is refused. Candidate Health and Capabilities must also report the locally derived policy fingerprint and retention contract.
 
 ## Failure behavior
 

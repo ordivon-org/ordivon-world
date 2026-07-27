@@ -14,10 +14,7 @@ import {
   leaseDurationMilliseconds,
   type ExecutionLease
 } from "./execution.js";
-import {
-  CAPABILITY_VERSIONS,
-  EDGE_POLICY_VERSION
-} from "./version.js";
+import { CAPABILITY_VERSIONS } from "./version.js";
 
 interface PendingRequestState {
   readonly schema_version: typeof REQUEST_STATE_SCHEMA_VERSION;
@@ -53,6 +50,7 @@ export interface BeginRequestOptions {
   readonly requestId: string;
   readonly requestDigest: string;
   readonly operation: EdgeOperation;
+  readonly policyVersion: string;
   readonly workerVersion: WorkerVersionMetadata;
   readonly now?: Date;
   readonly tokenFactory?: () => string;
@@ -202,6 +200,7 @@ function createPendingState(
     operation: options.operation,
     execution: executionMetadata(
       options.operation,
+      options.policyVersion,
       options.workerVersion,
       generation
     ),
@@ -301,7 +300,7 @@ export async function beginRequest(
       );
     }
     if (
-      existing.state.execution.policy_version !== EDGE_POLICY_VERSION ||
+      existing.state.execution.policy_version !== options.policyVersion ||
       existing.state.execution.capability_version !==
         CAPABILITY_VERSIONS[options.operation]
     ) {

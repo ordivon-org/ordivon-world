@@ -95,3 +95,10 @@ cleanup/v2/<request-id>/g<generation>.json
 ```
 
 The tombstone contains only Request ID, operation, lease generation, Artifact keys, reason, and timestamp. It contains no lease token or ETag. The GC controller validates that every requested deletion belongs to the same Request ID and generation and is under `fetch/v2` or `browser/v2` before deleting anything.
+
+
+## Policy fingerprint and retention window
+
+The execution policy is no longer a manually maintained label. Edge hashes `config/edge-policy.json` together with the effective Fetch hostname allowlist and stores the resulting `p1.6.<digest>` fingerprint in each lease and Receipt. Configuration changes therefore fence expired work even when the capability contract version itself is unchanged.
+
+Request-ID idempotency, authoritative request state, and Receipt mirrors are retained for 90 days. Capability Artifacts are retained for 91 days, providing a one-day safety margin so a lifecycle-managed Artifact does not expire before its replayable Receipt. The retention contract is exposed by `GET /v1/capabilities`.

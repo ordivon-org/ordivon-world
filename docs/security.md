@@ -15,14 +15,15 @@ Requests outside a five-minute window, signed with a different key ID, or carryi
 
 ## Replay and idempotency
 
-R2 stores an atomic Request-ID lock using an `If-None-Match: *` equivalent condition. A Request ID can have only one request digest:
+R2 stores one authoritative `requests/v2` state object per Request ID. Creation uses an `If-None-Match: *` equivalent condition; takeover and final commit use the current object ETag. A Request ID can have only one request digest:
 
-- same ID and same digest: return the stored receipt without re-execution;
+- same ID and committed digest: return the stored Receipt without re-execution;
 - same ID and different digest: `409 idempotency_conflict`;
-- active lock without receipt: `409 request_in_progress`;
-- stale lock: conditional takeover using the existing R2 ETag.
+- active Pending state: `409 request_in_progress`;
+- expired Pending state with the same policy: generation-incrementing conditional takeover;
+- expired Pending state under a different policy: require a new Request ID.
 
-R2 strong consistency makes the lock and later receipt globally visible after each completed write.
+R2 strong consistency makes each state transition globally visible after the write completes. The idempotency contract is retained for 90 days.
 
 ## External fetch
 
@@ -85,3 +86,8 @@ Final Receipts explicitly whitelist execution metadata fields. Private lease tok
 Every new Receipt records the policy version, capability version, Worker version ID/tag/timestamp, and lease generation. An expired pending request cannot be taken over after a policy or capability version change; callers must use a new Request ID.
 
 Rate Limit bindings fail closed when the budget service is unavailable. Replays return an already committed Receipt without invoking the budget or external capability again.
+
+
+## Client-side Artifact verification
+
+The local client treats the R2 SHA-256 metadata as mandatory. It compares the downloaded bytes against `X-Ordivon-Sha256` and, when supplied, against the Receipt digest before replacing the destination. Failed verification leaves any existing destination unchanged. Successful files are atomically installed with mode `0600`.

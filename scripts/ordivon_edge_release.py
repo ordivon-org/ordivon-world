@@ -25,6 +25,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 WORKER_NAME = "ordivon-edge"
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
 EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
+POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
+WRANGLER_CONFIG = ROOT / "wrangler.jsonc"
 RELEASE_DIR = pathlib.Path("/root/backups/ordivon-edge/releases")
 
 
@@ -70,6 +72,33 @@ def cloudflare_environment() -> dict[str, str]:
         }
     )
     return environment
+
+
+def expected_policy() -> tuple[str, dict[str, int]]:
+    policy = load_json(POLICY_CONFIG)
+    wrangler = load_json(WRANGLER_CONFIG)
+    allowed_hosts = wrangler.get("vars", {}).get("FETCH_ALLOWED_HOSTS")
+    if not isinstance(allowed_hosts, str) or not allowed_hosts:
+        fail("FETCH_ALLOWED_HOSTS is missing from Wrangler configuration")
+    normalized_hosts = sorted(
+        host.strip().lower().rstrip(".")
+        for host in allowed_hosts.split(",")
+        if host.strip()
+    )
+    payload = json.dumps(
+        {
+            "policy": policy,
+            "effective_fetch_allowed_hosts": normalized_hosts,
+        },
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    family = policy.get("family")
+    retention = policy.get("retention_days")
+    if not isinstance(family, str) or not isinstance(retention, dict):
+        fail("Edge policy configuration is invalid")
+    version = f"{family}.{hashlib.sha256(payload).hexdigest()[:16]}"
+    return version, retention
 
 
 def load_edge_config() -> EdgeConfig:
@@ -319,6 +348,14 @@ def assert_version(value: Any, version_id: str, context: str) -> None:
         fail(f"{context} reached Worker version {actual!r}, expected {version_id}")
 
 
+def assert_policy(value: Any, policy_version: str, context: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{context} did not return a JSON object")
+    actual = value.get("policy_version")
+    if actual != policy_version:
+        fail(f"{context} reported policy {actual!r}, expected {policy_version}")
+
+
 def wait_for_version_propagation(
     config: EdgeConfig,
     version_id: str,
@@ -408,7 +445,12 @@ def smoke_operation(
     fail(f"Smoke operation {path} remained rate limited: HTTP {last_status}: {last_value}")
 
 
-def smoke_version(config: EdgeConfig, version_id: str) -> dict[str, Any]:
+def smoke_version(
+    config: EdgeConfig,
+    version_id: str,
+    policy_version: str,
+    retention: dict[str, int],
+) -> dict[str, Any]:
     status, _, health = signed_request(
         config,
         "GET",
@@ -418,6 +460,30 @@ def smoke_version(config: EdgeConfig, version_id: str) -> dict[str, Any]:
     if status != 200:
         fail(f"Version-specific health smoke returned HTTP {status}: {health}")
     assert_version(health, version_id, "health smoke")
+    assert_policy(health, policy_version, "health smoke")
+
+    status, _, capabilities = signed_request(
+        config,
+        "GET",
+        "/v1/capabilities",
+        version_override=version_id,
+    )
+    if status != 200:
+        fail(f"Version-specific capability smoke returned HTTP {status}: {capabilities}")
+    assert_version(capabilities, version_id, "capability smoke")
+    assert_policy(capabilities, policy_version, "capability smoke")
+    expected_retention = {
+        "idempotency_days": retention["idempotency"],
+        "request_state_days": retention["request_state"],
+        "receipt_mirror_days": retention["receipt_mirror"],
+        "artifact_days": retention["artifacts"],
+        "cleanup_task_days": retention["cleanup_tasks"],
+    }
+    if capabilities.get("retention") != expected_retention:
+        fail(
+            "Capability retention does not match the release policy: "
+            f"{capabilities.get('retention')!r}"
+        )
 
     fetch_body = json.dumps(
         {
@@ -470,6 +536,7 @@ def smoke_version(config: EdgeConfig, version_id: str) -> dict[str, Any]:
 
     return {
         "health": health,
+        "capabilities": capabilities,
         "fetch_request_id": fetch_id,
         "fetch_receipt": fetch_receipt,
         "browser_request_id": browser_id,
@@ -493,11 +560,14 @@ def release(args: argparse.Namespace) -> int:
     edge = load_edge_config()
     commit = verify_release_source()
     message = args.message or f"Ordivon Edge {commit[:12]}"
+    policy_version, retention = expected_policy()
     report: dict[str, Any] = {
         "status": "preflight",
         "started_at": dt.datetime.now(dt.UTC).isoformat(),
         "git_commit": commit,
         "message": message,
+        "expected_policy_version": policy_version,
+        "expected_retention": retention,
     }
     previous_version: str | None = None
     new_version: str | None = None
@@ -560,7 +630,12 @@ def release(args: argparse.Namespace) -> int:
             new_version,
             use_override=True
         )
-        report["smoke"] = smoke_version(edge, new_version)
+        report["smoke"] = smoke_version(
+            edge,
+            new_version,
+            policy_version,
+            retention,
+        )
         report["status"] = "smoke_passed"
         deploy_versions(
             environment,
@@ -576,6 +651,7 @@ def release(args: argparse.Namespace) -> int:
         if status != 200:
             fail(f"Post-promotion health returned HTTP {status}: {health}")
         assert_version(health, new_version, "post-promotion health")
+        assert_policy(health, policy_version, "post-promotion health")
         report.update(
             {
                 "status": "promoted",

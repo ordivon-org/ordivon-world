@@ -19,6 +19,11 @@ SPEC.loader.exec_module(release_controller)
 
 
 class ReleaseControllerTests(unittest.TestCase):
+    def test_expected_policy_matches_local_configuration(self) -> None:
+        version, retention = release_controller.expected_policy()
+        self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
+        self.assertGreater(retention["artifacts"], retention["idempotency"])
+
     def test_deployments_are_sorted_by_created_time(self) -> None:
         payload = [
             {"id": "new", "created_on": "2026-07-27T02:00:00Z"},

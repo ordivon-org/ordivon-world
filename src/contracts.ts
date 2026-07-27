@@ -1,7 +1,5 @@
-import {
-  CAPABILITY_VERSIONS,
-  EDGE_POLICY_VERSION
-} from "./version.js";
+import { RETENTION_POLICY } from "./policy.js";
+import { CAPABILITY_VERSIONS } from "./version.js";
 
 export const EDGE_SCHEMA_VERSION = 1 as const;
 export const REQUEST_STATE_SCHEMA_VERSION = 2 as const;
@@ -24,10 +22,19 @@ export interface EdgeCapability {
   readonly reason: string;
 }
 
+export interface EdgeRetentionPolicy {
+  readonly idempotency_days: number;
+  readonly request_state_days: number;
+  readonly receipt_mirror_days: number;
+  readonly artifact_days: number;
+  readonly cleanup_task_days: number;
+}
+
 export interface EdgeCapabilitiesDocument {
   readonly schema_version: typeof EDGE_SCHEMA_VERSION;
   readonly service: "ordivon-edge";
   readonly policy_version: string;
+  readonly retention: EdgeRetentionPolicy;
   readonly capabilities: readonly EdgeCapability[];
 }
 
@@ -102,46 +109,57 @@ export interface EdgeReceiptEnvelope {
   readonly replayed: boolean;
 }
 
-export const CAPABILITIES: EdgeCapabilitiesDocument = {
-  schema_version: EDGE_SCHEMA_VERSION,
-  service: "ordivon-edge",
-  policy_version: EDGE_POLICY_VERSION,
-  capabilities: [
-    {
-      id: "artifact.put",
-      version: CAPABILITY_VERSIONS["artifact.put"],
-      state: "ready",
-      reason: "Bounded Edge operations can persist private artifacts in R2."
+export function capabilitiesDocument(
+  policyVersion: string
+): EdgeCapabilitiesDocument {
+  return {
+    schema_version: EDGE_SCHEMA_VERSION,
+    service: "ordivon-edge",
+    policy_version: policyVersion,
+    retention: {
+      idempotency_days: RETENTION_POLICY.idempotency,
+      request_state_days: RETENTION_POLICY.request_state,
+      receipt_mirror_days: RETENTION_POLICY.receipt_mirror,
+      artifact_days: RETENTION_POLICY.artifacts,
+      cleanup_task_days: RETENTION_POLICY.cleanup_tasks
     },
-    {
-      id: "artifact.get",
-      version: CAPABILITY_VERSIONS["artifact.get"],
-      state: "ready",
-      reason: "Authenticated clients can retrieve validated private artifact keys."
-    },
-    {
-      id: "artifact.delete",
-      version: CAPABILITY_VERSIONS["artifact.delete"],
-      state: "planned",
-      reason: "Deletion remains internal until a receipt-backed deletion contract is added."
-    },
-    {
-      id: "fetch",
-      version: CAPABILITY_VERSIONS.fetch,
-      state: "ready",
-      reason: "Signed requests can execute allowlisted, bounded HTTPS fetches with transactional receipts."
-    },
-    {
-      id: "browser.run",
-      version: CAPABILITY_VERSIONS["browser.run"],
-      state: "ready",
-      reason: "Signed requests can capture allowlisted same-origin browser snapshots with transactional artifacts."
-    },
-    {
-      id: "receipt",
-      version: "receipt.v2",
-      state: "ready",
-      reason: "Pending state, fenced leases, committed receipts, replay, and conflict detection are implemented."
-    }
-  ]
-};
+    capabilities: [
+      {
+        id: "artifact.put",
+        version: CAPABILITY_VERSIONS["artifact.put"],
+        state: "ready",
+        reason: "Bounded Edge operations can persist private artifacts in R2."
+      },
+      {
+        id: "artifact.get",
+        version: CAPABILITY_VERSIONS["artifact.get"],
+        state: "ready",
+        reason: "Authenticated clients can retrieve validated private artifact keys."
+      },
+      {
+        id: "artifact.delete",
+        version: CAPABILITY_VERSIONS["artifact.delete"],
+        state: "planned",
+        reason: "Deletion remains internal until a receipt-backed deletion contract is added."
+      },
+      {
+        id: "fetch",
+        version: CAPABILITY_VERSIONS.fetch,
+        state: "ready",
+        reason: "Signed requests can execute allowlisted, bounded HTTPS fetches with transactional receipts."
+      },
+      {
+        id: "browser.run",
+        version: CAPABILITY_VERSIONS["browser.run"],
+        state: "ready",
+        reason: "Signed requests can capture allowlisted same-origin browser snapshots with transactional artifacts."
+      },
+      {
+        id: "receipt",
+        version: "receipt.v2",
+        state: "ready",
+        reason: "Pending state, fenced leases, committed receipts, replay, and conflict detection are implemented."
+      }
+    ]
+  };
+}

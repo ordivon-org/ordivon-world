@@ -3,8 +3,9 @@ import test from "node:test";
 
 import { validateArtifactKey } from "../src/artifacts.js";
 import { browserRunOptions, validateBrowserRunRequest } from "../src/browser-policy.js";
-import { CAPABILITIES } from "../src/contracts.js";
+import { capabilitiesDocument } from "../src/contracts.js";
 import { validateExternalUrl, validateFetchRequest } from "../src/fetch-policy.js";
+import { effectivePolicyVersion } from "../src/policy.js";
 import { createReceipt } from "../src/receipts.js";
 
 const DIGEST = "a".repeat(64);
@@ -18,9 +19,11 @@ const EXECUTION = {
 } as const;
 
 test("capabilities expose only the Edge execution surface", () => {
+  const document = capabilitiesDocument("test-policy");
   const states = new Map(
-    CAPABILITIES.capabilities.map((capability) => [capability.id, capability.state])
+    document.capabilities.map((capability) => [capability.id, capability.state])
   );
+  assert.ok(document.retention.artifact_days > document.retention.idempotency_days);
   assert.equal(states.get("fetch"), "ready");
   assert.equal(states.get("artifact.get"), "ready");
   assert.equal(states.get("browser.run"), "ready");
@@ -148,4 +151,20 @@ test("browser policy exposes only bounded navigation and same-origin resources",
       environment
     )
   );
+});
+
+
+test("effective policy version is stable across host order and changes with policy inputs", async () => {
+  const first = await effectivePolicyVersion({
+    FETCH_ALLOWED_HOSTS: "b.example.org,a.example.org"
+  });
+  const reordered = await effectivePolicyVersion({
+    FETCH_ALLOWED_HOSTS: "a.example.org,b.example.org"
+  });
+  const changed = await effectivePolicyVersion({
+    FETCH_ALLOWED_HOSTS: "a.example.org,c.example.org"
+  });
+  assert.match(first, /^p1\.6\.[a-f0-9]{16}$/);
+  assert.equal(first, reordered);
+  assert.notEqual(first, changed);
 });

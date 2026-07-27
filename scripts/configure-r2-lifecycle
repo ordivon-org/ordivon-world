@@ -3,6 +3,7 @@ set -euo pipefail
 
 bucket="ordivon-artifacts"
 config="/root/.config/ordivon/secrets/cloudflare.json"
+policy="config/edge-policy.json"
 
 readarray -t cf < <(python3 - "$config" <<'PY'
 import json,sys
@@ -14,18 +15,27 @@ PY
 export CLOUDFLARE_API_TOKEN="${cf[0]}"
 export CLOUDFLARE_ACCOUNT_ID="${cf[1]}"
 
-rules=(
-  "edge-v2-request-state-90d|requests/v2/|90"
-  "edge-v2-receipt-mirror-90d|receipts/v2/|90"
-  "edge-v2-fetch-artifacts-30d|fetch/v2/|30"
-  "edge-v2-browser-artifacts-30d|browser/v2/|30"
-  "edge-v2-cleanup-tasks-90d|cleanup/v2/|90"
+mapfile -t rules < <(python3 - "$policy" <<'PY'
+import json,sys
+r=json.load(open(sys.argv[1]))['retention_days']
+print(f"edge-v2-request-state-{r['request_state']}d|requests/v2/|{r['request_state']}")
+print(f"edge-v2-receipt-mirror-{r['receipt_mirror']}d|receipts/v2/|{r['receipt_mirror']}")
+print(f"edge-v2-fetch-artifacts-{r['artifacts']}d|fetch/v2/|{r['artifacts']}")
+print(f"edge-v2-browser-artifacts-{r['artifacts']}d|browser/v2/|{r['artifacts']}")
+print(f"edge-v2-cleanup-tasks-{r['cleanup_tasks']}d|cleanup/v2/|{r['cleanup_tasks']}")
+PY
 )
+
+# Remove managed rules by prefix so retention changes do not leave stale names behind.
+existing="$(pnpm exec wrangler r2 bucket lifecycle list "$bucket" --jurisdiction default)"
+while IFS= read -r name; do
+  [[ -n "$name" ]] || continue
+  pnpm exec wrangler r2 bucket lifecycle remove "$bucket" \
+    --name "$name" --jurisdiction default >/dev/null
+done < <(sed -n 's/^name:[[:space:]]*\(edge-v2-.*\)$/\1/p' <<<"$existing")
 
 for entry in "${rules[@]}"; do
   IFS='|' read -r name prefix days <<<"$entry"
-  pnpm exec wrangler r2 bucket lifecycle remove "$bucket" \
-    --name "$name" --jurisdiction default >/dev/null 2>&1 || true
   pnpm exec wrangler r2 bucket lifecycle add "$bucket" "$name" "$prefix" \
     --expire-days "$days" --jurisdiction default --force
 done

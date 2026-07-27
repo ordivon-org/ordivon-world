@@ -3,6 +3,7 @@ import test from "node:test";
 
 import type { EdgeReceiptEnvelope } from "../src/contracts.js";
 import { handleRequest } from "../src/index.js";
+import { effectivePolicyVersion } from "../src/policy.js";
 import { MemoryR2, makeEnv, signedRequest } from "./helpers.js";
 
 test("unsigned requests are rejected before route handling", async () => {
@@ -26,7 +27,7 @@ test("signed health and capabilities are minimal and non-cacheable", async () =>
     schema_version: 1,
     service: "ordivon-edge",
     status: "ok",
-    policy_version: "2026-07-27.p1.5",
+    policy_version: await effectivePolicyVersion(environment),
     worker_version: {
       id: "test-worker-version",
       tag: "test",
@@ -43,6 +44,10 @@ test("signed health and capabilities are minimal and non-cacheable", async () =>
   const body = await capabilities.text();
   assert.equal(capabilities.status, 200);
   assert.doesNotMatch(body, /account_id|bucket_name|ordivon-artifacts/i);
+  const document = JSON.parse(body) as {
+    retention: { artifact_days: number; idempotency_days: number };
+  };
+  assert.ok(document.retention.artifact_days > document.retention.idempotency_days);
 });
 
 test("bounded fetch persists an artifact and receipt, then replays without refetching", async () => {

@@ -25,6 +25,7 @@ const WORKER_VERSION: WorkerVersionMetadata = {
 };
 const DIGEST = "c".repeat(64);
 const NO_LOG = () => {};
+const TEST_POLICY_VERSION = "test-policy-current";
 
 function artifact(key: string): ArtifactReference {
   return {
@@ -109,6 +110,7 @@ test("lease takeover increments generation and fences the stale executor", async
     requestId,
     requestDigest: DIGEST,
     operation: "fetch",
+    policyVersion: TEST_POLICY_VERSION,
     workerVersion: WORKER_VERSION,
     now: new Date("2026-07-27T00:00:00.000Z"),
     tokenFactory: () => "lease-one"
@@ -121,6 +123,7 @@ test("lease takeover increments generation and fences the stale executor", async
     requestId,
     requestDigest: DIGEST,
     operation: "fetch",
+    policyVersion: TEST_POLICY_VERSION,
     workerVersion: WORKER_VERSION,
     now: new Date("2026-07-27T00:01:01.000Z"),
     tokenFactory: () => "lease-two"
@@ -268,7 +271,8 @@ test("expired requests cannot cross a policy version boundary", async () => {
       requestId,
       requestDigest: DIGEST,
       operation: "fetch",
-      workerVersion: WORKER_VERSION,
+      policyVersion: TEST_POLICY_VERSION,
+    workerVersion: WORKER_VERSION,
       now: new Date("2026-07-27T00:02:00.000Z")
     }),
     (error: unknown) => errorCode(error) === "request_policy_changed"
@@ -339,6 +343,7 @@ test("failed Artifact deletion creates a bounded cleanup tombstone", async () =>
     requestId,
     requestDigest: DIGEST,
     operation: "fetch",
+    policyVersion: TEST_POLICY_VERSION,
     workerVersion: WORKER_VERSION,
     now: new Date("2026-07-27T00:00:00.000Z"),
     tokenFactory: () => "cleanup-lease"
@@ -394,7 +399,7 @@ test("structured logs contain execution identity but not request content", async
   );
   const serialized = JSON.stringify(entries);
   assert.doesNotMatch(serialized, /private-path|token=hidden|EDGE_HMAC/);
-  assert.match(serialized, /2026-07-27\.p1\.5/);
+  assert.match(serialized, /p1\.6\.[a-f0-9]{16}/);
   assert.match(serialized, /test-worker-version/);
   assert.match(serialized, /lease_generation/);
 });
