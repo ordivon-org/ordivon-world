@@ -51,6 +51,7 @@ pnpm run ci
 ```bash
 scripts/install-edge-operations
 ordivon-edge health
+ordivon-edge status --repo /root/projects/ordivon-edge --expected-ref HEAD
 ordivon-edge fetch https://developers.cloudflare.com/
 ordivon-edge browser-run https://example.com/ --full-page
 ordivon-edge receipt <request-id> --wait

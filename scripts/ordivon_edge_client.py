@@ -11,6 +11,8 @@ import http.client
 import json
 import os
 import pathlib
+import re
+import subprocess
 import sys
 import tempfile
 import time
@@ -162,6 +164,171 @@ def command_json(config: Config, path: str) -> int:
     return 0 if 200 <= status < 300 else 1
 
 
+WORKER_RELEASE_INPUTS = (
+    "src",
+    "config/edge-policy.json",
+    "wrangler.jsonc",
+    "package.json",
+    "pnpm-lock.yaml",
+    "tsconfig.json",
+)
+
+
+def git(
+    repository: pathlib.Path,
+    *arguments: str,
+    check: bool = True,
+) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(
+        ["git", "-C", str(repository), *arguments],
+        text=True,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if check and completed.returncode != 0:
+        detail = (completed.stderr or completed.stdout).strip()
+        raise ClientError(
+            f"Git command failed: {' '.join(arguments)}"
+            + (f"\n{detail}" if detail else "")
+        )
+    return completed
+
+
+def resolve_commit(repository: pathlib.Path, reference: str) -> str:
+    return git(
+        repository,
+        "rev-parse",
+        "--verify",
+        f"{reference}^{{commit}}",
+    ).stdout.strip()
+
+
+def release_digest(repository: pathlib.Path, commit: str) -> str:
+    listing = git(
+        repository,
+        "ls-tree",
+        "-r",
+        "--full-tree",
+        commit,
+        "--",
+        *WORKER_RELEASE_INPUTS,
+    ).stdout
+    if not listing.strip():
+        raise ClientError(f"Worker release inputs are empty at commit: {commit}")
+    return hashlib.sha256(listing.encode("utf-8")).hexdigest()
+
+
+def commit_relation(
+    repository: pathlib.Path,
+    deployed_commit: str,
+    expected_commit: str,
+) -> str:
+    if deployed_commit == expected_commit:
+        return "current"
+    deployed_ancestor = git(
+        repository,
+        "merge-base",
+        "--is-ancestor",
+        deployed_commit,
+        expected_commit,
+        check=False,
+    )
+    if deployed_ancestor.returncode == 0:
+        return "behind"
+    if deployed_ancestor.returncode not in {0, 1}:
+        return "unknown"
+    expected_ancestor = git(
+        repository,
+        "merge-base",
+        "--is-ancestor",
+        expected_commit,
+        deployed_commit,
+        check=False,
+    )
+    if expected_ancestor.returncode == 0:
+        return "ahead"
+    if expected_ancestor.returncode == 1:
+        return "diverged"
+    return "unknown"
+
+
+def deployment_identity(health: dict[str, Any]) -> tuple[str | None, str | None]:
+    identity = health.get("deployment_identity")
+    if isinstance(identity, dict):
+        source = identity.get("source_commit")
+        digest = identity.get("worker_release_digest")
+        return (
+            source if isinstance(source, str) else None,
+            digest if isinstance(digest, str) else None,
+        )
+    version = health.get("worker_version")
+    tag = version.get("tag") if isinstance(version, dict) else None
+    current = re.fullmatch(
+        r"git-([0-9a-f]{12})-src-([0-9a-f]{16})-[0-9]+",
+        tag or "",
+    )
+    if current is not None:
+        return current.group(1), current.group(2)
+    legacy = re.fullmatch(r"git-([0-9a-f]{12})-[0-9]+", tag or "")
+    return (legacy.group(1), None) if legacy is not None else (None, None)
+
+
+def command_status(config: Config, args: argparse.Namespace) -> int:
+    status, _, body = request(config, "GET", "/health")
+    try:
+        health = json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise ClientError("Edge returned a non-JSON health response") from exc
+    if not isinstance(health, dict):
+        raise ClientError("Edge health response is not an object")
+    if not 200 <= status < 300:
+        print(json.dumps(health, indent=2, ensure_ascii=False))
+        return 1
+
+    repository = pathlib.Path(args.repo).expanduser().resolve()
+    expected_commit = resolve_commit(repository, args.expected_ref)
+    source_ref, deployed_digest = deployment_identity(health)
+    deployed_commit: str | None = None
+    relation = "unknown"
+    source_error: str | None = None
+    if source_ref is not None:
+        try:
+            deployed_commit = resolve_commit(repository, source_ref)
+            relation = commit_relation(repository, deployed_commit, expected_commit)
+        except ClientError as error:
+            source_error = str(error)
+
+    expected_digest = release_digest(repository, expected_commit)
+    inputs_status = (
+        "current"
+        if deployed_digest == expected_digest[:16]
+        else "drifted"
+        if deployed_digest is not None
+        else "unknown"
+    )
+    result = {
+        "ok": True,
+        "service": health.get("service"),
+        "status": health.get("status"),
+        "policy_version": health.get("policy_version"),
+        "worker_version": health.get("worker_version"),
+        "deployment": {
+            "source_ref": source_ref,
+            "source_commit": deployed_commit,
+            "expected_ref": args.expected_ref,
+            "expected_commit": expected_commit,
+            "source_relation": relation,
+            "worker_release_digest": deployed_digest,
+            "expected_worker_release_digest": expected_digest[:16],
+            "worker_inputs": inputs_status,
+            "source_error": source_error,
+        },
+    }
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0
+
+
 def command_fetch(config: Config, args: argparse.Namespace) -> int:
     payload: dict[str, Any] = {
         "url": args.url,
@@ -301,6 +468,9 @@ def parser() -> argparse.ArgumentParser:
     commands = root.add_subparsers(dest="command", required=True)
     commands.add_parser("health")
     commands.add_parser("capabilities")
+    status = commands.add_parser("status")
+    status.add_argument("--repo", default=".")
+    status.add_argument("--expected-ref", default="HEAD")
 
     fetch = commands.add_parser("fetch")
     fetch.add_argument("url")
@@ -344,6 +514,8 @@ def main() -> int:
             return command_json(config, "/health")
         if args.command == "capabilities":
             return command_json(config, "/v1/capabilities")
+        if args.command == "status":
+            return command_status(config, args)
         if args.command == "fetch":
             return command_fetch(config, args)
         if args.command == "browser-run":

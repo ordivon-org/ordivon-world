@@ -57,6 +57,7 @@ Requests outside a five-minute clock window are rejected. Reusing a Request ID w
 
 ```bash
 ordivon-edge health
+ordivon-edge status --repo /root/projects/ordivon-edge --expected-ref HEAD
 ordivon-edge capabilities
 ordivon-edge fetch https://developers.cloudflare.com/ --maximum-bytes 262144
 ordivon-edge receipt <receipt-id>

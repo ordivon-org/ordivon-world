@@ -244,6 +244,45 @@ def git_output(*arguments: str) -> str:
     return run(["git", *arguments], capture=True).stdout.strip()
 
 
+def worker_release_digest(commit: str) -> str:
+    listing = run(
+        [
+            "git",
+            "ls-tree",
+            "-r",
+            "--full-tree",
+            commit,
+            "--",
+            *WORKER_RELEASE_INPUTS,
+        ],
+        capture=True,
+    ).stdout
+    if not listing.strip():
+        fail(f"Worker release inputs are empty at commit: {commit}")
+    return hashlib.sha256(listing.encode("utf-8")).hexdigest()
+
+
+def worker_version_tag(commit: str, release_digest: str, timestamp: int) -> str:
+    if re.fullmatch(r"[0-9a-f]{40}", commit) is None:
+        fail("Worker source commit is not a full lowercase Git object ID")
+    if re.fullmatch(r"[0-9a-f]{64}", release_digest) is None:
+        fail("Worker release digest is not a SHA-256 digest")
+    return f"git-{commit[:12]}-src-{release_digest[:16]}-{timestamp}"
+
+
+def parse_worker_version_tag(tag: str | None) -> tuple[str, str | None]:
+    current = re.fullmatch(
+        r"git-([0-9a-f]{12})-src-([0-9a-f]{16})-[0-9]+",
+        tag or "",
+    )
+    if current is not None:
+        return current.group(1), current.group(2)
+    legacy = re.fullmatch(r"git-([0-9a-f]{12})-[0-9]+", tag or "")
+    if legacy is not None:
+        return legacy.group(1), None
+    fail(f"Worker Version has no valid Git source tag: tag={tag!r}")
+
+
 def verify_release_source() -> str:
     if git_output("status", "--porcelain"):
         fail("Repository is dirty; release requires a clean main branch")
@@ -352,13 +391,21 @@ def resumable_candidate(
         fail(f"Candidate Worker Version does not exist: {version_id}")
     annotations = candidate.get("annotations")
     tag = annotations.get("workers/tag") if isinstance(annotations, dict) else None
-    match = re.fullmatch(r"git-([0-9a-f]{12})-[0-9]+", tag or "")
-    if match is None:
+    try:
+        candidate_ref, candidate_digest = parse_worker_version_tag(tag)
+    except ReleaseError as error:
         fail(
             "Candidate Worker Version has no valid Git source tag: "
-            f"version={version_id}, tag={tag!r}"
+            f"version={version_id}, tag={tag!r}, error={error}"
         )
-    candidate_ref = match.group(1)
+    if candidate_digest is not None:
+        current_digest = worker_release_digest(commit)
+        if candidate_digest != current_digest[:16]:
+            fail(
+                "Candidate Worker Version release digest does not match current inputs: "
+                f"version={version_id}, candidate_digest={candidate_digest}, "
+                f"current_digest={current_digest[:16]}"
+            )
     if candidate_ref != commit[:12] and not source_equivalent(
         candidate_ref,
         commit,
@@ -839,12 +886,14 @@ def release(args: argparse.Namespace) -> int:
     environment = cloudflare_environment()
     edge = load_edge_config()
     commit = verify_release_source()
+    release_digest = worker_release_digest(commit)
     message = args.message or f"Ordivon Edge {commit[:12]}"
     policy_version, retention = expected_policy()
     report: dict[str, Any] = {
         "status": "preflight",
         "started_at": dt.datetime.now(dt.UTC).isoformat(),
         "git_commit": commit,
+        "worker_release_digest": release_digest,
         "message": message,
         "expected_policy_version": policy_version,
         "expected_retention": retention,
@@ -886,7 +935,7 @@ def release(args: argparse.Namespace) -> int:
             )
         else:
             before_versions = {item.get("id") for item in version_list}
-            tag = f"git-{commit[:12]}-{int(time.time())}"
+            tag = worker_version_tag(commit, release_digest, int(time.time()))
             report.update(
                 {
                     "tag": tag,
@@ -975,6 +1024,7 @@ def release(args: argparse.Namespace) -> int:
                     "ok": True,
                     "status": report["status"],
                     "git_commit": commit,
+                    "worker_release_digest": release_digest,
                     "previous_version": previous_version,
                     "version_id": new_version,
                     "receipt": str(receipt_path),

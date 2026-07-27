@@ -32,6 +32,10 @@ test("signed health and capabilities are minimal and non-cacheable", async () =>
       id: "test-worker-version",
       tag: "test",
       timestamp: "2026-07-27T00:00:00.000Z"
+    },
+    deployment_identity: {
+      source_commit: null,
+      worker_release_digest: null
     }
   });
 

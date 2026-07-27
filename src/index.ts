@@ -46,6 +46,7 @@ import {
   REQUEST_POLICY
 } from "./policy.js";
 import { createReceipt } from "./receipts.js";
+import { workerDeploymentIdentity } from "./version.js";
 const RECEIPT_PREFIX = "/v1/receipts/";
 const ARTIFACT_PREFIX = "/v1/artifacts/";
 
@@ -480,7 +481,10 @@ export async function handleRequest(
         service: "ordivon-edge",
         status: "ok",
         policy_version: await effectivePolicyVersion(environment),
-        worker_version: environment.CF_VERSION_METADATA
+        worker_version: environment.CF_VERSION_METADATA,
+        deployment_identity: workerDeploymentIdentity(
+          environment.CF_VERSION_METADATA
+        )
       });
     }
 
@@ -488,7 +492,10 @@ export async function handleRequest(
       if (request.method !== "GET") return methodNotAllowed("GET");
       return jsonResponse({
         ...capabilitiesDocument(await effectivePolicyVersion(environment)),
-        worker_version: environment.CF_VERSION_METADATA
+        worker_version: environment.CF_VERSION_METADATA,
+        deployment_identity: workerDeploymentIdentity(
+          environment.CF_VERSION_METADATA
+        )
       });
     }
 

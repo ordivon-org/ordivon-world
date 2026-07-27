@@ -98,6 +98,50 @@ class ReleaseControllerTests(unittest.TestCase):
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
         self.assertGreater(retention["artifacts"], retention["idempotency"])
 
+    def test_worker_version_tag_binds_source_and_release_inputs(self) -> None:
+        commit = "a" * 40
+        digest = "b" * 64
+        tag = release_controller.worker_version_tag(commit, digest, 1234567890)
+        self.assertEqual(
+            tag,
+            "git-aaaaaaaaaaaa-src-bbbbbbbbbbbbbbbb-1234567890",
+        )
+        self.assertEqual(
+            release_controller.parse_worker_version_tag(tag),
+            ("aaaaaaaaaaaa", "bbbbbbbbbbbbbbbb"),
+        )
+        self.assertEqual(
+            release_controller.parse_worker_version_tag(
+                "git-aaaaaaaaaaaa-1234567890"
+            ),
+            ("aaaaaaaaaaaa", None),
+        )
+
+    def test_resumable_current_tag_rejects_release_input_drift(self) -> None:
+        versions = [
+            {
+                "id": "candidate",
+                "annotations": {
+                    "workers/tag": (
+                        "git-abcdef123456-src-1111111111111111-1234567890"
+                    )
+                },
+            }
+        ]
+        with (
+            mock.patch.object(
+                release_controller,
+                "worker_release_digest",
+                return_value="2" * 64,
+            ),
+            self.assertRaises(release_controller.ReleaseError),
+        ):
+            release_controller.resumable_candidate(
+                versions,
+                "candidate",
+                "abcdef1234567890abcdef1234567890abcdef12",
+            )
+
     def test_control_plane_json_query_retries_transient_failure(self) -> None:
         sleeps: list[float] = []
         completed = subprocess.CompletedProcess(
@@ -223,6 +267,11 @@ class ReleaseControllerTests(unittest.TestCase):
             mock.patch.object(release_controller, "cloudflare_environment", return_value={}),
             mock.patch.object(release_controller, "load_edge_config", return_value=edge_config),
             mock.patch.object(release_controller, "verify_release_source", return_value=commit),
+            mock.patch.object(
+                release_controller,
+                "worker_release_digest",
+                return_value="b" * 64,
+            ),
             mock.patch.object(
                 release_controller,
                 "expected_policy",
@@ -362,6 +411,11 @@ class ReleaseControllerTests(unittest.TestCase):
                 release_controller,
                 "verify_release_source",
                 return_value="a" * 40,
+            ),
+            mock.patch.object(
+                release_controller,
+                "worker_release_digest",
+                return_value="b" * 64,
             ),
             mock.patch.object(release_controller, "run"),
             mock.patch.object(

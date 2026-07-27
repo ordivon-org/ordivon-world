@@ -5,7 +5,9 @@ import hashlib
 import http.client
 import importlib.util
 import io
+import json
 import os
+import subprocess
 import pathlib
 import sys
 import tempfile
@@ -118,6 +120,65 @@ class ClientTests(unittest.TestCase):
             self.assertEqual(os.stat(destination).st_mode & 0o777, 0o600)
             self.assertIn('"verified": true', output.getvalue().lower())
             self.assertEqual(list(pathlib.Path(directory).glob(".*.tmp")), [])
+
+    def test_status_reports_older_source_with_current_worker_inputs(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = pathlib.Path(directory)
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.email", "test@example.invalid"],
+                check=True,
+            )
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.name", "Test"],
+                check=True,
+            )
+            (repository / "src").mkdir()
+            (repository / "src" / "index.ts").write_text("worker\n")
+            for relative in client.WORKER_RELEASE_INPUTS[1:]:
+                target = repository / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(relative + "\n")
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repository), "commit", "-qm", "worker"], check=True)
+            deployed = subprocess.check_output(
+                ["git", "-C", str(repository), "rev-parse", "HEAD"],
+                text=True,
+            ).strip()
+            digest = client.release_digest(repository, deployed)
+            (repository / "README.md").write_text("docs only\n")
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repository), "commit", "-qm", "docs"], check=True)
+            health = {
+                "service": "ordivon-edge",
+                "status": "ok",
+                "policy_version": "p1.6.test",
+                "worker_version": {
+                    "id": "version-old",
+                    "tag": f"git-{deployed[:12]}-src-{digest[:16]}-123",
+                    "timestamp": "2026-07-28T00:00:00Z",
+                },
+                "deployment_identity": {
+                    "source_commit": deployed[:12],
+                    "worker_release_digest": digest[:16],
+                },
+            }
+            output = io.StringIO()
+            args = argparse.Namespace(repo=str(repository), expected_ref="HEAD")
+            with (
+                mock.patch.object(
+                    client,
+                    "request",
+                    return_value=(200, {}, json.dumps(health).encode()),
+                ),
+                redirect_stdout(output),
+            ):
+                result = client.command_status(self.config, args)
+            report = json.loads(output.getvalue())
+            self.assertEqual(result, 0)
+            self.assertEqual(report["deployment"]["source_relation"], "behind")
+            self.assertEqual(report["deployment"]["worker_inputs"], "current")
+            self.assertEqual(report["deployment"]["source_commit"], deployed)
 
 
 if __name__ == "__main__":

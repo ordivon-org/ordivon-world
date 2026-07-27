@@ -28,6 +28,14 @@ Cloudflare-Workers-Version-Overrides:
 
 Health, Capabilities, and execution Receipts must report the candidate Worker version through `CF_VERSION_METADATA`; otherwise promotion is refused. Candidate Health and Capabilities must also report the locally derived policy fingerprint and retention contract.
 
+Each immutable Worker Version is tagged as:
+
+```text
+git-<12-char-source>-src-<16-char-worker-input-sha256>-<unix-time>
+```
+
+The Worker-input digest covers committed `src`, policy, Wrangler configuration, package/lock files, and TypeScript configuration. `/health` exposes both parsed fields as `deployment_identity`. Rollback preserves the identity chain because it selects an existing immutable Worker Version. Legacy `git-<source>-<time>` tags remain readable with an unknown input digest.
+
 ## Failure behavior
 
 If any smoke or promotion check fails after the 0% deployment is established, the controller restores the previous version to 100% and writes a failure receipt. The uploaded candidate may remain available for diagnosis but receives no traffic.
