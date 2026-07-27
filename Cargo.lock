@@ -409,88 +409,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "edge-model"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "thiserror",
-]
-
-[[package]]
-name = "edge-probe"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "edge-model",
- "serde",
- "serde_json",
- "tempfile",
- "toml",
-]
-
-[[package]]
-name = "edge-runtime"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "edge-model",
- "edge-probe",
- "rusqlite",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "edge-server"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-stream",
- "axum",
- "chrono",
- "clap",
- "edge-runtime",
- "futures-core",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tower",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "edge-transport-quic"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytes",
- "edge-wire",
- "quinn",
- "rcgen",
- "rustls",
- "sha2",
- "thiserror",
- "tokio",
-]
-
-[[package]]
-name = "edge-wire"
-version = "0.1.0"
-dependencies = [
- "thiserror",
-]
-
-[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -826,6 +744,88 @@ dependencies = [
  "cc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "link-console"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-stream",
+ "axum",
+ "chrono",
+ "clap",
+ "futures-core",
+ "link-observer",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tower",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "link-model"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "link-observer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "link-model",
+ "link-probe",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "link-probe"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "link-model",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "toml",
+]
+
+[[package]]
+name = "link-transport-quic"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "link-wire",
+ "quinn",
+ "rcgen",
+ "rustls",
+ "sha2",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "link-wire"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
 ]
 
 [[package]]

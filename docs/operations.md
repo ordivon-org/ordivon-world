@@ -15,7 +15,7 @@ HTTP/3 measurement additionally requires a `curl` build whose feature list conta
 Run in the repository:
 
 ```bash
-cargo run -p edge-server -- \
+cargo run -p link-console -- \
   --bind 127.0.0.1:8787 \
   --database artifacts/runtime/edge.db \
   --targets config/targets/web.toml \
@@ -53,27 +53,27 @@ Default development path:
 artifacts/runtime/edge.db
 ```
 
-The database uses WAL, a five-second busy timeout, `trusted_schema=OFF`, explicit schema metadata, bounded retention, and sanitized records. It may be deleted during development to start with an empty history. Production state belongs outside the repository, such as `/var/lib/ordivon-edge/edge.db`.
+The database uses WAL, a five-second busy timeout, `trusted_schema=OFF`, explicit schema metadata, bounded retention, and sanitized records. It may be deleted during development to start with an empty history. Production state belongs outside the repository, such as `/var/lib/ordivon-link/edge.db`.
 
 ### systemd example
 
 A hardened example is committed at:
 
 ```text
-deploy/systemd/ordivon-edge.service
+deploy/systemd/ordivon-link.service
 ```
 
 Before installation:
 
-1. build and install the binary as `/usr/local/bin/ordivon-edge`;
-2. copy `config/targets/web.toml` to `/etc/ordivon-edge/targets.toml`;
+1. build and install the binary as `/usr/local/bin/ordivon-link`;
+2. copy `config/targets/web.toml` to `/etc/ordivon-link/targets.toml`;
 3. verify Windows PowerShell interop under the selected service identity;
 4. keep the listener on `127.0.0.1`;
 5. do not stop the existing monitoring stack until parallel validation is complete.
 
 ## Service-check semantics
 
-The Web registry uses HTTP HEAD checks through `edge-probe`:
+The Web registry uses HTTP HEAD checks through `link-probe`:
 
 - any HTTP status from 100 through 599 proves the HTTP endpoint answered;
 - success does not imply authorization or business-level success;
@@ -87,7 +87,7 @@ The Web registry uses HTTP HEAD checks through `edge-probe`:
 ## Reachability evidence collection
 
 ```bash
-cargo run -p edge-probe -- run \
+cargo run -p link-probe -- run \
   --targets config/targets/default.toml \
   --network wsl-current \
   --route host-current \
@@ -105,7 +105,7 @@ cargo run -p edge-probe -- run \
 A positive QUIC control proves only that one UDP/QUIC path worked in that time window:
 
 ```bash
-cargo run -p edge-probe -- run \
+cargo run -p link-probe -- run \
   --targets config/targets/quic-control.toml \
   --network wsl-current \
   --route host-current \
@@ -118,7 +118,7 @@ cargo run -p edge-probe -- run \
 ## Transfer and connection lifetime
 
 ```bash
-cargo run -p edge-probe -- transfer \
+cargo run -p link-probe -- transfer \
   --targets config/targets/transfer.toml \
   --network wsl-current \
   --route host-current \
@@ -128,7 +128,7 @@ cargo run -p edge-probe -- transfer \
   --truncate-output \
   --output artifacts/baseline/transfer.ndjson
 
-cargo run -p edge-probe -- lifetime \
+cargo run -p link-probe -- lifetime \
   --targets config/targets/transfer.toml \
   --network wsl-current \
   --route host-current \
@@ -145,11 +145,11 @@ The lifetime probe is a sustained response-body test, not idle keepalive, stream
 ## Compare and report
 
 ```bash
-cargo run -p edge-probe -- compare \
+cargo run -p link-probe -- compare \
   --input artifacts/baseline/reachability.ndjson \
   --output artifacts/baseline/reachability-summary.json
 
-cargo run -p edge-probe -- report \
+cargo run -p link-probe -- report \
   --input artifacts/baseline/reachability.ndjson \
   --output artifacts/baseline/reachability-report.md
 ```

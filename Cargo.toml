@@ -1,11 +1,11 @@
 [workspace]
 members = [
-  "crates/edge-model",
-  "crates/edge-probe",
-  "crates/edge-wire",
-  "crates/edge-transport-quic",
-  "crates/edge-runtime",
-  "crates/edge-server",
+  "crates/link-model",
+  "crates/link-probe",
+  "crates/link-wire",
+  "crates/link-transport-quic",
+  "crates/link-observer",
+  "crates/link-console",
 ]
 resolver = "2"
 

@@ -130,8 +130,8 @@ Never commit:
 
 ## Ownership boundary
 
-- `edge-wire` owns the pure wire contract, bounded parsing, identifiers, limits, and state transitions.
-- `edge-transport-quic` owns the localhost reference integration with Quinn, rustls, mTLS, certificate-bound device identity, TCP relay, and UDP associations.
-- `edge-probe` owns external path observations and comparison evidence.
+- `link-wire` owns the pure wire contract, bounded parsing, identifiers, limits, and state transitions.
+- `link-transport-quic` owns the localhost reference integration with Quinn, rustls, mTLS, certificate-bound device identity, TCP relay, and UDP associations.
+- `link-probe` owns external path observations and comparison evidence.
 - Ordivon Link will later own local route selection and recovery policy.
 - Ordivon Edge will later own node deployment and lifecycle.

@@ -98,7 +98,7 @@ Implementations must:
 7. treat parser errors as protocol failures, not panics;
 8. release all request and association state on connection termination.
 
-The Rust `edge-wire` crate implements the first bounded parser contract without network or filesystem access.
+The Rust `link-wire` crate implements the first bounded parser contract without network or filesystem access.
 
 ## Resource safety
 

@@ -14,7 +14,7 @@ The repository remains an observation and control project. This study does not a
 The machine-readable source of the comparison is [`config/transports/protocols.toml`](../config/transports/protocols.toml). It pins the exact upstream revisions inspected on 2026-07-26. Generate the expanded report with:
 
 ```bash
-cargo run -p edge-probe -- catalog
+cargo run -p link-probe -- catalog
 ```
 
 ## First-principles model
