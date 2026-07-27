@@ -60,7 +60,7 @@ ordivon-edge health
 ordivon-edge capabilities
 ordivon-edge fetch https://developers.cloudflare.com/ --maximum-bytes 262144
 ordivon-edge receipt <receipt-id>
-ordivon-edge artifact-get fetch/v1/<receipt-id>.body --output /tmp/result.bin
+ordivon-edge artifact-get fetch/v2/<receipt-id>/g<generation>/body --output /tmp/result.bin
 ```
 
 ## Fetch boundary
@@ -100,11 +100,70 @@ ordivon-edge browser-run https://example.com/ \
 A successful run creates three private artifacts:
 
 ```text
-browser/v1/<request-id>/screenshot.png
-browser/v1/<request-id>/content.html
-browser/v1/<request-id>/manifest.json
+browser/v2/<request-id>/g<generation>/screenshot.png
+browser/v2/<request-id>/g<generation>/content.html
+browser/v2/<request-id>/g<generation>/manifest.json
 ```
 
 The manifest is the receipt's primary `artifact`; all three references appear in `artifacts`. Download each object with `ordivon-edge artifact-get`.
 
 P1 intentionally supports only one action: navigate to an allowlisted HTTPS URL and capture a snapshot. It does not accept scripts, cookies, credentials, arbitrary headers, clicks, form input, selectors, or file downloads. Browser subresources are restricted to the requested hostname.
+
+
+## P1.5 operation state
+
+New operations persist an authoritative state under `requests/v2/`. Receipt queries can return HTTP `202` while the execution lease is pending. Use:
+
+```bash
+ordivon-edge receipt <request-id> --wait
+```
+
+New Artifact paths include the lease generation. Consumers must use the keys returned by the Receipt rather than constructing paths.
+
+## Execution budgets
+
+Cloudflare Rate Limit bindings apply per HMAC key ID:
+
+```text
+Browser Run: 1 new execution / 10 seconds
+Fetch:       30 new executions / 60 seconds
+```
+
+Receipt replay occurs before budget consumption. A rate-limited first execution produces a failed Receipt and a `Retry-After` response header.
+
+## R2 lifecycle
+
+Apply the managed lifecycle rules with:
+
+```bash
+scripts/configure-r2-lifecycle
+```
+
+The rules retain authoritative v2 request states, receipt mirrors, and cleanup tombstones for 90 days, and Fetch/Browser Artifacts for 30 days. Legacy v1 evidence is not modified.
+
+When immediate Artifact cleanup is deferred, inspect or execute the bounded GC controller:
+
+```bash
+python3 scripts/ordivon_edge_gc.py --dry-run
+python3 scripts/ordivon_edge_gc.py
+```
+
+GC accepts only generation-matching `fetch/v2` and `browser/v2` keys from `cleanup/v2` tombstones.
+
+
+## Local operational installation
+
+Install the client, release controller, GC controller, and daily GC timer:
+
+```bash
+scripts/install-edge-operations
+```
+
+The timer runs after WSL boot and approximately once every 24 hours with randomized delay:
+
+```bash
+systemctl status ordivon-edge-gc.timer
+systemctl list-timers ordivon-edge-gc.timer
+```
+
+The service is root-only, uses a `0077` umask, and processes at most 100 cleanup tombstones per run.

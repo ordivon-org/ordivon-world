@@ -42,9 +42,32 @@ function normalizeHttpMetadata(value: R2HTTPMetadata | Headers | undefined): R2H
   return value;
 }
 
+export type PutFault = "throw_before" | "throw_after" | "return_null";
+
 export class MemoryR2 {
   readonly objects = new Map<string, StoredObject>();
+  readonly deletedKeys: string[] = [];
   private sequence = 0;
+  private deleteFailuresRemaining = 0;
+  private readonly putCounts = new Map<string, number>();
+  private readonly putFaults = new Map<string, Map<number, PutFault>>();
+
+  faultPut(key: string, callNumber: number, fault: PutFault): void {
+    if (!Number.isInteger(callNumber) || callNumber < 1) {
+      throw new Error("callNumber must be a positive integer");
+    }
+    const byCall = this.putFaults.get(key) ?? new Map<number, PutFault>();
+    byCall.set(callNumber, fault);
+    this.putFaults.set(key, byCall);
+  }
+
+  putCount(key: string): number {
+    return this.putCounts.get(key) ?? 0;
+  }
+
+  failNextDelete(): void {
+    this.deleteFailuresRemaining += 1;
+  }
 
   asBucket(): R2Bucket {
     const self = this;
@@ -93,6 +116,15 @@ export class MemoryR2 {
         } as unknown as R2ObjectBody;
       },
       async put(key: string, value: unknown, options?: R2PutOptions): Promise<R2Object | null> {
+        const callNumber = (self.putCounts.get(key) ?? 0) + 1;
+        self.putCounts.set(key, callNumber);
+        const fault = self.putFaults.get(key)?.get(callNumber);
+        if (fault === "throw_before") {
+          throw new Error(`injected R2 put failure before write: ${key}`);
+        }
+        if (fault === "return_null") {
+          return null;
+        }
         const existing = self.objects.get(key);
         const onlyIf = options?.onlyIf;
         if (
@@ -121,6 +153,9 @@ export class MemoryR2 {
           customMetadata: options?.customMetadata ?? {}
         };
         self.objects.set(key, stored);
+        if (fault === "throw_after") {
+          throw new Error(`injected R2 put failure after write: ${key}`);
+        }
         return {
           key,
           version: etag,
@@ -137,7 +172,12 @@ export class MemoryR2 {
         } as unknown as R2Object;
       },
       async delete(key: string | string[]) {
+        if (self.deleteFailuresRemaining > 0) {
+          self.deleteFailuresRemaining -= 1;
+          throw new Error("injected R2 delete failure");
+        }
         for (const candidate of Array.isArray(key) ? key : [key]) {
+          self.deletedKeys.push(candidate);
           self.objects.delete(candidate);
         }
       }
@@ -159,7 +199,22 @@ export function makeEnv(memory = new MemoryR2()): Env {
           { status: 503, headers: { "content-type": "application/json" } }
         );
       }
-    } as unknown as BrowserRun
+    } as unknown as BrowserRun,
+    FETCH_RATE_LIMIT: {
+      async limit() {
+        return { success: true };
+      }
+    } as RateLimit,
+    BROWSER_RATE_LIMIT: {
+      async limit() {
+        return { success: true };
+      }
+    } as RateLimit,
+    CF_VERSION_METADATA: {
+      id: "test-worker-version",
+      tag: "test",
+      timestamp: "2026-07-27T00:00:00.000Z"
+    }
   };
 }
 

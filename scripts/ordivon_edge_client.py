@@ -182,6 +182,36 @@ def command_browser_run(config: Config, args: argparse.Namespace) -> int:
     return 0 if 200 <= status < 300 else 1
 
 
+def command_receipt(config: Config, args: argparse.Namespace) -> int:
+    path = f"/v1/receipts/{args.receipt_id}"
+    deadline = time.monotonic() + args.timeout
+    while True:
+        status, _, body = request(config, "GET", path)
+        try:
+            value = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise ClientError("Edge returned a non-JSON receipt response") from exc
+        pending = status == 202 and isinstance(value, dict) and value.get("status") == "pending"
+        if not pending or not args.wait:
+            print(json.dumps(value, indent=2, ensure_ascii=False))
+            return 0 if 200 <= status < 300 else 1
+        if time.monotonic() >= deadline:
+            print(json.dumps(value, indent=2, ensure_ascii=False))
+            print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "error": "receipt wait timed out",
+                        "receipt_id": args.receipt_id,
+                    },
+                    ensure_ascii=False,
+                ),
+                file=sys.stderr,
+            )
+            return 3
+        time.sleep(args.interval)
+
+
 def command_artifact_get(config: Config, args: argparse.Namespace) -> int:
     encoded = "/".join(urllib.parse.quote(segment, safe="") for segment in args.key.split("/"))
     status, headers, body = request(
@@ -244,6 +274,9 @@ def parser() -> argparse.ArgumentParser:
 
     receipt = commands.add_parser("receipt")
     receipt.add_argument("receipt_id")
+    receipt.add_argument("--wait", action="store_true")
+    receipt.add_argument("--timeout", type=float, default=120.0)
+    receipt.add_argument("--interval", type=float, default=1.0)
 
     artifact = commands.add_parser("artifact-get")
     artifact.add_argument("key")
@@ -264,7 +297,9 @@ def main() -> int:
         if args.command == "browser-run":
             return command_browser_run(config, args)
         if args.command == "receipt":
-            return command_json(config, f"/v1/receipts/{args.receipt_id}")
+            if args.timeout <= 0 or args.interval <= 0:
+                raise ClientError("receipt wait timeout and interval must be positive")
+            return command_receipt(config, args)
         if args.command == "artifact-get":
             return command_artifact_get(config, args)
         raise ClientError(f"Unknown command: {args.command}")

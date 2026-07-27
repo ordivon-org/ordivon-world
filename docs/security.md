@@ -76,3 +76,12 @@ The Worker stores the screenshot, rendered HTML, and a manifest as private R2 ar
 - R2 public access remains disabled.
 
 Arbitrary browser interaction remains disabled until a separate action contract and per-action authorization model are implemented.
+
+
+## P1.5 execution confidentiality
+
+Final Receipts explicitly whitelist execution metadata fields. Private lease tokens and R2 state ETags never enter Receipt JSON, public responses, or structured operation logs.
+
+Every new Receipt records the policy version, capability version, Worker version ID/tag/timestamp, and lease generation. An expired pending request cannot be taken over after a policy or capability version change; callers must use a new Request ID.
+
+Rate Limit bindings fail closed when the budget service is unavailable. Replays return an already committed Receipt without invoking the budget or external capability again.

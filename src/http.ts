@@ -28,7 +28,13 @@ export function errorResponse(error: EdgeError): Response {
     error.httpStatus
   );
   if (error.httpStatus === 401) {
-    response.headers.set("www-authenticate", 'Ordivon-HMAC realm="ordivon-edge"');
+    response.headers.set(
+      "www-authenticate",
+      'Ordivon-HMAC realm="ordivon-edge"'
+    );
+  }
+  if (error.retryAfterSeconds !== undefined) {
+    response.headers.set("retry-after", String(error.retryAfterSeconds));
   }
   return response;
 }

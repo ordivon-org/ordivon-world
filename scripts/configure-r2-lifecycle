@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+bucket="ordivon-artifacts"
+config="/root/.config/ordivon/secrets/cloudflare.json"
+
+readarray -t cf < <(python3 - "$config" <<'PY'
+import json,sys
+c=json.load(open(sys.argv[1]))
+print(c['api_token'])
+print(c['account_id'])
+PY
+)
+export CLOUDFLARE_API_TOKEN="${cf[0]}"
+export CLOUDFLARE_ACCOUNT_ID="${cf[1]}"
+
+rules=(
+  "edge-v2-request-state-90d|requests/v2/|90"
+  "edge-v2-receipt-mirror-90d|receipts/v2/|90"
+  "edge-v2-fetch-artifacts-30d|fetch/v2/|30"
+  "edge-v2-browser-artifacts-30d|browser/v2/|30"
+  "edge-v2-cleanup-tasks-90d|cleanup/v2/|90"
+)
+
+for entry in "${rules[@]}"; do
+  IFS='|' read -r name prefix days <<<"$entry"
+  pnpm exec wrangler r2 bucket lifecycle remove "$bucket" \
+    --name "$name" --jurisdiction default >/dev/null 2>&1 || true
+  pnpm exec wrangler r2 bucket lifecycle add "$bucket" "$name" "$prefix" \
+    --expire-days "$days" --jurisdiction default --force
+done
+
+pnpm exec wrangler r2 bucket lifecycle list "$bucket" --jurisdiction default

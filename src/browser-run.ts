@@ -3,11 +3,13 @@ import {
   browserRunOptions,
   type ValidatedBrowserRunRequest
 } from "./browser-policy.js";
+import { cleanupArtifacts } from "./cleanup.js";
 import type {
   ArtifactReference,
   BrowserReceiptDetails
 } from "./contracts.js";
 import { EdgeError } from "./errors.js";
+import type { ExecutionLease } from "./execution.js";
 
 const MAX_BROWSER_RESPONSE_BYTES = 8 * 1_048_576;
 const MAX_SCREENSHOT_BYTES = 4 * 1_048_576;
@@ -147,16 +149,20 @@ async function storeArtifact(
   key: string,
   body: Uint8Array,
   mediaType: string,
-  requestId: string,
+  lease: ExecutionLease,
   kind: string
 ): Promise<ArtifactReference> {
   const sha256 = await sha256Hex(body);
   const stored = await bucket.put(key, body, {
     httpMetadata: { contentType: mediaType },
     customMetadata: {
-      receipt_id: requestId,
+      receipt_id: lease.request_id,
       sha256,
-      kind
+      kind,
+      policy_version: lease.policy_version,
+      capability_version: lease.capability_version,
+      worker_version_id: lease.worker_version_id,
+      lease_generation: String(lease.lease_generation)
     }
   });
   if (stored === null) {
@@ -174,7 +180,7 @@ async function storeArtifact(
 export async function executeBrowserRun(
   environment: BrowserExecutionEnvironment,
   runner: BrowserSnapshotRunner,
-  requestId: string,
+  lease: ExecutionLease,
   request: ValidatedBrowserRunRequest
 ): Promise<BrowserExecutionResult> {
   let response: Response;
@@ -194,7 +200,7 @@ export async function executeBrowserRun(
     throw new EdgeError("browser_output_too_large", 502, "Rendered HTML exceeded its budget.", "failed");
   }
   const screenshot = decodeScreenshot(snapshot.result.screenshot);
-  const base = `browser/v1/${requestId}`;
+  const base = `browser/v2/${lease.request_id}/g${lease.lease_generation}`;
   const writtenKeys: string[] = [];
   try {
     const screenshotArtifact = await storeArtifact(
@@ -202,7 +208,7 @@ export async function executeBrowserRun(
       `${base}/screenshot.png`,
       screenshot,
       "image/png",
-      requestId,
+      lease,
       "screenshot"
     );
     writtenKeys.push(screenshotArtifact.key);
@@ -211,7 +217,7 @@ export async function executeBrowserRun(
       `${base}/content.html`,
       content,
       "text/html; charset=utf-8",
-      requestId,
+      lease,
       "rendered_content"
     );
     writtenKeys.push(contentArtifact.key);
@@ -225,8 +231,16 @@ export async function executeBrowserRun(
       full_page: request.fullPage
     };
     const manifestBody = new TextEncoder().encode(JSON.stringify({
-      schema_version: 1,
-      receipt_id: requestId,
+      schema_version: 2,
+      receipt_id: lease.request_id,
+      execution: {
+        policy_version: lease.policy_version,
+        capability_version: lease.capability_version,
+        worker_version_id: lease.worker_version_id,
+        worker_version_tag: lease.worker_version_tag,
+        worker_version_timestamp: lease.worker_version_timestamp,
+        lease_generation: lease.lease_generation
+      },
       browser,
       artifacts: [screenshotArtifact, contentArtifact]
     }));
@@ -235,7 +249,7 @@ export async function executeBrowserRun(
       `${base}/manifest.json`,
       manifestBody,
       "application/json; charset=utf-8",
-      requestId,
+      lease,
       "manifest"
     );
     writtenKeys.push(manifestArtifact.key);
@@ -246,7 +260,12 @@ export async function executeBrowserRun(
     };
   } catch (error) {
     if (writtenKeys.length > 0) {
-      await environment.ARTIFACTS.delete(writtenKeys);
+      await cleanupArtifacts(
+        environment.ARTIFACTS,
+        lease,
+        writtenKeys,
+        "browser_partial_write"
+      );
     }
     throw error;
   }

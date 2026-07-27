@@ -8,30 +8,34 @@ Ordivon Runtime / Agent
         ▼
 Ordivon Edge
   ├─ allowlisted external fetch
-  ├─ private R2 artifacts
-  ├─ idempotent task receipts
   ├─ bounded Browser Run snapshots
-  └─ optional remote node lifecycle
+  ├─ private versioned R2 artifacts
+  ├─ fenced execution leases and transactional receipts
+  └─ versioned release, smoke, promotion, and rollback
 ```
 
 ## Strict boundary
 
-Ordivon Edge owns Cloudflare Worker execution, external fetch and Browser Run policy, private R2 artifacts, execution budgets, receipts, and future remote Edge-node lifecycle.
+Ordivon Edge owns Cloudflare Worker execution, external fetch and Browser Run policy, private R2 artifacts, execution budgets, receipts, release control, and future remote Edge-node lifecycle.
 
 It does **not** own local route, VPN, DNS, WARP, path measurement, transport selection, QUIC relay clients, or failover; those belong to `ordivon-link`. Local Agent tasks, workspaces, process supervision, and recovery belong to `ordivon-runtime`.
 
-## Implemented P0 execution plane
+## Implemented execution plane
 
 - HMAC-SHA256 service authentication with a five-minute timestamp window;
 - signed method, path, query, Request ID, timestamp, and body digest;
-- R2-backed atomic request locks;
+- one authoritative `requests/v2` state object per operation;
+- queryable pending receipts and conditionally committed final receipts;
+- generation-scoped execution leases and stale-executor fencing;
+- Artifact cleanup when a result loses its lease or cannot commit;
+- policy, capability, Worker version, and lease generation in every new Receipt;
 - deterministic receipt replay and Request-ID conflict detection;
-- HTTPS-only exact/wildcard hostname allowlists;
-- validated redirects, fixed GET semantics, and no caller credentials forwarded;
-- bounded request, response, redirect, and time budgets;
-- private response artifacts and success/failure/rejection receipts;
-- authenticated health, capability, receipt, and artifact reads;
+- Cloudflare-native per-key Fetch and Browser rate limits;
+- structured operation logs and Worker traces;
+- HTTPS-only external Fetch with bounded redirects, size, and time;
 - same-origin Browser Run snapshots with PNG, rendered HTML, and manifest artifacts;
+- private, generation-versioned R2 Artifact paths;
+- version upload, 0% traffic smoke, version override validation, promotion, and rollback receipts;
 - Workers.dev, preview URLs, and R2 public access disabled;
 - machine-enforced repository boundary checks.
 
@@ -40,16 +44,25 @@ It does **not** own local route, VPN, DNS, WARP, path measurement, transport sel
 ```bash
 pnpm install --frozen-lockfile
 pnpm run ci
-python -m py_compile scripts/ordivon_edge_client.py
 ```
 
 ## Local client
 
 ```bash
-scripts/install-edge-client
+scripts/install-edge-operations
 ordivon-edge health
 ordivon-edge fetch https://developers.cloudflare.com/
 ordivon-edge browser-run https://example.com/ --full-page
+ordivon-edge receipt <request-id> --wait
 ```
 
-See [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).
+## Release and lifecycle
+
+```bash
+python3 scripts/ordivon_edge_release.py release
+python3 scripts/ordivon_edge_release.py rollback
+scripts/configure-r2-lifecycle
+python3 scripts/ordivon_edge_gc.py --dry-run
+```
+
+See [`docs/reliability.md`](docs/reliability.md), [`docs/release.md`](docs/release.md), [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).

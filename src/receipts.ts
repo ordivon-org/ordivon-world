@@ -2,6 +2,7 @@ import {
   EDGE_SCHEMA_VERSION,
   type ArtifactReference,
   type BrowserReceiptDetails,
+  type EdgeExecutionMetadata,
   type EdgeOperation,
   type EdgeReceipt,
   type FetchReceiptDetails,
@@ -15,6 +16,7 @@ export interface ReceiptFactoryOptions {
   readonly startedAt: Date;
   readonly completedAt: Date;
   readonly receiptId: string;
+  readonly execution: EdgeExecutionMetadata;
   readonly artifact?: ArtifactReference;
   readonly artifacts?: readonly ArtifactReference[];
   readonly fetch?: FetchReceiptDetails;
@@ -48,6 +50,9 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
   if (options.artifacts !== undefined && options.artifacts.length === 0) {
     throw new Error("artifacts must not be empty");
   }
+  if (!Number.isSafeInteger(options.execution.lease_generation) || options.execution.lease_generation < 1) {
+    throw new Error("lease generation must be a positive integer");
+  }
 
   return {
     schema_version: EDGE_SCHEMA_VERSION,
@@ -58,6 +63,14 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
     started_at: options.startedAt.toISOString(),
     completed_at: options.completedAt.toISOString(),
     duration_ms: durationMs,
+    execution: {
+      policy_version: options.execution.policy_version,
+      capability_version: options.execution.capability_version,
+      worker_version_id: options.execution.worker_version_id,
+      worker_version_tag: options.execution.worker_version_tag,
+      worker_version_timestamp: options.execution.worker_version_timestamp,
+      lease_generation: options.execution.lease_generation
+    },
     ...(options.artifact === undefined ? {} : { artifact: options.artifact }),
     ...(options.artifacts === undefined ? {} : { artifacts: options.artifacts }),
     ...(options.fetch === undefined ? {} : { fetch: options.fetch }),

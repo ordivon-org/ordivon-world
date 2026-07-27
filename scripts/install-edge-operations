@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+install -m 0755 scripts/ordivon_edge_client.py /usr/local/bin/ordivon-edge
+install -m 0750 scripts/ordivon_edge_release.py /usr/local/sbin/ordivon-edge-release
+install -m 0750 scripts/ordivon_edge_gc.py /usr/local/sbin/ordivon-edge-gc
+install -m 0644 deploy/systemd/ordivon-edge-gc.service /etc/systemd/system/ordivon-edge-gc.service
+install -m 0644 deploy/systemd/ordivon-edge-gc.timer /etc/systemd/system/ordivon-edge-gc.timer
+systemctl daemon-reload
+systemctl enable --now ordivon-edge-gc.timer
+printf '%s\n' \
+  'installed /usr/local/bin/ordivon-edge' \
+  'installed /usr/local/sbin/ordivon-edge-release' \
+  'installed /usr/local/sbin/ordivon-edge-gc' \
+  'enabled ordivon-edge-gc.timer'

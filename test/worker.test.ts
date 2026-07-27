@@ -25,7 +25,13 @@ test("signed health and capabilities are minimal and non-cacheable", async () =>
   assert.deepEqual(await health.json(), {
     schema_version: 1,
     service: "ordivon-edge",
-    status: "ok"
+    status: "ok",
+    policy_version: "2026-07-27.p1.5",
+    worker_version: {
+      id: "test-worker-version",
+      tag: "test",
+      timestamp: "2026-07-27T00:00:00.000Z"
+    }
   });
 
   const capabilities = await handleRequest(
@@ -72,10 +78,10 @@ test("bounded fetch persists an artifact and receipt, then replays without refet
   const firstEnvelope = (await first.json()) as EdgeReceiptEnvelope;
   assert.equal(firstEnvelope.replayed, false);
   assert.equal(firstEnvelope.receipt.status, "succeeded");
-  assert.equal(firstEnvelope.receipt.artifact?.key, `fetch/v1/${requestId}.body`);
+  assert.equal(firstEnvelope.receipt.artifact?.key, `fetch/v2/${requestId}/g1/body`);
   assert.equal(fetchCount, 1);
-  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
-  assert.ok(memory.objects.has(`fetch/v1/${requestId}.body`));
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
+  assert.ok(memory.objects.has(`fetch/v2/${requestId}/g1/body`));
 
   const second = await handleRequest(
     signedRequest("https://edge.invalid/v1/fetch", {
@@ -172,7 +178,7 @@ test("rejected fetches receive persistent receipts", async () => {
   const envelope = (await response.json()) as EdgeReceiptEnvelope;
   assert.equal(envelope.receipt.status, "rejected");
   assert.equal(envelope.receipt.error_code, "host_not_allowed");
-  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
 });
 
 test("authenticated clients can retrieve persisted artifacts", async () => {
@@ -262,21 +268,21 @@ test("bounded browser run stores screenshot, content, manifest, and replays", as
   assert.equal(envelope.receipt.artifacts?.length, 3);
   assert.equal(
     envelope.receipt.artifact?.key,
-    `browser/v1/${requestId}/manifest.json`
+    `browser/v2/${requestId}/g1/manifest.json`
   );
   assert.equal(browserCount, 1);
 
   const screenshotObject = await environment.ARTIFACTS.get(
-    `browser/v1/${requestId}/screenshot.png`
+    `browser/v2/${requestId}/g1/screenshot.png`
   );
   assert.notEqual(screenshotObject, null);
   assert.deepEqual(
     new Uint8Array(await screenshotObject!.arrayBuffer()),
     screenshot
   );
-  assert.ok(memory.objects.has(`browser/v1/${requestId}/content.html`));
-  assert.ok(memory.objects.has(`browser/v1/${requestId}/manifest.json`));
-  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
+  assert.ok(memory.objects.has(`browser/v2/${requestId}/g1/content.html`));
+  assert.ok(memory.objects.has(`browser/v2/${requestId}/g1/manifest.json`));
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
 
   const replay = await handleRequest(
     signedRequest("https://edge.invalid/v1/browser/run", {
@@ -322,7 +328,7 @@ test("browser policy rejection is receipted before Browser Run executes", async 
   assert.equal(envelope.receipt.status, "rejected");
   assert.equal(envelope.receipt.error_code, "unsupported_browser_option");
   assert.equal(browserCount, 0);
-  assert.ok(memory.objects.has(`receipts/v1/${requestId}.json`));
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
 });
 
 test("Browser Run rate limits produce failed receipts without upstream details", async () => {
