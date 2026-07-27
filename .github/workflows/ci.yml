@@ -23,5 +23,7 @@ jobs:
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Test
         run: cargo test --workspace
+      - name: Install VPN fixture dependency
+        run: sudo apt-get update && sudo apt-get install --yes wireguard-tools
       - name: VPN controller static checks
         run: scripts/check-vpn-controller
