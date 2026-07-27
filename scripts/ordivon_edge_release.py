@@ -143,14 +143,30 @@ def run(
     return completed
 
 
-def run_json(arguments: list[str], environment: dict[str, str]) -> Any:
-    completed = run(arguments, environment=environment, capture=True)
-    try:
-        return json.loads(completed.stdout)
-    except json.JSONDecodeError as exc:
-        raise ReleaseError(
-            f"Command returned invalid JSON: {' '.join(arguments)}"
-        ) from exc
+def run_json(
+    arguments: list[str],
+    environment: dict[str, str],
+    *,
+    attempts: int = 4,
+    base_delay_seconds: float = 2.0,
+    sleep: Any = time.sleep,
+) -> Any:
+    if attempts < 1 or base_delay_seconds < 0:
+        fail("Control-plane retry parameters are invalid")
+    last_error: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            completed = run(arguments, environment=environment, capture=True)
+            return json.loads(completed.stdout)
+        except (ReleaseError, json.JSONDecodeError) as error:
+            last_error = error
+            if attempt >= attempts:
+                break
+            sleep(min(base_delay_seconds * (2 ** (attempt - 1)), 15.0))
+    raise ReleaseError(
+        f"Control-plane query failed after {attempts} attempts: "
+        f"{' '.join(arguments)}\n{last_error}"
+    ) from last_error
 
 
 def git_output(*arguments: str) -> str:
@@ -228,6 +244,28 @@ def deployments(environment: dict[str, str]) -> list[dict[str, Any]]:
         if isinstance(item.get("created_on"), str)
         else "",
     )
+
+
+def resumable_candidate(
+    version_list: list[dict[str, Any]],
+    version_id: str,
+    commit: str,
+) -> dict[str, Any]:
+    candidate = next(
+        (item for item in version_list if item.get("id") == version_id),
+        None,
+    )
+    if candidate is None:
+        fail(f"Candidate Worker Version does not exist: {version_id}")
+    annotations = candidate.get("annotations")
+    tag = annotations.get("workers/tag") if isinstance(annotations, dict) else None
+    expected_prefix = f"git-{commit[:12]}-"
+    if not isinstance(tag, str) or not tag.startswith(expected_prefix):
+        fail(
+            "Candidate Worker Version is not bound to the current Git commit: "
+            f"version={version_id}, tag={tag!r}, expected_prefix={expected_prefix!r}"
+        )
+    return candidate
 
 
 def active_version(deployment_list: list[dict[str, Any]]) -> str:
@@ -578,51 +616,79 @@ def release(args: argparse.Namespace) -> int:
         run(["pnpm", "run", "ci"])
         report["status"] = "ci_passed"
 
-        before_versions = {item.get("id") for item in versions(environment)}
+        version_list = versions(environment)
         previous_deployments = deployments(environment)
         previous_version = active_version(previous_deployments)
-        tag = f"git-{commit[:12]}-{int(time.time())}"
-        report.update(
-            {
-                "tag": tag,
-                "previous_version": previous_version,
-                "status": "upload_pending",
-            }
-        )
-        wrangler(
-            environment,
-            "versions",
-            "upload",
-            "--name",
-            WORKER_NAME,
-            "--tag",
-            tag,
-            "--message",
-            message,
-            "--keep-vars",
-            "--strict",
-        )
-        after = versions(environment)
-        new_versions = [
-            item
-            for item in after
-            if item.get("id") not in before_versions
-            and isinstance(item.get("id"), str)
-        ]
-        if len(new_versions) != 1:
-            fail(f"Expected one newly uploaded version, found {len(new_versions)}")
-        new_version = new_versions[0]["id"]
-        report.update(
-            {
-                "candidate_version": new_version,
-                "status": "smoke_pending",
-            }
-        )
+        resume_version_id = getattr(args, "candidate_version_id", None)
+        if resume_version_id is not None:
+            candidate = resumable_candidate(
+                version_list,
+                resume_version_id,
+                commit,
+            )
+            new_version = resume_version_id
+            annotations = candidate.get("annotations")
+            tag = (
+                annotations.get("workers/tag")
+                if isinstance(annotations, dict)
+                else None
+            )
+            report.update(
+                {
+                    "tag": tag,
+                    "previous_version": previous_version,
+                    "candidate_version": new_version,
+                    "candidate_reused": True,
+                    "status": "smoke_pending",
+                }
+            )
+        else:
+            before_versions = {item.get("id") for item in version_list}
+            tag = f"git-{commit[:12]}-{int(time.time())}"
+            report.update(
+                {
+                    "tag": tag,
+                    "previous_version": previous_version,
+                    "status": "upload_pending",
+                }
+            )
+            wrangler(
+                environment,
+                "versions",
+                "upload",
+                "--name",
+                WORKER_NAME,
+                "--tag",
+                tag,
+                "--message",
+                message,
+                "--keep-vars",
+                "--strict",
+            )
+            after = versions(environment)
+            new_versions = [
+                item
+                for item in after
+                if item.get("id") not in before_versions
+                and isinstance(item.get("id"), str)
+            ]
+            if len(new_versions) != 1:
+                fail(
+                    f"Expected one newly uploaded version, found {len(new_versions)}"
+                )
+            new_version = new_versions[0]["id"]
+            report.update(
+                {
+                    "candidate_version": new_version,
+                    "candidate_reused": False,
+                    "status": "smoke_pending",
+                }
+            )
 
         deploy_versions(
             environment,
             [f"{previous_version}@100", f"{new_version}@0"],
-            f"P1.5 smoke candidate {commit[:12]}",
+            f"Smoke candidate {commit[:12]}",
         )
         zero_deployed = True
         report["candidate_propagation"] = wait_for_version_propagation(
@@ -756,6 +822,10 @@ def parser() -> argparse.ArgumentParser:
 
     release_command = commands.add_parser("release")
     release_command.add_argument("--message")
+    release_command.add_argument(
+        "--candidate-version-id",
+        help="Reuse an uploaded Worker Version bound to the current Git commit.",
+    )
 
     rollback_command = commands.add_parser("rollback")
     rollback_command.add_argument("--version-id")

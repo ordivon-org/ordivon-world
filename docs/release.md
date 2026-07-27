@@ -61,3 +61,16 @@ Release and rollback receipts are stored root-only in:
 ## Smoke Artifact policy
 
 Release Fetch and Browser smoke operations use unique Request IDs and the public `example.com` allowlist target. Their Receipts and Artifacts follow normal R2 lifecycle rules.
+
+
+## Control-plane recovery
+
+Read-only Wrangler control-plane queries are retried with bounded exponential backoff. If a Worker Version was uploaded but a later query failed, resume it without creating another candidate:
+
+```bash
+python3 scripts/ordivon_edge_release.py release \
+  --candidate-version-id <uploaded-worker-version-id> \
+  --message "resume release"
+```
+
+The controller accepts a resumed candidate only when its `workers/tag` begins with the exact current Git commit prefix. The candidate still starts at 0% ordinary traffic and must pass the complete propagation, Policy, Retention, Fetch, and Browser smoke sequence.
