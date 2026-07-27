@@ -12,6 +12,7 @@ import json
 import os
 import pathlib
 import re
+import signal
 import subprocess
 import sys
 import time
@@ -50,6 +51,12 @@ class EdgeConfig:
     secret: bytes
 
 
+@dataclass(frozen=True)
+class CloudflareCredentials:
+    api_token: str
+    account_id: str
+
+
 def fail(message: str) -> NoReturn:
     raise ReleaseError(message)
 
@@ -64,7 +71,7 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
     return value
 
 
-def cloudflare_environment() -> dict[str, str]:
+def load_cloudflare_credentials() -> CloudflareCredentials:
     config = load_json(CLOUDFLARE_CONFIG)
     token = config.get("api_token")
     account_id = config.get("account_id")
@@ -72,15 +79,70 @@ def cloudflare_environment() -> dict[str, str]:
         fail("Cloudflare API token is missing")
     if not isinstance(account_id, str) or not account_id:
         fail("Cloudflare account ID is missing")
+    return CloudflareCredentials(api_token=token, account_id=account_id)
+
+
+def cloudflare_environment() -> dict[str, str]:
+    credentials = load_cloudflare_credentials()
     environment = os.environ.copy()
     environment.update(
         {
-            "CLOUDFLARE_API_TOKEN": token,
-            "CLOUDFLARE_ACCOUNT_ID": account_id,
+            "CLOUDFLARE_API_TOKEN": credentials.api_token,
+            "CLOUDFLARE_ACCOUNT_ID": credentials.account_id,
             "CI": "true",
         }
     )
     return environment
+
+
+def cloudflare_api(
+    method: str,
+    path: str,
+    *,
+    body: dict[str, Any] | None = None,
+    attempts: int = 4,
+    base_delay_seconds: float = 1.0,
+    sleep: Any = time.sleep,
+) -> Any:
+    if attempts < 1 or base_delay_seconds < 0:
+        fail("Cloudflare API retry parameters are invalid")
+    credentials = load_cloudflare_credentials()
+    url = f"https://api.cloudflare.com/client/v4{path}"
+    encoded = None if body is None else json.dumps(body).encode("utf-8")
+    last_error: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        request = urllib.request.Request(
+            url,
+            data=encoded,
+            method=method.upper(),
+            headers={
+                "Authorization": f"Bearer {credentials.api_token}",
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "User-Agent": "ordivon-edge-release/0.2",
+            },
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                payload = json.loads(response.read())
+            if not isinstance(payload, dict) or payload.get("success") is not True:
+                raise ReleaseError(f"Cloudflare API returned failure: {payload}")
+            return payload.get("result")
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            TimeoutError,
+            json.JSONDecodeError,
+            ReleaseError,
+        ) as error:
+            last_error = error
+            if attempt >= attempts:
+                break
+            sleep(min(base_delay_seconds * (2 ** (attempt - 1)), 10.0))
+    raise ReleaseError(
+        f"Cloudflare API request failed after {attempts} attempts: "
+        f"{method.upper()} {path}\n{last_error}"
+    ) from last_error
 
 
 def expected_policy() -> tuple[str, dict[str, int]]:
@@ -204,24 +266,18 @@ def wrangler(environment: dict[str, str], *arguments: str, capture: bool = False
     )
 
 
-def versions(environment: dict[str, str]) -> list[dict[str, Any]]:
-    value = run_json(
-        [
-            "pnpm",
-            "exec",
-            "wrangler",
-            "versions",
-            "list",
-            "--name",
-            WORKER_NAME,
-            "--json",
-        ],
-        environment,
+def versions(environment: dict[str, str] | None = None) -> list[dict[str, Any]]:
+    del environment
+    credentials = load_cloudflare_credentials()
+    result = cloudflare_api(
+        "GET",
+        f"/accounts/{credentials.account_id}/workers/scripts/{WORKER_NAME}/versions?deployable=true",
     )
-    if not isinstance(value, list):
-        fail("Wrangler versions list returned an unexpected shape")
+    items = result.get("items") if isinstance(result, dict) else None
+    if not isinstance(items, list):
+        fail("Cloudflare versions API returned an unexpected shape")
     return sorted(
-        value,
+        items,
         key=lambda item: (
             item.get("number") if isinstance(item.get("number"), int) else -1,
             item.get("metadata", {}).get("created_on", "")
@@ -231,24 +287,18 @@ def versions(environment: dict[str, str]) -> list[dict[str, Any]]:
     )
 
 
-def deployments(environment: dict[str, str]) -> list[dict[str, Any]]:
-    value = run_json(
-        [
-            "pnpm",
-            "exec",
-            "wrangler",
-            "deployments",
-            "list",
-            "--name",
-            WORKER_NAME,
-            "--json",
-        ],
-        environment,
+def deployments(environment: dict[str, str] | None = None) -> list[dict[str, Any]]:
+    del environment
+    credentials = load_cloudflare_credentials()
+    result = cloudflare_api(
+        "GET",
+        f"/accounts/{credentials.account_id}/workers/scripts/{WORKER_NAME}/deployments",
     )
-    if not isinstance(value, list) or not value:
-        fail("No active Worker deployment was found")
+    items = result.get("deployments") if isinstance(result, dict) else None
+    if not isinstance(items, list) or not items:
+        fail("Cloudflare deployments API returned no active deployments")
     return sorted(
-        value,
+        items,
         key=lambda item: item.get("created_on", "")
         if isinstance(item.get("created_on"), str)
         else "",
@@ -332,13 +382,116 @@ def active_version(deployment_list: list[dict[str, Any]]) -> str:
     return candidates[0]["version_id"]
 
 
+def parse_deployment_specifications(
+    specifications: list[str],
+) -> list[dict[str, Any]]:
+    parsed: list[dict[str, Any]] = []
+    for specification in specifications:
+        version_id, separator, percentage_text = specification.partition("@")
+        if not separator or not version_id:
+            fail(f"Invalid deployment specification: {specification}")
+        try:
+            percentage = float(percentage_text)
+        except ValueError as exc:
+            raise ReleaseError(
+                f"Invalid deployment percentage: {specification}"
+            ) from exc
+        if percentage < 0 or percentage > 100:
+            fail(f"Deployment percentage is out of range: {specification}")
+        parsed.append(
+            {
+                "version_id": version_id,
+                "percentage": int(percentage)
+                if percentage.is_integer()
+                else percentage,
+            }
+        )
+    if abs(sum(float(item["percentage"]) for item in parsed) - 100.0) > 0.0001:
+        fail("Deployment percentages must sum to 100")
+    return parsed
+
+
+def deployment_matches(
+    deployment: dict[str, Any],
+    expected_versions: list[dict[str, Any]],
+) -> bool:
+    actual = deployment.get("versions")
+    if not isinstance(actual, list):
+        return False
+    normalize = lambda rows: sorted(
+        (
+            str(row.get("version_id")),
+            float(row.get("percentage", -1)),
+        )
+        for row in rows
+        if isinstance(row, dict)
+    )
+    return normalize(actual) == normalize(expected_versions)
+
+
+def wait_for_deployment(
+    expected_versions: list[dict[str, Any]],
+    *,
+    timeout_seconds: float = 45.0,
+    interval_seconds: float = 2.0,
+    sleep: Any = time.sleep,
+    monotonic: Any = time.monotonic,
+) -> dict[str, Any]:
+    deadline = monotonic() + timeout_seconds
+    last: dict[str, Any] | None = None
+    while True:
+        last = deployments()[-1]
+        if deployment_matches(last, expected_versions):
+            return last
+        if monotonic() >= deadline:
+            fail(
+                "Cloudflare deployment did not reach the requested version split: "
+                f"expected={expected_versions!r}, latest={last!r}"
+            )
+        sleep(interval_seconds)
+
+
+def create_deployment_api(
+    expected_versions: list[dict[str, Any]],
+    message: str,
+    *,
+    force: bool = False,
+) -> dict[str, Any]:
+    credentials = load_cloudflare_credentials()
+    suffix = "?force=true" if force else ""
+    result = cloudflare_api(
+        "POST",
+        f"/accounts/{credentials.account_id}/workers/scripts/{WORKER_NAME}/deployments{suffix}",
+        body={
+            "strategy": "percentage",
+            "versions": expected_versions,
+            "annotations": {"workers/message": message},
+        },
+    )
+    if not isinstance(result, dict):
+        fail("Cloudflare deployment API returned an unexpected shape")
+    return wait_for_deployment(expected_versions)
+
+
 def deploy_versions(
     environment: dict[str, str],
     specifications: list[str],
     message: str,
-) -> None:
-    wrangler(
-        environment,
+    *,
+    command_timeout_seconds: float = 30.0,
+    force: bool = False,
+) -> dict[str, Any]:
+    expected_versions = parse_deployment_specifications(specifications)
+    if all(float(item["percentage"]) > 0 for item in expected_versions):
+        return create_deployment_api(
+            expected_versions,
+            message,
+            force=force,
+        )
+    arguments = [
+        "pnpm",
+        "exec",
+        "wrangler",
         "versions",
         "deploy",
         *specifications,
@@ -347,7 +500,43 @@ def deploy_versions(
         "--message",
         message,
         "--yes",
+    ]
+    process = subprocess.Popen(
+        arguments,
+        cwd=ROOT,
+        env=environment,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        start_new_session=True,
     )
+    output = ""
+    timed_out = False
+    try:
+        output, _ = process.communicate(timeout=command_timeout_seconds)
+    except subprocess.TimeoutExpired as error:
+        timed_out = True
+        partial = error.output
+        if isinstance(partial, bytes):
+            partial = partial.decode("utf-8", errors="replace")
+        output = partial or ""
+        os.killpg(process.pid, signal.SIGKILL)
+        remainder, _ = process.communicate()
+        output += remainder or ""
+
+    try:
+        deployment = wait_for_deployment(expected_versions)
+    except ReleaseError as reconciliation_error:
+        detail = output.strip()[-4000:]
+        state = "timed out" if timed_out else f"exited {process.returncode}"
+        raise ReleaseError(
+            f"Wrangler deployment {state} and API reconciliation failed.\n"
+            f"{detail}\n{reconciliation_error}"
+        ) from reconciliation_error
+
+    if output.strip():
+        print(output.rstrip())
+    return deployment
 
 
 def canonical_target(url: str) -> str:
@@ -840,17 +1029,12 @@ def rollback(args: argparse.Namespace) -> int:
         fail("No previous 100% deployment was found; provide --version-id")
 
     message = args.message or f"Rollback Ordivon Edge from {current} to {target}"
-    wrangler(
+    deploy_versions(
         environment,
-        "rollback",
-        target,
-        "--name",
-        WORKER_NAME,
-        "--message",
+        [f"{target}@100"],
         message,
-        "--yes",
+        force=True,
     )
-    time.sleep(3)
     status, _, health = signed_request(edge, "GET", "/health")
     if status != 200:
         fail(f"Rollback health returned HTTP {status}: {health}")

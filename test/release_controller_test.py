@@ -20,6 +20,79 @@ SPEC.loader.exec_module(release_controller)
 
 
 class ReleaseControllerTests(unittest.TestCase):
+    def test_deployment_specifications_are_bounded_and_normalized(self) -> None:
+        parsed = release_controller.parse_deployment_specifications(
+            ["old@99.5", "new@0.5"]
+        )
+        self.assertEqual(
+            parsed,
+            [
+                {"version_id": "old", "percentage": 99.5},
+                {"version_id": "new", "percentage": 0.5},
+            ],
+        )
+        with self.assertRaises(release_controller.ReleaseError):
+            release_controller.parse_deployment_specifications(["new@99"] )
+
+    def test_nonzero_deployment_uses_cloudflare_api_without_wrangler(self) -> None:
+        expected = [{"version_id": "candidate", "percentage": 100}]
+        deployment = {"id": "deployment", "versions": expected}
+        with (
+            mock.patch.object(
+                release_controller,
+                "create_deployment_api",
+                return_value=deployment,
+            ) as create,
+            mock.patch.object(release_controller.subprocess, "Popen") as popen,
+        ):
+            result = release_controller.deploy_versions(
+                {},
+                ["candidate@100"],
+                "promote",
+            )
+        self.assertEqual(result, deployment)
+        create.assert_called_once_with(expected, "promote", force=False)
+        popen.assert_not_called()
+
+    def test_deploy_timeout_is_reconciled_from_cloudflare_api(self) -> None:
+        class Process:
+            pid = 1234
+            returncode = None
+
+            def communicate(self, timeout=None):
+                if timeout is not None:
+                    raise subprocess.TimeoutExpired(
+                        cmd=["wrangler"],
+                        timeout=timeout,
+                        output="SUCCESS deployed",
+                    )
+                self.returncode = -9
+                return ("", None)
+
+        expected = [
+            {"version_id": "old", "percentage": 100},
+            {"version_id": "new", "percentage": 0},
+        ]
+        deployment = {"id": "deployment", "versions": expected}
+        with (
+            mock.patch.object(release_controller.subprocess, "Popen", return_value=Process()),
+            mock.patch.object(release_controller.os, "killpg") as killpg,
+            mock.patch.object(
+                release_controller,
+                "wait_for_deployment",
+                return_value=deployment,
+            ) as reconcile,
+        ):
+            result = release_controller.deploy_versions(
+                {},
+                ["old@100", "new@0"],
+                "smoke",
+                command_timeout_seconds=1,
+            )
+        self.assertEqual(result, deployment)
+        killpg.assert_called_once_with(1234, release_controller.signal.SIGKILL)
+        reconcile.assert_called_once_with(expected)
+
     def test_expected_policy_matches_local_configuration(self) -> None:
         version, retention = release_controller.expected_policy()
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
@@ -203,7 +276,21 @@ class ReleaseControllerTests(unittest.TestCase):
             {"id": "new", "created_on": "2026-07-27T02:00:00Z"},
             {"id": "old", "created_on": "2026-07-27T01:00:00Z"},
         ]
-        with mock.patch.object(release_controller, "run_json", return_value=payload):
+        with (
+            mock.patch.object(
+                release_controller,
+                "load_cloudflare_credentials",
+                return_value=release_controller.CloudflareCredentials(
+                    api_token="test-token",
+                    account_id="test-account",
+                ),
+            ),
+            mock.patch.object(
+                release_controller,
+                "cloudflare_api",
+                return_value={"deployments": payload},
+            ),
+        ):
             result = release_controller.deployments({})
         self.assertEqual([item["id"] for item in result], ["old", "new"])
 

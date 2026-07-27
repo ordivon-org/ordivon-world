@@ -135,7 +135,7 @@ Receipt replay occurs before budget consumption. A rate-limited first execution 
 
 ## R2 lifecycle
 
-Apply the managed lifecycle rules with:
+Apply the managed lifecycle rules through the Cloudflare R2 Lifecycle API with:
 
 ```bash
 scripts/configure-r2-lifecycle
@@ -180,3 +180,6 @@ Artifact downloads fail closed unless `X-Ordivon-Sha256` is present and matches 
 ## Effective policy version
 
 `config/edge-policy.json` is the single source for execution bounds, lease durations, expected rate limits, and retention. The Worker combines that document with the effective `FETCH_ALLOWED_HOSTS` binding and reports a fingerprint such as `p1.6.<digest>`. An expired Pending request cannot be taken over when that fingerprint changed. `pnpm check:policy` rejects drift between the policy document and Wrangler configuration.
+
+
+The lifecycle controller preserves non-Ordivon rules, replaces all rules whose IDs begin with `edge-v2-`, then rereads the API and requires an exact match. It does not depend on Wrangler or the local Node dependency tree.
