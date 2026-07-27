@@ -60,7 +60,9 @@ ordivon-edge health
 ordivon-edge capabilities
 ordivon-edge fetch https://developers.cloudflare.com/ --maximum-bytes 262144
 ordivon-edge receipt <receipt-id>
-ordivon-edge artifact-get fetch/v2/<receipt-id>/g<generation>/body --output /tmp/result.bin
+ordivon-edge artifact-get fetch/v2/<receipt-id>/g<generation>/body \
+  --sha256 <sha256-from-receipt> \
+  --output /tmp/result.bin
 ```
 
 ## Fetch boundary
@@ -76,7 +78,7 @@ P0 fetch allows only:
 - execution time up to 15 seconds;
 - fixed GET semantics with no caller-provided cookies or authorization headers.
 
-Every accepted request acquires an R2 idempotency lock. Successes, failures, and policy rejections produce private Receipt objects.
+Every accepted request conditionally creates an authoritative R2 `requests/v2` Pending state. Successes, failures, and policy rejections commit a final Receipt into that same state object and write a best-effort Receipt mirror.
 
 
 ## Browser Run P1
@@ -139,7 +141,7 @@ Apply the managed lifecycle rules with:
 scripts/configure-r2-lifecycle
 ```
 
-The rules retain authoritative v2 request states, receipt mirrors, and cleanup tombstones for 90 days, and Fetch/Browser Artifacts for 30 days. Legacy v1 evidence is not modified.
+Retention is defined once in `config/edge-policy.json`. Request states, Receipt mirrors, cleanup tombstones, and Request-ID idempotency are retained for 90 days. Fetch and Browser Artifacts are retained for 91 days so a replayable Receipt does not outlive its result. Legacy v1 evidence is not modified.
 
 When immediate Artifact cleanup is deferred, inspect or execute the bounded GC controller:
 
@@ -167,3 +169,14 @@ systemctl list-timers ordivon-edge-gc.timer
 ```
 
 The service is root-only, uses a `0077` umask, and processes at most 100 cleanup tombstones per run.
+
+
+## Client transport and Artifact integrity
+
+The client retries transient transport failures up to three times. A POST retry preserves the original Request ID and request body, so the Edge state machine returns a first execution, Pending state, or deterministic Receipt replay rather than creating a second operation. HTTP policy failures are not retried automatically.
+
+Artifact downloads fail closed unless `X-Ordivon-Sha256` is present and matches the downloaded bytes. `--sha256` additionally verifies the digest carried by the operation Receipt. The client writes through a same-directory temporary file, fsyncs it, atomically renames it, and applies mode `0600`.
+
+## Effective policy version
+
+`config/edge-policy.json` is the single source for execution bounds, lease durations, expected rate limits, and retention. The Worker combines that document with the effective `FETCH_ALLOWED_HOSTS` binding and reports a fingerprint such as `p1.6.<digest>`. An expired Pending request cannot be taken over when that fingerprint changed. `pnpm check:policy` rejects drift between the policy document and Wrangler configuration.

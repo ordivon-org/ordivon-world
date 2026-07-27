@@ -2,13 +2,13 @@ import { sha256Hex } from "./auth.js";
 import type { ArtifactReference, FetchReceiptDetails } from "./contracts.js";
 import type { ExecutionLease } from "./execution.js";
 import { EdgeError } from "./errors.js";
+import { FETCH_POLICY } from "./policy.js";
 import {
   validateExternalUrl,
   type FetchPolicyEnvironment,
   type ValidatedFetchRequest
 } from "./fetch-policy.js";
 
-const MAX_REDIRECTS = 3;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 export interface FetchExecutionEnvironment extends FetchPolicyEnvironment {
@@ -131,7 +131,7 @@ export async function executeExternalFetch(
       if (!REDIRECT_STATUSES.has(response.status)) {
         break;
       }
-      if (redirectCount >= MAX_REDIRECTS) {
+      if (redirectCount >= FETCH_POLICY.max_redirects) {
         await response.body?.cancel("redirect budget exceeded");
         throw new EdgeError("too_many_redirects", 502, "The external request exceeded its redirect budget.", "failed");
       }

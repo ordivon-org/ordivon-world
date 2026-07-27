@@ -1,9 +1,9 @@
 import { EdgeError } from "./errors.js";
+import { REQUEST_POLICY } from "./policy.js";
 
 const AUTH_SCHEME = "Ordivon-HMAC";
 const REQUEST_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{7,63}$/;
 const KEY_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{2,31}$/;
-const MAX_CLOCK_SKEW_SECONDS = 300;
 const encoder = new TextEncoder();
 
 export interface AuthEnvironment {
@@ -92,7 +92,7 @@ export async function verifySignedRequest(
     throw new EdgeError("invalid_timestamp", 401, "X-Ordivon-Timestamp is missing or invalid.");
   }
   const timestamp = Number.parseInt(timestampText, 10);
-  if (Math.abs(nowSeconds - timestamp) > MAX_CLOCK_SKEW_SECONDS) {
+  if (Math.abs(nowSeconds - timestamp) > REQUEST_POLICY.clock_skew_seconds) {
     throw new EdgeError("stale_request", 401, "The signed request is outside the allowed time window.");
   }
 

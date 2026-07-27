@@ -19,6 +19,8 @@ Ordivon Edge owns externally hosted bounded execution, R2 artifacts, Browser Run
 11. Never serialize lease tokens or R2 ETags into Receipts, logs, manifests, or client responses.
 12. Production release must use `scripts/ordivon_edge_release.py`; do not deploy directly from a feature branch.
 13. Cleanup tasks may delete only matching-generation `fetch/v2` or `browser/v2` Artifacts.
+14. Execution bounds, retention, and expected rate limits belong in `config/edge-policy.json`; do not introduce parallel constants.
+15. Artifact downloads must fail closed on missing or mismatched SHA-256 metadata and must not partially replace destinations.
 
 ## Required checks
 

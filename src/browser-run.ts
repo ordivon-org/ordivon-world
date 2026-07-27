@@ -10,10 +10,7 @@ import type {
 } from "./contracts.js";
 import { EdgeError } from "./errors.js";
 import type { ExecutionLease } from "./execution.js";
-
-const MAX_BROWSER_RESPONSE_BYTES = 8 * 1_048_576;
-const MAX_SCREENSHOT_BYTES = 4 * 1_048_576;
-const MAX_CONTENT_BYTES = 1_048_576;
+import { BROWSER_POLICY } from "./policy.js";
 
 interface SnapshotSuccess {
   readonly success: true;
@@ -103,7 +100,7 @@ function decodeScreenshot(value: string): Uint8Array {
   } catch {
     throw new EdgeError("invalid_browser_output", 502, "Browser Run returned an invalid screenshot.", "failed");
   }
-  if (decoded.length > MAX_SCREENSHOT_BYTES) {
+  if (decoded.length > BROWSER_POLICY.max_screenshot_bytes) {
     throw new EdgeError("browser_output_too_large", 502, "Browser screenshot exceeded its budget.", "failed");
   }
   return Uint8Array.from(decoded, (character) => character.charCodeAt(0));
@@ -190,13 +187,13 @@ export async function executeBrowserRun(
     throw new EdgeError("browser_unavailable", 503, "Browser Run is temporarily unavailable.", "failed");
   }
   const browserMs = parseBrowserMilliseconds(response);
-  const body = await readLimited(response, MAX_BROWSER_RESPONSE_BYTES);
+  const body = await readLimited(response, BROWSER_POLICY.max_response_bytes);
   if (!response.ok) {
     throw browserFailure(response.status);
   }
   const snapshot = parseSnapshot(body);
   const content = new TextEncoder().encode(snapshot.result.content);
-  if (content.byteLength > MAX_CONTENT_BYTES) {
+  if (content.byteLength > BROWSER_POLICY.max_content_bytes) {
     throw new EdgeError("browser_output_too_large", 502, "Rendered HTML exceeded its budget.", "failed");
   }
   const screenshot = decodeScreenshot(snapshot.result.screenshot);

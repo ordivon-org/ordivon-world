@@ -1,4 +1,5 @@
 import { EdgeError } from "./errors.js";
+import { BROWSER_POLICY } from "./policy.js";
 import {
   validateExternalUrl,
   type FetchPolicyEnvironment
@@ -13,12 +14,9 @@ const ALLOWED_FIELDS = new Set([
   "timeout_ms",
   "wait_after_ms"
 ]);
-const WAIT_UNTIL_VALUES = new Set<BrowserRunLifecycleEvent>([
-  "load",
-  "domcontentloaded",
-  "networkidle0",
-  "networkidle2"
-]);
+const WAIT_UNTIL_VALUES = new Set<BrowserRunLifecycleEvent>(
+  BROWSER_POLICY.wait_until as BrowserRunLifecycleEvent[]
+);
 
 export interface ValidatedBrowserRunRequest {
   readonly url: URL;
@@ -71,13 +69,37 @@ export function validateBrowserRunRequest(
   return {
     url: validateExternalUrl(value.url, environment),
     viewport: {
-      width: boundedInteger(value.viewport_width, 1365, 320, 1920, "viewport_width"),
-      height: boundedInteger(value.viewport_height, 768, 240, 1080, "viewport_height")
+      width: boundedInteger(
+        value.viewport_width,
+        BROWSER_POLICY.viewport.default_width,
+        BROWSER_POLICY.viewport.min_width,
+        BROWSER_POLICY.viewport.max_width,
+        "viewport_width"
+      ),
+      height: boundedInteger(
+        value.viewport_height,
+        BROWSER_POLICY.viewport.default_height,
+        BROWSER_POLICY.viewport.min_height,
+        BROWSER_POLICY.viewport.max_height,
+        "viewport_height"
+      )
     },
     fullPage: value.full_page ?? false,
     waitUntil: waitUntil as BrowserRunLifecycleEvent,
-    timeoutMs: boundedInteger(value.timeout_ms, 15_000, 1_000, 30_000, "timeout_ms"),
-    waitAfterMs: boundedInteger(value.wait_after_ms, 0, 0, 3_000, "wait_after_ms")
+    timeoutMs: boundedInteger(
+      value.timeout_ms,
+      BROWSER_POLICY.timeout.default_ms,
+      BROWSER_POLICY.timeout.min_ms,
+      BROWSER_POLICY.timeout.max_ms,
+      "timeout_ms"
+    ),
+    waitAfterMs: boundedInteger(
+      value.wait_after_ms,
+      BROWSER_POLICY.wait_after.default_ms,
+      BROWSER_POLICY.wait_after.min_ms,
+      BROWSER_POLICY.wait_after.max_ms,
+      "wait_after_ms"
+    )
   };
 }
 
@@ -97,21 +119,16 @@ export function browserRunOptions(
       waitUntil: request.waitUntil
     },
     waitForTimeout: request.waitAfterMs,
-    actionTimeout: Math.min(120_000, request.timeoutMs + request.waitAfterMs + 5_000),
+    actionTimeout: Math.min(
+      BROWSER_POLICY.action_timeout_max_ms,
+      request.timeoutMs +
+        request.waitAfterMs +
+        BROWSER_POLICY.action_timeout_overhead_ms
+    ),
     cacheTTL: 0,
     setJavaScriptEnabled: true,
     allowRequestPattern: [originPattern],
-    rejectResourceTypes: [
-      "media",
-      "font",
-      "prefetch",
-      "eventsource",
-      "websocket",
-      "manifest",
-      "signedexchange",
-      "ping",
-      "cspviolationreport"
-    ],
+    rejectResourceTypes: [...BROWSER_POLICY.rejected_resource_types] as BrowserRunResourceType[],
     screenshotOptions: {
       type: "png",
       fullPage: request.fullPage,

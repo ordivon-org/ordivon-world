@@ -1,22 +1,16 @@
 import { EdgeError } from "./errors.js";
+import { FETCH_POLICY } from "./policy.js";
 
-const MAX_URL_BYTES = 2048;
-const MAX_RESPONSE_BYTES = 1_048_576;
-const DEFAULT_RESPONSE_BYTES = 262_144;
-const MIN_TIMEOUT_MS = 1_000;
-const MAX_TIMEOUT_MS = 15_000;
-const DEFAULT_TIMEOUT_MS = 10_000;
-const MAX_ACCEPT_BYTES = 256;
-const FORBIDDEN_HOST_SUFFIXES = [
-  ".localhost",
-  ".local",
-  ".internal",
-  ".home.arpa",
-  ".test",
-  ".invalid",
-  ".example",
-  ".onion"
-];
+const {
+  max_url_bytes: MAX_URL_BYTES,
+  max_response_bytes: MAX_RESPONSE_BYTES,
+  default_response_bytes: DEFAULT_RESPONSE_BYTES,
+  min_timeout_ms: MIN_TIMEOUT_MS,
+  max_timeout_ms: MAX_TIMEOUT_MS,
+  default_timeout_ms: DEFAULT_TIMEOUT_MS,
+  max_accept_bytes: MAX_ACCEPT_BYTES,
+  forbidden_host_suffixes: FORBIDDEN_HOST_SUFFIXES
+} = FETCH_POLICY;
 
 export interface FetchPolicyEnvironment {
   readonly FETCH_ALLOWED_HOSTS: string;
@@ -88,13 +82,13 @@ export function validateExternalUrl(
   } catch {
     throw new EdgeError("invalid_url", 422, "The external URL is invalid.");
   }
-  if (url.protocol !== "https:") {
+  if (url.protocol !== FETCH_POLICY.allowed_scheme) {
     throw new EdgeError("unsupported_scheme", 422, "Only HTTPS external URLs are allowed.");
   }
   if (url.username !== "" || url.password !== "") {
     throw new EdgeError("url_credentials_forbidden", 422, "Credentials in external URLs are forbidden.");
   }
-  if (url.port !== "" && url.port !== "443") {
+  if (url.port !== "" && url.port !== FETCH_POLICY.allowed_port) {
     throw new EdgeError("unsafe_port", 422, "Only the standard HTTPS port is allowed.");
   }
   const hostname = normalizeHostname(url.hostname);

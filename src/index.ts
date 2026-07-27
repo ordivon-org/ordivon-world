@@ -12,7 +12,7 @@ import {
   type BrowserSnapshotRunner
 } from "./browser-run.js";
 import {
-  CAPABILITIES,
+  capabilitiesDocument,
   EDGE_SCHEMA_VERSION,
   type EdgeOperation,
   type EdgeReceipt,
@@ -41,10 +41,11 @@ import {
   emitOperationLog,
   type EdgeLogWriter
 } from "./observability.js";
+import {
+  effectivePolicyVersion,
+  REQUEST_POLICY
+} from "./policy.js";
 import { createReceipt } from "./receipts.js";
-import { EDGE_POLICY_VERSION } from "./version.js";
-
-const MAX_REQUEST_BODY_BYTES = 8_192;
 const RECEIPT_PREFIX = "/v1/receipts/";
 const ARTIFACT_PREFIX = "/v1/artifacts/";
 
@@ -198,6 +199,7 @@ async function beginOperation(
     requestId,
     requestDigest,
     operation,
+    policyVersion: await effectivePolicyVersion(environment),
     workerVersion: environment.CF_VERSION_METADATA,
     now: nowFrom(dependencies),
     ...(dependencies.tokenFactory === undefined
@@ -467,7 +469,7 @@ export async function handleRequest(
   dependencies: HandlerDependencies = {}
 ): Promise<Response> {
   try {
-    const body = await readBodyLimited(request, MAX_REQUEST_BODY_BYTES);
+    const body = await readBodyLimited(request, REQUEST_POLICY.max_body_bytes);
     const auth = await verifySignedRequest(request, body, environment);
     const url = new URL(request.url);
 
@@ -477,7 +479,7 @@ export async function handleRequest(
         schema_version: EDGE_SCHEMA_VERSION,
         service: "ordivon-edge",
         status: "ok",
-        policy_version: EDGE_POLICY_VERSION,
+        policy_version: await effectivePolicyVersion(environment),
         worker_version: environment.CF_VERSION_METADATA
       });
     }
@@ -485,7 +487,7 @@ export async function handleRequest(
     if (url.pathname === "/v1/capabilities") {
       if (request.method !== "GET") return methodNotAllowed("GET");
       return jsonResponse({
-        ...CAPABILITIES,
+        ...capabilitiesDocument(await effectivePolicyVersion(environment)),
         worker_version: environment.CF_VERSION_METADATA
       });
     }

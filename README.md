@@ -28,13 +28,13 @@ It does **not** own local route, VPN, DNS, WARP, path measurement, transport sel
 - queryable pending receipts and conditionally committed final receipts;
 - generation-scoped execution leases and stale-executor fencing;
 - Artifact cleanup when a result loses its lease or cannot commit;
-- policy, capability, Worker version, and lease generation in every new Receipt;
-- deterministic receipt replay and Request-ID conflict detection;
+- policy fingerprint, capability, Worker version, and lease generation in every new Receipt;
+- deterministic receipt replay with an explicit 90-day idempotency window;
 - Cloudflare-native per-key Fetch and Browser rate limits;
 - structured operation logs and Worker traces;
 - HTTPS-only external Fetch with bounded redirects, size, and time;
 - same-origin Browser Run snapshots with PNG, rendered HTML, and manifest artifacts;
-- private, generation-versioned R2 Artifact paths;
+- private, generation-versioned R2 Artifact paths retained longer than replayable Receipts;
 - version upload, 0% traffic smoke, version override validation, promotion, and rollback receipts;
 - Workers.dev, preview URLs, and R2 public access disabled;
 - machine-enforced repository boundary checks.
@@ -54,6 +54,7 @@ ordivon-edge health
 ordivon-edge fetch https://developers.cloudflare.com/
 ordivon-edge browser-run https://example.com/ --full-page
 ordivon-edge receipt <request-id> --wait
+ordivon-edge artifact-get <artifact-key> --sha256 <receipt-sha256> --output ./artifact.bin
 ```
 
 ## Release and lifecycle

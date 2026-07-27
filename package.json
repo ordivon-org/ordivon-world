@@ -10,11 +10,12 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/**/*.test.ts",
-    "check:python": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py && python3 -m unittest discover -s test -p '*_test.py'",
+    "check:python": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py scripts/check-policy-config.py && python3 -m unittest discover -s test -p '*_test.py'",
     "check:operations": "scripts/check-operations",
     "check:boundary": "node scripts/check-boundary.mjs",
     "build": "node scripts/wrangler-dry-run.mjs",
-    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:operations && pnpm check:boundary && pnpm build"
+    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:policy && pnpm check:operations && pnpm check:boundary && pnpm build",
+    "check:policy": "python3 scripts/check-policy-config.py"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "5.20260727.1",

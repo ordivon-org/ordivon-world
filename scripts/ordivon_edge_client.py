@@ -7,10 +7,12 @@ import argparse
 import base64
 import hashlib
 import hmac
+import http.client
 import json
 import os
 import pathlib
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -20,7 +22,9 @@ from dataclasses import dataclass
 from typing import Any
 
 DEFAULT_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
-USER_AGENT = "ordivon-edge-client/0.1"
+USER_AGENT = "ordivon-edge-client/0.2"
+MAX_TRANSPORT_ATTEMPTS = 3
+TRANSPORT_RETRY_BASE_SECONDS = 0.25
 
 
 class ClientError(RuntimeError):
@@ -104,26 +108,44 @@ def request(
     body: bytes = b"",
     request_id: str | None = None,
     accept: str = "application/json",
+    transport_attempts: int = MAX_TRANSPORT_ATTEMPTS,
+    sleep: Any = time.sleep,
 ) -> tuple[int, dict[str, str], bytes]:
     request_id = request_id or make_request_id()
+    if transport_attempts < 1:
+        raise ClientError("transport_attempts must be positive")
     url = f"{config.endpoint}{path}"
-    headers = signed_headers(config, method, url, body, request_id)
-    headers["Accept"] = accept
-    if body:
-        headers["Content-Type"] = "application/json"
-    invocation = urllib.request.Request(
-        url,
-        data=body if method.upper() not in {"GET", "HEAD"} else None,
-        method=method.upper(),
-        headers=headers,
-    )
-    try:
-        with urllib.request.urlopen(invocation, timeout=30) as response:
-            return response.status, dict(response.headers.items()), response.read()
-    except urllib.error.HTTPError as exc:
-        return exc.code, dict(exc.headers.items()), exc.read()
-    except urllib.error.URLError as exc:
-        raise ClientError(f"Edge request failed: {exc.reason}") from exc
+    last_error: BaseException | None = None
+    for attempt in range(1, transport_attempts + 1):
+        headers = signed_headers(config, method, url, body, request_id)
+        headers["Accept"] = accept
+        if body:
+            headers["Content-Type"] = "application/json"
+        invocation = urllib.request.Request(
+            url,
+            data=body if method.upper() not in {"GET", "HEAD"} else None,
+            method=method.upper(),
+            headers=headers,
+        )
+        try:
+            with urllib.request.urlopen(invocation, timeout=30) as response:
+                return response.status, dict(response.headers.items()), response.read()
+        except urllib.error.HTTPError as exc:
+            return exc.code, dict(exc.headers.items()), exc.read()
+        except (
+            urllib.error.URLError,
+            http.client.HTTPException,
+            ConnectionError,
+            TimeoutError,
+        ) as exc:
+            last_error = exc
+            if attempt >= transport_attempts:
+                break
+            sleep(TRANSPORT_RETRY_BASE_SECONDS * (2 ** (attempt - 1)))
+    detail = getattr(last_error, "reason", None) or str(last_error) or type(last_error).__name__
+    raise ClientError(
+        f"Edge request failed after {transport_attempts} transport attempts: {detail}"
+    ) from last_error
 
 
 def print_json_bytes(body: bytes) -> None:
@@ -223,19 +245,48 @@ def command_artifact_get(config: Config, args: argparse.Namespace) -> int:
     if not 200 <= status < 300:
         print_json_bytes(body)
         return 1
+    normalized_headers = {key.lower(): value for key, value in headers.items()}
+    edge_sha256 = normalized_headers.get("x-ordivon-sha256")
+    local_sha256 = hashlib.sha256(body).hexdigest()
+    if edge_sha256 is None:
+        raise ClientError("Artifact response is missing X-Ordivon-Sha256")
+    if edge_sha256 != local_sha256:
+        raise ClientError("Artifact SHA-256 does not match the Edge metadata")
+    if args.sha256 is not None and args.sha256.lower() != local_sha256:
+        raise ClientError("Artifact SHA-256 does not match the expected Receipt digest")
+
     destination = pathlib.Path(args.output)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_bytes(body)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{destination.name}.",
+        suffix=".tmp",
+        dir=destination.parent,
+    )
+    temporary = pathlib.Path(temporary_name)
+    try:
+        os.fchmod(descriptor, 0o600)
+        with os.fdopen(descriptor, "wb", closefd=True) as stream:
+            stream.write(body)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, destination)
+        os.chmod(destination, 0o600)
+    except Exception:
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        temporary.unlink(missing_ok=True)
+        raise
+
     receipt = {
         "saved": str(destination),
         "bytes": len(body),
-        "sha256": hashlib.sha256(body).hexdigest(),
-        "edge_sha256": headers.get("X-Ordivon-Sha256")
-        or headers.get("x-ordivon-sha256"),
-        "download_content_type": headers.get("Content-Type")
-        or headers.get("content-type"),
-        "media_type": headers.get("X-Ordivon-Media-Type")
-        or headers.get("x-ordivon-media-type"),
+        "sha256": local_sha256,
+        "edge_sha256": edge_sha256,
+        "verified": True,
+        "download_content_type": normalized_headers.get("content-type"),
+        "media_type": normalized_headers.get("x-ordivon-media-type"),
     }
     print(json.dumps(receipt, indent=2))
     return 0
@@ -281,6 +332,7 @@ def parser() -> argparse.ArgumentParser:
     artifact = commands.add_parser("artifact-get")
     artifact.add_argument("key")
     artifact.add_argument("--output", required=True)
+    artifact.add_argument("--sha256")
     return root
 
 
