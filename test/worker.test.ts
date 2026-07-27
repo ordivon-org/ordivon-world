@@ -43,6 +43,7 @@ test("bounded fetch persists an artifact and receipt, then replays without refet
   const memory = new MemoryR2();
   const environment = makeEnv(memory);
   const requestId = "request_fetch_001";
+  const signedAt = Math.floor(Date.now() / 1000);
   const requestBody = JSON.stringify({
     url: "https://allowed.example.org/data",
     maximum_bytes: 1024,
@@ -61,7 +62,8 @@ test("bounded fetch persists an artifact and receipt, then replays without refet
     signedRequest("https://edge.invalid/v1/fetch", {
       method: "POST",
       body: requestBody,
-      requestId
+      requestId,
+      timestamp: signedAt
     }),
     environment,
     { fetcher }
@@ -79,7 +81,8 @@ test("bounded fetch persists an artifact and receipt, then replays without refet
     signedRequest("https://edge.invalid/v1/fetch", {
       method: "POST",
       body: requestBody,
-      requestId
+      requestId,
+      timestamp: signedAt + 1
     }),
     environment,
     { fetcher }
