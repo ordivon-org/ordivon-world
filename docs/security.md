@@ -40,7 +40,7 @@ Fetch is intentionally constrained:
 - timeout between one and fifteen seconds;
 - response bodies never returned inline from the execution endpoint.
 
-The fetched body is stored in private R2 and referenced by SHA-256, byte length, media type, and ETag.
+The fetched body is stored in private R2 and referenced by SHA-256, byte length, media type, and ETag. Artifact reads are always served as `application/octet-stream` with `Content-Disposition: attachment` and `Cache-Control: no-store, no-transform`; the original media type is exposed only as `X-Ordivon-Media-Type`. This preserves exact bytes and prevents HTML execution or Cloudflare JavaScript Detection injection.
 
 ## Public surface
 
