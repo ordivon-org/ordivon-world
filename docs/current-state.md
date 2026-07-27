@@ -11,12 +11,13 @@
 - a loopback-only read-only Web console with freshness semantics, SSE updates, restrictive headers, and raw request-target validation;
 - Baseline v0 bounded wire frames, addresses, errors, negotiated limits, and state machines;
 - localhost Quinn/rustls TLS 1.3 mTLS reference transport with certificate-bound device identity, strict TCP relay, confirmed UDP associations, liveness, cleanup, and loopback-only target policy;
-- tests that require neither public network access nor host-route mutation.
+- tests that require neither public network access nor host-route mutation;
+- an explicit, root-only WireGuard network-namespace controller for selected commands, with transactional rollback and no WSL root-route mutation.
 
 ## Not implemented
 
-- route-selection execution or automatic failover;
-- host route, DNS, firewall, TUN, or VPN mutation;
+- automatic route-selection execution or automatic failover;
+- global host route, root-namespace DNS, or automatic VPN mutation;
 - production device and remote-node certificate lifecycle;
 - public Baseline endpoint and repeated direct-no-VPN versus VPN evidence;
 - production transport adapters for sing-box, Xray-core, Hysteria2, or NaiveProxy;

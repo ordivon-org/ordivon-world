@@ -1,0 +1,16 @@
+[Unit]
+Description=Ordivon isolated VPN namespace (%i)
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/root/.config/ordivon/secrets/surfshark/rendered/%i.conf
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/ordivon-vpn up %i
+ExecStop=/usr/local/sbin/ordivon-vpn down
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

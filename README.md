@@ -24,6 +24,7 @@ Ordivon Link owns:
 - explainable route-selection inputs and future failover policy;
 - local read-only status history and console;
 - replaceable transport adapters;
+- explicit root-only isolated VPN namespaces for selected commands, without changing the WSL root default route;
 - the Ordivon Baseline v0 wire contract and QUIC reference adapter.
 
 Ordivon Link does **not** own:
@@ -75,6 +76,19 @@ cargo run -p link-console -- \
 ```
 
 The console remains loopback-only and read-only. It does not mutate VPN, routes, DNS, firewall, Tunnel, or Ordivon Runtime state.
+
+## Isolated VPN execution
+
+The separate `ordivon-vpn` controller creates a root-only network namespace for explicitly selected commands. It is not called by the console and does not move Runtime, MCP, or Cloudflare Tunnel out of the WSL root namespace.
+
+```bash
+sudo scripts/install-ordivon-vpn
+sudo ordivon-vpn up jp-tok
+sudo ordivon-vpn exec curl -fsS https://www.cloudflare.com/cdn-cgi/trace
+sudo ordivon-vpn down
+```
+
+See [`docs/vpn-namespace.md`](docs/vpn-namespace.md).
 
 ## Probe example
 
