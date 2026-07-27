@@ -276,10 +276,20 @@ class ReleaseControllerTests(unittest.TestCase):
             {"id": "new", "created_on": "2026-07-27T02:00:00Z"},
             {"id": "old", "created_on": "2026-07-27T01:00:00Z"},
         ]
-        with mock.patch.object(
-            release_controller,
-            "cloudflare_api",
-            return_value={"deployments": payload},
+        with (
+            mock.patch.object(
+                release_controller,
+                "load_cloudflare_credentials",
+                return_value=release_controller.CloudflareCredentials(
+                    api_token="test-token",
+                    account_id="test-account",
+                ),
+            ),
+            mock.patch.object(
+                release_controller,
+                "cloudflare_api",
+                return_value={"deployments": payload},
+            ),
         ):
             result = release_controller.deployments({})
         self.assertEqual([item["id"] for item in result], ["old", "new"])
