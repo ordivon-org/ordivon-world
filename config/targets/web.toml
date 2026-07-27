@@ -1,0 +1,52 @@
+schema_version = 1
+
+# Minimal service set for the local Ordivon Edge Web plane.
+# Only sanitized health summaries are retained; URLs and remote IPs are not
+# exposed by the API or written to the Edge SQLite store.
+[[targets]]
+id = "github-web"
+url = "https://github.com/"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "openai-web"
+url = "https://chatgpt.com/"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "openai-api"
+url = "https://api.openai.com/v1/models"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "anthropic-api"
+url = "https://api.anthropic.com/v1/messages"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "cloudflare-api"
+url = "https://api.cloudflare.com/client/v4/user/tokens/verify"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "docker-registry"
+url = "https://registry-1.docker.io/v2/"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "npm-registry"
+url = "https://registry.npmjs.org/"
+enabled = true
+protocols = ["http_tls"]
+
+[[targets]]
+id = "pypi"
+url = "https://pypi.org/simple/"
+enabled = true
+protocols = ["http_tls"]
