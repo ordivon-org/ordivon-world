@@ -99,12 +99,19 @@ export async function verifySignedRequest(
   const bodySha256 = await sha256Hex(body);
   const url = new URL(request.url);
   const canonicalTarget = `${url.pathname}${url.search}`;
+  const method = request.method.toUpperCase();
   const canonicalRequest = [
     "ordivon-edge-v1",
-    request.method.toUpperCase(),
+    method,
     canonicalTarget,
     requestId,
     timestampText,
+    bodySha256
+  ].join("\n");
+  const idempotencyRequest = [
+    "ordivon-edge-idempotency-v1",
+    method,
+    canonicalTarget,
     bodySha256
   ].join("\n");
 
@@ -131,7 +138,7 @@ export async function verifySignedRequest(
     requestId,
     timestamp,
     bodySha256,
-    requestDigest: await sha256Hex(canonicalRequest),
+    requestDigest: await sha256Hex(idempotencyRequest),
     canonicalRequest
   };
 }
