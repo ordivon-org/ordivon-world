@@ -239,3 +239,17 @@ Deferred work: OCI images, writable overlays, hard cgroup CPU/process limits,
 long-lived process freezing, checkpoint/restore, multi-Node World recovery,
 cross-process management locking, WORM evidence storage, adversarial-range
 credentials and lifecycle, and Link-managed range connectivity.
+
+
+## Security control session
+
+`src/research-node-control.ts` and
+`scripts/ordivon_edge_node_control.ts` expose the local provider through a
+bounded long-lived JSONL session. The session binds one immutable identity,
+keeps non-persistent lease tokens in memory, persists completed Security
+operation Receipts, and provides reset, fresh-root reconstruction, and residual
+classification without changing production Worker routes or policy.
+
+The session does not solve cross-process authority. One trusted process still
+owns a provider root, and two sessions must not manage the same root
+concurrently. See [`research-node-control-v0.md`](research-node-control-v0.md).

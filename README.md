@@ -28,6 +28,10 @@ research profile are documented in
 separate library adapter and does not add Worker routes, bindings, or release
 behavior.
 
+A component-owned long-lived JSONL control session exposes the research Node to
+Ordivon Security without persisting lease tokens or copying Edge lifecycle
+state. See [`docs/research-node-control-v0.md`](docs/research-node-control-v0.md).
+
 ## Strict boundary
 
 Ordivon Edge owns Cloudflare Worker execution, external fetch and Browser Run policy, private R2 artifacts, execution budgets, receipts, release control, and future remote Edge-node lifecycle.
@@ -53,7 +57,21 @@ It does **not** own local route, VPN, DNS, WARP, path measurement, transport sel
 - Workers.dev, preview URLs, and R2 public access disabled;
 - machine-enforced repository boundary checks.
 
+## Research Node control
+
+```bash
+corepack enable
+pnpm node-control -- --root /private/edge-provider-root
+```
+
+The process accepts bounded JSONL `declare`, `snapshot`, `execute`, `reconcile`,
+and `residual` requests. It is not a production HTTP API and must remain under
+the trusted research management boundary.
+
 ## Verification
+
+The repository pins `pnpm@10.33.2`; local and CI entry points use the same major
+version and build-script policy.
 
 ```bash
 pnpm install --frozen-lockfile

@@ -68,10 +68,7 @@ test("pending executions are queryable before final commit", async () => {
     }
   );
 
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    if (memory.objects.has(requestStateKey(requestId))) break;
-    await new Promise((resolve) => setTimeout(resolve, 0));
-  }
+  await memory.waitForPut(requestStateKey(requestId));
   assert.ok(memory.objects.has(requestStateKey(requestId)));
 
   const pendingResponse = await handleRequest(
