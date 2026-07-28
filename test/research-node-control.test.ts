@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -19,6 +19,29 @@ import {
 
 const NOW = new Date("2026-07-29T00:00:00.000Z");
 const ENTRYPOINT = new TextEncoder().encode("printf 'edge-control-ok\\n'\n");
+
+async function removeControlRoot(root: string): Promise<void> {
+  async function makeWritable(path: string): Promise<void> {
+    let entries;
+    try {
+      entries = await readdir(path, { withFileTypes: true });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return;
+      throw error;
+    }
+    await chmod(path, 0o700);
+    for (const entry of entries) {
+      const child = join(path, entry.name);
+      if (entry.isDirectory()) {
+        await makeWritable(child);
+      } else if (!entry.isSymbolicLink()) {
+        await chmod(child, 0o600);
+      }
+    }
+  }
+  await makeWritable(root);
+  await rm(root, { recursive: true, force: true });
+}
 
 class FakeExecutor implements LocalExperimentExecutor {
   prepareCalls = 0;
@@ -122,7 +145,7 @@ async function execute(
 
 test("research control drives one complete disposable Node lifecycle", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "ordivon-edge-control-"));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  t.after(() => removeControlRoot(root));
   const executor = new FakeExecutor();
   let token = 0;
   const session = new ResearchNodeControlSession({
@@ -181,7 +204,7 @@ test("research control drives one complete disposable Node lifecycle", async (t)
 
 test("control state and completed operation receipts survive a process restart", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "ordivon-edge-control-restart-"));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  t.after(() => removeControlRoot(root));
   const executor = new FakeExecutor();
   let token = 0;
   const options = {
@@ -209,7 +232,7 @@ test("control state and completed operation receipts survive a process restart",
 
 test("request validation and operation rebinding fail closed", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "ordivon-edge-control-invalid-"));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  t.after(() => removeControlRoot(root));
   const session = new ResearchNodeControlSession({
     root,
     executorFactory: () => new FakeExecutor(),

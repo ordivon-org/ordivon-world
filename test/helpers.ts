@@ -51,6 +51,16 @@ export class MemoryR2 {
   private deleteFailuresRemaining = 0;
   private readonly putCounts = new Map<string, number>();
   private readonly putFaults = new Map<string, Map<number, PutFault>>();
+  private readonly putWaiters = new Map<string, Set<() => void>>();
+
+  waitForPut(key: string): Promise<void> {
+    if (this.objects.has(key)) return Promise.resolve();
+    return new Promise((resolve) => {
+      const waiters = this.putWaiters.get(key) ?? new Set<() => void>();
+      waiters.add(resolve);
+      this.putWaiters.set(key, waiters);
+    });
+  }
 
   faultPut(key: string, callNumber: number, fault: PutFault): void {
     if (!Number.isInteger(callNumber) || callNumber < 1) {
@@ -153,6 +163,11 @@ export class MemoryR2 {
           customMetadata: options?.customMetadata ?? {}
         };
         self.objects.set(key, stored);
+        const waiters = self.putWaiters.get(key);
+        if (waiters !== undefined) {
+          self.putWaiters.delete(key);
+          for (const resolve of waiters) resolve();
+        }
         if (fault === "throw_after") {
           throw new Error(`injected R2 put failure after write: ${key}`);
         }
