@@ -19,6 +19,8 @@ WSL root namespace
 - The controller never prints keys, peer public keys, endpoint hostnames, or endpoint addresses.
 - Runtime, MCP, and Cloudflare Tunnel remain in the root namespace.
 - No automatic failover or route selection is enabled.
+- Windows Surfshark must be disconnected before `up`; the controller rejects nested VPN startup.
+- Forwarding is admitted only for the namespace veth and current root uplink, through `DOCKER-USER` when Docker owns the host `FORWARD` policy.
 - Only one `ordivon-vpn` namespace is active at a time.
 
 ## Install
@@ -41,6 +43,8 @@ Then validate a profile:
 ordivon-vpn doctor jp-tok
 ```
 
+`doctor` reports whether Windows Surfshark is currently active. Disconnect it before starting the namespace.
+
 ## Operate
 
 ```bash
@@ -51,7 +55,7 @@ sudo ordivon-vpn exec git clone https://github.com/example/example.git
 sudo ordivon-vpn down
 ```
 
-The `exec` subcommand replaces itself with `ip netns exec`; command exit status is preserved.
+The `exec` subcommand replaces itself with `ip netns exec`; command exit status is preserved. The controller adds only two exact forwarding rules for the veth/uplink pair and removes them during `down` or rollback.
 
 A manual systemd instance is also available:
 
@@ -64,7 +68,7 @@ The unit is installed but not enabled automatically.
 
 ## Recovery
 
-`up` is transactional. Any failure before verified WireGuard handshake and HTTPS egress removes the namespace, veth, nftables tables, resolver file, temporary stripped configuration, and restores the previous IPv4 forwarding value.
+`up` is transactional. Any failure before verified WireGuard handshake and HTTPS egress removes the namespace, veth, NAT table, Docker/host forwarding exceptions, resolver file, temporary stripped configuration, and restores the previous IPv4 forwarding value.
 
 `down` is idempotent and may be used after an interrupted invocation:
 
@@ -73,3 +77,16 @@ sudo ordivon-vpn down
 ```
 
 Raw configuration, endpoint, route, and public-egress evidence must not be committed.
+
+## Surfshark before/after measurement
+
+Capture a VPN-disconnected baseline, a connected sample, and a reduced comparison without storing key values:
+
+```bash
+sudo surfshark-measure before
+# Connect Surfshark in Windows and wait 15–20 seconds.
+sudo surfshark-measure after
+sudo surfshark-measure compare
+```
+
+`before` is rejected while the Windows WireGuard service or adapter is active; `after` is rejected until both are active. Raw local evidence remains root-only under `/root/backups/ordivon-link/surfshark-measure`.

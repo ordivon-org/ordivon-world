@@ -6,7 +6,7 @@
 - system `curl`;
 - WSL networking commands (`ip`);
 - Windows PowerShell interop for Surfshark observation;
-- `wireguard-tools`, `iproute2`, and `nftables` for optional isolated VPN execution;
+- `wireguard-tools`, `iproute2`, `nftables`, and `iptables` for optional isolated VPN execution;
 - outbound DNS and TCP/443 for Web target checks.
 
 HTTP/3 measurement additionally requires a `curl` build whose feature list contains `HTTP3`.
@@ -172,7 +172,7 @@ sudo ordivon-vpn-keypair
 ordivon-vpn doctor jp-tok
 ```
 
-`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile.
+`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile. `ordivon-vpn up` refuses to start while Windows Surfshark is active and adds only veth/uplink-specific forwarding exceptions.
 
 Start one profile and run only selected commands through it:
 
@@ -184,3 +184,14 @@ sudo ordivon-vpn down
 ```
 
 The configuration directory is outside the repository. Do not copy private keys, rendered configuration, endpoint inventory, or egress evidence into Git. See [`vpn-namespace.md`](vpn-namespace.md).
+
+### Surfshark route-state comparison
+
+```bash
+sudo surfshark-measure before
+# Connect Surfshark in Windows, then wait 15–20 seconds.
+sudo surfshark-measure after
+sudo surfshark-measure compare
+```
+
+The state gates prevent a connected sample from being mislabeled as `before` or a disconnected sample as `after`. The utility stores root-only local evidence and never records WireGuard key values.

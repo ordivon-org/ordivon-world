@@ -5,6 +5,8 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 bash -n "$root/scripts/ordivon-vpn"
 bash -n "$root/scripts/ordivon-vpn-keypair"
 bash -n "$root/scripts/test-vpn-keypair"
+bash -n "$root/scripts/test-vpn-forwarding"
+bash -n "$root/scripts/surfshark-measure"
 bash -n "$root/scripts/install-ordivon-vpn"
 
 python3 - "$root" <<'PY'
@@ -16,6 +18,7 @@ root = Path(sys.argv[1])
 files = [
     root / "scripts/ordivon-vpn",
     root / "scripts/ordivon-vpn-keypair",
+    root / "scripts/surfshark-measure",
     root / "scripts/install-ordivon-vpn",
     root / "deploy/systemd/ordivon-vpn@.service",
     root / "docs/vpn-namespace.md",
@@ -40,3 +43,5 @@ else
   printf 'vpn key-pair tests require root or passwordless sudo\n' >&2
   exit 1
 fi
+
+"$root/scripts/test-vpn-forwarding"
