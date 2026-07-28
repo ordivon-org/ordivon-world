@@ -93,7 +93,7 @@ sudo surfshark-measure compare
 
 ## Surfshark profile discovery and ranking
 
-The profile scanner is a separate measurement utility, not part of the always-on VPN controller. It sequentially creates the same birth-namespace WireGuard topology for each rendered profile, records whether endpoint UDP returns, and benchmarks only profiles that complete a WireGuard handshake.
+The profile scanner is a separate measurement utility, not part of the always-on VPN controller. It runs bounded parallel handshake discovery with an independent birth-namespace WireGuard topology per worker, records whether endpoint UDP returns, and then benchmarks reachable profiles serially.
 
 Validate the complete local profile inventory without changing network state:
 
@@ -110,9 +110,10 @@ sudo surfshark-profile-scan scan
 Defaults:
 
 - all rendered profiles, sorted deterministically;
-- one profile at a time;
+- six parallel discovery workers by default, configurable with `--workers 1..16`;
+- one independent namespace and WireGuard interface per worker;
 - 12-second handshake deadline;
-- HTTPS timing plus a 1 MiB download only after a successful handshake;
+- serial HTTPS timing plus a 1 MiB download only after successful discovery;
 - no root-route, NAT, forwarding, or firewall changes.
 
 Each profile result is written atomically under `/root/backups/ordivon-link/surfshark-profile-scan/<timestamp>/profiles`. An interrupted run can continue without repeating completed profiles:

@@ -121,3 +121,111 @@ assert len(list(csv.DictReader(open(sys.argv[4])))) == 2
 PY
 
 printf 'surfshark_profile_scan_tests=passed\n'
+
+python3 - "$root/scripts/surfshark-profile-scan" "$tmp/parallel" <<'PY'
+from pathlib import Path
+from types import SimpleNamespace
+import importlib.machinery
+import importlib.util
+import json
+import sys
+import threading
+import time
+
+source=Path(sys.argv[1])
+run_dir=Path(sys.argv[2])
+(run_dir/'profiles').mkdir(parents=True)
+loader=importlib.machinery.SourceFileLoader('surfshark_profile_scan_test',str(source))
+spec=importlib.util.spec_from_loader(loader.name,loader)
+module=importlib.util.module_from_spec(spec)
+sys.modules[loader.name]=module
+loader.exec_module(module)
+configs=[
+    module.ProfileConfig(
+        profile=f'p{i}',
+        path=run_dir/f'p{i}.conf',
+        address='10.14.0.2/16',
+        private_key='private',
+        peer_public_key=f'peer-{i}',
+        endpoint_host=f'endpoint-{i}',
+        endpoint_port=51820,
+        dns_servers=('1.1.1.1',),
+    )
+    for i in range(6)
+]
+args=SimpleNamespace(workers=3,handshake_timeout=0.1,download_bytes=1024)
+lock=threading.Lock()
+active=0
+maximum=0
+seen_tags=set()
+
+def fake_discovery(config,output,tag,handshake_timeout,download_bytes,*,benchmark):
+    global active,maximum
+    assert benchmark is False
+    assert download_bytes == 0
+    with lock:
+        active += 1
+        maximum=max(maximum,active)
+        assert tag not in seen_tags
+        seen_tags.add(tag)
+    time.sleep(0.04)
+    result=module.ProfileResult(
+        profile=config.profile,
+        status='reachable',
+        failure_class=None,
+        started_at=module.utc_now(),
+        duration_seconds=0.04,
+        handshake_success=True,
+        handshake_ms=40.0,
+    )
+    module.atomic_write(output,json.dumps(module.asdict(result))+'\n')
+    with lock:
+        active -= 1
+    return result
+
+module.run_probe_process=fake_discovery
+module._STOP=False
+module.parallel_discovery(configs,args,run_dir,planned=6,completed_before=0)
+assert maximum == 3, maximum
+assert len(list((run_dir/'profiles').glob('*.json'))) == 6
+assert all(x.status == 'reachable' for x in module.load_results(run_dir))
+
+benchmark_active=0
+benchmark_maximum=0
+benchmark_order=[]
+
+def fake_benchmark(config,output,tag,handshake_timeout,download_bytes,*,benchmark):
+    global benchmark_active,benchmark_maximum
+    assert benchmark is True
+    with lock:
+        benchmark_active += 1
+        benchmark_maximum=max(benchmark_maximum,benchmark_active)
+        benchmark_order.append(config.profile)
+    time.sleep(0.01)
+    result=module.ProfileResult(
+        profile=config.profile,
+        status='success',
+        failure_class=None,
+        started_at=module.utc_now(),
+        duration_seconds=0.01,
+        handshake_success=True,
+        handshake_ms=45.0,
+        https_total_ms=100.0,
+        http_code=200,
+        download_bytes=download_bytes,
+        download_mbps=10.0,
+    )
+    module.atomic_write(output,json.dumps(module.asdict(result))+'\n')
+    with lock:
+        benchmark_active -= 1
+    return result
+
+module.run_probe_process=fake_benchmark
+module.windows_outer_vpn_active=lambda:False
+module._STOP=False
+module.serial_benchmark(configs,args,run_dir,planned=6)
+assert benchmark_maximum == 1
+assert benchmark_order == [f'p{i}' for i in range(6)]
+assert all(x.status == 'success' for x in module.load_results(run_dir))
+print('surfshark_parallel_scheduler_tests=passed')
+PY
