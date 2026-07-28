@@ -90,3 +90,41 @@ sudo surfshark-measure compare
 ```
 
 `before` is rejected while the Windows WireGuard service or adapter is active; `after` is rejected until both are active. Raw local evidence remains root-only under `/root/backups/ordivon-link/surfshark-measure`.
+
+## Surfshark profile discovery and ranking
+
+The profile scanner is a separate measurement utility, not part of the always-on VPN controller. It sequentially creates the same birth-namespace WireGuard topology for each rendered profile, records whether endpoint UDP returns, and benchmarks only profiles that complete a WireGuard handshake.
+
+Validate the complete local profile inventory without changing network state:
+
+```bash
+sudo surfshark-profile-scan validate
+```
+
+Disconnect Windows Surfshark, wait for the adapter to go down, and run the full discovery pass:
+
+```bash
+sudo surfshark-profile-scan scan
+```
+
+Defaults:
+
+- all rendered profiles, sorted deterministically;
+- one profile at a time;
+- 12-second handshake deadline;
+- HTTPS timing plus a 1 MiB download only after a successful handshake;
+- no root-route, NAT, forwarding, or firewall changes.
+
+Each profile result is written atomically under `/root/backups/ordivon-link/surfshark-profile-scan/<timestamp>/profiles`. An interrupted run can continue without repeating completed profiles:
+
+```bash
+sudo surfshark-profile-scan scan --resume /root/backups/ordivon-link/surfshark-profile-scan/<timestamp>
+```
+
+Reduced outputs include `summary.json`, `results.jsonl`, `results.csv`, and `ranking.csv`. Endpoint names and addresses are represented only by local fingerprints; keys are never printed or persisted in results. Show the current ranking with:
+
+```bash
+surfshark-profile-scan rank
+```
+
+The first pass is discovery evidence, not a permanent latency claim. Re-run leading profiles at different times before making an automatic selection policy.

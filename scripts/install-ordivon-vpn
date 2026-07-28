@@ -4,6 +4,7 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 install -Dm755 "$root/scripts/ordivon-vpn" /usr/local/sbin/ordivon-vpn
 install -Dm755 "$root/scripts/ordivon-vpn-keypair" /usr/local/sbin/ordivon-vpn-keypair
 install -Dm755 "$root/scripts/surfshark-measure" /usr/local/sbin/surfshark-measure
+install -Dm755 "$root/scripts/surfshark-profile-scan" /usr/local/sbin/surfshark-profile-scan
 install -Dm644 "$root/deploy/systemd/ordivon-vpn@.service" /etc/systemd/system/ordivon-vpn@.service
 systemctl daemon-reload
-printf 'installed /usr/local/sbin/ordivon-vpn, /usr/local/sbin/ordivon-vpn-keypair, /usr/local/sbin/surfshark-measure, and ordivon-vpn@.service\n'
+printf 'installed /usr/local/sbin/ordivon-vpn, /usr/local/sbin/ordivon-vpn-keypair, /usr/local/sbin/surfshark-measure, /usr/local/sbin/surfshark-profile-scan, and ordivon-vpn@.service\n'

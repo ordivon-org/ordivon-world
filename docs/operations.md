@@ -195,3 +195,14 @@ sudo surfshark-measure compare
 ```
 
 The state gates prevent a connected sample from being mislabeled as `before` or a disconnected sample as `after`. The utility stores root-only local evidence and never records WireGuard key values.
+
+### Surfshark profile discovery
+
+Validate all rendered profiles, then disconnect Windows Surfshark and scan them sequentially:
+
+```bash
+sudo surfshark-profile-scan validate
+sudo surfshark-profile-scan scan
+```
+
+The scan records handshake reachability, endpoint UDP return evidence, HTTPS phase timings, and a bounded 1 MiB throughput sample. Results are root-only, resumable, and reduced to JSONL/CSV/ranking artifacts under `/root/backups/ordivon-link/surfshark-profile-scan`. The scanner remains an explicit measurement command; it does not enable automatic route selection or failover.

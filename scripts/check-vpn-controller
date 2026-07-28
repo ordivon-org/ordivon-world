@@ -6,7 +6,13 @@ bash -n "$root/scripts/ordivon-vpn"
 bash -n "$root/scripts/ordivon-vpn-keypair"
 bash -n "$root/scripts/test-vpn-keypair"
 bash -n "$root/scripts/surfshark-measure"
+bash -n "$root/scripts/test-surfshark-profile-scan"
 bash -n "$root/scripts/install-ordivon-vpn"
+python3 - "$root/scripts/surfshark-profile-scan" <<'PY'
+from pathlib import Path
+import sys
+compile(Path(sys.argv[1]).read_text(), sys.argv[1], "exec")
+PY
 
 python3 - "$root" <<'PY'
 from pathlib import Path
@@ -18,6 +24,7 @@ files = [
     root / "scripts/ordivon-vpn",
     root / "scripts/ordivon-vpn-keypair",
     root / "scripts/surfshark-measure",
+    root / "scripts/surfshark-profile-scan",
     root / "scripts/install-ordivon-vpn",
     root / "deploy/systemd/ordivon-vpn@.service",
     root / "docs/vpn-namespace.md",
@@ -53,3 +60,5 @@ else
   printf 'vpn key-pair tests require root or passwordless sudo\n' >&2
   exit 1
 fi
+
+"$root/scripts/test-surfshark-profile-scan"
