@@ -9,12 +9,13 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test test/**/*.test.ts",
+    "test": "node --import tsx --test test/**/*.test.ts",
     "check:python": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py scripts/check-policy-config.py scripts/configure_r2_lifecycle.py && python3 -m unittest discover -s test -p '*_test.py'",
     "check:operations": "scripts/check-operations",
     "check:boundary": "node scripts/check-boundary.mjs",
+    "check:node-policy": "node scripts/check-node-policy.mjs",
     "build": "node scripts/wrangler-dry-run.mjs",
-    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:policy && pnpm check:operations && pnpm check:boundary && pnpm build",
+    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:policy && pnpm check:node-policy && pnpm check:operations && pnpm check:boundary && pnpm build",
     "check:policy": "python3 scripts/check-policy-config.py"
   },
   "devDependencies": {

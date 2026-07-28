@@ -22,6 +22,12 @@ Production, research, and adversarial-range profiles are distinct. A range body 
 
 See [`docs/charter.md`](docs/charter.md) and [`docs/capability-gaps.md`](docs/capability-gaps.md).
 
+The provider-neutral identity/lifecycle contract and the rootless disposable
+research profile are documented in
+[`docs/node-contract.md`](docs/node-contract.md). The local provider is a
+separate library adapter and does not add Worker routes, bindings, or release
+behavior.
+
 ## Strict boundary
 
 Ordivon Edge owns Cloudflare Worker execution, external fetch and Browser Run policy, private R2 artifacts, execution budgets, receipts, release control, and future remote Edge-node lifecycle.

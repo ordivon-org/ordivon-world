@@ -13,6 +13,23 @@ Edge Node contract
 
 The implemented Cloudflare layers below are the production profile of that broader architecture.
 
+## Provider-neutral Node layer
+
+`src/node-contracts.ts` defines deterministic Node identity, provider/source,
+profile-scoped capability and policy, resources, Campaign/World membership,
+leases, observations, evidence, and reconstruction without importing a platform
+SDK. `src/node-lifecycle.ts` defines idempotent lifecycle uncertainty,
+reconciliation, and durable snapshots.
+
+`src/local-node-adapter.ts` implements the research-local provider with a
+minimal Linux user-namespace body, a sealed read-only rootfs, a durable local
+management journal, monotonic lease fencing, and atomic evidence export. Its
+management, experiment, observation, and evidence-export roots are inaccessible
+from the evaluated chroot, while remaining under one trusted local provider
+account. It is not imported by `src/index.ts`; `config/edge-node-policy.json` is
+also separate from the production Worker policy and fingerprint. See
+[`node-contract.md`](node-contract.md).
+
 ## Platform shell
 
 `src/index.ts` is the narrow Cloudflare Worker adapter. It reads a bounded body, authenticates the canonical request, routes the operation, and converts domain failures into stable HTTP responses.
