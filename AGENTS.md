@@ -2,7 +2,7 @@
 
 ## Scope
 
-Ordivon Edge owns externally hosted bounded execution, R2 artifacts, Browser Run, fetch policy, receipts, and optional remote-node lifecycle.
+Ordivon Edge owns distributed external presence: remote Node identity and lifecycle, profile-scoped capabilities, execution evidence, Artifacts, receipts, reconstruction, and destruction. The current repository implements the narrow Cloudflare production profile.
 
 ## Rules
 
@@ -19,6 +19,10 @@ Ordivon Edge owns externally hosted bounded execution, R2 artifacts, Browser Run
 11. Never serialize lease tokens or R2 ETags into Receipts, logs, manifests, or client responses.
 12. Production release must use `scripts/ordivon_edge_release.py`; do not deploy directly from a feature branch.
 13. Cleanup tasks may delete only matching-generation `fetch/v2` or `browser/v2` Artifacts.
+14. Production, research, and adversarial-range profiles must have separate credentials, authority, and lifecycle policy.
+15. Future disposable Nodes must keep management, experiment, observation, and evidence-export planes distinct.
+16. Broad internal range capability does not imply external authority; every remote body must bind an explicit consequence profile.
+17. The evaluated Agent must not control authoritative Node lifecycle, observer state, or destruction evidence.
 14. Execution bounds, retention, and expected rate limits belong in `config/edge-policy.json`; do not introduce parallel constants.
 15. Artifact downloads must fail closed on missing or mismatched SHA-256 metadata and must not partially replace destinations.
 16. Prefer Cloudflare REST control-plane APIs for reads, lifecycle, promotion, and rollback. Wrangler may remain only where the public API cannot express the required operation, and every such effect must be time-bounded and reconciled against API state.

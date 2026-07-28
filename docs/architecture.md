@@ -1,5 +1,18 @@
 # Architecture
 
+## Target architecture
+
+```text
+Edge Node contract
+  → provider adapter and lifecycle controller
+  → profile-scoped capability and resource lease
+  → remote execution and observation
+  → identity-bound Artifact and Receipt export
+  → freeze / snapshot / restore / destruction evidence
+```
+
+The implemented Cloudflare layers below are the production profile of that broader architecture.
+
 ## Platform shell
 
 `src/index.ts` is the narrow Cloudflare Worker adapter. It reads a bounded body, authenticates the canonical request, routes the operation, and converts domain failures into stable HTTP responses.

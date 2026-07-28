@@ -1,6 +1,6 @@
 # Ordivon Edge
 
-Ordivon Edge is the externally hosted execution layer of the Ordivon stack.
+Ordivon Edge is the distributed external presence and execution fabric of the Ordivon stack. The current repository implements its Cloudflare production profile.
 
 ```text
 Ordivon Runtime / Agent
@@ -13,6 +13,14 @@ Ordivon Edge
   ├─ fenced execution leases and transactional receipts
   └─ versioned release, smoke, promotion, and rollback
 ```
+
+## Project horizon
+
+Edge is not limited to Cloudflare Fetch and Browser Run. Its full subject is the identity, lifecycle, capability, evidence, and recovery of remote Agent bodies across browsers, containers, virtual machines, service emulators, sensors, decoys, and user-controlled infrastructure.
+
+Production, research, and adversarial-range profiles are distinct. A range body may be internally powerful while its external consequence scope remains independently constrained and observed.
+
+See [`docs/charter.md`](docs/charter.md) and [`docs/capability-gaps.md`](docs/capability-gaps.md).
 
 ## Strict boundary
 
@@ -67,4 +75,4 @@ scripts/configure-r2-lifecycle
 python3 scripts/ordivon_edge_gc.py --dry-run
 ```
 
-See [`docs/reliability.md`](docs/reliability.md), [`docs/release.md`](docs/release.md), [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).
+See [`docs/charter.md`](docs/charter.md), [`docs/capability-gaps.md`](docs/capability-gaps.md), [`docs/reliability.md`](docs/reliability.md), [`docs/release.md`](docs/release.md), [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).
