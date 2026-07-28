@@ -3,6 +3,8 @@
 `ordivon_edge_node_control.ts` is the component-owned management surface for
 Security's research-local Node composition. It directly uses
 `LocalDisposableNodeAdapter`; it does not implement a second Edge lifecycle.
+`ResearchNodeControlSession` and the JSONL process are supervisor/control, while
+the adapter is the narrow research conformance/reference Provider.
 
 ## Transport
 
@@ -60,4 +62,10 @@ compromised management host.
 The session supports only the credential-free research authority and the local
 unshare provider. It does not expose Cloudflare bindings, production
 credentials, arbitrary commands, package installation, route selection, or
-Link attachment.
+Link attachment. Runtime may supervise this trusted process, but does not
+thereby own its Node/body lifecycle.
+
+This session is not an independent Sandbox abstraction or a general container
+service. The current code has no standalone Sandbox type. local-unshare remains
+a narrow conformance/reference Provider and must not expand into image
+management, writable workspaces, daemon supervision, or scheduling.

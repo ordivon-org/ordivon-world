@@ -1,6 +1,7 @@
 # Provider-neutral Edge Node contract
 
-Status: implemented contract plus one narrow research-local provider
+Status: implemented contract plus one narrow research conformance/reference
+provider
 
 The contract is split deliberately:
 
@@ -9,7 +10,7 @@ The contract is split deliberately:
   and reconstruction types;
 - `src/node-lifecycle.ts` contains the deterministic lifecycle state machine;
 - `src/local-node-adapter.ts` owns one disposable, one-shot Linux namespace
-  body provider;
+  reference body provider;
 - `config/edge-node-policy.json` owns profile and local-provider bounds.
 
 The Cloudflare Worker continues to use `config/edge-policy.json` and
@@ -18,15 +19,32 @@ fingerprint, Worker bundle, routes, bindings, or release controller.
 
 ## Scope
 
-The local adapter is an Edge body provider, not a second Runtime. It can create,
-admit, make eligible, execute once under a bounded lease, capture evidence,
-retire, and destroy one digest-pinned body. It does not schedule Tasks, manage
-workspaces, install tools, supervise arbitrary host processes, recover Runtime
-work, select connectivity, or orchestrate other providers.
+The local-unshare adapter is an Edge research-profile conformance/reference
+provider, not a second Runtime and not a general container provider. It can
+create, admit, make eligible, execute once under a bounded lease, capture
+evidence, retire, and destroy one digest-pinned body. Its scope is frozen at
+exercising lifecycle, fencing, evidence, reconstruction, and isolation
+contracts. It does not schedule Tasks, manage workspaces, install tools,
+supervise arbitrary host processes, recover Runtime work, select connectivity,
+or orchestrate other providers.
 
 The implemented source format is intentionally only a digest-pinned Bash
 fixture. OCI unpacking, arbitrary source archives, writable overlays, package
-installation, generic process commands, and cloud orchestration are deferred.
+installation, generic process commands, and cloud orchestration are not
+implemented. OCI/runc-backed Providers are future direction only, not Phase 0
+work or permission to expand this adapter into a self-developed container
+Runtime.
+
+## Terminology
+
+A Node is the long-lived semantic identity of an Agent presence. A Sandbox is
+one isolated instance of that Node on a Provider, including its generation. An
+Execution is one bounded action inside a Sandbox.
+
+The current contract has no independent Sandbox type. `EdgeNodeIdentity` still
+binds generation in its identity input, while the local adapter couples a body,
+lifecycle record, and lease generations. Those are current implementation
+facts, not a completed standalone Sandbox abstraction.
 
 ## Identity
 
@@ -223,22 +241,27 @@ ORDIVON_EDGE_LIVE_TEST=1 node --import tsx test/node-lifecycle.test.ts
 
 - **Security** supplies Campaign/World identity, consequence approval, and
   policy revisions; it does not receive lease tokens or lifecycle authority.
-- **Link** may later attach explicitly approved range-local connectivity. This
-  implementation contains no route, DNS, VPN, path-selection, or transport
-  client code.
+- **Link** may later consume an explicit generation-bound attachment handle for
+  approved range-local connectivity. It does not own or advance Sandbox
+  lifecycle. This implementation contains neither that handle nor route, DNS,
+  VPN, path-selection, or transport client code.
 - **Host** chooses a body and consumes verified observations and Receipts; the
   evaluated Agent cannot mutate authoritative lifecycle state or the evidence
   root through the body.
-- **Runtime** schedules trusted-local Tasks and supplies reconstruction inputs.
-  Edge does not own Runtime Tasks, workspaces, recovery, or general process
-  supervision.
+- **Runtime** schedules trusted-local Tasks, supervises trusted
+  supervisor/control processes, and supplies reconstruction inputs. Edge does
+  not own Runtime Tasks, workspaces, or recovery; Runtime supervision of an
+  Edge process does not transfer body/Sandbox semantics or lifecycle authority.
 - **Cloudflare production** remains in `src/index.ts`, the original production
   policy, R2 transaction state, and `scripts/ordivon_edge_release.py`.
 
-Deferred work: OCI images, writable overlays, hard cgroup CPU/process limits,
-long-lived process freezing, checkpoint/restore, multi-Node World recovery,
-cross-process management locking, WORM evidence storage, adversarial-range
-credentials and lifecycle, and Link-managed range connectivity.
+Direction beyond Phase 0 includes externally supplied OCI/runc-backed
+Providers, checkpoint/restore, multi-Node World recovery, independently
+administered evidence storage, adversarial-range Providers, and Link-managed
+range connectivity. None is implemented here. In particular, the
+local-unshare reference provider must not acquire generic image management,
+writable workspaces, daemon supervision, scheduling, or container-Runtime
+responsibilities.
 
 
 ## Security control session

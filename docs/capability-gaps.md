@@ -1,9 +1,9 @@
 # Capability gaps
 
 The repository now contains a mature narrow Cloudflare production profile, a
-provider-neutral Node contract, a real research-local unshare body, and a
-component-owned Security control session. It is not yet a heterogeneous or
-long-lived distributed execution fabric.
+provider-neutral Node contract, a narrow research-local unshare
+conformance/reference body, and a component-owned Security control session. It
+is not yet a heterogeneous or long-lived distributed execution fabric.
 
 ## P0 status
 
@@ -13,7 +13,7 @@ long-lived distributed execution fabric.
 | Provision, admit, start, freeze, retire, and destroy semantics | implemented |
 | Snapshot and restore contract | defined; local provider execution pending |
 | Production, research, and adversarial-range authority profiles | separated; adversarial provider pending |
-| Disposable provider beyond Cloudflare Worker | implemented as local unshare/chroot |
+| Disposable provider beyond Cloudflare Worker | narrow lifecycle/isolation conformance reference implemented as local unshare/chroot; not a general container Provider |
 | Management, experiment, observation, and evidence plane separation | implemented relative to evaluated body; same host account remains trusted |
 | Identity-bound one-way evidence export | implemented |
 | Lease generation and uncertain provision/destroy reconciliation | implemented |
@@ -34,9 +34,12 @@ The current body remains one digest-pinned Bash fixture executed once inside a
 fresh namespace/chroot. It is sufficient for lifecycle and evidence
 composition, not for long-horizon Agent execution.
 
-## P1 — distributed presence
+## Direction beyond Phase 0
 
-- OCI images or verified source archives and writable overlays;
+The following items are architectural direction, not authorized Phase 0
+implementation work:
+
+- external OCI/runc-backed Providers or verified source Providers;
 - persistent container or microVM bodies;
 - browser, VM, service-emulator, sensor, and decoy Node classes;
 - checkpoint/restore plus partial-world recovery;
@@ -52,6 +55,10 @@ composition, not for long-horizon Agent execution.
 - long-lived migratable Agent bodies;
 - physical or IoT interfaces in isolated facilities.
 
-The next large step is not another lifecycle type. It is a persistent provider
-whose network namespace can be attached by Ordivon Link without transferring
-Node ownership to Link.
+A future persistent Provider may expose a generation-bound attachment handle
+that Ordivon Link consumes without acquiring Sandbox lifecycle authority. That
+handle and Provider are not implemented in Phase 0.
+
+The local-unshare reference provider must not be expanded to reach these
+directions. Edge will not grow it into a container runtime, VM orchestrator,
+network stack, scheduler, or workspace runtime.
