@@ -13,10 +13,11 @@
 - localhost Quinn/rustls TLS 1.3 mTLS reference transport with certificate-bound device identity, strict TCP relay, confirmed UDP associations, liveness, cleanup, and loopback-only target policy;
 - tests that require neither public network access nor host-route mutation;
 - an explicit, root-only WireGuard network-namespace controller for selected commands, with transactional rollback and no WSL root-route mutation.
+- a v1 deterministic Network World manifest, identity and revision model, lifecycle controller, bounded mutation state, synthetic identity reset, independent hash-chained events, separate actor view, and opt-in loopback service fixture.
 
 ## Implemented profile
 
-The implemented system is the **local operations profile** of the broader Link Charter. It does not yet construct or govern an isolated multi-node Network World.
+The implemented system contains the **local operations profile** and the first deterministic local **range profile** slice. The range slice constructs typed state and enforces loopback fixture service availability; it does not yet construct a packet-isolated multi-node namespace.
 
 ## Not implemented
 
@@ -28,11 +29,8 @@ The implemented system is the **local operations profile** of the broader Link C
 - seven-day controlled path evidence;
 - Cloudflare fetch, Browser Rendering, R2 artifact execution, or external task receipts;
 - local Agent task execution or workspace management.
-- typed Network World manifests and revisions;
-- deterministic range create, freeze, reset, and destruction;
-- programmable latency, loss, partition, DNS, route, and service mutations;
-- an independent append-only network observer outside evaluated-Agent control;
-- synthetic range identity lifecycle;
-- a Security or Game control API for dynamic campaigns.
+- packet-level enforcement of Network World latency, loss, partition, DNS, and route mutations;
+- production OS/service-account deployment of the authoritative observer boundary;
+- a network service control API beyond the versioned local JSON CLI/library surface.
 
 The final two categories are intentionally excluded: they belong to Ordivon Edge and Ordivon Runtime respectively.

@@ -1,6 +1,6 @@
 # Ordivon Link
 
-Ordivon Link is the programmable network and communication fabric of the Ordivon stack. The current repository implements its local observation, controlled-egress, and reference-transport slice.
+Ordivon Link is the programmable network and communication fabric of the Ordivon stack. The current repository implements local observation, controlled egress, a reference transport, and a deterministic local Network World slice.
 
 It owns facts and decisions about the path between a user-controlled device and user-controlled or third-party network endpoints:
 
@@ -52,6 +52,7 @@ Ordivon Link does **not** own:
 | `link-console` | Loopback-only read-only Web console and status API |
 | `link-wire` | Pure bounded Baseline v0 wire contract and state machines |
 | `link-transport-quic` | Quinn/rustls localhost reference client/server for Baseline v0 |
+| `link-world` | Independent Network World v1 manifest, lifecycle, mutation, event chain, actor view, and loopback fixture |
 
 The dependency graph is deliberately split into three independent vertical slices:
 
@@ -60,10 +61,26 @@ link-model ← link-probe ← link-observer ← link-console
 
 link-wire ← link-transport-quic
 
+link-world
+
 configuration + evidence ← operational commands
 ```
 
 The observation/control slice does not depend on the Baseline wire implementation. The wire/transport slice does not depend on host observation, SQLite, or the Web console.
+
+## Deterministic Network World
+
+The first range slice constructs typed world state without coupling it to host observation or the transport core:
+
+```bash
+cargo run -p link-world -- validate \
+  config/worlds/disconnected-three-service.toml
+
+cargo run -p link-world -- create \
+  config/worlds/disconnected-three-service.toml
+```
+
+Use the returned `world_id` with `inspect`, `mutate`, `freeze`, `reset`, `events`, and `destroy`. A separate read-only `link-world-actor` binary exposes evaluated-actor inspection without lifecycle or observer controls. The optional `fixture` command enforces service reachability for the three loopback TCP services; topology, route, DNS, and impairment mutations are modeled in this slice. See [`docs/network-world.md`](docs/network-world.md).
 
 ## Verification
 

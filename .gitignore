@@ -3,5 +3,8 @@
 /artifacts/baseline/*.json
 /artifacts/baseline/*.md
 /artifacts/runtime*/
+/artifacts/worlds/
+/artifacts/world-observer/
+/artifacts/world-actors/
 !/artifacts/baseline/.gitkeep
 .DS_Store

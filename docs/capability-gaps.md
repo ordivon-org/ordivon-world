@@ -29,3 +29,9 @@ The current repository is a strong local observation and controlled-egress slice
 - hardware-backed high-fidelity observation and impairment.
 
 The first implementation target should be one local, disconnected, deterministic range world. Automatic Internet failover is not a prerequisite.
+
+## Implemented P0 vertical slice
+
+`link-world` now supplies the v1 typed manifest, stable identity, deterministic lifecycle, all listed mutation state, identity rotation/revocation/reset, separate hash-chained observation, declared egress policy plus separately recorded evidence, and a versioned JSON CLI surface.
+
+The safe executable subset is deliberately narrower than the full fault plane: the opt-in loopback fixture enforces service reachability by binding or withdrawing local TCP listeners. Link partitions, latency/loss, routes, and DNS are validated deterministic state and events, not packet-level enforcement. External-boundary policy is a declaration, never proof of containment. See [`network-world.md`](network-world.md).

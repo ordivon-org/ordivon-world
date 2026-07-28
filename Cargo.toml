@@ -6,6 +6,7 @@ members = [
   "crates/link-transport-quic",
   "crates/link-observer",
   "crates/link-console",
+  "crates/link-world",
 ]
 resolver = "2"
 

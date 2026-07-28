@@ -1,6 +1,6 @@
 # Architecture
 
-## Target architecture
+## Network World slice
 
 ```text
 Network World manifest
@@ -11,7 +11,19 @@ Network World manifest
   → freeze / reset / destruction receipt
 ```
 
-The following implemented layers are the local operations slice of that target.
+`link-world` implements the manifest, deterministic controller state, bounded fault facts, independent hash-chained observer root, actor-safe projection, and lifecycle receipts. Its opt-in loopback fixture enforces service availability. It does not yet enforce link, route, DNS, latency, or loss changes in a network namespace.
+
+It is an independent vertical slice:
+
+```text
+link-world (manifest + controller + observer + fixture)
+
+link-model ← link-probe ← link-observer ← link-console
+
+link-wire ← link-transport-quic
+```
+
+The following layers describe the separate local operations slice.
 
 ## Layer 1 — immutable evidence model
 
