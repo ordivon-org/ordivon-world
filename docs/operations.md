@@ -172,7 +172,7 @@ sudo ordivon-vpn-keypair
 ordivon-vpn doctor jp-tok
 ```
 
-`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile. `ordivon-vpn up` refuses to start while Windows Surfshark is active. It creates WireGuard in the WSL root namespace, moves the interface into the isolated namespace, and leaves the encrypted UDP socket on the root network path; no veth, NAT, IP forwarding, or firewall mutation is required.
+`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile. `doctor` and `up` fail closed if a rendered profile no longer derives the canonical installed public key. `ordivon-vpn up` refuses to start while Windows Surfshark is active. It creates WireGuard in the WSL root namespace, moves the interface into the isolated namespace, and leaves the encrypted UDP socket on the root network path; no veth, NAT, IP forwarding, or firewall mutation is required.
 
 Start one profile and run only selected commands through it:
 

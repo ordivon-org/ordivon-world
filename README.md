@@ -104,7 +104,7 @@ The console remains loopback-only and read-only. It does not mutate VPN, routes,
 
 ## Isolated VPN execution
 
-The separate `ordivon-vpn` controller creates a root-only network namespace for explicitly selected commands. WireGuard is born in the WSL root namespace and then moved into the isolated namespace, so encrypted UDP uses the existing root network path while cleartext routes remain isolated. The controller is not called by the console and does not move Runtime, MCP, or Cloudflare Tunnel.
+The separate `ordivon-vpn` controller creates a root-only network namespace for explicitly selected commands. WireGuard is born in the WSL root namespace and then moved into the isolated namespace, so encrypted UDP uses the existing root network path while cleartext routes remain isolated. The controller is not called by the console and does not move Runtime, MCP, or Cloudflare Tunnel. It also refuses startup when a rendered profile does not match the canonical installed Surfshark key pair.
 
 ```bash
 sudo scripts/install-ordivon-vpn

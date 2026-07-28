@@ -41,6 +41,53 @@ cmp -s "$public_one" "$tmp/secrets/ordivon-manual.public"
 [[ $(stat -c %a "$tmp/secrets/rendered/jp-tok.conf") == 600 ]]
 grep -Fq "PrivateKey = $(cat "$private_one")" "$tmp/secrets/rendered/jp-tok.conf"
 wg-quick strip "$tmp/secrets/rendered/jp-tok.conf" >/dev/null
+
+ORDIVON_VPN_CONFIG_DIR="$tmp/secrets/rendered" \
+ORDIVON_VPN_PUBLIC_KEY_PATH="$tmp/secrets/ordivon-manual.public" \
+ORDIVON_VPN_PRIVATE_KEY_PATH="$tmp/secrets/ordivon-manual.private" \
+  "$root/scripts/ordivon-vpn" doctor jp-tok > "$tmp/doctor-consistent.json"
+python3 - "$tmp/doctor-consistent.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["config_valid"] is True
+assert value["key_pair_consistent"] is True
+PY
+
+python3 - "$private_two" "$tmp/secrets/rendered/jp-tok.conf" <<'PY'
+from pathlib import Path
+import re,sys
+private=Path(sys.argv[1]).read_text().strip()
+p=Path(sys.argv[2])
+s=p.read_text()
+s,n=re.subn(r'(?m)^(\s*PrivateKey\s*=\s*).+$',lambda m:m.group(1)+private,s,count=1)
+assert n==1
+p.write_text(s)
+PY
+set +e
+ORDIVON_VPN_CONFIG_DIR="$tmp/secrets/rendered" \
+ORDIVON_VPN_PUBLIC_KEY_PATH="$tmp/secrets/ordivon-manual.public" \
+ORDIVON_VPN_PRIVATE_KEY_PATH="$tmp/secrets/ordivon-manual.private" \
+  "$root/scripts/ordivon-vpn" doctor jp-tok > "$tmp/doctor-inconsistent.json"
+doctor_rc=$?
+set -e
+[[ $doctor_rc -ne 0 ]]
+python3 - "$tmp/doctor-inconsistent.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["config_valid"] is True
+assert value["key_pair_consistent"] is False
+PY
+cp "$private_one" "$tmp/secrets/ordivon-manual.private"
+python3 - "$private_one" "$tmp/secrets/rendered/jp-tok.conf" <<'PY'
+from pathlib import Path
+import re,sys
+private=Path(sys.argv[1]).read_text().strip()
+p=Path(sys.argv[2])
+s=p.read_text()
+s,n=re.subn(r'(?m)^(\s*PrivateKey\s*=\s*).+$',lambda m:m.group(1)+private,s,count=1)
+assert n==1
+p.write_text(s)
+PY
 before=$(sha256sum "$tmp/secrets/ordivon-manual.private" "$tmp/secrets/rendered/jp-tok.conf")
 
 set +e
