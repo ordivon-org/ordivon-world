@@ -5,7 +5,6 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 bash -n "$root/scripts/ordivon-vpn"
 bash -n "$root/scripts/ordivon-vpn-keypair"
 bash -n "$root/scripts/test-vpn-keypair"
-bash -n "$root/scripts/test-vpn-forwarding"
 bash -n "$root/scripts/surfshark-measure"
 bash -n "$root/scripts/install-ordivon-vpn"
 
@@ -32,7 +31,18 @@ patterns = [
 for pattern in patterns:
     if re.search(pattern, text):
         raise SystemExit("secret-like material found in VPN controller files")
+
+controller = (root / "scripts/ordivon-vpn").read_text()
+for forbidden in ("type veth", "iptables", "masquerade", "net.ipv4.ip_forward", "nft add table"):
+    if forbidden in controller:
+        raise SystemExit(f"obsolete forwarded VPN topology remains: {forbidden}")
+create = controller.index('ip link add "$WG_INTERFACE" type wireguard')
+move = controller.index('ip link set "$WG_INTERFACE" netns "$NAMESPACE"')
+configure = controller.index('ip netns exec "$NAMESPACE" wg setconf "$WG_INTERFACE" "$temporary"')
+if not create < move < configure:
+    raise SystemExit("WireGuard birth-namespace sequence is invalid")
 print("vpn_controller_static_checks=passed")
+print("vpn_birth_namespace_topology=passed")
 PY
 
 if [[ ${EUID:-$(id -u)} -eq 0 ]]; then
@@ -43,5 +53,3 @@ else
   printf 'vpn key-pair tests require root or passwordless sudo\n' >&2
   exit 1
 fi
-
-"$root/scripts/test-vpn-forwarding"

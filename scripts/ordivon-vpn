@@ -3,18 +3,11 @@ set -euo pipefail
 
 PROGRAM="ordivon-vpn"
 NAMESPACE="${ORDIVON_VPN_NAMESPACE:-ordivon-vpn}"
-HOST_VETH="${ORDIVON_VPN_HOST_VETH:-ovpn-host}"
-NS_VETH="${ORDIVON_VPN_NS_VETH:-ovpn-ns}"
 WG_INTERFACE="${ORDIVON_VPN_WG_INTERFACE:-wg0}"
-HOST_ADDRESS="${ORDIVON_VPN_HOST_ADDRESS:-10.203.47.1/30}"
-NS_ADDRESS="${ORDIVON_VPN_NS_ADDRESS:-10.203.47.2/30}"
-GATEWAY="${ORDIVON_VPN_GATEWAY:-10.203.47.1}"
-SUBNET="${ORDIVON_VPN_SUBNET:-10.203.47.0/30}"
 CONFIG_DIR="${ORDIVON_VPN_CONFIG_DIR:-/root/.config/ordivon/secrets/surfshark/rendered}"
 STATE_DIR="${ORDIVON_VPN_STATE_DIR:-/run/ordivon-vpn}"
 STATE_FILE="$STATE_DIR/state"
 RESOLV_DIR="/etc/netns/$NAMESPACE"
-NAT_TABLE="ordivon_vpn_nat"
 WINDOWS_POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 
 log() { printf '%s: %s\n' "$PROGRAM" "$*" >&2; }
@@ -36,39 +29,6 @@ ensure_outer_surfshark_disconnected() {
   if windows_surfshark_active; then
     die "Windows Surfshark is active; disconnect it before starting the isolated namespace"
   fi
-}
-
-forward_chain() {
-  if iptables -n -L DOCKER-USER >/dev/null 2>&1; then
-    printf 'DOCKER-USER'
-  else
-    printf 'FORWARD'
-  fi
-}
-
-add_forward_rules() {
-  local uplink=$1 chain
-  chain=$(forward_chain)
-  iptables -C "$chain" -i "$HOST_VETH" -o "$uplink" -j ACCEPT >/dev/null 2>&1 \
-    || iptables -I "$chain" 1 -i "$HOST_VETH" -o "$uplink" -j ACCEPT
-  iptables -C "$chain" -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT >/dev/null 2>&1 \
-    || iptables -I "$chain" 1 -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-  printf '%s' "$chain"
-}
-
-remove_forward_rules() {
-  local uplink=${1:-} chain=${2:-}
-  [[ -n $uplink ]] || return 0
-  local chains=() candidate
-  if [[ -n $chain ]]; then
-    chains+=("$chain")
-  else
-    chains+=(DOCKER-USER FORWARD)
-  fi
-  for candidate in "${chains[@]}"; do
-    iptables -D "$candidate" -i "$HOST_VETH" -o "$uplink" -j ACCEPT >/dev/null 2>&1 || true
-    iptables -D "$candidate" -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT >/dev/null 2>&1 || true
-  done
 }
 
 usage() {
@@ -115,35 +75,27 @@ state_value() {
 }
 
 write_state() {
-  local profile=$1 original_forward=$2 uplink=$3 forward_chain_name=$4
+  local profile=$1
   install -d -m 700 "$STATE_DIR"
   local temporary
   temporary=$(mktemp "$STATE_DIR/.state.XXXXXX")
   chmod 600 "$temporary"
   {
     printf 'profile=%s\n' "$profile"
-    printf 'original_ip_forward=%s\n' "$original_forward"
-    printf 'uplink=%s\n' "$uplink"
-    printf 'forward_chain=%s\n' "$forward_chain_name"
+    printf 'topology=wireguard-birth-namespace\n'
     printf 'created_at=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   } > "$temporary"
   mv -f "$temporary" "$STATE_FILE"
 }
 
 cleanup_network() {
-  local restore_forward=${1:-} uplink=${2:-} forward_chain_name=${3:-}
-  [[ -n $uplink ]] || uplink=$(state_value uplink 2>/dev/null || true)
-  [[ -n $forward_chain_name ]] || forward_chain_name=$(state_value forward_chain 2>/dev/null || true)
   set +e
-  remove_forward_rules "$uplink" "$forward_chain_name"
+  # Covers a failure before the interface is moved into the target namespace.
+  ip link del "$WG_INTERFACE" 2>/dev/null
+  # Covers the normal case: deleting the namespace also deletes the moved interface.
   ip netns del "$NAMESPACE" 2>/dev/null
-  ip link del "$HOST_VETH" 2>/dev/null
-  nft delete table ip "$NAT_TABLE" 2>/dev/null
   rm -rf "$RESOLV_DIR"
   rm -f "$STATE_FILE"
-  if [[ $restore_forward =~ ^[01]$ ]]; then
-    sysctl -q -w net.ipv4.ip_forward="$restore_forward" >/dev/null 2>&1
-  fi
   set -e
 }
 
@@ -192,7 +144,7 @@ command_doctor() {
   local profile=${1:-jp-tok} config
   config=$(config_path "$profile")
   local missing=() command
-  for command in ip wg wg-quick nft iptables curl getent sysctl awk sed grep stat python3 flock; do
+  for command in ip wg wg-quick curl getent awk sed grep stat python3 flock; do
     command -v "$command" >/dev/null 2>&1 || missing+=("$command")
   done
   local config_ok=false placeholder=false mode=null outer_active=null
@@ -215,6 +167,7 @@ print(json.dumps({
   "private_key_placeholder": placeholder == "true",
   "config_mode": None if mode == "null" else mode,
   "windows_surfshark_active": None if outer_active == "null" else outer_active == "true",
+  "topology": "wireguard-birth-namespace",
   "missing_commands": [] if int(count) == 0 else missing.split(),
 }, indent=2))
 PY
@@ -236,10 +189,7 @@ command_up() {
     return 0
   fi
 
-  local uplink original_forward endpoint_ip endpoint_port tunnel_address temporary forward_chain_name= success=false
-  uplink=$(ip -4 route show default | awk 'NR == 1 { print $5 }')
-  [[ -n $uplink ]] || die "root namespace has no IPv4 default route"
-  original_forward=$(sysctl -n net.ipv4.ip_forward)
+  local endpoint_ip endpoint_port tunnel_address temporary success=false
   IFS=$'\t' read -r endpoint_ip endpoint_port tunnel_address < <(resolve_endpoint "$config")
   temporary=$(mktemp /run/ordivon-vpn.XXXXXX.conf)
   chmod 600 "$temporary"
@@ -248,33 +198,23 @@ command_up() {
 
   rollback() {
     rm -f "$temporary"
-    if [[ $success != true ]]; then cleanup_network "$original_forward" "$uplink" "$forward_chain_name"; fi
+    if [[ $success != true ]]; then cleanup_network; fi
   }
   trap rollback EXIT
 
   ip netns add "$NAMESPACE"
-  ip link add "$HOST_VETH" type veth peer name "$NS_VETH"
-  ip link set "$NS_VETH" netns "$NAMESPACE"
-  ip addr add "$HOST_ADDRESS" dev "$HOST_VETH"
-  ip link set "$HOST_VETH" up
-  ip netns exec "$NAMESPACE" ip link set lo up
-  ip netns exec "$NAMESPACE" ip addr add "$NS_ADDRESS" dev "$NS_VETH"
-  ip netns exec "$NAMESPACE" ip link set "$NS_VETH" up
-  ip netns exec "$NAMESPACE" ip route add default via "$GATEWAY" dev "$NS_VETH"
   write_resolver "$config"
 
-  sysctl -q -w net.ipv4.ip_forward=1 >/dev/null
-  nft add table ip "$NAT_TABLE"
-  nft "add chain ip $NAT_TABLE postrouting { type nat hook postrouting priority srcnat; policy accept; }"
-  nft add rule ip "$NAT_TABLE" postrouting ip saddr "$SUBNET" oifname "$uplink" masquerade
-  forward_chain_name=$(add_forward_rules "$uplink")
-
-  ip netns exec "$NAMESPACE" ip link add "$WG_INTERFACE" type wireguard
+  # WireGuard remembers the namespace in which it is created. Its encrypted UDP
+  # socket therefore remains in the root namespace after the interface moves.
+  # Cleartext traffic and routes live only in the target namespace.
+  ip link add "$WG_INTERFACE" type wireguard
+  ip link set "$WG_INTERFACE" netns "$NAMESPACE"
+  ip netns exec "$NAMESPACE" ip link set lo up
   ip netns exec "$NAMESPACE" wg setconf "$WG_INTERFACE" "$temporary"
   ip netns exec "$NAMESPACE" ip addr add "$tunnel_address" dev "$WG_INTERFACE"
   ip netns exec "$NAMESPACE" ip link set mtu 1280 up dev "$WG_INTERFACE"
-  ip netns exec "$NAMESPACE" ip route add "${endpoint_ip}/32" via "$GATEWAY" dev "$NS_VETH"
-  ip netns exec "$NAMESPACE" ip route replace default dev "$WG_INTERFACE"
+  ip netns exec "$NAMESPACE" ip route add default dev "$WG_INTERFACE"
 
   local trace handshake=0 now age=999999
   trace=$(probe_trace ip netns exec "$NAMESPACE" || true)
@@ -283,7 +223,7 @@ command_up() {
   [[ ${handshake:-0} -gt 0 ]] && age=$((now - handshake))
   [[ -n $trace && $age -lt 120 ]] || die "WireGuard handshake or egress verification failed"
 
-  write_state "$profile" "$original_forward" "$uplink" "$forward_chain_name"
+  write_state "$profile"
   success=true
   rm -f "$temporary"
   trap - EXIT
@@ -292,19 +232,16 @@ command_up() {
 
 command_down() {
   require_root
-  local original_forward uplink forward_chain_name
-  original_forward=$(state_value original_ip_forward 2>/dev/null || true)
-  uplink=$(state_value uplink 2>/dev/null || true)
-  forward_chain_name=$(state_value forward_chain 2>/dev/null || true)
-  cleanup_network "$original_forward" "$uplink" "$forward_chain_name"
+  cleanup_network
   printf '{"active":false,"namespace":"%s"}\n' "$NAMESPACE"
 }
 
 command_status() {
-  local active=false profile='' handshake=0 now age=null rx=0 tx=0 trace='' ip='' country=''
+  local active=false profile='' topology='' handshake=0 now age=null rx=0 tx=0 trace='' ip='' country=''
   if namespace_exists && ip netns exec "$NAMESPACE" ip link show "$WG_INTERFACE" >/dev/null 2>&1; then
     active=true
     profile=$(state_value profile 2>/dev/null || true)
+    topology=$(state_value topology 2>/dev/null || true)
     handshake=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" latest-handshakes | awk 'NR == 1 { print $2 }')
     rx=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" transfer | awk 'NR == 1 { print $2 }')
     tx=$(ip netns exec "$NAMESPACE" wg show "$WG_INTERFACE" transfer | awk 'NR == 1 { print $3 }')
@@ -313,13 +250,14 @@ command_status() {
     ip=$(awk -F= '$1 == "ip" { print $2 }' <<< "$trace")
     country=$(awk -F= '$1 == "loc" { print $2 }' <<< "$trace")
   fi
-  python3 - "$active" "$profile" "$age" "$rx" "$tx" "$ip" "$country" "$NAMESPACE" <<'PY'
+  python3 - "$active" "$profile" "$topology" "$age" "$rx" "$tx" "$ip" "$country" "$NAMESPACE" <<'PY'
 import json,sys
-active,profile,age,rx,tx,ip,country,namespace=sys.argv[1:]
+active,profile,topology,age,rx,tx,ip,country,namespace=sys.argv[1:]
 print(json.dumps({
   "active": active == "true",
   "namespace": namespace,
   "profile": profile or None,
+  "topology": topology or None,
   "latest_handshake_age_seconds": None if age == "null" else int(age),
   "received_bytes": int(rx),
   "sent_bytes": int(tx),

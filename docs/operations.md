@@ -6,7 +6,7 @@
 - system `curl`;
 - WSL networking commands (`ip`);
 - Windows PowerShell interop for Surfshark observation;
-- `wireguard-tools`, `iproute2`, `nftables`, and `iptables` for optional isolated VPN execution;
+- `wireguard-tools` and `iproute2` for optional isolated VPN execution;
 - outbound DNS and TCP/443 for Web target checks.
 
 HTTP/3 measurement additionally requires a `curl` build whose feature list contains `HTTP3`.
@@ -172,7 +172,7 @@ sudo ordivon-vpn-keypair
 ordivon-vpn doctor jp-tok
 ```
 
-`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile. `ordivon-vpn up` refuses to start while Windows Surfshark is active and adds only veth/uplink-specific forwarding exceptions.
+`ordivon-vpn-keypair` accepts the public key visibly and the matching private key through hidden terminal input. It rejects malformed or mismatched pairs before changing local state, backs up the previous root-only key/configuration set, and atomically rerenders every profile. `ordivon-vpn up` refuses to start while Windows Surfshark is active. It creates WireGuard in the WSL root namespace, moves the interface into the isolated namespace, and leaves the encrypted UDP socket on the root network path; no veth, NAT, IP forwarding, or firewall mutation is required.
 
 Start one profile and run only selected commands through it:
 
