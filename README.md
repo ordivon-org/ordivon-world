@@ -82,6 +82,26 @@ cargo run -p link-world -- create \
 
 Use the returned `world_id` with `inspect`, `mutate`, `freeze`, `reset`, `events`, and `destroy`. A separate read-only `link-world-actor` binary exposes evaluated-actor inspection without lifecycle or observer controls. The optional `fixture` command enforces service reachability for the three loopback TCP services; topology, route, DNS, and impairment mutations are modeled in this slice. See [`docs/network-world.md`](docs/network-world.md).
 
+## Security lifecycle port
+
+`link-world-security` exposes a component-owned JSON surface for Security
+snapshot, lifecycle execution, reconciliation, residual checks, and fresh-root
+reconstruction. It preserves Link's native World identity and observer chain;
+it does not move Link state into Security.
+
+```bash
+cargo run -p link-world --bin link-world-security -- \
+  --manifest config/worlds/disconnected-three-service.toml \
+  --authority-root /private/link/authority \
+  --observer-root /private/link/observer \
+  --actor-root /private/link/actor \
+  --operation-root /private/link/operations \
+  --reconstruction-root /private/link/reconstruction \
+  snapshot
+```
+
+See [`docs/security-port-v0.md`](docs/security-port-v0.md).
+
 ## Verification
 
 ```bash

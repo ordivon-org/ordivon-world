@@ -189,6 +189,18 @@ pub struct EffectSemantics {
     pub dns: EffectMode,
 }
 
+impl EffectSemantics {
+    pub fn network_world_v1() -> Self {
+        Self {
+            service_reachability: EffectMode::OptInLoopbackFixture,
+            link_state: EffectMode::ModeledOnly,
+            latency_loss: EffectMode::ModeledOnly,
+            routes: EffectMode::ModeledOnly,
+            dns: EffectMode::ModeledOnly,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum EffectMode {
@@ -510,13 +522,7 @@ impl WorldState {
             manifest_revision: manifest.manifest_revision(),
             runtime_revision: 0,
             phase: WorldPhase::Active,
-            effect_semantics: EffectSemantics {
-                service_reachability: EffectMode::OptInLoopbackFixture,
-                link_state: EffectMode::ModeledOnly,
-                latency_loss: EffectMode::ModeledOnly,
-                routes: EffectMode::ModeledOnly,
-                dns: EffectMode::ModeledOnly,
-            },
+            effect_semantics: EffectSemantics::network_world_v1(),
             links: manifest
                 .links
                 .iter()

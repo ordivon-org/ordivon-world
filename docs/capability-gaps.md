@@ -1,19 +1,40 @@
 # Capability gaps
 
-The current repository is a strong local observation and controlled-egress slice, but it is not yet a programmable adversarial network fabric.
+The repository now contains a deterministic Network World, a component-owned
+Security lifecycle port, local observation, controlled WireGuard egress, and a
+reference QUIC transport. It is not yet a packet-isolated adversarial network
+fabric.
 
-## P0 — required before credible dynamic-range claims
+## P0 status
 
-1. A typed Network World manifest for nodes, links, subnets, trust zones, identity domains, routes, and external boundaries.
-2. Deterministic create, inspect, freeze, reset, and destroy lifecycle for one named world.
-3. A programmable fault plane for latency, jitter, loss, bandwidth, partitions, DNS, routes, and service reachability.
-4. An append-only independent observer outside evaluated-Agent control.
-5. An explicit egress declaration and measurement surface.
-6. A versioned control API consumable by Ordivon Security and Game.
-7. Synthetic communication identity creation, rotation, revocation, and reset.
+| Capability | Current state |
+|---|---|
+| Typed Network World manifest | implemented |
+| Deterministic create, inspect, freeze, reset, and destroy | implemented |
+| Append-only independent observer and actor-safe projection | implemented |
+| Explicit egress declaration and separately ingested evidence | implemented |
+| Synthetic identity rotation, revocation, and reset | implemented |
+| Versioned Security lifecycle surface | implemented as `link-world-security` |
+| Response-loss reconciliation without duplicate reset/destroy | implemented |
+| Fresh-root reconstruction and residual receipts | implemented |
+| Live loopback service reachability | implemented |
+| Packet-level partitions, latency, loss, routes, and DNS | pending |
+| Persistent Edge Node network attachment | pending; P0-D design boundary |
+| Production OS-account separation for observer authority | pending |
+
+`link-world-security` exposes only snapshot, execute, reconcile, and residual
+operations over the existing Link controller. It retains component-side
+operation journals so a lost reset response can be proven by the exact observer
+revision instead of dispatching a second reset.
+
+The executable effect surface remains deliberately narrow. The opt-in loopback
+fixture controls TCP service reachability. Link state, latency/loss, routes, and
+DNS remain deterministic modeled state and events. Declared Internet denial is
+not packet-containment proof.
 
 ## P1 — full-spectrum network behavior
 
+- persistent namespace, veth, bridge, route, DNS, and `tc netem` data plane;
 - dynamic topology and moving trust boundaries;
 - Agent communication graph and message provenance;
 - deception nodes, sinkholes, mirrors, and identity emulation;
@@ -28,10 +49,6 @@ The current repository is a strong local observation and controlled-egress slice
 - adaptive network policies competing with adaptive Agents;
 - hardware-backed high-fidelity observation and impairment.
 
-The first implementation target should be one local, disconnected, deterministic range world. Automatic Internet failover is not a prerequisite.
-
-## Implemented P0 vertical slice
-
-`link-world` now supplies the v1 typed manifest, stable identity, deterministic lifecycle, all listed mutation state, identity rotation/revocation/reset, separate hash-chained observation, declared egress policy plus separately recorded evidence, and a versioned JSON CLI surface.
-
-The safe executable subset is deliberately narrower than the full fault plane: the opt-in loopback fixture enforces service reachability by binding or withdrawing local TCP listeners. Link partitions, latency/loss, routes, and DNS are validated deterministic state and events, not packet-level enforcement. External-boundary policy is a declaration, never proof of containment. See [`network-world.md`](network-world.md).
+The next large step is not another manifest or controller abstraction. It is a
+persistent data-plane backend that can attach an Edge-owned body without making
+Link own that body's lifecycle.
