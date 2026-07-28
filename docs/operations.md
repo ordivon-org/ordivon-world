@@ -205,4 +205,4 @@ sudo surfshark-profile-scan validate
 sudo surfshark-profile-scan scan
 ```
 
-The scan records handshake reachability, endpoint UDP return evidence, HTTPS phase timings, and a bounded 1 MiB throughput sample. Results are root-only, resumable, and reduced to JSONL/CSV/ranking artifacts under `/root/backups/ordivon-link/surfshark-profile-scan`. The scanner remains an explicit measurement command; it does not enable automatic route selection or failover.
+The scan discovers handshake reachability with six bounded parallel workers, then records HTTPS phase timings and a bounded 1 MiB throughput sample serially so bandwidth contention does not distort ranking. Results are root-only, resumable, and reduced to JSONL/CSV/ranking artifacts under `/root/backups/ordivon-link/surfshark-profile-scan`. The scanner remains an explicit measurement command; it does not enable automatic route selection or failover.
