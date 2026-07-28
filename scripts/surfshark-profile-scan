@@ -1,0 +1,760 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import math
+import os
+import re
+import shutil
+import signal
+import socket
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Iterable
+
+PROGRAM = "surfshark-profile-scan"
+PROFILE_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,30}$")
+CONFIG_DIR = Path(os.environ.get("SURFSHARK_SCAN_CONFIG_DIR", "/root/.config/ordivon/secrets/surfshark/rendered"))
+PUBLIC_KEY_PATH = Path(os.environ.get("SURFSHARK_SCAN_PUBLIC_KEY_PATH", "/root/.config/ordivon/secrets/surfshark/ordivon-manual.public"))
+PRIVATE_KEY_PATH = Path(os.environ.get("SURFSHARK_SCAN_PRIVATE_KEY_PATH", "/root/.config/ordivon/secrets/surfshark/ordivon-manual.private"))
+OUT_ROOT = Path(os.environ.get("SURFSHARK_SCAN_OUT_ROOT", "/root/backups/ordivon-link/surfshark-profile-scan"))
+NAMESPACE = os.environ.get("SURFSHARK_SCAN_NAMESPACE", "ovpn-scan")
+WG_INTERFACE = os.environ.get("SURFSHARK_SCAN_INTERFACE", "wgscan0")
+WINDOWS_POWERSHELL = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
+TRACE_URL = os.environ.get("SURFSHARK_SCAN_TRACE_URL", "https://www.cloudflare.com/cdn-cgi/trace")
+DOWNLOAD_URL = os.environ.get("SURFSHARK_SCAN_DOWNLOAD_URL", "https://speed.cloudflare.com/__down?bytes={bytes}")
+
+
+class ScanError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class ProfileConfig:
+    profile: str
+    path: Path
+    address: str
+    private_key: str
+    peer_public_key: str
+    endpoint_host: str
+    endpoint_port: int
+    dns_servers: tuple[str, ...]
+
+
+@dataclass
+class ProfileResult:
+    profile: str
+    status: str
+    failure_class: str | None
+    started_at: str
+    duration_seconds: float
+    endpoint_port: int | None = None
+    endpoint_fingerprint: str | None = None
+    peer_fingerprint: str | None = None
+    endpoint_udp_outbound_observed: bool = False
+    endpoint_udp_inbound_observed: bool = False
+    handshake_success: bool = False
+    handshake_ms: float | None = None
+    wireguard_received_bytes: int = 0
+    wireguard_sent_bytes: int = 0
+    dns_ms: float | None = None
+    tcp_connect_ms: float | None = None
+    tls_ms: float | None = None
+    ttfb_ms: float | None = None
+    https_total_ms: float | None = None
+    http_code: int | None = None
+    egress_country: str | None = None
+    egress_colo: str | None = None
+    egress_ip_fingerprint: str | None = None
+    download_bytes: int = 0
+    download_seconds: float | None = None
+    download_mbps: float | None = None
+    error: str | None = None
+    composite_score: float | None = None
+
+
+_STOP = False
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def fingerprint(value: str, length: int = 16) -> str:
+    return hashlib.sha256(value.encode()).hexdigest()[:length]
+
+
+def atomic_write(path: Path, content: str, mode: int = 0o600) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        os.fchmod(fd, mode)
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+        os.chmod(path, mode)
+    except Exception:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+        Path(temporary).unlink(missing_ok=True)
+        raise
+
+
+def run(
+    command: list[str],
+    *,
+    timeout: float | None = None,
+    check: bool = True,
+    input_text: str | None = None,
+) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(
+        command,
+        input=input_text,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=timeout,
+        check=False,
+    )
+    if check and completed.returncode != 0:
+        detail = completed.stderr.strip().splitlines()[-1:] or [f"exit {completed.returncode}"]
+        raise ScanError(f"{command[0]} failed: {detail[0]}")
+    return completed
+
+
+def require_commands(commands: Iterable[str]) -> None:
+    missing = [command for command in commands if shutil.which(command) is None]
+    if missing:
+        raise ScanError(f"missing required commands: {', '.join(missing)}")
+
+
+def key_value(text: str, wanted: str) -> str | None:
+    for raw in text.splitlines():
+        if "=" not in raw:
+            continue
+        key, value = raw.split("=", 1)
+        if key.strip() == wanted:
+            return value.strip()
+    return None
+
+
+def derive_public(private_key: str) -> str:
+    completed = run(["wg", "pubkey"], input_text=private_key + "\n")
+    return completed.stdout.strip()
+
+
+def canonical_public_key() -> str:
+    for path in (PUBLIC_KEY_PATH, PRIVATE_KEY_PATH):
+        if not path.is_file() or path.is_symlink():
+            raise ScanError(f"canonical key file is missing or unsafe: {path}")
+        if stat.S_IMODE(path.stat().st_mode) != 0o600:
+            raise ScanError(f"canonical key file must have mode 0600: {path}")
+    public_key = PUBLIC_KEY_PATH.read_text().strip()
+    private_key = PRIVATE_KEY_PATH.read_text().strip()
+    if derive_public(private_key) != public_key:
+        raise ScanError("canonical Surfshark key pair is inconsistent")
+    return public_key
+
+
+def load_profile(profile: str, canonical_public: str) -> ProfileConfig:
+    if not PROFILE_RE.fullmatch(profile):
+        raise ScanError(f"invalid profile name: {profile}")
+    path = CONFIG_DIR / f"{profile}.conf"
+    if not path.is_file() or path.is_symlink():
+        raise ScanError(f"profile config is missing or unsafe: {profile}")
+    if stat.S_IMODE(path.stat().st_mode) != 0o600:
+        raise ScanError(f"profile config must have mode 0600: {profile}")
+    text = path.read_text(encoding="utf-8-sig")
+    private_key = key_value(text, "PrivateKey")
+    peer_public = key_value(text, "PublicKey")
+    endpoint = key_value(text, "Endpoint")
+    address = key_value(text, "Address")
+    dns = key_value(text, "DNS") or "1.1.1.1"
+    if not all((private_key, peer_public, endpoint, address)):
+        raise ScanError(f"profile is missing required WireGuard fields: {profile}")
+    if "<insert_" in private_key:
+        raise ScanError(f"profile still contains a private-key placeholder: {profile}")
+    if derive_public(private_key) != canonical_public:
+        raise ScanError(f"profile key does not match canonical Surfshark identity: {profile}")
+    validation = run(["wg-quick", "strip", str(path)], check=False)
+    if validation.returncode != 0:
+        raise ScanError(f"profile failed wg-quick validation: {profile}")
+    if endpoint.startswith("["):
+        match = re.fullmatch(r"\[(.+)]:(\d+)", endpoint)
+        if not match:
+            raise ScanError(f"invalid endpoint: {profile}")
+        host, port_text = match.groups()
+    else:
+        if ":" not in endpoint:
+            raise ScanError(f"invalid endpoint: {profile}")
+        host, port_text = endpoint.rsplit(":", 1)
+    if not port_text.isdigit() or not (1 <= int(port_text) <= 65535):
+        raise ScanError(f"invalid endpoint port: {profile}")
+    servers = tuple(item.strip() for item in dns.split(",") if item.strip())
+    return ProfileConfig(
+        profile=profile,
+        path=path,
+        address=address.split(",", 1)[0].strip(),
+        private_key=private_key,
+        peer_public_key=peer_public,
+        endpoint_host=host,
+        endpoint_port=int(port_text),
+        dns_servers=servers,
+    )
+
+
+def list_profiles(requested: list[str]) -> list[str]:
+    if requested:
+        profiles = requested
+    else:
+        profiles = [path.stem for path in CONFIG_DIR.glob("*.conf") if path.is_file()]
+    unique = sorted(set(profiles))
+    if not unique:
+        raise ScanError("no Surfshark profiles found")
+    for profile in unique:
+        if not PROFILE_RE.fullmatch(profile):
+            raise ScanError(f"invalid profile filename: {profile}")
+    return unique
+
+
+def windows_surfshark_active() -> bool:
+    if not WINDOWS_POWERSHELL.is_file():
+        return False
+    script = (
+        "$service=Get-Service -Name 'Surfshark WireGuard' -ErrorAction SilentlyContinue; "
+        "$adapter=Get-NetAdapter -Name 'SurfsharkWireGuard' -IncludeHidden -ErrorAction SilentlyContinue; "
+        "if (($service -and $service.Status -eq 'Running') -or ($adapter -and $adapter.Status -eq 'Up')) { exit 0 } else { exit 1 }"
+    )
+    completed = subprocess.run(
+        [str(WINDOWS_POWERSHELL), "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return completed.returncode == 0
+
+
+def namespace_exists() -> bool:
+    completed = run(["ip", "netns", "list"], check=False)
+    return any(line.split(maxsplit=1)[0] == NAMESPACE for line in completed.stdout.splitlines() if line.strip())
+
+
+def cleanup_network() -> None:
+    subprocess.run(["ip", "link", "del", WG_INTERFACE], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    subprocess.run(["ip", "netns", "del", NAMESPACE], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    shutil.rmtree(Path("/etc/netns") / NAMESPACE, ignore_errors=True)
+
+
+def resolve_ipv4(host: str, port: int) -> str:
+    values = sorted({item[4][0] for item in socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_DGRAM)})
+    if not values:
+        raise ScanError("endpoint did not resolve to IPv4")
+    return values[0]
+
+
+def build_stripped_config(config: ProfileConfig, endpoint_ip: str) -> Path:
+    stripped = run(["wg-quick", "strip", str(config.path)]).stdout
+    replaced, count = re.subn(
+        r"(?mi)^\s*Endpoint\s*=.*$",
+        f"Endpoint = {endpoint_ip}:{config.endpoint_port}",
+        stripped,
+        count=1,
+    )
+    if count != 1:
+        raise ScanError("stripped profile has no unique Endpoint")
+    fd, name = tempfile.mkstemp(prefix="surfshark-scan.", suffix=".conf", dir="/run")
+    os.fchmod(fd, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        stream.write(replaced)
+    return Path(name)
+
+
+def start_probe(filter_text: str, timeout_seconds: float) -> subprocess.Popen[bytes] | None:
+    if shutil.which("tcpdump") is None:
+        return None
+    return subprocess.Popen(
+        ["timeout", str(math.ceil(timeout_seconds + 5)), "tcpdump", "-i", "any", "-nn", "-c", "1", "-w", "/dev/null", filter_text],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+
+def finish_probe(process: subprocess.Popen[bytes] | None) -> bool:
+    if process is None:
+        return False
+    if process.poll() is None:
+        process.terminate()
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=2)
+        return False
+    return process.returncode == 0
+
+
+def wireguard_transfer() -> tuple[int, int]:
+    completed = run(["ip", "netns", "exec", NAMESPACE, "wg", "show", WG_INTERFACE, "transfer"], check=False)
+    if completed.returncode != 0 or not completed.stdout.strip():
+        return (0, 0)
+    fields = completed.stdout.splitlines()[0].split()
+    return (int(fields[1]), int(fields[2])) if len(fields) >= 3 else (0, 0)
+
+
+def latest_handshake() -> int:
+    completed = run(["ip", "netns", "exec", NAMESPACE, "wg", "show", WG_INTERFACE, "latest-handshakes"], check=False)
+    if completed.returncode != 0 or not completed.stdout.strip():
+        return 0
+    fields = completed.stdout.splitlines()[0].split()
+    return int(fields[1]) if len(fields) >= 2 else 0
+
+
+def parse_trace(text: str) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for line in text.splitlines():
+        if "=" in line:
+            key, value = line.split("=", 1)
+            result[key] = value
+    return result
+
+
+def benchmark_https(download_bytes: int) -> dict[str, Any]:
+    body_fd, body_name = tempfile.mkstemp(prefix="surfshark-trace.", dir="/run")
+    os.close(body_fd)
+    try:
+        fmt = "%{time_namelookup}\t%{time_connect}\t%{time_appconnect}\t%{time_starttransfer}\t%{time_total}\t%{http_code}"
+        completed = run(
+            [
+                "ip", "netns", "exec", NAMESPACE, "curl", "-4fsS",
+                "--connect-timeout", "6", "--max-time", "20",
+                "-o", body_name, "-w", fmt, TRACE_URL,
+            ],
+            timeout=25,
+            check=False,
+        )
+        values = completed.stdout.strip().split("\t")
+        result: dict[str, Any] = {}
+        if completed.returncode == 0 and len(values) == 6:
+            lookup, connect, appconnect, starttransfer, total, http_code = values
+            trace = parse_trace(Path(body_name).read_text(errors="replace"))
+            result.update(
+                dns_ms=round(float(lookup) * 1000, 3),
+                tcp_connect_ms=round(max(0.0, float(connect) - float(lookup)) * 1000, 3),
+                tls_ms=round(max(0.0, float(appconnect) - float(connect)) * 1000, 3),
+                ttfb_ms=round(float(starttransfer) * 1000, 3),
+                https_total_ms=round(float(total) * 1000, 3),
+                http_code=int(http_code),
+                egress_country=trace.get("loc"),
+                egress_colo=trace.get("colo"),
+                egress_ip_fingerprint=fingerprint(trace["ip"]) if trace.get("ip") else None,
+            )
+        if download_bytes > 0:
+            url = DOWNLOAD_URL.format(bytes=download_bytes)
+            down = run(
+                [
+                    "ip", "netns", "exec", NAMESPACE, "curl", "-4fsS",
+                    "--connect-timeout", "6", "--max-time", "30",
+                    "-o", "/dev/null", "-w", "%{speed_download}\t%{time_total}\t%{http_code}", url,
+                ],
+                timeout=35,
+                check=False,
+            )
+            parts = down.stdout.strip().split("\t")
+            if down.returncode == 0 and len(parts) == 3 and int(parts[2]) < 400:
+                speed_bytes = float(parts[0])
+                result.update(
+                    download_bytes=download_bytes,
+                    download_seconds=round(float(parts[1]), 6),
+                    download_mbps=round(speed_bytes * 8 / 1_000_000, 3),
+                )
+        return result
+    finally:
+        Path(body_name).unlink(missing_ok=True)
+
+
+def configure_namespace(config: ProfileConfig, stripped: Path) -> None:
+    cleanup_network()
+    run(["ip", "netns", "add", NAMESPACE])
+    resolver_dir = Path("/etc/netns") / NAMESPACE
+    resolver_dir.mkdir(parents=True, exist_ok=True, mode=0o755)
+    resolver = "".join(f"nameserver {server}\n" for server in config.dns_servers) + "options timeout:2 attempts:2\n"
+    atomic_write(resolver_dir / "resolv.conf", resolver, mode=0o644)
+    run(["ip", "link", "add", WG_INTERFACE, "type", "wireguard"])
+    run(["ip", "link", "set", WG_INTERFACE, "netns", NAMESPACE])
+    run(["ip", "netns", "exec", NAMESPACE, "ip", "link", "set", "lo", "up"])
+    run(["ip", "netns", "exec", NAMESPACE, "wg", "setconf", WG_INTERFACE, str(stripped)])
+    run(["ip", "netns", "exec", NAMESPACE, "ip", "addr", "add", config.address, "dev", WG_INTERFACE])
+    run(["ip", "netns", "exec", NAMESPACE, "ip", "link", "set", "mtu", "1280", "up", "dev", WG_INTERFACE])
+    run(["ip", "netns", "exec", NAMESPACE, "ip", "route", "add", "default", "dev", WG_INTERFACE])
+
+
+def scan_profile(config: ProfileConfig, handshake_timeout: float, download_bytes: int) -> ProfileResult:
+    started_at = utc_now()
+    started = time.monotonic()
+    result = ProfileResult(
+        profile=config.profile,
+        status="error",
+        failure_class="internal_error",
+        started_at=started_at,
+        duration_seconds=0,
+        endpoint_port=config.endpoint_port,
+        endpoint_fingerprint=fingerprint(config.endpoint_host),
+        peer_fingerprint=fingerprint(config.peer_public_key),
+    )
+    stripped: Path | None = None
+    outbound: subprocess.Popen[bytes] | None = None
+    inbound: subprocess.Popen[bytes] | None = None
+    trigger: subprocess.Popen[bytes] | None = None
+    try:
+        endpoint_ip = resolve_ipv4(config.endpoint_host, config.endpoint_port)
+        stripped = build_stripped_config(config, endpoint_ip)
+        filter_out = f"udp and dst host {endpoint_ip} and dst port {config.endpoint_port}"
+        filter_in = f"udp and src host {endpoint_ip} and src port {config.endpoint_port}"
+        outbound = start_probe(filter_out, handshake_timeout)
+        inbound = start_probe(filter_in, handshake_timeout)
+        time.sleep(0.15)
+        configure_namespace(config, stripped)
+        handshake_started = time.monotonic()
+        trigger = subprocess.Popen(
+            ["ip", "netns", "exec", NAMESPACE, "ping", "-n", "-i", "1", "-w", str(math.ceil(handshake_timeout)), "1.1.1.1"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        deadline = handshake_started + handshake_timeout
+        while time.monotonic() < deadline and not _STOP:
+            if latest_handshake() > 0:
+                result.handshake_success = True
+                result.handshake_ms = round((time.monotonic() - handshake_started) * 1000, 3)
+                break
+            time.sleep(0.2)
+        result.wireguard_received_bytes, result.wireguard_sent_bytes = wireguard_transfer()
+        if trigger.poll() is None:
+            trigger.terminate()
+            try:
+                trigger.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                trigger.kill()
+                trigger.wait(timeout=2)
+        result.endpoint_udp_outbound_observed = finish_probe(outbound)
+        result.endpoint_udp_inbound_observed = finish_probe(inbound)
+        outbound = inbound = None
+        if result.handshake_success:
+            metrics = benchmark_https(download_bytes)
+            for key, value in metrics.items():
+                setattr(result, key, value)
+            if result.http_code and result.http_code < 400:
+                result.status = "success"
+                result.failure_class = None
+            else:
+                result.status = "handshake_only"
+                result.failure_class = "tunnel_https_failed"
+        elif result.endpoint_udp_outbound_observed and not result.endpoint_udp_inbound_observed:
+            result.status = "no_reply"
+            result.failure_class = "endpoint_no_udp_reply"
+        elif result.endpoint_udp_inbound_observed:
+            result.status = "inbound_no_handshake"
+            result.failure_class = "udp_reply_without_valid_handshake"
+        else:
+            result.status = "no_outbound"
+            result.failure_class = "local_udp_not_observed"
+    except Exception as exc:
+        result.error = str(exc)[:300]
+    finally:
+        for process in (trigger, outbound, inbound):
+            if process is not None and process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=2)
+        cleanup_network()
+        if stripped is not None:
+            stripped.unlink(missing_ok=True)
+        result.duration_seconds = round(time.monotonic() - started, 3)
+    return result
+
+
+def load_results(run_dir: Path) -> list[ProfileResult]:
+    results: list[ProfileResult] = []
+    for path in sorted((run_dir / "profiles").glob("*.json")):
+        value = json.loads(path.read_text())
+        results.append(ProfileResult(**value))
+    return results
+
+
+def rank_scores(results: list[ProfileResult]) -> None:
+    successful = [item for item in results if item.status == "success"]
+    if not successful:
+        return
+
+    def normalized(items: list[ProfileResult], getter: Any, lower_is_better: bool) -> dict[str, float]:
+        present = [(item.profile, getter(item)) for item in items if getter(item) is not None]
+        if not present:
+            return {item.profile: 0.0 for item in items}
+        ordered = sorted(present, key=lambda pair: pair[1], reverse=not lower_is_better)
+        if len(ordered) == 1:
+            return {ordered[0][0]: 1.0}
+        return {profile: 1.0 - index / (len(ordered) - 1) for index, (profile, _) in enumerate(ordered)}
+
+    handshake = normalized(successful, lambda item: item.handshake_ms, True)
+    latency = normalized(successful, lambda item: item.https_total_ms, True)
+    throughput = normalized(successful, lambda item: item.download_mbps, False)
+    for item in successful:
+        item.composite_score = round(100 * (0.25 * handshake.get(item.profile, 0) + 0.45 * latency.get(item.profile, 0) + 0.30 * throughput.get(item.profile, 0)), 3)
+
+
+def result_sort_key(item: ProfileResult) -> tuple[Any, ...]:
+    success_order = {"success": 0, "handshake_only": 1, "inbound_no_handshake": 2, "no_reply": 3, "no_outbound": 4, "error": 5}
+    return (
+        success_order.get(item.status, 9),
+        -(item.composite_score if item.composite_score is not None else -1),
+        item.https_total_ms if item.https_total_ms is not None else float("inf"),
+        -(item.download_mbps or 0),
+        item.profile,
+    )
+
+
+def write_aggregate(run_dir: Path, planned: int | None = None, root_invariants: dict[str, Any] | None = None) -> dict[str, Any]:
+    results = load_results(run_dir)
+    rank_scores(results)
+    ordered = sorted(results, key=result_sort_key)
+    jsonl = "".join(json.dumps(asdict(item), sort_keys=True) + "\n" for item in ordered)
+    atomic_write(run_dir / "results.jsonl", jsonl)
+    fields = list(ProfileResult.__dataclass_fields__)
+    csv_temp = run_dir / ".results.csv.build"
+    with csv_temp.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        for item in ordered:
+            writer.writerow(asdict(item))
+    os.chmod(csv_temp, 0o600)
+    os.replace(csv_temp, run_dir / "results.csv")
+    ranking = [item for item in ordered if item.status == "success"]
+    ranking_temp = run_dir / ".ranking.csv.build"
+    ranking_fields = [
+        "profile", "composite_score", "handshake_ms", "dns_ms", "tcp_connect_ms", "tls_ms",
+        "ttfb_ms", "https_total_ms", "download_mbps", "egress_country", "egress_colo",
+    ]
+    with ranking_temp.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=ranking_fields)
+        writer.writeheader()
+        for item in ranking:
+            value = asdict(item)
+            writer.writerow({key: value.get(key) for key in ranking_fields})
+    os.chmod(ranking_temp, 0o600)
+    os.replace(ranking_temp, run_dir / "ranking.csv")
+    counts: dict[str, int] = {}
+    for item in results:
+        counts[item.status] = counts.get(item.status, 0) + 1
+    summary = {
+        "schema_version": 1,
+        "generated_at": utc_now(),
+        "planned_profiles": planned if planned is not None else len(results),
+        "completed_profiles": len(results),
+        "status_counts": counts,
+        "handshake_successes": sum(1 for item in results if item.handshake_success),
+        "full_successes": sum(1 for item in results if item.status == "success"),
+        "root_invariants": root_invariants,
+        "top_profiles": [
+            {
+                "profile": item.profile,
+                "composite_score": item.composite_score,
+                "handshake_ms": item.handshake_ms,
+                "https_total_ms": item.https_total_ms,
+                "download_mbps": item.download_mbps,
+                "egress_country": item.egress_country,
+                "egress_colo": item.egress_colo,
+            }
+            for item in ranking[:20]
+        ],
+    }
+    atomic_write(run_dir / "summary.json", json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    return summary
+
+
+def route_snapshot() -> dict[str, str]:
+    route = run(["ip", "-4", "route", "show", "table", "all"], check=False).stdout
+    rule = run(["ip", "-4", "rule", "show"], check=False).stdout
+    return {
+        "route_sha256": hashlib.sha256(route.encode()).hexdigest(),
+        "rule_sha256": hashlib.sha256(rule.encode()).hexdigest(),
+    }
+
+
+def validate_profiles(profiles: list[str]) -> list[ProfileConfig]:
+    canonical = canonical_public_key()
+    return [load_profile(profile, canonical) for profile in profiles]
+
+
+def scan_command(args: argparse.Namespace) -> int:
+    global _STOP
+    if os.geteuid() != 0:
+        raise ScanError("scan must run as root")
+    require_commands(("ip", "wg", "wg-quick", "curl", "ping", "timeout", "tcpdump", "python3"))
+    if not WINDOWS_POWERSHELL.is_file():
+        raise ScanError("Windows PowerShell interop is unavailable; cannot verify outer Surfshark state")
+    if windows_surfshark_active():
+        raise ScanError("Windows Surfshark is active; disconnect it before scanning")
+    if namespace_exists():
+        raise ScanError(f"scan namespace already exists: {NAMESPACE}")
+    profiles = list_profiles(args.profiles)
+    configs = validate_profiles(profiles)
+    if args.resume:
+        run_dir = Path(args.resume).resolve()
+        if not run_dir.is_dir():
+            raise ScanError("resume directory does not exist")
+    else:
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        run_dir = OUT_ROOT / stamp
+        run_dir.mkdir(parents=True, exist_ok=False, mode=0o700)
+    (run_dir / "profiles").mkdir(parents=True, exist_ok=True, mode=0o700)
+    OUT_ROOT.mkdir(parents=True, exist_ok=True, mode=0o700)
+    baseline = route_snapshot()
+    completed = {path.stem for path in (run_dir / "profiles").glob("*.json")}
+    pending = [config for config in configs if config.profile not in completed]
+    estimated = round(len(pending) * (args.handshake_timeout + 1.5) / 60, 1)
+    print(f"run={run_dir}")
+    print(f"profiles_total={len(configs)} pending={len(pending)} estimated_minutes={estimated}")
+    print(f"handshake_timeout={args.handshake_timeout}s download_bytes={args.download_bytes}")
+
+    def stop_handler(_signum: int, _frame: Any) -> None:
+        global _STOP
+        _STOP = True
+
+    previous_int = signal.signal(signal.SIGINT, stop_handler)
+    previous_term = signal.signal(signal.SIGTERM, stop_handler)
+    try:
+        for index, config in enumerate(pending, start=len(completed) + 1):
+            if _STOP:
+                break
+            print(f"[{index}/{len(configs)}] {config.profile}: probing", flush=True)
+            result = scan_profile(config, args.handshake_timeout, args.download_bytes)
+            atomic_write(run_dir / "profiles" / f"{config.profile}.json", json.dumps(asdict(result), indent=2, sort_keys=True) + "\n")
+            print(
+                f"[{index}/{len(configs)}] {config.profile}: status={result.status} "
+                f"handshake_ms={result.handshake_ms} https_ms={result.https_total_ms} mbps={result.download_mbps}",
+                flush=True,
+            )
+            write_aggregate(run_dir, planned=len(configs))
+    finally:
+        cleanup_network()
+        signal.signal(signal.SIGINT, previous_int)
+        signal.signal(signal.SIGTERM, previous_term)
+    after = route_snapshot()
+    invariants = {
+        "root_routes_unchanged": baseline["route_sha256"] == after["route_sha256"],
+        "root_rules_unchanged": baseline["rule_sha256"] == after["rule_sha256"],
+    }
+    summary = write_aggregate(run_dir, planned=len(configs), root_invariants=invariants)
+    atomic_write(run_dir / "run.json", json.dumps({
+        "schema_version": 1,
+        "profiles": profiles,
+        "handshake_timeout_seconds": args.handshake_timeout,
+        "download_bytes": args.download_bytes,
+        "completed": summary["completed_profiles"],
+        "interrupted": _STOP,
+        "root_invariants": invariants,
+    }, indent=2, sort_keys=True) + "\n")
+    latest = OUT_ROOT / "latest"
+    latest.unlink(missing_ok=True)
+    latest.symlink_to(run_dir)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    print(f"saved={run_dir}")
+    if not all(invariants.values()):
+        return 3
+    return 130 if _STOP else 0
+
+
+def validate_command(args: argparse.Namespace) -> int:
+    require_commands(("wg", "wg-quick"))
+    profiles = list_profiles(args.profiles)
+    configs = validate_profiles(profiles)
+    print(json.dumps({
+        "profiles_valid": len(configs),
+        "canonical_key_consistent": True,
+        "private_keys_printed": False,
+    }, indent=2))
+    return 0
+
+
+def summarize_command(args: argparse.Namespace) -> int:
+    run_dir = Path(args.run_dir).resolve()
+    if not run_dir.is_dir():
+        raise ScanError("run directory does not exist")
+    summary = write_aggregate(run_dir)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def rank_command(args: argparse.Namespace) -> int:
+    run_dir = Path(args.run_dir).resolve() if args.run_dir else (OUT_ROOT / "latest").resolve()
+    if not run_dir.is_dir():
+        raise ScanError("run directory does not exist")
+    summary = write_aggregate(run_dir)
+    rows = summary["top_profiles"][: args.limit]
+    if not rows:
+        print("no successful profiles")
+        return 0
+    print("rank profile score handshake_ms https_ms mbps country colo")
+    for index, row in enumerate(rows, 1):
+        print(
+            f"{index:>4} {row['profile']:<12} {row['composite_score']!s:<7} "
+            f"{row['handshake_ms']!s:<12} {row['https_total_ms']!s:<8} "
+            f"{row['download_mbps']!s:<8} {row['egress_country'] or '-':<7} {row['egress_colo'] or '-'}"
+        )
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog=PROGRAM, description="Discover and benchmark Surfshark WireGuard profiles without changing the WSL root route.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    validate = subparsers.add_parser("validate", help="validate profile files and canonical key identity without network changes")
+    validate.add_argument("profiles", nargs="*")
+    validate.set_defaults(function=validate_command)
+    scan = subparsers.add_parser("scan", help="sequentially scan profiles; omit profile names to scan all")
+    scan.add_argument("profiles", nargs="*")
+    scan.add_argument("--handshake-timeout", type=float, default=12.0)
+    scan.add_argument("--download-bytes", type=int, default=1_048_576)
+    scan.add_argument("--resume", metavar="RUN_DIR")
+    scan.set_defaults(function=scan_command)
+    summarize = subparsers.add_parser("summarize", help="rebuild JSONL, CSV, ranking, and summary from per-profile results")
+    summarize.add_argument("run_dir")
+    summarize.set_defaults(function=summarize_command)
+    rank = subparsers.add_parser("rank", help="print the highest-ranked successful profiles")
+    rank.add_argument("run_dir", nargs="?")
+    rank.add_argument("--limit", type=int, default=20)
+    rank.set_defaults(function=rank_command)
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    if getattr(args, "handshake_timeout", 1) <= 0:
+        parser.error("--handshake-timeout must be positive")
+    if getattr(args, "download_bytes", 0) < 0:
+        parser.error("--download-bytes must not be negative")
+    try:
+        return int(args.function(args))
+    except (ScanError, OSError, subprocess.TimeoutExpired, socket.gaierror) as exc:
+        print(f"{PROGRAM}: {exc}", file=sys.stderr)
+        cleanup_network()
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

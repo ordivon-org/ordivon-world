@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+root=$(cd "$(dirname "$0")/.." && pwd)
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+mkdir -p "$tmp/configs" "$tmp/out" "$tmp/run/profiles"
+
+private_one="$tmp/private-one"
+public_one="$tmp/public-one"
+private_two="$tmp/private-two"
+public_two="$tmp/public-two"
+wg genkey > "$private_one"
+wg pubkey < "$private_one" > "$public_one"
+wg genkey > "$private_two"
+wg pubkey < "$private_two" > "$public_two"
+chmod 600 "$private_one" "$public_one" "$private_two" "$public_two"
+
+for profile in aa-one bb-two; do
+  cat > "$tmp/configs/$profile.conf" <<EOF
+[Interface]
+Address = 10.14.0.2/16
+PrivateKey = $(cat "$private_one")
+DNS = 162.252.172.57, 149.154.159.92
+
+[Peer]
+PublicKey = $(cat "$public_two")
+AllowedIPs = 0.0.0.0/0
+Endpoint = 203.0.113.10:51820
+PersistentKeepalive = 25
+EOF
+  chmod 600 "$tmp/configs/$profile.conf"
+done
+
+scan=(
+  env
+  SURFSHARK_SCAN_CONFIG_DIR="$tmp/configs"
+  SURFSHARK_SCAN_PUBLIC_KEY_PATH="$public_one"
+  SURFSHARK_SCAN_PRIVATE_KEY_PATH="$private_one"
+  SURFSHARK_SCAN_OUT_ROOT="$tmp/out"
+  python3 "$root/scripts/surfshark-profile-scan"
+)
+
+"${scan[@]}" validate > "$tmp/validate.json"
+python3 - "$tmp/validate.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["profiles_valid"] == 2
+assert value["canonical_key_consistent"] is True
+assert value["private_keys_printed"] is False
+PY
+
+python3 - "$tmp/configs/bb-two.conf" "$private_two" <<'PY'
+from pathlib import Path
+import re,sys
+path=Path(sys.argv[1]); private=Path(sys.argv[2]).read_text().strip()
+text=path.read_text()
+text,count=re.subn(r'(?m)^(\s*PrivateKey\s*=\s*).+$',lambda m:m.group(1)+private,text,count=1)
+assert count == 1
+path.write_text(text)
+path.chmod(0o600)
+PY
+set +e
+"${scan[@]}" validate > "$tmp/mismatch.out" 2> "$tmp/mismatch.err"
+rc=$?
+set -e
+[[ $rc -ne 0 ]]
+grep -Fq 'does not match canonical Surfshark identity' "$tmp/mismatch.err"
+
+cat > "$tmp/run/profiles/aa-one.json" <<'JSON'
+{
+  "profile": "aa-one",
+  "status": "success",
+  "failure_class": null,
+  "started_at": "2026-07-29T00:00:00Z",
+  "duration_seconds": 2.0,
+  "handshake_success": true,
+  "handshake_ms": 100.0,
+  "https_total_ms": 200.0,
+  "download_mbps": 20.0
+}
+JSON
+cat > "$tmp/run/profiles/bb-two.json" <<'JSON'
+{
+  "profile": "bb-two",
+  "status": "success",
+  "failure_class": null,
+  "started_at": "2026-07-29T00:00:01Z",
+  "duration_seconds": 2.0,
+  "handshake_success": true,
+  "handshake_ms": 200.0,
+  "https_total_ms": 100.0,
+  "download_mbps": 40.0
+}
+JSON
+cat > "$tmp/run/profiles/cc-three.json" <<'JSON'
+{
+  "profile": "cc-three",
+  "status": "no_reply",
+  "failure_class": "endpoint_no_udp_reply",
+  "started_at": "2026-07-29T00:00:02Z",
+  "duration_seconds": 12.0,
+  "endpoint_udp_outbound_observed": true,
+  "endpoint_udp_inbound_observed": false,
+  "handshake_success": false
+}
+JSON
+chmod 600 "$tmp/run/profiles"/*.json
+"${scan[@]}" summarize "$tmp/run" > "$tmp/summary.out"
+python3 - "$tmp/run/summary.json" "$tmp/run/results.jsonl" "$tmp/run/results.csv" "$tmp/run/ranking.csv" <<'PY'
+import csv,json,sys
+summary=json.load(open(sys.argv[1]))
+assert summary["completed_profiles"] == 3
+assert summary["handshake_successes"] == 2
+assert summary["full_successes"] == 2
+assert summary["status_counts"] == {"no_reply": 1, "success": 2}
+assert summary["top_profiles"][0]["profile"] == "bb-two"
+assert len(open(sys.argv[2]).read().splitlines()) == 3
+assert len(list(csv.DictReader(open(sys.argv[3])))) == 3
+assert len(list(csv.DictReader(open(sys.argv[4])))) == 2
+PY
+
+printf 'surfshark_profile_scan_tests=passed\n'
