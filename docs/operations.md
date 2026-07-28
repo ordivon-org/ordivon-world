@@ -198,7 +198,7 @@ The state gates prevent a connected sample from being mislabeled as `before` or 
 
 ### Surfshark profile discovery
 
-Validate all rendered profiles, then disconnect Windows Surfshark and scan them sequentially:
+Validate all rendered profiles, then disconnect Windows Surfshark and any native WireGuard/OpenVPN tunnel before scanning them sequentially:
 
 ```bash
 sudo surfshark-profile-scan validate

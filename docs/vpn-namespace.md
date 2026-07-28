@@ -18,7 +18,7 @@ WSL root namespace
 - The controller never prints keys, peer public keys, endpoint hostnames, or endpoint addresses.
 - Runtime, MCP, and Cloudflare Tunnel remain in the root namespace.
 - No automatic failover or route selection is enabled.
-- Windows Surfshark must be disconnected before `up`; the controller rejects nested VPN startup.
+- Windows Surfshark and any native Windows WireGuard/OpenVPN tunnel must be disconnected before `up`; the controller rejects nested VPN startup.
 - The WireGuard interface is created in the WSL root namespace and then moved; its encrypted UDP socket remains in the root namespace while cleartext routes exist only inside `ordivon-vpn`.
 - The controller does not create a veth pair, enable IP forwarding, add NAT, or modify Docker/host firewall rules.
 - Only one `ordivon-vpn` namespace is active at a time.
@@ -101,7 +101,7 @@ Validate the complete local profile inventory without changing network state:
 sudo surfshark-profile-scan validate
 ```
 
-Disconnect Windows Surfshark, wait for the adapter to go down, and run the full discovery pass:
+Disconnect Windows Surfshark and any native WireGuard/OpenVPN test tunnel, wait for all VPN adapters to go down, and run the full discovery pass:
 
 ```bash
 sudo surfshark-profile-scan scan
