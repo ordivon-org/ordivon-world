@@ -15,13 +15,61 @@ STATE_DIR="${ORDIVON_VPN_STATE_DIR:-/run/ordivon-vpn}"
 STATE_FILE="$STATE_DIR/state"
 RESOLV_DIR="/etc/netns/$NAMESPACE"
 NAT_TABLE="ordivon_vpn_nat"
-FILTER_TABLE="ordivon_vpn_filter"
+WINDOWS_POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 
 log() { printf '%s: %s\n' "$PROGRAM" "$*" >&2; }
 die() { log "$*"; exit 1; }
 require_root() { [[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root"; }
 require_command() { command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"; }
 namespace_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$NAMESPACE"; }
+
+windows_surfshark_active() {
+  [[ -f $WINDOWS_POWERSHELL ]] || return 1
+  "$WINDOWS_POWERSHELL" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \
+    "\$service=Get-Service -Name 'Surfshark WireGuard' -ErrorAction SilentlyContinue; \
+     \$adapter=Get-NetAdapter -Name 'SurfsharkWireGuard' -IncludeHidden -ErrorAction SilentlyContinue; \
+     if ((\$service -and \$service.Status -eq 'Running') -or (\$adapter -and \$adapter.Status -eq 'Up')) { exit 0 } else { exit 1 }" \
+    >/dev/null 2>&1
+}
+
+ensure_outer_surfshark_disconnected() {
+  if windows_surfshark_active; then
+    die "Windows Surfshark is active; disconnect it before starting the isolated namespace"
+  fi
+}
+
+forward_chain() {
+  if iptables -n -L DOCKER-USER >/dev/null 2>&1; then
+    printf 'DOCKER-USER'
+  else
+    printf 'FORWARD'
+  fi
+}
+
+add_forward_rules() {
+  local uplink=$1 chain
+  chain=$(forward_chain)
+  iptables -C "$chain" -i "$HOST_VETH" -o "$uplink" -j ACCEPT >/dev/null 2>&1 \
+    || iptables -I "$chain" 1 -i "$HOST_VETH" -o "$uplink" -j ACCEPT
+  iptables -C "$chain" -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT >/dev/null 2>&1 \
+    || iptables -I "$chain" 1 -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+  printf '%s' "$chain"
+}
+
+remove_forward_rules() {
+  local uplink=${1:-} chain=${2:-}
+  [[ -n $uplink ]] || return 0
+  local chains=() candidate
+  if [[ -n $chain ]]; then
+    chains+=("$chain")
+  else
+    chains+=(DOCKER-USER FORWARD)
+  fi
+  for candidate in "${chains[@]}"; do
+    iptables -D "$candidate" -i "$HOST_VETH" -o "$uplink" -j ACCEPT >/dev/null 2>&1 || true
+    iptables -D "$candidate" -i "$uplink" -o "$HOST_VETH" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT >/dev/null 2>&1 || true
+  done
+}
 
 usage() {
   cat <<'EOF'
@@ -67,7 +115,7 @@ state_value() {
 }
 
 write_state() {
-  local profile=$1 original_forward=$2 uplink=$3
+  local profile=$1 original_forward=$2 uplink=$3 forward_chain_name=$4
   install -d -m 700 "$STATE_DIR"
   local temporary
   temporary=$(mktemp "$STATE_DIR/.state.XXXXXX")
@@ -76,18 +124,21 @@ write_state() {
     printf 'profile=%s\n' "$profile"
     printf 'original_ip_forward=%s\n' "$original_forward"
     printf 'uplink=%s\n' "$uplink"
+    printf 'forward_chain=%s\n' "$forward_chain_name"
     printf 'created_at=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   } > "$temporary"
   mv -f "$temporary" "$STATE_FILE"
 }
 
 cleanup_network() {
-  local restore_forward=${1:-}
+  local restore_forward=${1:-} uplink=${2:-} forward_chain_name=${3:-}
+  [[ -n $uplink ]] || uplink=$(state_value uplink 2>/dev/null || true)
+  [[ -n $forward_chain_name ]] || forward_chain_name=$(state_value forward_chain 2>/dev/null || true)
   set +e
+  remove_forward_rules "$uplink" "$forward_chain_name"
   ip netns del "$NAMESPACE" 2>/dev/null
   ip link del "$HOST_VETH" 2>/dev/null
   nft delete table ip "$NAT_TABLE" 2>/dev/null
-  nft delete table inet "$FILTER_TABLE" 2>/dev/null
   rm -rf "$RESOLV_DIR"
   rm -f "$STATE_FILE"
   if [[ $restore_forward =~ ^[01]$ ]]; then
@@ -141,10 +192,13 @@ command_doctor() {
   local profile=${1:-jp-tok} config
   config=$(config_path "$profile")
   local missing=() command
-  for command in ip wg wg-quick nft curl getent sysctl awk sed grep stat python3 flock; do
+  for command in ip wg wg-quick nft iptables curl getent sysctl awk sed grep stat python3 flock; do
     command -v "$command" >/dev/null 2>&1 || missing+=("$command")
   done
-  local config_ok=false placeholder=false mode=null
+  local config_ok=false placeholder=false mode=null outer_active=null
+  if [[ -f $WINDOWS_POWERSHELL ]]; then
+    if windows_surfshark_active; then outer_active=true; else outer_active=false; fi
+  fi
   if [[ -f $config && ! -L $config ]]; then
     mode=$(stat -c %a "$config" 2>/dev/null || printf null)
     grep -q '<insert_your_private_key_here>' "$config" && placeholder=true
@@ -152,14 +206,15 @@ command_doctor() {
       config_ok=true
     fi
   fi
-  python3 - "$profile" "$config_ok" "$placeholder" "$mode" "${#missing[@]}" "${missing[*]:-}" <<'PY'
+  python3 - "$profile" "$config_ok" "$placeholder" "$mode" "$outer_active" "${#missing[@]}" "${missing[*]:-}" <<'PY'
 import json,sys
-profile,config_ok,placeholder,mode,count,missing=sys.argv[1:]
+profile,config_ok,placeholder,mode,outer_active,count,missing=sys.argv[1:]
 print(json.dumps({
   "profile": profile,
   "config_valid": config_ok == "true",
   "private_key_placeholder": placeholder == "true",
   "config_mode": None if mode == "null" else mode,
+  "windows_surfshark_active": None if outer_active == "null" else outer_active == "true",
   "missing_commands": [] if int(count) == 0 else missing.split(),
 }, indent=2))
 PY
@@ -173,6 +228,7 @@ command_up() {
   config=$(config_path "$profile")
   validate_config "$config"
   probe_trace >/dev/null || die "root namespace HTTPS egress is unavailable"
+  ensure_outer_surfshark_disconnected
   if namespace_exists; then
     current_profile=$(state_value profile 2>/dev/null || true)
     [[ $current_profile == "$profile" ]] || die "namespace is already active with another or unknown profile; run down first"
@@ -180,7 +236,7 @@ command_up() {
     return 0
   fi
 
-  local uplink original_forward endpoint_ip endpoint_port tunnel_address temporary success=false
+  local uplink original_forward endpoint_ip endpoint_port tunnel_address temporary forward_chain_name= success=false
   uplink=$(ip -4 route show default | awk 'NR == 1 { print $5 }')
   [[ -n $uplink ]] || die "root namespace has no IPv4 default route"
   original_forward=$(sysctl -n net.ipv4.ip_forward)
@@ -192,7 +248,7 @@ command_up() {
 
   rollback() {
     rm -f "$temporary"
-    if [[ $success != true ]]; then cleanup_network "$original_forward"; fi
+    if [[ $success != true ]]; then cleanup_network "$original_forward" "$uplink" "$forward_chain_name"; fi
   }
   trap rollback EXIT
 
@@ -211,8 +267,7 @@ command_up() {
   nft add table ip "$NAT_TABLE"
   nft "add chain ip $NAT_TABLE postrouting { type nat hook postrouting priority srcnat; policy accept; }"
   nft add rule ip "$NAT_TABLE" postrouting ip saddr "$SUBNET" oifname "$uplink" masquerade
-  nft add table inet "$FILTER_TABLE"
-  nft "add chain inet $FILTER_TABLE forward { type filter hook forward priority -100; policy accept; }"
+  forward_chain_name=$(add_forward_rules "$uplink")
 
   ip netns exec "$NAMESPACE" ip link add "$WG_INTERFACE" type wireguard
   ip netns exec "$NAMESPACE" wg setconf "$WG_INTERFACE" "$temporary"
@@ -228,7 +283,7 @@ command_up() {
   [[ ${handshake:-0} -gt 0 ]] && age=$((now - handshake))
   [[ -n $trace && $age -lt 120 ]] || die "WireGuard handshake or egress verification failed"
 
-  write_state "$profile" "$original_forward" "$uplink"
+  write_state "$profile" "$original_forward" "$uplink" "$forward_chain_name"
   success=true
   rm -f "$temporary"
   trap - EXIT
@@ -237,9 +292,11 @@ command_up() {
 
 command_down() {
   require_root
-  local original_forward
+  local original_forward uplink forward_chain_name
   original_forward=$(state_value original_ip_forward 2>/dev/null || true)
-  cleanup_network "$original_forward"
+  uplink=$(state_value uplink 2>/dev/null || true)
+  forward_chain_name=$(state_value forward_chain 2>/dev/null || true)
+  cleanup_network "$original_forward" "$uplink" "$forward_chain_name"
   printf '{"active":false,"namespace":"%s"}\n' "$NAMESPACE"
 }
 
@@ -310,4 +367,6 @@ main() {
   esac
 }
 
-main "$@"
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+  main "$@"
+fi
