@@ -1,5 +1,18 @@
 # Architecture
 
+## Target architecture
+
+```text
+Network World manifest
+  → topology and identity controller
+  → transport and mediation adapters
+  → programmable fault plane
+  → independent observer and event root
+  → freeze / reset / destruction receipt
+```
+
+The following implemented layers are the local operations slice of that target.
+
 ## Layer 1 — immutable evidence model
 
 `link-model` defines serialized facts. It contains no network, filesystem, database, process, or route mutation.

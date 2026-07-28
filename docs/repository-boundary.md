@@ -4,7 +4,7 @@
 
 A component belongs in Ordivon Link when its primary question is:
 
-> Which local or remote network path is available, suitable, selected, connected, or recoverable?
+> What network world connects the actors, how may it change, and what connectivity facts can be independently proven?
 
 A component belongs in Ordivon Edge when its primary question is:
 
@@ -13,6 +13,10 @@ A component belongs in Ordivon Edge when its primary question is:
 A component belongs in Ordivon Runtime when its primary question is:
 
 > How should a local Agent task, process, workspace, result, or recovery lifecycle be executed and retained?
+
+## Capability horizon
+
+Link may construct isolated range topology, communication identity, dynamic faults, deception, and multi-Agent communication evidence. Those capabilities remain Link responsibilities even when Security defines the adversarial objective. Current code implements only the local operations profile.
 
 ## Accepted dependencies
 

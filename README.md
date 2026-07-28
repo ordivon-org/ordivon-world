@@ -1,6 +1,6 @@
 # Ordivon Link
 
-Ordivon Link is the local network observation, transport, path-selection, and recovery layer of the Ordivon stack.
+Ordivon Link is the programmable network and communication fabric of the Ordivon stack. The current repository implements its local observation, controlled-egress, and reference-transport slice.
 
 It owns facts and decisions about the path between a user-controlled device and user-controlled or third-party network endpoints:
 
@@ -14,6 +14,14 @@ Observe local path
 → Fail over
 → Recover
 ```
+
+## Project horizon
+
+Link is not limited to one workstation, VPN, or relay. Its full subject is the network world through which distributed Agents discover, communicate, fail, reorganize, and compete. Future range profiles may construct isolated multi-node topologies, inject faults and partitions, expose synthetic identities, and provide independent network evidence.
+
+The evaluated Agent's internal communication capability and the experiment's external consequence boundary are separate concerns. Link may support broad range-local behavior while independently proving which external paths exist.
+
+See [`docs/charter.md`](docs/charter.md) and [`docs/capability-gaps.md`](docs/capability-gaps.md).
 
 ## Strict boundary
 
@@ -103,4 +111,4 @@ cargo run -p link-probe -- run \
   --output artifacts/baseline/reachability.ndjson
 ```
 
-See [`docs/repository-boundary.md`](docs/repository-boundary.md), [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).
+See [`docs/charter.md`](docs/charter.md), [`docs/capability-gaps.md`](docs/capability-gaps.md), [`docs/repository-boundary.md`](docs/repository-boundary.md), [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).

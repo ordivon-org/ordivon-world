@@ -2,7 +2,7 @@
 
 ## Scope
 
-Ordivon Link owns local network observation, evidence, selection inputs, replaceable transports, and recovery policy. Keep Cloudflare execution and Agent process execution outside this repository.
+Ordivon Link owns programmable network worlds, communication topology, path and transport evidence, controlled faults, selection, containment facts, and network recovery. The current implementation is the local operations profile. Keep remote Node lifecycle, Cloudflare execution, Agent cognition, and trusted-local process execution outside this repository.
 
 ## Engineering rules
 
@@ -19,6 +19,9 @@ Ordivon Link owns local network observation, evidence, selection inputs, replace
 11. Explicit VPN mutation must be isolated to a dedicated namespace, remain root-only, preserve the WSL root default route, and roll back transactionally.
 12. CI may syntax-check the VPN controller and exercise key-pair rendering only against temporary fixtures, but must never create namespaces, interfaces, routes, firewall rules, or public probes.
 13. VPN key input must not place key values in command arguments, process listings, repository content, or normal output; mismatched pairs must leave existing state unchanged.
+14. Capability inside an owned range and consequence outside it are separate; do not reduce the project definition to workstation diagnosis.
+15. Any future topology or fault mutation must bind a named Network World identity and emit independently observable events.
+16. Reachability is never treated as target authority, and missing routes are never sufficient proof of containment.
 
 ## Required checks
 

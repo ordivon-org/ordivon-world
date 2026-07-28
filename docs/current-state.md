@@ -14,6 +14,10 @@
 - tests that require neither public network access nor host-route mutation;
 - an explicit, root-only WireGuard network-namespace controller for selected commands, with transactional rollback and no WSL root-route mutation.
 
+## Implemented profile
+
+The implemented system is the **local operations profile** of the broader Link Charter. It does not yet construct or govern an isolated multi-node Network World.
+
 ## Not implemented
 
 - automatic route-selection execution or automatic failover;
@@ -24,5 +28,11 @@
 - seven-day controlled path evidence;
 - Cloudflare fetch, Browser Rendering, R2 artifact execution, or external task receipts;
 - local Agent task execution or workspace management.
+- typed Network World manifests and revisions;
+- deterministic range create, freeze, reset, and destruction;
+- programmable latency, loss, partition, DNS, route, and service mutations;
+- an independent append-only network observer outside evaluated-Agent control;
+- synthetic range identity lifecycle;
+- a Security or Game control API for dynamic campaigns.
 
 The final two categories are intentionally excluded: they belong to Ordivon Edge and Ordivon Runtime respectively.
