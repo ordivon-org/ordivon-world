@@ -14,7 +14,7 @@ WSL root namespace
 ## Security boundary
 
 - WireGuard configuration files remain outside Git under `/root/.config/ordivon/secrets/surfshark/rendered`.
-- Every configuration must be a regular `0600` file and must contain a real locally retained private key.
+- Every configuration must be a regular `0600` file and must contain a real locally retained private key. `doctor` also derives its public key and requires it to match the canonical `ordivon-manual` key pair before `up` is admitted.
 - The controller never prints keys, peer public keys, endpoint hostnames, or endpoint addresses.
 - Runtime, MCP, and Cloudflare Tunnel remain in the root namespace.
 - No automatic failover or route selection is enabled.

@@ -5,6 +5,8 @@ PROGRAM="ordivon-vpn"
 NAMESPACE="${ORDIVON_VPN_NAMESPACE:-ordivon-vpn}"
 WG_INTERFACE="${ORDIVON_VPN_WG_INTERFACE:-wg0}"
 CONFIG_DIR="${ORDIVON_VPN_CONFIG_DIR:-/root/.config/ordivon/secrets/surfshark/rendered}"
+PUBLIC_KEY_PATH="${ORDIVON_VPN_PUBLIC_KEY_PATH:-/root/.config/ordivon/secrets/surfshark/ordivon-manual.public}"
+PRIVATE_KEY_PATH="${ORDIVON_VPN_PRIVATE_KEY_PATH:-/root/.config/ordivon/secrets/surfshark/ordivon-manual.private}"
 STATE_DIR="${ORDIVON_VPN_STATE_DIR:-/run/ordivon-vpn}"
 STATE_FILE="$STATE_DIR/state"
 RESOLV_DIR="/etc/netns/$NAMESPACE"
@@ -59,6 +61,21 @@ config_path() {
   printf '%s/%s.conf' "$CONFIG_DIR" "$profile"
 }
 
+key_pair_consistent() {
+  local config=$1 config_private stored_private stored_public config_public private_public
+  [[ -f $PUBLIC_KEY_PATH && ! -L $PUBLIC_KEY_PATH ]] || return 1
+  [[ -f $PRIVATE_KEY_PATH && ! -L $PRIVATE_KEY_PATH ]] || return 1
+  [[ $(stat -c %a "$PUBLIC_KEY_PATH" 2>/dev/null) == 600 ]] || return 1
+  [[ $(stat -c %a "$PRIVATE_KEY_PATH" 2>/dev/null) == 600 ]] || return 1
+  stored_public=$(tr -d '\r\n' < "$PUBLIC_KEY_PATH")
+  stored_private=$(tr -d '\r\n' < "$PRIVATE_KEY_PATH")
+  config_private=$(awk '/^[[:space:]]*PrivateKey[[:space:]]*=/{value=substr($0,index($0,"=")+1); gsub(/[[:space:]]/,"",value); print value; exit}' "$config")
+  [[ -n $stored_public && -n $stored_private && -n $config_private ]] || return 1
+  private_public=$(printf '%s\n' "$stored_private" | wg pubkey 2>/dev/null) || return 1
+  config_public=$(printf '%s\n' "$config_private" | wg pubkey 2>/dev/null) || return 1
+  [[ $private_public == "$stored_public" && $config_public == "$stored_public" ]]
+}
+
 validate_config() {
   local config=$1
   [[ -f $config ]] || die "profile config not found"
@@ -66,6 +83,7 @@ validate_config() {
   [[ $(stat -c %a "$config") == 600 ]] || die "profile config must have mode 0600"
   grep -q '<insert_your_private_key_here>' "$config" && die "profile config still contains a private-key placeholder"
   wg-quick strip "$config" >/dev/null || die "profile config is not a valid WireGuard configuration"
+  key_pair_consistent "$config" || die "profile config key does not match the installed Surfshark key pair"
 }
 
 state_value() {
@@ -147,7 +165,7 @@ command_doctor() {
   for command in ip wg wg-quick curl getent awk sed grep stat python3 flock; do
     command -v "$command" >/dev/null 2>&1 || missing+=("$command")
   done
-  local config_ok=false placeholder=false mode=null outer_active=null
+  local config_ok=false key_pair_ok=false placeholder=false mode=null outer_active=null
   if [[ -f $WINDOWS_POWERSHELL ]]; then
     if windows_surfshark_active; then outer_active=true; else outer_active=false; fi
   fi
@@ -156,14 +174,16 @@ command_doctor() {
     grep -q '<insert_your_private_key_here>' "$config" && placeholder=true
     if [[ $mode == 600 && $placeholder == false ]] && wg-quick strip "$config" >/dev/null 2>&1; then
       config_ok=true
+      if key_pair_consistent "$config"; then key_pair_ok=true; fi
     fi
   fi
-  python3 - "$profile" "$config_ok" "$placeholder" "$mode" "$outer_active" "${#missing[@]}" "${missing[*]:-}" <<'PY'
+  python3 - "$profile" "$config_ok" "$key_pair_ok" "$placeholder" "$mode" "$outer_active" "${#missing[@]}" "${missing[*]:-}" <<'PY'
 import json,sys
-profile,config_ok,placeholder,mode,outer_active,count,missing=sys.argv[1:]
+profile,config_ok,key_pair_ok,placeholder,mode,outer_active,count,missing=sys.argv[1:]
 print(json.dumps({
   "profile": profile,
   "config_valid": config_ok == "true",
+  "key_pair_consistent": key_pair_ok == "true",
   "private_key_placeholder": placeholder == "true",
   "config_mode": None if mode == "null" else mode,
   "windows_surfshark_active": None if outer_active == "null" else outer_active == "true",
@@ -171,7 +191,7 @@ print(json.dumps({
   "missing_commands": [] if int(count) == 0 else missing.split(),
 }, indent=2))
 PY
-  [[ ${#missing[@]} -eq 0 && $config_ok == true ]]
+  [[ ${#missing[@]} -eq 0 && $config_ok == true && $key_pair_ok == true ]]
 }
 
 command_up() {
