@@ -18,18 +18,22 @@ require_root() { [[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root"; }
 require_command() { command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"; }
 namespace_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$NAMESPACE"; }
 
-windows_surfshark_active() {
+windows_outer_vpn_active() {
   [[ -f $WINDOWS_POWERSHELL ]] || return 1
   "$WINDOWS_POWERSHELL" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \
-    "\$service=Get-Service -Name 'Surfshark WireGuard' -ErrorAction SilentlyContinue; \
-     \$adapter=Get-NetAdapter -Name 'SurfsharkWireGuard' -IncludeHidden -ErrorAction SilentlyContinue; \
-     if ((\$service -and \$service.Status -eq 'Running') -or (\$adapter -and \$adapter.Status -eq 'Up')) { exit 0 } else { exit 1 }" \
+    "\$services=@(Get-Service -ErrorAction SilentlyContinue | Where-Object { \
+       \$_.Status -eq 'Running' -and (\$_.Name -eq 'Surfshark WireGuard' -or \$_.Name -like 'WireGuardTunnel$*') \
+     }); \
+     \$adapters=@(Get-NetAdapter -IncludeHidden -ErrorAction SilentlyContinue | Where-Object { \
+       \$_.Status -eq 'Up' -and (\$_.Name -match 'Surfshark|WireGuard|OpenVPN' -or \$_.InterfaceDescription -match 'Surfshark|WireGuard|OpenVPN') \
+     }); \
+     if (\$services.Count -gt 0 -or \$adapters.Count -gt 0) { exit 0 } else { exit 1 }" \
     >/dev/null 2>&1
 }
 
-ensure_outer_surfshark_disconnected() {
-  if windows_surfshark_active; then
-    die "Windows Surfshark is active; disconnect it before starting the isolated namespace"
+ensure_outer_vpn_disconnected() {
+  if windows_outer_vpn_active; then
+    die "a Windows Surfshark, WireGuard, or OpenVPN tunnel is active; disconnect it before starting the isolated namespace"
   fi
 }
 
@@ -167,7 +171,7 @@ command_doctor() {
   done
   local config_ok=false key_pair_ok=false placeholder=false mode=null outer_active=null
   if [[ -f $WINDOWS_POWERSHELL ]]; then
-    if windows_surfshark_active; then outer_active=true; else outer_active=false; fi
+    if windows_outer_vpn_active; then outer_active=true; else outer_active=false; fi
   fi
   if [[ -f $config && ! -L $config ]]; then
     mode=$(stat -c %a "$config" 2>/dev/null || printf null)
@@ -187,6 +191,7 @@ print(json.dumps({
   "private_key_placeholder": placeholder == "true",
   "config_mode": None if mode == "null" else mode,
   "windows_surfshark_active": None if outer_active == "null" else outer_active == "true",
+  "windows_outer_vpn_active": None if outer_active == "null" else outer_active == "true",
   "topology": "wireguard-birth-namespace",
   "missing_commands": [] if int(count) == 0 else missing.split(),
 }, indent=2))
@@ -201,7 +206,7 @@ command_up() {
   config=$(config_path "$profile")
   validate_config "$config"
   probe_trace >/dev/null || die "root namespace HTTPS egress is unavailable"
-  ensure_outer_surfshark_disconnected
+  ensure_outer_vpn_disconnected
   if namespace_exists; then
     current_profile=$(state_value profile 2>/dev/null || true)
     [[ $current_profile == "$profile" ]] || die "namespace is already active with another or unknown profile; run down first"

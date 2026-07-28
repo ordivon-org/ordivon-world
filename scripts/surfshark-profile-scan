@@ -230,13 +230,18 @@ def list_profiles(requested: list[str]) -> list[str]:
     return unique
 
 
-def windows_surfshark_active() -> bool:
+def windows_outer_vpn_active() -> bool:
     if not WINDOWS_POWERSHELL.is_file():
         return False
     script = (
-        "$service=Get-Service -Name 'Surfshark WireGuard' -ErrorAction SilentlyContinue; "
-        "$adapter=Get-NetAdapter -Name 'SurfsharkWireGuard' -IncludeHidden -ErrorAction SilentlyContinue; "
-        "if (($service -and $service.Status -eq 'Running') -or ($adapter -and $adapter.Status -eq 'Up')) { exit 0 } else { exit 1 }"
+        "$services=@(Get-Service -ErrorAction SilentlyContinue | Where-Object { "
+        "$_.Status -eq 'Running' -and ($_.Name -eq 'Surfshark WireGuard' -or $_.Name -like 'WireGuardTunnel$*') "
+        "}); "
+        "$adapters=@(Get-NetAdapter -IncludeHidden -ErrorAction SilentlyContinue | Where-Object { "
+        "$_.Status -eq 'Up' -and ($_.Name -match 'Surfshark|WireGuard|OpenVPN' -or "
+        "$_.InterfaceDescription -match 'Surfshark|WireGuard|OpenVPN') "
+        "}); "
+        "if ($services.Count -gt 0 -or $adapters.Count -gt 0) { exit 0 } else { exit 1 }"
     )
     completed = subprocess.run(
         [str(WINDOWS_POWERSHELL), "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script],
@@ -607,8 +612,8 @@ def scan_command(args: argparse.Namespace) -> int:
     require_commands(("ip", "wg", "wg-quick", "curl", "ping", "timeout", "tcpdump", "python3"))
     if not WINDOWS_POWERSHELL.is_file():
         raise ScanError("Windows PowerShell interop is unavailable; cannot verify outer Surfshark state")
-    if windows_surfshark_active():
-        raise ScanError("Windows Surfshark is active; disconnect it before scanning")
+    if windows_outer_vpn_active():
+        raise ScanError("a Windows Surfshark, WireGuard, or OpenVPN tunnel is active; disconnect it before scanning")
     if namespace_exists():
         raise ScanError(f"scan namespace already exists: {NAMESPACE}")
     profiles = list_profiles(args.profiles)
