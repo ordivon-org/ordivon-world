@@ -6,10 +6,9 @@ Ordivon Link can provide an explicit, local-only WireGuard execution path withou
 WSL root namespace
 ├─ Ordivon Runtime
 ├─ Ordivon MCP / cloudflared
-└─ veth + NAT
-   └─ ordivon-vpn namespace
-      └─ WireGuard
-         └─ explicitly selected commands only
+└─ WireGuard encrypted UDP socket
+   └─ moved wg0 interface in ordivon-vpn namespace
+      └─ explicitly selected commands only
 ```
 
 ## Security boundary
@@ -20,7 +19,8 @@ WSL root namespace
 - Runtime, MCP, and Cloudflare Tunnel remain in the root namespace.
 - No automatic failover or route selection is enabled.
 - Windows Surfshark must be disconnected before `up`; the controller rejects nested VPN startup.
-- Forwarding is admitted only for the namespace veth and current root uplink, through `DOCKER-USER` when Docker owns the host `FORWARD` policy.
+- The WireGuard interface is created in the WSL root namespace and then moved; its encrypted UDP socket remains in the root namespace while cleartext routes exist only inside `ordivon-vpn`.
+- The controller does not create a veth pair, enable IP forwarding, add NAT, or modify Docker/host firewall rules.
 - Only one `ordivon-vpn` namespace is active at a time.
 
 ## Install
@@ -55,7 +55,7 @@ sudo ordivon-vpn exec git clone https://github.com/example/example.git
 sudo ordivon-vpn down
 ```
 
-The `exec` subcommand replaces itself with `ip netns exec`; command exit status is preserved. The controller adds only two exact forwarding rules for the veth/uplink pair and removes them during `down` or rollback.
+The `exec` subcommand replaces itself with `ip netns exec`; command exit status is preserved. The namespace contains only loopback and the moved WireGuard interface.
 
 A manual systemd instance is also available:
 
@@ -68,7 +68,7 @@ The unit is installed but not enabled automatically.
 
 ## Recovery
 
-`up` is transactional. Any failure before verified WireGuard handshake and HTTPS egress removes the namespace, veth, NAT table, Docker/host forwarding exceptions, resolver file, temporary stripped configuration, and restores the previous IPv4 forwarding value.
+`up` is transactional. Any failure before verified WireGuard handshake and HTTPS egress removes the namespace, any not-yet-moved WireGuard interface, resolver file, state, and temporary stripped configuration.
 
 `down` is idempotent and may be used after an interrupted invocation:
 
