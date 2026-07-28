@@ -19,7 +19,7 @@ fabric.
 | Fresh-root reconstruction and residual receipts | implemented |
 | Live loopback service reachability | implemented |
 | Packet-level partitions, latency, loss, routes, and DNS | pending |
-| Persistent Edge Node network attachment | pending; P0-D design boundary |
+| Persistent Edge Node `NetworkAttachment` | pending; P0-D terminology boundary only, with no Schema or backend |
 | Production OS-account separation for observer authority | pending |
 
 `link-world-security` exposes only snapshot, execute, reconcile, and residual
@@ -31,6 +31,10 @@ The executable effect surface remains deliberately narrow. The opt-in loopback
 fixture controls TCP service reachability. Link state, latency/loss, routes, and
 DNS remain deterministic modeled state and events. Declared Internet denial is
 not packet-containment proof.
+
+P0-D ownership terms are frozen in [`component-map.md`](component-map.md).
+They do not specify a serialized attachment contract or claim an implemented
+data-plane backend.
 
 ## P1 — full-spectrum network behavior
 

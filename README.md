@@ -1,6 +1,6 @@
 # Ordivon Link
 
-Ordivon Link is the programmable network and communication fabric of the Ordivon stack. The current repository implements local observation, controlled egress, a reference transport, and a deterministic local Network World slice.
+Ordivon Link is the programmable network and communication fabric of the Ordivon stack. The current repository contains the long-term Agent-native Network World core, a local-operations observation/client slice, a bounded reference transport experiment, and private operations/provider tooling.
 
 It owns facts and decisions about the path between a user-controlled device and user-controlled or third-party network endpoints:
 
@@ -23,10 +23,22 @@ The evaluated Agent's internal communication capability and the experiment's ext
 
 See [`docs/charter.md`](docs/charter.md) and [`docs/capability-gaps.md`](docs/capability-gaps.md).
 
+## Repository shape
+
+The Phase 0 boundary separates four kinds of code:
+
+1. **Long-term Agent-native core:** `link-world` owns the `NetworkWorld` domain, Link-native world identity, modeled mutations, independent evidence, and lifecycle. The implemented slice is deterministic and local; only its loopback service fixture has an executable effect plane today.
+2. **Local-operations observation/client slice:** `link-model`, `link-probe`, `link-observer`, and `link-console` observe and present workstation, path, and service facts. They are useful clients of Link capabilities, not the definition of the Network World core.
+3. **Reference transport experiment:** `link-wire` and `link-transport-quic` preserve the bounded Baseline v0 interoperability experiment. Phase 0 freezes expansion into a general transport platform; production work must reuse maintained TLS, QUIC, and proxy implementations.
+4. **Private operations/provider tooling:** the VPN and Surfshark scripts support explicit private operations and provider-specific evidence. They do not define Link's public architecture or a reusable VPN core.
+
+See [`docs/component-map.md`](docs/component-map.md) for component authority, dependency direction, and Phase 0 disposition.
+
 ## Strict boundary
 
 Ordivon Link owns:
 
+- `NetworkWorld` identity, modeled topology and mutations, independent network evidence, and lifecycle receipts;
 - local route, DNS, interface, VPN, WARP, and service observations;
 - HTTP/TLS and HTTP/3/QUIC measurement evidence;
 - explainable route-selection inputs and future failover policy;
@@ -40,21 +52,23 @@ Ordivon Link does **not** own:
 - Cloudflare Workers, Browser Rendering, R2 artifacts, or external fetch execution — those belong to `ordivon-edge`;
 - local Agent jobs, workspaces, process supervision, or task artifacts — those belong to `ordivon-runtime`;
 - public project presentation — that belongs to `ordivon-web`;
-- public proxy subscriptions, multi-user accounts, traffic resale, or new cryptography.
+- public proxy subscriptions, multi-user accounts, or traffic resale;
+- a self-developed general-purpose network protocol, VPN core, cryptography, or container-network orchestration.
 
 ## Workspace
 
-| Crate | Responsibility |
-|---|---|
-| `link-model` | Stable observation, target, transport, route, snapshot, and event models |
-| `link-probe` | Reachability, transfer, connection-lifetime collection, comparison, and reports |
-| `link-observer` | Local WSL/Windows/VPN/DNS/service observation and sanitized SQLite history |
-| `link-console` | Loopback-only read-only Web console and status API |
-| `link-wire` | Pure bounded Baseline v0 wire contract and state machines |
-| `link-transport-quic` | Quinn/rustls localhost reference client/server for Baseline v0 |
-| `link-world` | Independent Network World v1 manifest, lifecycle, mutation, event chain, actor view, and loopback fixture |
+| Category | Component | Responsibility |
+|---|---|---|
+| Agent-native core | `link-world` | Independent Network World v1 manifest, identity, lifecycle, mutation, event chain, actor view, and loopback fixture |
+| Local operations | `link-model` | Stable observation, target, transport, route, snapshot, and event models |
+| Local operations | `link-probe` | Reachability, transfer, connection-lifetime collection, comparison, and reports |
+| Local operations | `link-observer` | Local WSL/Windows/VPN/DNS/service observation and sanitized SQLite history |
+| Local operations | `link-console` | Loopback-only read-only Web console and status API |
+| Reference transport | `link-wire` | Pure bounded Baseline v0 wire contract and state machines |
+| Reference transport | `link-transport-quic` | Quinn/rustls localhost reference client/server for Baseline v0 |
+| Private operations | `scripts/` VPN and Surfshark tools | Explicit isolated egress, provider-specific measurement, installation, and fixture checks |
 
-The dependency graph is deliberately split into three independent vertical slices:
+The dependency graph keeps the core, local observation, and reference transport slices independent; private operations scripts remain outside the crate graph:
 
 ```text
 link-model ← link-probe ← link-observer ← link-console
@@ -66,7 +80,7 @@ link-world
 configuration + evidence ← operational commands
 ```
 
-The observation/control slice does not depend on the Baseline wire implementation. The wire/transport slice does not depend on host observation, SQLite, or the Web console.
+The observation/client slice does not depend on the Baseline wire implementation. The wire/transport experiment does not depend on host observation, SQLite, the Web console, or `link-world`.
 
 ## Deterministic Network World
 
@@ -151,4 +165,4 @@ cargo run -p link-probe -- run \
   --output artifacts/baseline/reachability.ndjson
 ```
 
-See [`docs/charter.md`](docs/charter.md), [`docs/capability-gaps.md`](docs/capability-gaps.md), [`docs/repository-boundary.md`](docs/repository-boundary.md), [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).
+See [`docs/charter.md`](docs/charter.md), [`docs/capability-gaps.md`](docs/capability-gaps.md), [`docs/component-map.md`](docs/component-map.md), [`docs/repository-boundary.md`](docs/repository-boundary.md), [`docs/current-state.md`](docs/current-state.md), [`docs/architecture.md`](docs/architecture.md), and [`docs/operations.md`](docs/operations.md).
