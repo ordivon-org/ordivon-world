@@ -93,6 +93,13 @@ export interface LocalExperimentResult {
   readonly completedAt: Date;
 }
 
+export interface LocalNodeInspection {
+  readonly identity: EdgeNodeIdentity;
+  readonly lifecycle: EdgeLifecycleSnapshot;
+  readonly planes: EdgePlaneBindings;
+  readonly highest_lease_generation: number;
+}
+
 export interface LocalExperimentExecutor {
   prepare(rootfs: string, entrypoint: Uint8Array): Promise<void>;
   run(rootfs: string, budget: {
@@ -205,6 +212,16 @@ export class LocalDisposableNodeAdapter {
 
   planes(nodeId: string): EdgePlaneBindings {
     return { ...this.#record(nodeId).planes };
+  }
+
+  inspect(nodeId: string): LocalNodeInspection {
+    const record = this.#record(nodeId);
+    return {
+      identity: record.identity,
+      lifecycle: record.lifecycle.snapshot(),
+      planes: { ...record.planes },
+      highest_lease_generation: record.highestLeaseGeneration
+    };
   }
 
   async provision(
