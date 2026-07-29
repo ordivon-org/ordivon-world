@@ -1,64 +1,51 @@
-# Capability gaps
+# Research Gaps and Evidence Frontier
 
-The repository now contains a mature narrow Cloudflare production profile, a
-provider-neutral Node contract, a narrow research-local unshare
-conformance/reference body, and a component-owned Security control session. It
-is not yet a heterogeneous or long-lived distributed execution fabric.
+The main gaps are no longer a wishlist for more body types. They are missing
+evidence for the revised Task-to-external-execution responsibility.
 
-## P0 status
+## Current verified capability
 
-| Capability | Current state |
+- mature Cloudflare Fetch/Browser/R2 production provider;
+- authoritative pending/committed request state;
+- response-loss and ambiguous-write reconciliation;
+- generation fencing and cleanup;
+- exact provider policy and version binding;
+- private Artifact export and Receipt replay;
+- narrow local body lifecycle, evidence, reconstruction, and residual
+  conformance experiment;
+- Security lifecycle integration.
+
+## Main unverified questions
+
+| Question | Current state |
 |---|---|
-| Provider-neutral Node identity, membership, policy, capability, and resource contract | implemented |
-| Provision, admit, start, freeze, retire, and destroy semantics | implemented |
-| Snapshot and restore contract | defined; local provider execution pending |
-| Production, research, and adversarial-range authority profiles | separated; adversarial provider pending |
-| Disposable provider beyond Cloudflare Worker | narrow lifecycle/isolation conformance reference implemented as local unshare/chroot; not a general container Provider |
-| Management, experiment, observation, and evidence plane separation | implemented relative to evaluated body; same host account remains trusted |
-| Identity-bound one-way evidence export | implemented |
-| Lease generation and uncertain provision/destroy reconciliation | implemented |
-| Reconstruction receipts | implemented |
-| Stable Security control surface | implemented as long-lived JSONL session |
-| Exact package-manager toolchain | pinned to pnpm 10.33.2 |
-| Cross-process single-authority locking | pending |
-| Persistent Link-managed network attachment | pending; P0-D design boundary |
-| Hard cgroup CPU/process enforcement | pending |
-| Long-running body freeze/resume | pending |
+| Can one Host Effect bind exactly to the Cloudflare provider and replay after Host restart? | not demonstrated end to end |
+| Which Placement Requirement fields generalize across Web research and software execution? | unknown |
+| Does an external Binding layer outperform direct provider integration? | not compared |
+| Can one Task continue across two different external providers using minimum sufficient state? | not demonstrated |
+| Can parallel external bodies join without confused provenance? | not demonstrated |
+| Does residual closure materially improve recovery or safety? | not measured |
+| Is persistent Agent presence distinct from Task, participant, service, and provider identity? | unproven |
 
-The JSONL control session remains long-lived intentionally. Lease tokens are
-held only in memory and are invalidated on manager restart. Turning it into a
-one-shot CLI would require persisting bearer authority or weakening the lease
-boundary.
+## Research order
 
-The current body remains one digest-pinned Bash fixture executed once inside a
-fresh namespace/chroot. It is sufficient for lifecycle and evidence
-composition, not for long-horizon Agent execution.
+1. Host-to-Cloudflare Effect binding and fault injection.
+2. Two-workload Placement Requirement field derivation.
+3. Direct integration versus Edge Binding comparison.
+4. Cross-provider continuation benchmark.
+5. Multi-body branch/join and residual closure.
+6. Persistent presence falsification.
 
-## Direction beyond Phase 0
+## Deferred classical mechanisms
 
-The following items are architectural direction, not authorized Phase 0
-implementation work:
+The following are not Edge gaps and must remain supplied by mature systems:
 
-- external OCI/runc-backed Providers or verified source Providers;
-- persistent container or microVM bodies;
-- browser, VM, service-emulator, sensor, and decoy Node classes;
-- checkpoint/restore plus partial-world recovery;
-- controlled dependency and Tool installation in research profiles;
-- heterogeneous cloud and user-owned provider adapters;
-- resource accounting and failure-domain placement;
-- WORM or independently administered evidence storage.
+- general container, VM, Sandbox, browser, device, scheduler, and cloud control
+  planes;
+- image management, package installation, writable workspace management, daemon
+  supervision, multi-tenancy, and generic checkpoint/restore;
+- network stack, VPN, CNI, proxy, service mesh, transport, and route control.
 
-## P2 — frontier work
-
-- multi-region and cross-provider placement;
-- accelerator and specialized hardware bodies;
-- long-lived migratable Agent bodies;
-- physical or IoT interfaces in isolated facilities.
-
-A future persistent Provider may expose a generation-bound attachment handle
-that Ordivon Link consumes without acquiring Sandbox lifecycle authority. That
-handle and Provider are not implemented in Phase 0.
-
-The local-unshare reference provider must not be expanded to reach these
-directions. Edge will not grow it into a container runtime, VM orchestrator,
-network stack, scheduler, or workspace runtime.
+The local-unshare reference provider must remain narrow. A future real provider
+may adapt established external systems only when required by the research
+workload.

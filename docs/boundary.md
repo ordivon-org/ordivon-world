@@ -1,35 +1,60 @@
-# Repository boundary
+# Repository Boundary
 
 A component belongs in Ordivon Edge when its primary question is:
 
-> Through which remote body should an Agent exist and act, under which capability and consequence profile, and with what lifecycle and evidence?
+> How does an open Task bind one Attempt or Effect to mature external execution,
+> preserve the exact remote outcome and provenance, and continue when the body
+> or provider changes?
 
-Move it to Ordivon Link when it observes or changes local networking, chooses paths, or implements local transport clients.
+## Edge candidate responsibilities
 
-Edge may define body/Sandbox semantics for disposable browsers, containers,
-virtual machines, service emulators, sensors, decoys, and remote Nodes through
-bounded Provider adapters. The current Cloudflare Worker remains the
-operationally critical production Provider, not the whole repository.
+- Placement Requirement and provider capability observations;
+- exact Placement Binding to provider execution identity;
+- remote outcome reconciliation before redispatch;
+- Artifact and Observation provenance from temporary bodies;
+- semantic reconstruction and body/provider replacement evidence;
+- residual closure after external execution ends.
 
-Edge does not build a container runtime, VM orchestrator, network stack,
-scheduler, or workspace runtime. local-unshare is a narrow research
-conformance/reference Provider, not the seed of a general container Runtime.
-OCI/runc-backed Providers remain future direction only.
+## Mature mechanisms Edge reuses
 
-Move it to Ordivon Runtime when it owns a trusted supervisor/process, local
-Task, workspace, persistence, or recovery lifecycle. Runtime supervision of a
-trusted Edge process does not transfer Edge body/Sandbox semantics.
+- browser and automation providers;
+- Sandboxes, containers, VMs, serverless isolates, devices, and cloud APIs;
+- schedulers, snapshots, filesystems, resource controls, and process lifecycle;
+- provider-native authentication, operation polling, quotas, and release
+  mechanisms.
 
-Ordivon Link may consume a future generation-bound attachment handle. Link
-does not own or advance the attached Sandbox lifecycle, and Phase 0 does not
-implement that handle.
+Edge adapters may invoke these mechanisms. They must not reimplement them.
 
-Forbidden Edge dependencies include:
+## Foreign ownership
 
-- VPN-provider detection;
-- host route or DNS inspection;
-- TUN integration;
-- path measurement and selection;
-- local Web status for the user's workstation;
-- Ordivon Runtime process supervision;
-- public site presentation.
+Move or keep responsibility elsewhere when the primary question is:
+
+- **Host / semantic Kernel:** Goal, Task, Attempt, Effect, Dispatch, verification,
+  next action, and overall recovery;
+- **Runtime:** trusted-local Workspace, Job, process, Artifact, cancellation, and
+  recovery;
+- **Link:** logical communication relationships, path, route, endpoint,
+  transport, and communication identity;
+- **Security/domain system:** consequence authorization and final validity;
+- **Provider:** physical body, image, Sandbox generation, scheduler, snapshot,
+  and native lifecycle.
+
+## Current Node vocabulary
+
+The current Node contract is valid for the existing body/lifecycle experiment.
+It must not be generalized by documentation or naming into a universal Agent
+presence, implemented Sandbox abstraction, or permanent long-term identity.
+
+A future persistent presence object requires a real callback, session, device,
+or asynchronous-role workload that fails without it and cannot be represented
+as Task, participant, service, or provider identity.
+
+## Forbidden dependencies and expansion
+
+- VPN, route, DNS, WARP, TUN, path selection, or transport clients;
+- a self-developed container runtime, VM orchestrator, scheduler, browser, or
+  device platform;
+- Runtime Task, Workspace, or Job lifecycle;
+- automatic provider routing before requirement fields and comparison value are
+  empirically established;
+- a cross-project global World or Agent ID.

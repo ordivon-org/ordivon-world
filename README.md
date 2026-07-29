@@ -1,137 +1,148 @@
 # Ordivon Edge
 
-Ordivon Edge is the distributed external presence and execution fabric of the
-Ordivon stack. Phase 0 contains a mature Cloudflare Worker production provider,
-provider-neutral Node contracts and lifecycle, a trusted research control
-session, and a narrow local-unshare conformance/reference provider.
+Ordivon Edge is the Task-to-external-execution continuity overlay of the
+Ordivon stack. It lets open Tasks obtain and bind mature external execution
+providers, reconcile uncertain remote outcomes, export durable Artifacts and
+evidence, and continue when a browser, Sandbox, machine, region, or provider is
+replaced.
+
+Edge does **not** build a browser, Sandbox, container runtime, VM orchestrator,
+scheduler, device platform, or cloud control plane. Those classical systems
+remain authoritative for physical execution and native lifecycle.
 
 ```text
-Ordivon Runtime / Agent
-        │ signed bounded request
-        ▼
-Ordivon Edge
-  ├─ allowlisted external fetch
-  ├─ bounded Browser Run snapshots
-  ├─ private versioned R2 artifacts
-  ├─ fenced execution leases and transactional receipts
-  └─ versioned release, smoke, promotion, and rollback
+Host Goal / Task / Attempt / Effect
+                │
+                ▼
+ placement requirement and exact binding
+                │
+                ▼
+ mature external provider
+ Browser / Fetch / Sandbox / VM / function / device
+                │
+                ▼
+ provider execution identity, Receipt, Artifact, residual evidence
+                │
+                ▼
+        Host continues the Task
 ```
 
-Cloudflare production remains the repository's operationally critical
-production plane. It is no longer accurate to describe it as the only
-implemented part of this repository.
+## Current repository truth
 
-## Phase 0 repository shape
+The repository currently contains three different classes of result:
 
-- **Agent-native core** — Node identity/lifecycle, leases, evidence, and
-  reconstruction contracts;
-- **supervisor/control** — `ResearchNodeControlSession` and the long-lived JSONL
-  session;
-- **providers** — Cloudflare Worker production and local-unshare
-  research/conformance;
-- **ops** — the Cloudflare client, release, GC, and lifecycle scripts.
+1. **Production provider** — a mature Cloudflare Worker execution plane for
+   bounded external Fetch, Browser Run, private R2 Artifacts, transactional
+   request state, release, rollback, and operations.
+2. **Remote-effect reliability mechanisms** — stable Request IDs,
+   pending/committed state, generation fencing, ambiguous-write reread, Receipt
+   replay, policy/version binding, and generation-scoped cleanup.
+3. **Body/lifecycle research substrate** — provider-neutral Node contracts,
+   deterministic lifecycle, a narrow local `unshare` body, Security control,
+   evidence export, reconstruction, and residual classification.
 
-See [`docs/component-map.md`](docs/component-map.md) for the key files,
-authority, and Phase 0 disposition of each area.
+The third class is a research hypothesis and conformance substrate. It is no
+longer described as a proven long-term Agent-native Node core. Current code does
+not implement Task-level Placement Requirements, candidate comparison,
+Host-level Placement Bindings, cross-provider continuation, or an automatic
+provider router.
 
-## Frozen terminology
+See [`docs/component-map.md`](docs/component-map.md) and
+[`docs/research-route.md`](docs/research-route.md).
 
-- A **Node** is the long-lived semantic identity of an Agent presence.
-- A **Sandbox** is an isolated instance of a Node on one Provider, including
-  its generation.
-- An **Execution** is one bounded action inside a Sandbox.
+## Active route
 
-The current code does not contain an independent `Sandbox` type. The existing
-Node identity input, provider body, lifecycle record, and generation fields
-cover parts of the model, but must not be presented as a completed Sandbox
-abstraction.
+```text
+E0 preserve the Cloudflare production provider
+→ E1 bind one real Host Effect to exact provider execution and Receipt
+→ E2 derive Placement Requirement from two real workloads
+→ E3 prove continuation across two external providers
+→ E4 test heterogeneous multi-body branch and join
+→ E5 revisit persistent Agent presence only if real workloads require it
+```
 
-## Project horizon
+The cross-project research source is
+[`EDGE-CHARTER-003`](https://github.com/zycxfyh/ordivon-computing/blob/main/research/charters/EDGE-CHARTER-003.md).
 
-Edge is not limited to Cloudflare Fetch and Browser Run. Its full subject is the identity, lifecycle, capability, evidence, and recovery of remote Agent bodies across browsers, containers, virtual machines, service emulators, sensors, decoys, and user-controlled infrastructure.
+## Provisional research vocabulary
 
-Production, research, and adversarial-range profiles are distinct. A range body may be internally powerful while its external consequence scope remains independently constrained and observed.
+- **Placement Requirement** — what one Attempt or Effect needs from an external
+  execution environment.
+- **Provider Capability Observation** — versioned and time-bounded facts about
+  one provider's available capabilities and limits.
+- **Placement Binding** — the exact relation from Task/Attempt/Effect/Dispatch
+  references to one provider, body or Sandbox generation, policy, capability,
+  and provider execution identity.
+- **Provider Execution** — the provider-native physical execution object.
+- **Artifact / Observation provenance** — durable identity and origin of results
+  exported from a temporary body.
+- **Semantic reconstruction** — the minimum sufficient declared inputs needed to
+  continue on another body.
+- **Residual evidence** — what remains after the body is retired or destroyed.
 
-That horizon is realized through bounded Provider adapters, not by building a
-container runtime, VM orchestrator, network stack, scheduler, or workspace
-runtime in Edge. OCI/runc-backed providers are a future direction only; Phase 0
-does not implement them.
+These are research candidates, not frozen public schemas.
 
-See [`docs/charter.md`](docs/charter.md) and [`docs/capability-gaps.md`](docs/capability-gaps.md).
-
-The provider-neutral identity/lifecycle contract and the rootless disposable
-research conformance profile are documented in
-[`docs/node-contract.md`](docs/node-contract.md). The local provider is a
-separate library adapter and does not add Worker routes, bindings, or release
-behavior. Its scope is frozen as a narrow reference implementation; it is not
-the seed of a self-developed container Runtime.
-
-A component-owned long-lived JSONL control session exposes the research Node to
-Ordivon Security without persisting lease tokens or copying Edge lifecycle
-state. See [`docs/research-node-control-v0.md`](docs/research-node-control-v0.md).
+The current code's `EdgeNodeIdentity`, lifecycle, body, and generation terms
+remain valid descriptions of the existing experiment. They must not be treated
+as proof that one permanent Agent Node identity is the correct long-term center.
 
 ## Strict boundary
 
-Ordivon Edge owns Node identity and authoritative lifecycle, body/Sandbox
-semantics, leases, execution evidence, reconstruction, and Provider contracts.
-It also owns the Cloudflare Worker production execution plane: external Fetch
-and Browser Run policy, private R2 Artifacts, budgets, receipts, and release
-control.
+Edge may own Task-to-external-execution placement, exact provider binding,
+remote outcome reconciliation, external Artifact provenance, semantic
+reconstruction, and residual closure.
 
-Ordivon Runtime supervises trusted supervisor/control processes and owns local
-Agent Tasks, workspaces, process supervision, and recovery. It does not own
-Edge body/Sandbox lifecycle. Ordivon Link owns connectivity, but may only
-consume a future generation-bound attachment handle; it does not own or advance
-Node or Sandbox lifecycle. That handle is not implemented in Phase 0.
+Edge references but does not redefine Goal, Task, Attempt, Effect, Dispatch,
+Claim, Verification, or Fact. Host and the semantic Kernel own open-work and
+Effect history. Runtime owns trusted-local Workspace, Job, process, and recovery
+lifecycle. Link owns Task-conditioned connectivity, path, and communication
+identity. Providers own physical bodies and native lifecycle.
 
-Edge does **not** own local route, VPN, DNS, WARP, path measurement, transport
-selection, QUIC relay clients, or failover. It also does not implement a
-container runtime, VM orchestrator, network stack, scheduler, or workspace
-runtime.
+Forbidden expansions include:
+
+- a self-developed container runtime, VM manager, scheduler, browser, or device
+  platform;
+- local route, VPN, DNS, WARP, TUN, path-selection, or transport-client code;
+- automatic provider routing before two real workloads establish a stable
+  requirement model;
+- relabeling the current Node contract as an implemented universal Sandbox or
+  permanent Agent presence.
 
 ## Cloudflare production execution plane
 
-- HMAC-SHA256 service authentication with a five-minute timestamp window;
-- signed method, path, query, Request ID, timestamp, and body digest;
-- one authoritative `requests/v2` state object per operation;
-- queryable pending receipts and conditionally committed final receipts;
-- generation-scoped execution leases and stale-executor fencing;
-- Artifact cleanup when a result loses its lease or cannot commit;
-- policy fingerprint, capability, Worker version, and lease generation in every new Receipt;
-- deterministic receipt replay with an explicit 90-day idempotency window;
-- Cloudflare-native per-key Fetch and Browser rate limits;
-- structured operation logs and Worker traces;
-- HTTPS-only external Fetch with bounded redirects, size, and time;
-- same-origin Browser Run snapshots with PNG, rendered HTML, and manifest artifacts;
-- private, generation-versioned R2 Artifact paths retained longer than replayable Receipts;
-- version upload, 0% traffic smoke, version override validation, promotion, and rollback receipts;
-- Workers.dev, preview URLs, and R2 public access disabled;
-- machine-enforced repository boundary checks.
+The production provider currently supplies:
 
-## Research Node control
+- HMAC-SHA256 service authentication and bounded signed requests;
+- one authoritative `requests/v2` state object per operation;
+- queryable pending state and conditionally committed final Receipts;
+- generation-scoped execution leases and stale-executor fencing;
+- ambiguous-write recovery by rereading authoritative state;
+- deterministic Receipt replay and generation-scoped Artifact cleanup;
+- bounded HTTPS Fetch and same-origin Browser Run snapshots;
+- private PNG, rendered HTML, manifest, and body Artifacts in R2;
+- policy fingerprint, capability, Worker version, and lease generation binding;
+- release upload, zero-traffic smoke, promotion, rollback, GC, and lifecycle
+  operations.
+
+## Research body control
 
 ```bash
 corepack enable
 pnpm node-control -- --root /private/edge-provider-root
 ```
 
-The process accepts bounded JSONL `declare`, `snapshot`, `execute`, `reconcile`,
-and `residual` requests. It is not a production HTTP API and must remain under
-the trusted research management boundary. It supervises the narrow local
-conformance provider; it does not establish a general Sandbox service or a
-second Runtime.
+The JSONL session exposes the narrow local conformance body for Security
+experiments. It is not a production Sandbox API, scheduler, workspace manager,
+or second Runtime.
 
 ## Verification
-
-The repository pins `pnpm@10.33.2`; local and CI entry points use the same major
-version and build-script policy.
 
 ```bash
 pnpm install --frozen-lockfile
 pnpm run ci
 ```
 
-## Local client
+## Local production client
 
 ```bash
 scripts/install-edge-operations
@@ -151,5 +162,3 @@ python3 scripts/ordivon_edge_release.py rollback
 scripts/configure-r2-lifecycle
 python3 scripts/ordivon_edge_gc.py --dry-run
 ```
-
-See [`docs/component-map.md`](docs/component-map.md), [`docs/charter.md`](docs/charter.md), [`docs/capability-gaps.md`](docs/capability-gaps.md), [`docs/reliability.md`](docs/reliability.md), [`docs/release.md`](docs/release.md), [`docs/operations.md`](docs/operations.md), [`docs/architecture.md`](docs/architecture.md), [`docs/boundary.md`](docs/boundary.md), and [`docs/security.md`](docs/security.md).

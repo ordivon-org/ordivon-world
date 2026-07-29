@@ -1,5 +1,7 @@
 # Provider-neutral Edge Node contract
 
+
+> **Research-status note:** this document specifies the current body/lifecycle experiment. Under the revised Edge route, its Node identity and lifecycle are not claimed as the permanent Agent-native center. See [`research-route.md`](research-route.md).
 Status: implemented contract plus one narrow research conformance/reference
 provider
 
