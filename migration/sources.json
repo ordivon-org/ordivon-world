@@ -6,13 +6,25 @@
       "repository": "https://github.com/zycxfyh/ordivon-edge",
       "mainRevision": "409a21ea3964c0c2206df7fb8dafc3fc947ab8fa",
       "destination": "providers/cloudflare",
-      "disposition": "retired-after-verified-migration"
+      "disposition": "retired-after-verified-migration",
+      "sourceIssue": "https://github.com/zycxfyh/ordivon-edge/issues/24",
+      "replacementIssue": "https://github.com/zycxfyh/ordivon-world/issues/1",
+      "repositoryDisposition": "deleted-after-history-import-and-verification",
+      "deletedAt": "2026-07-30"
     },
     {
       "repository": "https://github.com/zycxfyh/ordivon-link",
       "mainRevision": "906f6268a27d4708eb24f10cae0da444309f2c9f",
       "destination": "modules/network-observation",
-      "disposition": "retired-after-verified-migration"
+      "disposition": "retired-after-verified-migration",
+      "sourceIssue": "https://github.com/zycxfyh/ordivon-link/issues/18",
+      "replacementIssue": "https://github.com/zycxfyh/ordivon-world/issues/1",
+      "repositoryDisposition": "deleted-after-history-import-and-verification",
+      "deletedAt": "2026-07-30"
     }
-  ]
+  ],
+  "completedAt": "2026-07-30",
+  "replacementRepository": "https://github.com/zycxfyh/ordivon-world",
+  "researchIssue": "https://github.com/zycxfyh/ordivon-computing/issues/78",
+  "firstProductExperiment": "https://github.com/zycxfyh/ordivon-world/issues/1"
 }
