@@ -1,5 +1,7 @@
 # Ordivon Link
 
+
+> **Migration note:** this is the inherited network-observation and research module of Ordivon World. Its Link terminology is retained where required for operational compatibility and historical evidence; it no longer defines a separate top-level project.
 Ordivon Link is the Task-to-connectivity and evidence-continuity overlay of the
 Ordivon stack. It lets open Tasks express logical communication needs, bind them
 to mature network and identity mechanisms, verify the realized relation,

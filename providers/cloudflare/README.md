@@ -1,5 +1,7 @@
 # Ordivon Edge
 
+
+> **Migration note:** this is the inherited Cloudflare provider module of Ordivon World. Its Edge terminology is retained where required for operational compatibility and historical evidence; it no longer defines a separate top-level project.
 Ordivon Edge is the Task-to-external-execution continuity overlay of the
 Ordivon stack. It lets open Tasks obtain and bind mature external execution
 providers, reconcile uncertain remote outcomes, export durable Artifacts and
