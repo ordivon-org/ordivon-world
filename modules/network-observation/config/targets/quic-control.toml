@@ -1,0 +1,9 @@
+schema_version = 1
+
+# A control target known to negotiate HTTP/3 in the current development environment.
+# Success proves that at least one UDP/QUIC path worked at that time; failure alone does not prove UDP blocking.
+[[targets]]
+id = "cloudflare-quic-control"
+url = "https://cloudflare.com/"
+enabled = true
+protocols = ["quic"]

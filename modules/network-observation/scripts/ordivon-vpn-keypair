@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROGRAM="ordivon-vpn-keypair"
+SECRET_DIR="${ORDIVON_VPN_SECRET_DIR:-/root/.config/ordivon/secrets/surfshark}"
+TEMPLATE_DIR="${ORDIVON_VPN_TEMPLATE_DIR:-$SECRET_DIR/wireguard}"
+RENDERED_DIR="${ORDIVON_VPN_RENDERED_DIR:-$SECRET_DIR/rendered}"
+BACKUP_DIR="${ORDIVON_VPN_BACKUP_DIR:-/root/backups/ordivon-link/surfshark-keypairs}"
+PRIVATE_PATH="$SECRET_DIR/ordivon-manual.private"
+PUBLIC_PATH="$SECRET_DIR/ordivon-manual.public"
+PUBLIC_FILE=""
+PRIVATE_FILE=""
+
+log() { printf '%s: %s\n' "$PROGRAM" "$*" >&2; }
+die() { log "$*"; exit 1; }
+cleanup_paths=()
+cleanup() {
+  local path
+  for path in "${cleanup_paths[@]:-}"; do
+    if [[ -n $path ]]; then
+      rm -rf -- "$path"
+    fi
+  done
+  return 0
+}
+trap cleanup EXIT
+
+usage() {
+  cat <<'EOF'
+Usage:
+  sudo ordivon-vpn-keypair
+  sudo ordivon-vpn-keypair --public-key-file PATH --private-key-file PATH
+
+Interactive mode displays the public-key prompt and hides private-key input.
+Keys are validated as one WireGuard pair before any existing configuration is
+changed. Key values are never printed.
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --public-key-file)
+      [[ $# -ge 2 ]] || die "--public-key-file requires a path"
+      PUBLIC_FILE=$2
+      shift 2
+      ;;
+    --private-key-file)
+      [[ $# -ge 2 ]] || die "--private-key-file requires a path"
+      PRIVATE_FILE=$2
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      die "unknown argument: $1"
+      ;;
+  esac
+done
+
+[[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root"
+for command in wg wg-quick python3 install stat sha256sum mktemp cp mv; do
+  command -v "$command" >/dev/null 2>&1 || die "required command not found: $command"
+done
+[[ -d $TEMPLATE_DIR ]] || die "template directory not found: $TEMPLATE_DIR"
+if command -v ip >/dev/null 2>&1 && ip netns list 2>/dev/null | awk '{print $1}' | grep -Fxq 'ordivon-vpn'; then
+  die "the ordivon-vpn namespace is active; run 'ordivon-vpn down' first"
+fi
+if [[ -n $PUBLIC_FILE || -n $PRIVATE_FILE ]]; then
+  [[ -n $PUBLIC_FILE && -n $PRIVATE_FILE ]] || die "both key-file options are required"
+  [[ -f $PUBLIC_FILE && ! -L $PUBLIC_FILE ]] || die "public-key file is missing or is a symlink"
+  [[ -f $PRIVATE_FILE && ! -L $PRIVATE_FILE ]] || die "private-key file is missing or is a symlink"
+else
+  [[ -t 0 && -t 1 ]] || die "interactive mode requires a terminal"
+fi
+
+input_dir=$(mktemp -d /run/ordivon-vpn-keypair-input.XXXXXX)
+chmod 700 "$input_dir"
+cleanup_paths+=("$input_dir")
+raw_public="$input_dir/public.raw"
+raw_private="$input_dir/private.raw"
+normalized_public="$input_dir/public"
+normalized_private="$input_dir/private"
+
+if [[ -n $PUBLIC_FILE ]]; then
+  install -m 600 "$PUBLIC_FILE" "$raw_public"
+  install -m 600 "$PRIVATE_FILE" "$raw_private"
+else
+  printf 'Surfshark public key: '
+  IFS= read -r public_value
+  printf 'Matching private key (hidden): '
+  IFS= read -r -s private_value
+  printf '\n'
+  printf '%s\n' "$public_value" > "$raw_public"
+  printf '%s\n' "$private_value" > "$raw_private"
+  chmod 600 "$raw_public" "$raw_private"
+  unset public_value private_value
+fi
+
+python3 - "$raw_public" "$raw_private" "$normalized_public" "$normalized_private" <<'PY'
+from __future__ import annotations
+
+import base64
+import pathlib
+import re
+import sys
+
+public_source, private_source, public_target, private_target = map(pathlib.Path, sys.argv[1:])
+
+
+def extract(path: pathlib.Path, expected: str) -> str:
+    text = path.read_text(encoding="utf-8-sig").strip()
+    values: list[str] = []
+    for line in text.splitlines() or [text]:
+        value = line.strip()
+        if "=" in value and not re.fullmatch(r"[A-Za-z0-9+/]{43}=", value):
+            label, possible = value.split("=", 1)
+            normalized_label = re.sub(r"[^a-z]", "", label.lower())
+            accepted = {"publickey"} if expected == "public" else {"privatekey"}
+            if normalized_label not in accepted:
+                continue
+            value = possible.strip()
+        if not re.fullmatch(r"[A-Za-z0-9+/]{43}=", value):
+            continue
+        try:
+            raw = base64.b64decode(value, validate=True)
+        except Exception:
+            continue
+        if len(raw) == 32:
+            values.append(value)
+    values = list(dict.fromkeys(values))
+    if len(values) != 1:
+        raise SystemExit(f"{expected} key input must contain exactly one valid WireGuard key")
+    return values[0]
+
+public = extract(public_source, "public")
+private = extract(private_source, "private")
+public_target.write_text(public + "\n")
+private_target.write_text(private + "\n")
+public_target.chmod(0o600)
+private_target.chmod(0o600)
+PY
+
+derived_public=$(wg pubkey < "$normalized_private") || die "private key is not accepted by WireGuard"
+supplied_public=$(tr -d '\r\n' < "$normalized_public")
+[[ $derived_public == "$supplied_public" ]] || die "public and private keys are not the same WireGuard key pair"
+unset derived_public supplied_public
+
+install -d -m 700 "$SECRET_DIR" "$BACKUP_DIR"
+staging=$(mktemp -d "$SECRET_DIR/.keypair-stage.XXXXXX")
+chmod 700 "$staging"
+cleanup_paths+=("$staging")
+staged_rendered="$staging/rendered"
+install -d -m 700 "$staged_rendered"
+install -m 600 "$normalized_private" "$staging/private"
+install -m 600 "$normalized_public" "$staging/public"
+
+python3 - "$normalized_private" "$TEMPLATE_DIR" "$staged_rendered" <<'PY'
+from __future__ import annotations
+
+import os
+import pathlib
+import re
+import sys
+import tempfile
+
+private_path = pathlib.Path(sys.argv[1])
+template_dir = pathlib.Path(sys.argv[2])
+rendered_dir = pathlib.Path(sys.argv[3])
+private = private_path.read_text().strip()
+templates = sorted(template_dir.glob("*.conf"))
+if not templates:
+    raise SystemExit("no WireGuard templates were found")
+pattern = re.compile(r"(?im)^(\s*PrivateKey\s*=\s*).*$")
+for source in templates:
+    if source.is_symlink() or not source.is_file():
+        raise SystemExit(f"unsafe template: {source.name}")
+    text = source.read_text(encoding="utf-8-sig")
+    matches = list(pattern.finditer(text))
+    if len(matches) != 1:
+        raise SystemExit(f"{source.name}: expected exactly one PrivateKey line")
+    rendered = pattern.sub(lambda match: match.group(1) + private, text, count=1)
+    if "<insert_your_private_key_here>" in rendered:
+        raise SystemExit(f"{source.name}: unresolved private-key placeholder")
+    target = rendered_dir / source.name
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{source.name}.", suffix=".tmp", dir=rendered_dir
+    )
+    try:
+        os.fchmod(descriptor, 0o600)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            stream.write(rendered)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary_name, target)
+        os.chmod(target, 0o600)
+    except Exception:
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        pathlib.Path(temporary_name).unlink(missing_ok=True)
+        raise
+PY
+
+rendered_count=0
+while IFS= read -r -d '' config; do
+  wg-quick strip "$config" >/dev/null || die "rendered configuration failed validation"
+  [[ $(stat -c %a "$config") == 600 ]] || die "rendered configuration has unsafe permissions"
+  rendered_count=$((rendered_count + 1))
+done < <(find "$staged_rendered" -maxdepth 1 -type f -name '*.conf' -print0)
+[[ $rendered_count -gt 0 ]] || die "no configurations were rendered"
+
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+backup="$BACKUP_DIR/$stamp"
+install -d -m 700 "$backup"
+[[ -f $PRIVATE_PATH ]] && cp -a "$PRIVATE_PATH" "$backup/private.previous"
+[[ -f $PUBLIC_PATH ]] && cp -a "$PUBLIC_PATH" "$backup/public.previous"
+[[ -d $RENDERED_DIR ]] && cp -a "$RENDERED_DIR" "$backup/rendered.previous"
+chmod -R go-rwx "$backup"
+
+rollback_dir="$staging/rollback"
+install -d -m 700 "$rollback_dir"
+[[ -f $PRIVATE_PATH ]] && cp -a "$PRIVATE_PATH" "$rollback_dir/private"
+[[ -f $PUBLIC_PATH ]] && cp -a "$PUBLIC_PATH" "$rollback_dir/public"
+[[ -d $RENDERED_DIR ]] && mv "$RENDERED_DIR" "$rollback_dir/rendered"
+transaction_committed=false
+rollback_transaction() {
+  if [[ $transaction_committed != true ]]; then
+    rm -f "$PRIVATE_PATH" "$PUBLIC_PATH"
+    [[ -f $rollback_dir/private ]] && mv "$rollback_dir/private" "$PRIVATE_PATH"
+    [[ -f $rollback_dir/public ]] && mv "$rollback_dir/public" "$PUBLIC_PATH"
+    rm -rf "$RENDERED_DIR"
+    [[ -d $rollback_dir/rendered ]] && mv "$rollback_dir/rendered" "$RENDERED_DIR"
+  fi
+}
+trap 'rollback_transaction; cleanup' EXIT
+
+install -m 600 "$staging/private" "$PRIVATE_PATH.new"
+install -m 600 "$staging/public" "$PUBLIC_PATH.new"
+mv "$staged_rendered" "$RENDERED_DIR"
+mv "$PRIVATE_PATH.new" "$PRIVATE_PATH"
+mv "$PUBLIC_PATH.new" "$PUBLIC_PATH"
+chmod 700 "$SECRET_DIR" "$RENDERED_DIR"
+chmod 600 "$PRIVATE_PATH" "$PUBLIC_PATH" "$RENDERED_DIR"/*.conf
+transaction_committed=true
+rm -rf "$rollback_dir"
+trap cleanup EXIT
+
+public_fingerprint=$(sha256sum "$PUBLIC_PATH" | awk '{print substr($1,1,12)}')
+python3 - "$rendered_count" "$public_fingerprint" "$backup" <<'PY'
+import json
+import sys
+
+count, fingerprint, backup = sys.argv[1:]
+print(json.dumps({
+    "installed": True,
+    "key_pair_verified": True,
+    "rendered_configs": int(count),
+    "public_key_fingerprint": fingerprint,
+    "backup_directory": backup,
+    "private_key_printed": False,
+}, indent=2))
+PY

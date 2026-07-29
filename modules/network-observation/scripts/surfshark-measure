@@ -1,0 +1,322 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROGRAM="surfshark-measure"
+OUT_ROOT="${SURFSHARK_MEASURE_DIR:-/root/backups/ordivon-link/surfshark-measure}"
+PROFILE="${SURFSHARK_MEASURE_PROFILE:-jp-tok}"
+CONFIG="${SURFSHARK_MEASURE_CONFIG:-/root/.config/ordivon/secrets/surfshark/rendered/${PROFILE}.conf}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  sudo surfshark-measure before
+  sudo surfshark-measure after
+  sudo surfshark-measure compare
+  sudo surfshark-measure show [before|after]
+
+Workflow:
+  1. Disconnect Surfshark completely, then run: sudo surfshark-measure before
+  2. Connect Surfshark in the Windows app, wait 15 seconds, then run: sudo surfshark-measure after
+  3. Run: sudo surfshark-measure compare
+
+The script never prints or stores WireGuard private/public key values.
+EOF
+}
+
+die() { printf '%s: %s\n' "$PROGRAM" "$*" >&2; exit 1; }
+require_root() { [[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root"; }
+
+safe_trace() {
+  local result=''
+  for _ in 1 2 3; do
+    result=$(curl -4fsS --connect-timeout 6 --max-time 15 https://www.cloudflare.com/cdn-cgi/trace 2>/dev/null || true)
+    if grep -q '^ip=' <<<"$result"; then
+      awk -F= '$1=="ip"||$1=="loc"||$1=="colo"||$1=="warp"{print}' <<<"$result"
+      return 0
+    fi
+    sleep 2
+  done
+  return 1
+}
+
+safe_ipify() {
+  curl -4fsS --connect-timeout 6 --max-time 15 https://api.ipify.org 2>/dev/null || true
+}
+
+collect() {
+  local label=$1
+  local dir="$OUT_ROOT/$label"
+  local tmp="$OUT_ROOT/.${label}.tmp.$$"
+  rm -rf "$tmp"
+  install -d -m 700 "$tmp"
+
+  date -u +%Y-%m-%dT%H:%M:%SZ > "$tmp/timestamp.txt"
+  uname -a > "$tmp/uname.txt"
+  ip -brief addr > "$tmp/ip-addr.txt"
+  ip -4 route show table all > "$tmp/ip-route-all.txt"
+  ip -4 rule show > "$tmp/ip-rule.txt"
+  ip neigh show > "$tmp/ip-neigh.txt"
+  iptables -S INPUT > "$tmp/iptables-input.txt" 2>/dev/null || true
+  iptables -S FORWARD > "$tmp/iptables-forward.txt" 2>/dev/null || true
+  iptables -S DOCKER-USER > "$tmp/iptables-docker-user.txt" 2>/dev/null || true
+  nft -a list ruleset > "$tmp/nft-ruleset.txt" 2>/dev/null || true
+  sysctl -a 2>/dev/null | grep -E '^net\.ipv4\.(ip_forward|conf\.(all|default|eth0|eth3)\.(rp_filter|arp_filter|arp_ignore|accept_local))' > "$tmp/sysctl-network.txt" || true
+  cp -a /etc/resolv.conf "$tmp/resolv.conf" 2>/dev/null || true
+  safe_trace > "$tmp/cloudflare-trace.txt" || true
+  safe_ipify > "$tmp/ipify.txt" || true
+
+  {
+    printf 'gateway_ping='; ping -c 2 -W 2 192.168.0.1 >/dev/null 2>&1 && echo ok || echo failed
+    printf 'cloudflare_ip_ping='; ping -c 2 -W 2 1.1.1.1 >/dev/null 2>&1 && echo ok || echo failed
+    printf 'dns_github='; getent ahostsv4 github.com >/dev/null 2>&1 && echo ok || echo failed
+    printf 'https_github='; curl -4fsSI --connect-timeout 8 --max-time 20 https://github.com/ >/dev/null 2>&1 && echo ok || echo failed
+    printf 'https_cloudflare='; curl -4fsSI --connect-timeout 8 --max-time 20 https://www.cloudflare.com/ >/dev/null 2>&1 && echo ok || echo failed
+  } > "$tmp/connectivity.txt"
+
+  local ps_script="/mnt/c/Users/16663/AppData/Local/Temp/surfshark-measure-${label}-$$.ps1"
+  local ps_script_windows
+  ps_script_windows=$(wslpath -w "$ps_script")
+  cat > "$ps_script" <<'PS'
+$ErrorActionPreference='Stop'
+$ProgressPreference='SilentlyContinue'
+$errors=@()
+try {
+  $services=@(Get-CimInstance Win32_Service | Where-Object {
+    $_.Name -match 'Surfshark|WireGuard|OpenVPN' -or $_.DisplayName -match 'Surfshark|WireGuard|OpenVPN'
+  } | Select-Object Name,DisplayName,State,StartMode,ProcessId,ExitCode,PathName)
+} catch {
+  $services=@()
+  $errors += ('services: ' + $_.Exception.Message)
+}
+try {
+  $adapters=@(Get-NetAdapter -IncludeHidden | Where-Object {
+    $_.Name -match 'Surfshark|WireGuard|OpenVPN|WLAN|Wi-Fi|WSL' -or
+    $_.InterfaceDescription -match 'Surfshark|WireGuard|OpenVPN|Hyper-V'
+  } | Select-Object Name,InterfaceDescription,Status,ifIndex,LinkSpeed)
+} catch {
+  $adapters=@()
+  $errors += ('adapters: ' + $_.Exception.Message)
+}
+try {
+  $routes=@(Get-NetRoute -AddressFamily IPv4 | Where-Object {
+    $_.DestinationPrefix -in @('0.0.0.0/0','0.0.0.0/1','128.0.0.0/1') -or
+    $_.InterfaceAlias -match 'Surfshark|WireGuard|OpenVPN|WLAN|Wi-Fi'
+  } | Select-Object DestinationPrefix,NextHop,InterfaceAlias,InterfaceIndex,RouteMetric,State,Protocol)
+} catch {
+  $routes=@()
+  $errors += ('routes: ' + $_.Exception.Message)
+}
+try {
+  $ipconfig=@(Get-NetIPConfiguration | Where-Object {
+    $_.InterfaceAlias -match 'Surfshark|WireGuard|OpenVPN|WLAN|Wi-Fi|WSL'
+  } | ForEach-Object {
+    [pscustomobject]@{
+      InterfaceAlias=$_.InterfaceAlias
+      InterfaceIndex=$_.InterfaceIndex
+      IPv4Address=($_.IPv4Address.IPAddress -join ',')
+      IPv4Gateway=($_.IPv4DefaultGateway.NextHop -join ',')
+      DNSServer=($_.DNSServer.ServerAddresses -join ',')
+    }
+  })
+} catch {
+  $ipconfig=@()
+  $errors += ('ip_configuration: ' + $_.Exception.Message)
+}
+[pscustomobject]@{
+  timestamp=(Get-Date).ToString('o')
+  services=$services
+  adapters=$adapters
+  routes=$routes
+  ip_configuration=$ipconfig
+  collection_errors=$errors
+} | ConvertTo-Json -Depth 6
+PS
+  chmod 600 "$ps_script"
+  set +e
+  /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe \
+    -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass \
+    -File "$ps_script_windows" > "$tmp/windows-state.json" 2> "$tmp/windows-state.stderr.txt"
+  local ps_rc=$?
+  set -e
+  rm -f "$ps_script"
+  if [[ $ps_rc -ne 0 ]]; then
+    sed -n '1,40p' "$tmp/windows-state.stderr.txt" >&2 || true
+    die "Windows state collection failed with exit code $ps_rc"
+  fi
+  [[ -s "$tmp/windows-state.json" ]] || die "Windows state collection returned an empty document"
+  python3 - "$tmp/windows-state.json" <<'PY'
+import json,sys
+with open(sys.argv[1],encoding='utf-8-sig') as stream:
+    value=json.load(stream)
+if not isinstance(value,dict):
+    raise SystemExit('Windows state document is not a JSON object')
+for key in ('services','adapters','routes','ip_configuration'):
+    if key not in value:
+        raise SystemExit(f'Windows state document is missing {key}')
+PY
+
+  if ! python3 - "$label" "$tmp/windows-state.json" <<'PY'
+import json,sys
+label,path=sys.argv[1:]
+value=json.load(open(path,encoding='utf-8-sig'))
+services={item.get('Name'):item.get('State') for item in value.get('services') or []}
+adapters={item.get('Name'):item.get('Status') for item in value.get('adapters') or []}
+wireguard_running=services.get('Surfshark WireGuard') == 'Running'
+adapter_up=adapters.get('SurfsharkWireGuard') == 'Up'
+active=wireguard_running or adapter_up
+if label == 'before' and active:
+    raise SystemExit('before sample rejected: Surfshark WireGuard is still active; disconnect it and wait until the adapter is no longer Up')
+if label == 'after' and not (wireguard_running and adapter_up):
+    raise SystemExit('after sample rejected: Surfshark WireGuard is not fully connected; connect it and wait until the service is Running and adapter is Up')
+PY
+  then
+    rm -rf "$tmp"
+    exit 3
+  fi
+
+  python3 - "$CONFIG" "$tmp/wireguard-profile.json" <<'PY'
+from pathlib import Path
+import json,re,sys
+source=Path(sys.argv[1]); target=Path(sys.argv[2])
+result={'profile_exists':source.exists()}
+if source.exists():
+    text=source.read_text(errors='strict')
+    endpoint=re.search(r'(?im)^\s*Endpoint\s*=\s*(.*?)\s*$',text)
+    address=re.search(r'(?im)^\s*Address\s*=\s*(.*?)\s*$',text)
+    allowed=re.search(r'(?im)^\s*AllowedIPs\s*=\s*(.*?)\s*$',text)
+    result.update({
+      'profile_name':source.stem,
+      'endpoint_port':int(endpoint.group(1).rsplit(':',1)[1]) if endpoint and ':' in endpoint.group(1) else None,
+      'has_address':bool(address),
+      'default_route_v4':bool(allowed and '0.0.0.0/0' in allowed.group(1)),
+      'default_route_v6':bool(allowed and '::/0' in allowed.group(1)),
+      'contains_private_key_line':bool(re.search(r'(?im)^\s*PrivateKey\s*=\s*\S+\s*$',text)),
+    })
+target.write_text(json.dumps(result,indent=2)+'\n')
+PY
+
+  rm -rf "$dir"
+  mv "$tmp" "$dir"
+  chmod -R go-rwx "$dir"
+  printf 'saved=%s\n' "$dir"
+  printf 'cloudflare_trace='; tr '\n' ' ' < "$dir/cloudflare-trace.txt"; printf '\n'
+  printf 'windows_surfshark='; python3 - "$dir/windows-state.json" <<'PY'
+import json,sys
+x=json.load(open(sys.argv[1],encoding='utf-8-sig'))
+services={s['Name']:s['State'] for s in x.get('services') or []}
+adapters={a['Name']:a['Status'] for a in x.get('adapters') or []}
+print({'Surfshark Service':services.get('Surfshark Service'),'Surfshark WireGuard':services.get('Surfshark WireGuard'),'SurfsharkWireGuard':adapters.get('SurfsharkWireGuard')})
+PY
+}
+
+compare() {
+  local before="$OUT_ROOT/before"
+  local after="$OUT_ROOT/after"
+  [[ -d $before && -d $after ]] || die "both before and after samples are required"
+  python3 - "$before" "$after" <<'PY'
+from pathlib import Path
+import json,re,sys
+before,after=map(Path,sys.argv[1:])
+
+def read(path):
+    return path.read_text(errors='replace') if path.exists() else ''
+
+def trace(path):
+    data={}
+    for line in read(path).splitlines():
+        if '=' in line:
+            k,v=line.split('=',1); data[k]=v
+    return data
+
+def windows(path):
+    try:return json.loads(read(path))
+    except Exception:return {}
+
+def services(data):
+    return {x.get('Name'):x.get('State') for x in data.get('services') or []}
+
+def adapters(data):
+    return {x.get('Name'):x.get('Status') for x in data.get('adapters') or []}
+
+def split_routes(data):
+    return sorted((r.get('DestinationPrefix'),r.get('InterfaceAlias')) for r in data.get('routes') or [] if r.get('DestinationPrefix') in {'0.0.0.0/1','128.0.0.0/1'})
+
+def connectivity(path):
+    out={}
+    for line in read(path).splitlines():
+        if '=' in line:
+            k,v=line.split('=',1); out[k]=v
+    return out
+
+bt,at=trace(before/'cloudflare-trace.txt'),trace(after/'cloudflare-trace.txt')
+bw,aw=windows(before/'windows-state.json'),windows(after/'windows-state.json')
+bs,ass=services(bw),services(aw)
+ba,aa=adapters(bw),adapters(aw)
+bc,ac=connectivity(before/'connectivity.txt'),connectivity(after/'connectivity.txt')
+result={
+  'public_egress':{
+    'before':{'ip':bt.get('ip'),'country':bt.get('loc'),'colo':bt.get('colo')},
+    'after':{'ip':at.get('ip'),'country':at.get('loc'),'colo':at.get('colo')},
+    'changed':bool(bt.get('ip') and at.get('ip') and bt.get('ip')!=at.get('ip')),
+  },
+  'surfshark':{
+    'service_before':bs.get('Surfshark Service'),
+    'service_after':ass.get('Surfshark Service'),
+    'wireguard_service_before':bs.get('Surfshark WireGuard'),
+    'wireguard_service_after':ass.get('Surfshark WireGuard'),
+    'adapter_before':ba.get('SurfsharkWireGuard'),
+    'adapter_after':aa.get('SurfsharkWireGuard'),
+    'split_routes_before':split_routes(bw),
+    'split_routes_after':split_routes(aw),
+  },
+  'connectivity_before':bc,
+  'connectivity_after':ac,
+  'wsl_route_diff_summary':{
+    'before_has_eth3_split_routes':bool(re.search(r'^(0\.0\.0\.0/1|128\.0\.0\.0/1) dev eth3',read(before/'ip-route-all.txt'),re.M)),
+    'after_has_eth3_split_routes':bool(re.search(r'^(0\.0\.0\.0/1|128\.0\.0\.0/1) dev eth3',read(after/'ip-route-all.txt'),re.M)),
+  },
+}
+# High-level diagnosis only from observed deltas.
+if result['surfshark']['wireguard_service_after']=='Running' and result['surfshark']['adapter_after']=='Up' and result['public_egress']['changed']:
+    diagnosis='Windows Surfshark connected and WSL traffic followed it.'
+elif result['surfshark']['wireguard_service_after']=='Running' and result['surfshark']['adapter_after']=='Up' and not result['public_egress']['changed']:
+    diagnosis='Surfshark reports connected, but WSL egress did not change; inspect route mirroring or stale adapter state.'
+elif result['surfshark']['wireguard_service_after']!='Running':
+    diagnosis='Surfshark WireGuard service did not reach Running state.'
+else:
+    diagnosis='State is mixed; inspect the saved route and service snapshots.'
+result['diagnosis']=diagnosis
+print(json.dumps(result,indent=2,ensure_ascii=False))
+PY
+}
+
+show_sample() {
+  local label=${1:-after}
+  local dir="$OUT_ROOT/$label"
+  [[ -d $dir ]] || die "sample not found: $label"
+  printf '=== %s / Cloudflare trace ===\n' "$label"
+  cat "$dir/cloudflare-trace.txt"
+  printf '=== %s / Connectivity ===\n' "$label"
+  cat "$dir/connectivity.txt"
+  printf '=== %s / Windows summary ===\n' "$label"
+  python3 - "$dir/windows-state.json" <<'PY'
+import json,sys
+x=json.load(open(sys.argv[1],encoding='utf-8-sig'))
+print(json.dumps({'services':x.get('services'),'adapters':x.get('adapters'),'routes':x.get('routes')},indent=2,ensure_ascii=False))
+PY
+  printf '=== %s / WSL routes ===\n' "$label"
+  cat "$dir/ip-route-all.txt"
+}
+
+main() {
+  require_root
+  case ${1:-} in
+    before|after) collect "$1" ;;
+    compare) compare ;;
+    show) show_sample "${2:-after}" ;;
+    -h|--help|help|'') usage ;;
+    *) usage >&2; exit 2 ;;
+  esac
+}
+
+main "$@"

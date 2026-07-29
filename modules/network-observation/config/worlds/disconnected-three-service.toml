@@ -1,0 +1,108 @@
+schema_version = 1
+name = "disconnected-three-service"
+
+[[trust_zones]]
+id = "frontend"
+
+[[trust_zones]]
+id = "application"
+
+[[trust_zones]]
+id = "data"
+
+[[subnets]]
+id = "frontend-net"
+cidr = "10.77.1.0/24"
+trust_zone = "frontend"
+
+[[subnets]]
+id = "application-net"
+cidr = "10.77.2.0/24"
+trust_zone = "application"
+
+[[subnets]]
+id = "data-net"
+cidr = "10.77.3.0/24"
+trust_zone = "data"
+
+[[nodes]]
+id = "gateway"
+subnet = "frontend-net"
+
+[[nodes.services]]
+id = "gateway-http"
+protocol = "tcp"
+fixture_address = "127.0.0.1:38101"
+
+[[nodes]]
+id = "worker"
+subnet = "application-net"
+
+[[nodes.services]]
+id = "worker-rpc"
+protocol = "tcp"
+fixture_address = "127.0.0.1:38102"
+
+[[nodes]]
+id = "database"
+subnet = "data-net"
+
+[[nodes.services]]
+id = "database-rpc"
+protocol = "tcp"
+fixture_address = "127.0.0.1:38103"
+
+[[links]]
+id = "gateway-worker"
+node_a = "gateway"
+node_b = "worker"
+
+[[links]]
+id = "worker-database"
+node_a = "worker"
+node_b = "database"
+
+[[communication_identities]]
+id = "gateway-identity"
+node = "gateway"
+kind = "service"
+service = "gateway-http"
+
+[[communication_identities]]
+id = "worker-identity"
+node = "worker"
+kind = "service"
+service = "worker-rpc"
+
+[[communication_identities]]
+id = "database-identity"
+node = "database"
+kind = "service"
+service = "database-rpc"
+
+[[routes]]
+id = "gateway-to-worker"
+source_subnet = "frontend-net"
+destination = "10.77.2.0/24"
+via_node = "gateway"
+
+[[routes]]
+id = "worker-to-database"
+source_subnet = "application-net"
+destination = "10.77.3.0/24"
+via_node = "worker"
+
+[[external_boundaries]]
+id = "public-internet"
+destination = "0.0.0.0/0"
+policy = "declared_deny"
+
+[[initial_mutations]]
+kind = "set_link_state"
+link_id = "gateway-worker"
+state = "partitioned"
+
+[[initial_mutations]]
+kind = "set_link_state"
+link_id = "worker-database"
+state = "partitioned"

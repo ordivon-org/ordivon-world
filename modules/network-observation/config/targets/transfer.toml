@@ -1,0 +1,9 @@
+schema_version = 1
+
+# A bounded object used for transfer and sustained-response observations.
+# The endpoint is an experimental measurement dependency, not product infrastructure.
+[[targets]]
+id = "cloudflare-10mb"
+url = "https://speed.cloudflare.com/__down?bytes=10485760"
+enabled = true
+protocols = ["http_tls", "quic"]

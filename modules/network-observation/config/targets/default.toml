@@ -1,0 +1,61 @@
+schema_version = 1
+
+[[targets]]
+id = "github-web"
+url = "https://github.com/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "github-api"
+url = "https://api.github.com/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "openai-web"
+url = "https://chatgpt.com/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "openai-api"
+url = "https://api.openai.com/v1/models"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "cloudflare-api"
+url = "https://api.cloudflare.com/client/v4/user/tokens/verify"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "docker-registry"
+url = "https://registry-1.docker.io/v2/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "npm-registry"
+url = "https://registry.npmjs.org/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "pypi"
+url = "https://pypi.org/simple/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "crates-io"
+url = "https://crates.io/"
+enabled = true
+protocols = ["http_tls", "quic"]
+
+[[targets]]
+id = "go-proxy"
+url = "https://proxy.golang.org/"
+enabled = true
+protocols = ["http_tls", "quic"]
