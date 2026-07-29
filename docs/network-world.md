@@ -1,5 +1,7 @@
 # Deterministic Network World v1
 
+
+> **Research-status note:** `link-world` is a deterministic network-condition laboratory under the revised Link route, not a proven permanent Agent-native network core or production data plane. See [`research-route.md`](research-route.md).
 `link-world` is the first executable range-profile slice. It is independent from the local observation chain and the QUIC transport chain.
 
 ## Manifest and identity

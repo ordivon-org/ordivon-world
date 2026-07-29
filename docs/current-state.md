@@ -1,5 +1,7 @@
 # Current state
 
+
+> **Route-status note:** the capabilities below remain factual implementation results. Their long-term classification has changed: observation tools are operational inputs, while Network World and Baseline remain research/reference slices.
 ## Implemented
 
 - stable models for targets, transports, observations, route decisions, snapshots, and events;

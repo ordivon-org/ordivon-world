@@ -1,58 +1,52 @@
-# Capability gaps
+# Research Gaps and Evidence Frontier
 
-The repository now contains a deterministic Network World, a component-owned
-Security lifecycle port, local observation, controlled WireGuard egress, and a
-reference QUIC transport. It is not yet a packet-isolated adversarial network
-fabric.
+The main gaps are no longer a wishlist for a larger packet-isolated network
+fabric. They are missing evidence for the revised Task-to-connectivity and
+evidence-continuity responsibility.
 
-## P0 status
+## Current verified capability
 
-| Capability | Current state |
+- stable local path/service observation models;
+- bounded reachability, transfer, and sustained-response probes;
+- sanitized reduced history and loopback read-only console;
+- explicit root-only per-command WireGuard namespace operation;
+- provider-specific Surfshark measurement and profile validation;
+- bounded QUIC/TLS reference transport;
+- deterministic Network World state, modeled mutations, event chain, actor view,
+  lifecycle, loopback fixture, Security port, reconciliation, reconstruction,
+  and residual classification.
+
+## Main unverified questions
+
+| Question | Current state |
 |---|---|
-| Typed Network World manifest | implemented |
-| Deterministic create, inspect, freeze, reset, and destroy | implemented |
-| Append-only independent observer and actor-safe projection | implemented |
-| Explicit egress declaration and separately ingested evidence | implemented |
-| Synthetic identity rotation, revocation, and reset | implemented |
-| Versioned Security lifecycle surface | implemented as `link-world-security` |
-| Response-loss reconciliation without duplicate reset/destroy | implemented |
-| Fresh-root reconstruction and residual receipts | implemented |
-| Live loopback service reachability | implemented |
-| Packet-level partitions, latency, loss, routes, and DNS | pending |
-| Persistent Edge Node `NetworkAttachment` | pending; P0-D terminology boundary only, with no Schema or backend |
-| Production OS-account separation for observer authority | pending |
+| Can versioned, expiring Link Observations improve Host Context and decisions? | not demonstrated |
+| Which Connectivity Requirement fields generalize across Web research and Agent review? | unknown |
+| Does a Connectivity Binding outperform direct Host/network integration? | not compared |
+| How should path changes invalidate Artifacts, Claims, and permissions? | undefined |
+| Can uncertain delivery/reply reconcile before retransmission? | not demonstrated |
+| Can relation continuity survive endpoint, identity, and participant replacement? | not demonstrated |
+| Does Network World add value above topology configuration, traces, and mature data planes? | unproven |
 
-`link-world-security` exposes only snapshot, execute, reconcile, and residual
-operations over the existing Link controller. It retains component-side
-operation journals so a lost reset response can be proven by the exact observer
-revision instead of dispatching a second reset.
+## Research order
 
-The executable effect surface remains deliberately narrow. The opt-in loopback
-fixture controls TCP service reachability. Link state, latency/loss, routes, and
-DNS remain deterministic modeled state and events. Declared Internet denial is
-not packet-containment proof.
+1. Host-consumable versioned path observations.
+2. Two-workload Connectivity Requirement field derivation.
+3. Direct/VPN/Edge path-conditioned evidence experiment.
+4. Direct integration versus Link Binding comparison.
+5. Uncertain delivery, identity rotation, and participant handoff.
+6. Network World deletion and strong-backend comparison.
 
-P0-D ownership terms are frozen in [`component-map.md`](component-map.md).
-They do not specify a serialized attachment contract or claim an implemented
-data-plane backend.
+## Deferred classical mechanisms
 
-## P1 — full-spectrum network behavior
+The following are not Link gaps and must remain supplied by mature systems:
 
-- persistent namespace, veth, bridge, route, DNS, and `tc netem` data plane;
-- dynamic topology and moving trust boundaries;
-- Agent communication graph and message provenance;
-- deception nodes, sinkholes, mirrors, and identity emulation;
-- repeatable traffic capture and replay;
-- mature transport and mediation adapters;
-- multi-host range federation and controller-failure recovery.
+- general VPN, proxy, CNI, service mesh, DNS, PKI, transport, cryptography,
+  routing, firewall, load-balancing, and traffic-control implementations;
+- generic network namespace, bridge, veth, overlay, packet capture, and replay
+  platforms;
+- Agent Task, body, provider, process, or organizational lifecycle.
 
-## P2 — frontier work
-
-- large distributed ranges;
-- mobile and intermittent physical links;
-- adaptive network policies competing with adaptive Agents;
-- hardware-backed high-fidelity observation and impairment.
-
-The next large step is not another manifest or controller abstraction. It is a
-persistent data-plane backend that can attach an Edge-owned body without making
-Link own that body's lifecycle.
+A later controlled range may adapt maintained mechanisms only when required by
+a research workload. The current private scripts and Baseline transport must not
+be expanded into a general network product.

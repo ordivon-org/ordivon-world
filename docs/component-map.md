@@ -1,74 +1,48 @@
-# Phase 0 component map
+# Component Map Under the Revised Link Route
 
-This map classifies the current repository without moving directories. `keep`
-means active code aligned with the durable boundary; `reference` means a
-bounded experiment retained for interoperability; `ops` means private
-operational/provider tooling; `freeze` means no new general abstraction or
-implementation in Phase 0.
+This map separates operational capability from long-term research claims. No
+code is moved by this documentation change.
 
 ## Crates
 
-| Component | Class and authority | Allowed dependency direction | Phase 0 |
+| Component | Current authority | Revised classification | Disposition |
 |---|---|---|---|
-| `link-world` | Long-term Agent-native core. Authoritative for its native Network World manifest and Link World ID, modeled state and mutations, independent event evidence, actor projection, and lifecycle receipts. It does not prove packet isolation for modeled-only effects. | Independent of the other workspace crates. Future adapters consume its native surface without replacing its identity or event authority. | `keep` |
-| `link-model` | Local-operations observation/client model. Authoritative only for the serialized local observation, target, route-decision, snapshot, and event types it defines; not for Network World lifecycle or target authority. | Leaf of the observation chain; `link-probe` may depend on it. | `keep` |
-| `link-probe` | Local-operations evidence producer. Its bounded results are observations under named conditions, not complete path truth, authorization, or containment proof. | `link-probe → link-model`; `link-observer` may depend on it. | `keep` |
-| `link-observer` | Local-operations reducer and sanitized SQLite history. Authoritative for its reduced recorded observations, not raw command output, Network World state, or host/network control. | `link-observer → link-probe → link-model`; `link-console` may depend on it. | `keep` |
-| `link-console` | Local-operations read-only presentation. It has no mutation, route, VPN, Runtime, or Network World authority. | `link-console → link-observer → link-probe → link-model`; no dependency on transport or world slices. | `keep` |
-| `link-wire` | Bounded Baseline v0 reference wire contract and state machines. It is authoritative only for this experiment's framing contract, not a general Link protocol. | Leaf of the reference transport slice; only `link-transport-quic` depends on it. | `reference` |
-| `link-transport-quic` | Quinn/rustls localhost reference adapter for Baseline v0. It has no host-observation, route-control, Network World, or production Edge Node authority. | `link-transport-quic → link-wire`; no cross-dependency with world or observation slices. | `reference` |
+| `link-model` | serialized local targets, probes, routes, snapshots, and events | observation vocabulary | retain; evolve only from real Host consumption |
+| `link-probe` | bounded reachability, transfer, and lifetime observations | path evidence producer | retain; add method/freshness semantics before broader use |
+| `link-observer` | reduced local state and sanitized history | observation reducer | retain; no Task or network-control authority |
+| `link-console` | loopback read-only presentation | operator presentation | retain independently of semantic route |
+| `link-world` | deterministic manifest, world state, modeled mutations, events, lifecycle, actor view, fixture | network-condition research laboratory | keep for experiments; do not call permanent core |
+| `link-wire` | bounded Baseline v0 framing and state machines | reference protocol experiment | freeze general expansion |
+| `link-transport-quic` | localhost Quinn/rustls integration | reference transport adapter | freeze; reuse maintained transport |
 
-General transport expansion is `freeze`: do not turn the reference crates into
-a protocol framework or add new in-house transport, TLS, proxy, or
-cryptographic machinery. Production choices reuse maintained TLS, QUIC, and
-proxy implementations.
+## Private operations
 
-## Private operations/provider scripts
-
-These scripts are explicit operator tools, not crate dependencies or public
-architecture:
-
-| Script | Operational scope and authority | Allowed dependency direction | Phase 0 |
+| Component | Current authority | Revised classification | Disposition |
 |---|---|---|---|
-| `scripts/ordivon-vpn` | Root-only isolated WireGuard namespace control for explicitly selected commands; no authority over the Network World core or WSL root default route. | May consume private rendered profiles and maintained host tools; no crate may depend on it. | `ops` |
-| `scripts/ordivon-vpn-keypair` | Private Surfshark/WireGuard key-pair validation and transactional profile rendering; it defines no public identity system. | Produces private inputs for `ordivon-vpn` and the scanner; no crate dependency. | `ops` |
-| `scripts/surfshark-measure` | Provider-specific local route-state and egress measurement. Its outputs are bounded operational evidence, not public architecture or universal path truth. | Invoked directly by an operator; no crate dependency. | `ops` |
-| `scripts/surfshark-profile-scan` | Provider-specific profile validation, discovery, and ranking using isolated WireGuard test topology. | Consumes private profiles and maintained host tools; no crate dependency. | `ops` |
-| `scripts/install-ordivon-vpn` | Installs the private controller, provider tools, and existing service unit onto an explicitly managed host. | Copies the four operational tools and service unit; no crate dependency. | `ops` |
-| `scripts/check-vpn-controller` | Static/synthetic check entry point for the VPN/provider script set. It grants no runtime or network authority. | Validates the operational scripts and invokes their fixture tests. | `ops` |
-| `scripts/test-vpn-keypair` | Temporary-fixture validation of key matching, rendering, and fail-closed behavior. | Tests `ordivon-vpn-keypair` and non-mutating controller checks only. | `ops` |
-| `scripts/test-surfshark-profile-scan` | Temporary-fixture validation of scanner parsing, redaction, and result handling. | Tests `surfshark-profile-scan`; it is not a production dependency. | `ops` |
+| `ordivon-vpn` and key/profile tools | explicit root-only isolated WireGuard egress | private provider/operator tools | retain for user needs; no crate dependency |
+| Surfshark measurement and scanning | provider-specific path evidence | private measurement tools | retain; never define public architecture |
+| install and check scripts | local deployment and fixture validation | operations | retain independently of Link research outcome |
 
-The script set orchestrates a maintained VPN implementation; it is not a VPN
-core. It must not grow into general-purpose VPN software or container-network
-orchestration.
+## Not yet implemented
 
-## NetworkAttachment v0 terminology freeze
-
-Before any `NetworkAttachment` v0 design, only the following ownership terms
-are frozen:
-
-| Term | Phase 0 meaning and owner |
+| Candidate | Evidence status |
 |---|---|
-| **Security World ID** | Security-owned identity for its orchestrated world/context. Link may carry it as a foreign reference but does not mint or replace it. |
-| **Link World ID** | Link-owned, component-native identity of a Network World. The current implementation is the content-addressed `nw1-...` identity derived from the normalized manifest. |
-| **Edge Node** | Edge-owned remote body/Node. Link may reason about its network presence but does not own its provisioning or lifecycle. |
-| **Edge Sandbox Generation** | Edge-owned identity for one lifecycle generation of an Edge sandbox/body. It is not a Link World revision or Link communication-identity generation. |
-| **NetworkAttachment** | Future Link-owned network-side binding/evidence concept relating an Edge-owned subject generation to a Link World. No attachment contract or backend exists in Phase 0. |
-| **component-native identity** | Each component remains authoritative for its own identities, revisions, and lifecycle. Cross-component orchestration references those identities instead of replacing them with one global ID. |
+| Connectivity Requirement | research only |
+| Path/Identity Observation contract for Host Context | partial raw ingredients only |
+| Host-visible Connectivity Binding | absent |
+| path-conditioned Artifact/Claim provenance | absent |
+| dependency-driven invalidation | absent |
+| uncertain-delivery reconciliation | absent |
+| participant continuity and handoff | absent |
+| durable Network World above mature backends | unproven hypothesis |
 
-This is a naming and ownership freeze only. It defines no fields, serialized
-Schema, API, cardinality, lifecycle state machine, persistence format, or
-data-plane backend, and it does not increase the implemented P0-D capability.
+## Ownership summary
 
-## Layout decision
+- Classical network systems own byte movement and native configuration.
+- Link may own the exact Task-conditioned relation/path/identity binding and its
+  evidence/invalidation semantics.
+- Host owns why the relation exists and how Task state advances.
+- Edge owns where external execution occurs.
 
-No directory is moved in Phase 0. The documented authority and dependency
-boundaries provide the required separation; moving unchanged files would add
-review and history churn without changing behavior or ownership. A later move
-requires a concrete dependency, release, or ownership need.
-
-Link does not develop a general-purpose network protocol, VPN core,
-cryptography, or container-network orchestration. The bounded Baseline
-reference and private WireGuard tooling remain exceptions only in the roles
-listed above and continue to reuse maintained implementations.
+The current Network World remains useful because it can falsify or refine these
+boundaries. Its existence does not settle them.
