@@ -1,32 +1,40 @@
 # Component Map
 
-## Inherited Cloudflare provider
+The authoritative W0 classification is
+[`w0-carrier-inventory.json`](w0-carrier-inventory.json). This page is the compact
+human map.
 
-| Component | Unified classification | Disposition |
-|---|---|---|
-| signed Fetch/Browser Worker | external capability provider | retain and operate |
-| pending/committed request state | remote-effect reconciliation | retain |
-| generation leases and fencing | provider execution correctness | retain |
-| private R2 Artifacts and Receipts | evidence/result plane | retain |
-| release, rollback, GC, policy tooling | provider operations | retain |
-| local Node/unshare lifecycle | body research fixture | freeze; do not generalize |
+## Retained provider capability
 
-## Inherited network module
+| Component | Owner | W1 role | Disposition |
+|---|---|---|---|
+| signed Cloudflare Fetch | provider | external operation | retain |
+| Browser Run | provider | excluded from W1 | retain |
+| pending/committed request state, leases, fencing | provider | authoritative operation state | retain |
+| private R2 Artifacts and Receipts | provider | result and reconciliation evidence | retain |
+| release, rollback, GC, policy tooling | provider operations | none | retain |
+| signed Python client | provider adapter | direct baseline | adapter-only |
 
-| Component | Unified classification | Disposition |
-|---|---|---|
-| route/DNS/endpoint/transfer probes | candidate/path Observation producers | retain |
-| reduced SQLite history and console | local observation storage/presentation | retain |
-| WireGuard namespace tooling | explicit private operator adapter | retain outside public architecture |
-| Surfshark measurement | provider-specific historical/private tool | freeze unless repeated use returns |
-| reference wire and QUIC transport | bounded protocol experiment | freeze general expansion |
-| deterministic Network World | network-condition research fixture | retain for experiments; not production core |
+## Network and inherited research carriers
 
-## Missing unified capability
+| Component | Owner | W1 role | Disposition |
+|---|---|---|---|
+| `link-probe` and used `ProbeResult` fields | network observation | one source-native observation | adapter-only |
+| reduced SQLite history and loopback console | private local operations | none | adapter-only |
+| deterministic Network World and Security port | inherited research fixture | none | historical |
+| disposable Node/unshare lifecycle | inherited research fixture | none | historical |
+| reference wire and QUIC transport | inherited transport experiment | none | historical |
+| WireGuard/Surfshark tools and protocol catalog | private operations and dated research | none | historical |
+| unused `Device`, `Edge`, `Target`, `Transport`, `RouteDecision` declarations | none | none | delete-candidate |
+| universal interaction field inventory | research hypothesis | none | delete-candidate |
 
-- Host-consumable complete World Interaction trajectory;
-- correlation between path Observation and provider execution;
-- interaction-level remote outcome reconciliation after Host restart;
-- conditioned evidence invalidation across path/provider changes;
-- a second materially different provider or participant workload;
-- proof that a shared World layer outperforms direct Host adapters.
+## W1 missing capability
+
+Only one capability remains untested:
+
+> Can a small correlation record improve recovery and explanation after a real
+> provider Receipt commits but the Host loses the response, relative to direct
+> Host use of the same provider request identity and Receipt lookup?
+
+W1 does not need a resolver, provider router, Network World, Browser/Sandbox
+model, automatic recovery service, or shared schema to answer that question.

@@ -170,19 +170,23 @@ cargo test --workspace --all-targets
 
 ## Active research route
 
-The first unified experiment should prove one complete Host-to-World trajectory:
+W0 is frozen in the [carrier inventory](docs/w0-carrier-inventory.md) and the
+[W1 experiment contract](docs/w1-experiment-contract.md). The first boundary
+test uses exactly one Cloudflare Fetch:
 
 ```text
 Host Task
-→ current path/target Observation
-→ existing Cloudflare Browser or Fetch provider
-→ exact request / provider execution / path conditions
-→ Receipt and Artifact
-→ injected response loss or Host restart
-→ reconciliation through the original Interaction identity
-→ Host Verification and continued Task
+→ one explicit HTTP/TLS path observation
+→ stable provider Request ID
+→ provider commits Receipt and Artifact
+→ caller-visible response is discarded
+→ fresh Host process queries the original Receipt before redispatch
+→ exact Artifact verification
+→ continued and exactly-once Task completion
 ```
 
-Only after that trajectory should the project derive a shared Interaction field
-set, test a second provider or asynchronous participant, or add automatic
-resolution. See [`docs/research-route.md`](docs/research-route.md).
+The comparison is direct Host integration versus one minimum experiment-local
+World correlation record. Browser Run, path change, provider replacement,
+Network World, custom transport, and universal schema work are excluded. W2
+remains conditional on a concrete failure observed in W1. See
+[`docs/research-route.md`](docs/research-route.md).

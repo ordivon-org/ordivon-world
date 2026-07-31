@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon-world-w0-carrier-inventory",
+  "sourceRevision": "1ad5085772656df85e14d1bcedd56f9e44e98f0d",
+  "capturedAt": "2026-07-31",
+  "allowedDispositions": [
+    "retain",
+    "adapter-only",
+    "historical",
+    "delete-candidate"
+  ],
+  "baselineVerification": {
+    "repositoryLayout": "passed",
+    "cloudflareProvider": {
+      "ci": "passed",
+      "nodeTestsPassed": 40,
+      "nodeTestsSkipped": 1,
+      "pythonTestsPassed": 19
+    },
+    "networkObservation": {
+      "format": "passed",
+      "clippy": "passed",
+      "testsPassed": 82
+    }
+  },
+  "liveReadOnlyBaseline": {
+    "observedAt": "2026-07-31T10:52:18Z",
+    "provider": {
+      "endpoint": "edge.ordivon.com",
+      "status": "ok",
+      "policyVersion": "p1.6.0276f25929e23c23",
+      "deploymentSourceCommit": "c86295d6a8a4",
+      "workerVersionId": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "fetchCapability": "fetch.v2",
+      "receiptCapability": "receipt.v2",
+      "requestStateDays": 90,
+      "artifactDays": 91
+    },
+    "pathObservation": {
+      "target": "w1-example",
+      "network": "wsl-current",
+      "route": "host-current",
+      "protocol": "http_tls",
+      "httpStatus": 200,
+      "success": true,
+      "termination": "completed"
+    }
+  },
+  "w1Selection": {
+    "provider": "cloudflare",
+    "providerOperation": "fetch",
+    "target": "https://example.com/",
+    "pathObservationProducer": "link-probe",
+    "primaryBaseline": "direct-host-to-provider",
+    "faultPoint": "after-provider-receipt-commit-before-host-admission",
+    "pathChangeInW1": false,
+    "providerRebindingInW1": false
+  },
+  "carriers": [
+    {
+      "id": "cloudflare-fetch-provider",
+      "paths": [
+        "providers/cloudflare/src/auth.ts",
+        "providers/cloudflare/src/fetch-policy.ts",
+        "providers/cloudflare/src/external-fetch.ts",
+        "providers/cloudflare/src/index.ts"
+      ],
+      "disposition": "retain",
+      "owner": "Cloudflare provider module",
+      "executionMode": "production-provider",
+      "currentConsumers": ["signed local client", "release smoke tests"],
+      "legacyTerminology": true,
+      "w1Role": "provider",
+      "postW1Decision": "retain independently of the World boundary result"
+    },
+    {
+      "id": "cloudflare-browser-provider",
+      "paths": [
+        "providers/cloudflare/src/browser-policy.ts",
+        "providers/cloudflare/src/browser-run.ts"
+      ],
+      "disposition": "retain",
+      "owner": "Cloudflare provider module",
+      "executionMode": "production-provider",
+      "currentConsumers": ["signed local client", "release smoke tests"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "retain as a separate provider capability; exclude from W1 to preserve causal attribution"
+    },
+    {
+      "id": "cloudflare-request-reliability",
+      "paths": [
+        "providers/cloudflare/src/idempotency.ts",
+        "providers/cloudflare/src/execution.ts",
+        "providers/cloudflare/src/receipts.ts",
+        "providers/cloudflare/src/artifacts.ts",
+        "providers/cloudflare/src/cleanup.ts"
+      ],
+      "disposition": "retain",
+      "owner": "Cloudflare provider module",
+      "executionMode": "production-provider",
+      "currentConsumers": ["Fetch", "Browser Run", "receipt lookup", "artifact retrieval"],
+      "legacyTerminology": true,
+      "w1Role": "provider",
+      "postW1Decision": "remain provider-owned; World must reference rather than reproduce this state machine"
+    },
+    {
+      "id": "cloudflare-provider-operations",
+      "paths": [
+        "providers/cloudflare/config",
+        "providers/cloudflare/deploy",
+        "providers/cloudflare/scripts/ordivon_edge_release.py",
+        "providers/cloudflare/scripts/ordivon_edge_gc.py",
+        "providers/cloudflare/scripts/configure_r2_lifecycle.py"
+      ],
+      "disposition": "retain",
+      "owner": "Cloudflare provider operations",
+      "executionMode": "operator-tooling",
+      "currentConsumers": ["deployment", "rollback", "lifecycle policy", "garbage collection"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "retain independently; do not move into a World control plane"
+    },
+    {
+      "id": "cloudflare-direct-client",
+      "paths": [
+        "providers/cloudflare/scripts/ordivon_edge_client.py"
+      ],
+      "disposition": "adapter-only",
+      "owner": "Cloudflare provider client",
+      "executionMode": "operator-and-experiment-adapter",
+      "currentConsumers": ["direct provider invocation", "receipt polling", "artifact verification"],
+      "legacyTerminology": true,
+      "w1Role": "direct-baseline",
+      "postW1Decision": "retain as provider-specific client; do not promote its CLI or response model into World"
+    },
+    {
+      "id": "cloudflare-node-lifecycle-research",
+      "paths": [
+        "providers/cloudflare/src/node-contracts.ts",
+        "providers/cloudflare/src/node-lifecycle.ts",
+        "providers/cloudflare/src/local-node-adapter.ts",
+        "providers/cloudflare/src/research-node-control.ts",
+        "providers/cloudflare/scripts/ordivon_edge_node_control.ts"
+      ],
+      "disposition": "historical",
+      "owner": "inherited Edge body/lifecycle experiment",
+      "executionMode": "research-fixture",
+      "currentConsumers": ["module-local tests", "historical Security acceptance composition"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "freeze; remove only after confirming no retained external acceptance consumer"
+    },
+    {
+      "id": "network-probe-observations",
+      "paths": [
+        "modules/network-observation/crates/link-model/src/lib.rs",
+        "modules/network-observation/crates/link-probe"
+      ],
+      "disposition": "adapter-only",
+      "owner": "network observation module",
+      "executionMode": "explicit-observation-tool",
+      "currentConsumers": ["probe CLI", "summary/report generation", "local observer"],
+      "legacyTerminology": true,
+      "w1Role": "observation-adapter",
+      "postW1Decision": "retain ProbeResult and target registry only as source-native observations; project a smaller experiment-local digest for W1"
+    },
+    {
+      "id": "network-observer-console",
+      "paths": [
+        "modules/network-observation/crates/link-observer",
+        "modules/network-observation/crates/link-console"
+      ],
+      "disposition": "adapter-only",
+      "owner": "private local operations",
+      "executionMode": "host-local-observer-and-presentation",
+      "currentConsumers": ["loopback console", "sanitized local history"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "retain for local operations if still used; W1 reads one explicit probe result and does not depend on this database or UI"
+    },
+    {
+      "id": "deterministic-network-world",
+      "paths": [
+        "modules/network-observation/crates/link-world",
+        "modules/network-observation/config/worlds/disconnected-three-service.toml"
+      ],
+      "disposition": "historical",
+      "owner": "inherited Link network-condition experiment",
+      "executionMode": "deterministic-research-fixture",
+      "currentConsumers": ["module-local tests", "historical Security lifecycle port"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "freeze as a fixture; never treat NetworkWorldManifest or WorldState as the W1 or universal World schema"
+    },
+    {
+      "id": "network-security-port",
+      "paths": [
+        "modules/network-observation/crates/link-world/src/security_port.rs",
+        "modules/network-observation/crates/link-world/src/bin/link-world-security.rs"
+      ],
+      "disposition": "historical",
+      "owner": "historical Security acceptance integration",
+      "executionMode": "acceptance-fixture",
+      "currentConsumers": ["module-local tests", "past Security composition"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "freeze; future Security experiments must consume current component receipts rather than expand this port"
+    },
+    {
+      "id": "reference-wire-and-quic",
+      "paths": [
+        "modules/network-observation/crates/link-wire",
+        "modules/network-observation/crates/link-transport-quic"
+      ],
+      "disposition": "historical",
+      "owner": "inherited transport experiment",
+      "executionMode": "localhost-reference-implementation",
+      "currentConsumers": ["module-local tests"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "freeze; W1 reuses HTTPS and does not introduce a transport dependency"
+    },
+    {
+      "id": "private-vpn-and-surfshark-tools",
+      "paths": [
+        "modules/network-observation/scripts",
+        "modules/network-observation/deploy/systemd/ordivon-vpn@.service"
+      ],
+      "disposition": "historical",
+      "owner": "private operator environment",
+      "executionMode": "explicit-private-tooling",
+      "currentConsumers": ["manual network diagnosis and isolated egress"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "retain only while operationally useful; exclude from World identity, routing, and automatic selection"
+    },
+    {
+      "id": "transport-catalog-and-baseline-protocol",
+      "paths": [
+        "modules/network-observation/config/transports/protocols.toml",
+        "modules/network-observation/docs/protocol-charter.md",
+        "modules/network-observation/docs/protocol-spec-v0.md",
+        "modules/network-observation/docs/protocol-study.md"
+      ],
+      "disposition": "historical",
+      "owner": "transport research reference",
+      "executionMode": "research-reference",
+      "currentConsumers": ["catalog renderer", "historical comparison"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "preserve as dated research; do not reactivate a custom data plane from W1"
+    },
+    {
+      "id": "unused-link-model-entities",
+      "paths": [
+        "modules/network-observation/crates/link-model/src/lib.rs"
+      ],
+      "symbols": ["Device", "Edge", "Target", "Transport", "RouteDecision"],
+      "disposition": "delete-candidate",
+      "owner": "none",
+      "executionMode": "unused-type-declarations",
+      "currentConsumers": [],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "delete in a later cleanup after confirming no external crate consumer; they do not enter W1"
+    },
+    {
+      "id": "universal-world-interaction-schema",
+      "paths": [
+        "docs/interaction-model.md"
+      ],
+      "disposition": "delete-candidate",
+      "owner": "research hypothesis only",
+      "executionMode": "field-inventory-document",
+      "currentConsumers": [],
+      "legacyTerminology": false,
+      "w1Role": "none",
+      "postW1Decision": "retain only as a hypothesis ledger; delete any field not required by a measured W1 failure and do not generate code from it"
+    },
+    {
+      "id": "legacy-edge-link-names-and-documents",
+      "paths": [
+        "providers/cloudflare/README.md",
+        "providers/cloudflare/docs",
+        "modules/network-observation/README.md",
+        "modules/network-observation/docs"
+      ],
+      "disposition": "historical",
+      "owner": "migration history and module-local operations",
+      "executionMode": "documentation-and-compatibility",
+      "currentConsumers": ["operators", "historical receipts", "module-local commands"],
+      "legacyTerminology": true,
+      "w1Role": "none",
+      "postW1Decision": "keep exact historical claims; later remove misleading future-tense ownership statements without mass-renaming operational identifiers"
+    }
+  ]
+}

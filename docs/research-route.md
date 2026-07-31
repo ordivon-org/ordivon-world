@@ -1,62 +1,55 @@
 # Research Route
 
-## W0 — Unification and truth preservation
+## W0 — Carrier audit and experiment freeze
 
-- preserve both prototype histories;
-- retain production Cloudflare behavior and network observation behavior;
-- remove separate project ownership and artificial cross-project contracts;
-- record source revisions, retired Issues, and historical terminology.
+Status: completed by [`w0-carrier-inventory.md`](w0-carrier-inventory.md) and
+[`w1-experiment-contract.md`](w1-experiment-contract.md).
 
-## W1 — First complete World Interaction
+W0 preserved both prototype histories and verified all current code, then
+classified every major carrier as `retain`, `adapter-only`, `historical`, or
+`delete-candidate`. No inherited Edge or Link type became an admitted World
+schema. W1 is frozen before implementation.
 
-Use one real Host research Task:
+## W1 — One Fetch response-loss comparison
+
+Use one real Host research Task and one Cloudflare Fetch:
 
 ```text
-Task
-→ obtain a current path/target Observation
-→ invoke existing Cloudflare Fetch or Browser capability
-→ retain exact path, endpoint, provider, request, execution, policy, Receipt,
-  Artifact, and semantic references
-→ lose the response or restart Host
-→ reconcile through the original interaction
-→ verify and continue the Task
+Task / Attempt / Effect
+→ one explicit HTTP/TLS path observation
+→ stable provider Request ID and canonical Fetch payload
+→ provider commits Receipt and Artifact
+→ caller-visible response is discarded
+→ fresh Host process queries the original Receipt before redispatch
+→ exact Artifact retrieval and independent verification
+→ continuation and exactly-once Task completion
 ```
 
-Compare against direct Host calls to the same provider and direct network
-inspection. Do not build a resolver or shared schema.
+Compare direct Host-to-provider integration with one minimum experiment-local
+World correlation record. The path, provider, target, and capability remain
+fixed. W1 closeout deletes fields and decides whether the responsibility belongs
+in World, Host, provider adapters, or nowhere.
 
-## W2 — Field deletion and boundary test
+## W2 — Conditional capability negotiation and Effect rebinding
 
-Start with complete recorded evidence, then remove fields. Keep only fields whose
-absence causes duplicate Effects, false recovery, invalid provenance, stale
-claims, excess consequence, or unexplained operator state.
+W2 remains inactive unless W1 reproduces a concrete failure caused by provider
+capability mismatch, contract drift, or a valid need to rebind one still-open
+Effect. When activated, compare static configuration, manual replacement through
+native receipts, and the smallest explicit capability/binding decision.
 
-Decide whether the reusable responsibility belongs in World, Host, provider
-adapters, Runtime observations, or nowhere.
+No provider marketplace, universal broker, automatic routing, or blind
+redispatch is authorized.
 
-## W3 — Second workload
+## Later work — only after W1/W2 evidence
 
-Choose one materially different trajectory:
+A materially different second workload may test asynchronous participant
+handoff or a programmable external Sandbox. Dynamic graph shapes, callbacks,
+remote-to-remote Artifact movement, fan-out, and join remain later hypotheses.
+They do not enter the first boundary decision.
 
-- asynchronous Agent/service Artifact review with uncertain delivery and
-  participant handoff; or
-- external programmable Sandbox with direct remote-to-remote Artifact transfer
-  and provider replacement.
-
-No new transport, Sandbox, or identity platform is built.
-
-## W4 — Dynamic graph and rebinding
-
-Test local→remote, remote→local callback, remote→remote transfer, one→many
-fan-out, and many→one join. Replace path, provider, identity, transport, or
-participant independently and together. Preserve separate revisions and exact
-invalidation.
-
-## W5 — Architecture decision
-
-Possible outcomes:
+## Architecture outcomes
 
 - retain Ordivon World as a thin independent external-interaction layer;
-- absorb most semantics into Host and keep provider/observation modules;
+- absorb the surviving semantics into Host and provider/observation adapters;
 - retain only the Cloudflare product and private observation tools;
-- freeze or delete unified abstractions that do not beat direct integration.
+- freeze or delete abstractions that do not beat direct integration.
