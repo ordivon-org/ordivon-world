@@ -1,59 +1,52 @@
 # Ordivon World Charter
 
-Status: active unified research and product charter
+Status: provider and observation carrier repository; independent World layer not retained after W1
 
 ## Mission
 
-Ordivon World studies and supplies the boundary through which open Tasks
-interact with external services, providers, Agents, humans, devices, and data.
-It binds an intended external Effect or relationship to the exact target,
-identity, path, transport, provider execution, policy, and evidence conditions
-that realize it, then preserves continuity when any of those conditions change.
+Preserve and operate mature external-provider and network-observation capabilities, and test whether any cross-component Task-to-world responsibility is genuinely missing from Host, Runtime, provider adapters, observation adapters, or domain systems.
 
-## Why one responsibility
+The repository may incubate an experiment. It does not gain production authority from its name or from the complexity of external systems.
 
-Connectivity and external execution are not independent at the Task level:
+## W1 decision
 
-- the intended action determines endpoint, transport, locality, session, and
-  provider requirements;
-- the selected path, region, identity, and provider can change the observation
-  or consequence;
-- a timeout cannot be understood without both delivery and provider-operation
-  state;
-- provider replacement usually changes endpoint, path, identity, and body
-  together;
-- remote callbacks and remote-to-remote Artifact movement cross the former
-  Link/Edge boundary repeatedly.
+The first complete Host-to-Cloudflare response-loss comparison showed that direct Host integration already preserved:
 
-World Interaction is therefore the atomic research object. Connectivity and
-external action remain internal analytical planes, not separate projects.
+- exact semantic Effect and Dispatch identity;
+- provider-native idempotency and Receipt lookup;
+- explicit UNKNOWN and reconcile-first continuation;
+- exact Artifact retrieval and independent verification;
+- exactly-once Task completion after a fresh process.
 
-## Candidate responsibility
+A separate correlation journal prevented no additional failure and removed no existing state. It is not retained as a production layer.
 
-World may own:
+## Retained responsibility
 
-- external interaction requirements and candidate observations;
-- exact interaction binding and revision identity;
-- correlation of communication delivery and provider execution;
-- remote-outcome reconciliation before retry;
-- path/provider/identity-conditioned provenance;
-- invalidation and rebinding evidence;
-- semantic continuation and residual closure across external changes.
+This repository owns only its concrete modules and historical evidence:
+
+- Cloudflare provider implementation and operations;
+- network observation and private operator tooling;
+- imported prototype history;
+- bounded experiment code and closeout evidence.
 
 ## Foreign responsibility
 
-World references but does not redefine:
+The repository references but does not redefine:
 
-- Goal, Task, Attempt, Effect, Claim, Verification, commitment, and strategy;
-- local Workspace, Job, process, cancellation, and recovery;
-- packet, route, DNS, VPN, proxy, mesh, transport, PKI, and service identity;
-- Browser, Sandbox, VM, function, queue, object store, device, and provider
-  lifecycle;
-- domain authorization, compliance, and final outcome validity.
+- Host Goal, Task, Attempt, Effect, Dispatch, UNKNOWN, Verification, and outcome;
+- Runtime Workspace, Job, process, cancellation, and recovery;
+- provider-native request, session, identity, queue, storage, body, and lifecycle;
+- source-native path, endpoint, protocol, timing, and failure observations;
+- domain authorization, compliance, and final validity.
 
-## Success condition
+## Admission condition for a future World responsibility
 
-One Task can interact with multiple external objects through replaceable paths,
-providers, transports, and participants; retain exact evidence and uncertain
-outcomes; avoid duplicate Effects; continue after replacement; and do so with
-less permanent machinery than direct Host integration plus mature infrastructure.
+A new responsibility is admitted only when:
+
+1. a real trajectory fails under direct Host plus mature adapters;
+2. the failure cannot remain naturally in an existing owner;
+3. a second materially different workload needs the same invariant;
+4. the new state prevents the failure with lower total cost;
+5. every field has a deletion condition.
+
+Until then, World is a research name and repository boundary, not another runtime authority.

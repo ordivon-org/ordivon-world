@@ -1,61 +1,31 @@
-# World Interaction Model
+# World Interaction Field Inventory
 
-This document is a field inventory for research, not a stable schema.
+Status: historical research inventory; no shared schema admitted by W1
 
-## One interaction may contain
+This document records fields considered before the W1 deletion test. It must not be used to generate a production contract, database, or universal World identity.
 
-### Semantic references
+## W1 disposition
 
-- Goal, Task, Attempt, Effect, Dispatch, Claim, Verification;
-- completion, cancellation, compensation, and consequence expectations.
+The live Fetch response-loss trajectory required only existing owner fields:
 
-### Parties and authority
+- Host Goal, Task, Effect, Dispatch, StateRef, UNKNOWN, Verification, and outcome;
+- provider endpoint, operation, Request ID, idempotency digest, Receipt, Artifact, policy, capability, and Worker identity;
+- one source-native path observation reference and digest;
+- experiment-only arm and fault identity.
 
-- initiator, logical target, provider, participant, resource owner;
-- credential domain, delegated authority, budget, allowed consequence.
+A separate correlated graph or World record prevented no additional failure. The candidate field inventory is therefore a hypothesis ledger and `delete-candidate`, not a stable model.
 
-### Capability and placement
+## Historical field families
 
-- required operation or relationship;
-- local/remote execution position, provider, region, body or service generation;
-- input data, locality, privacy, duration, callback, and evidence requirements.
+The earlier analysis considered:
 
-### Connection
+- semantic references and completion expectations;
+- parties, authority, capability, placement, connection, and delivery;
+- provider execution, result evidence, invalidation, replacement, and residual state;
+- one-to-many, many-to-one, callback, and remote-to-remote topology.
 
-- endpoint, route/path class, transport, protocol, session, identity generation;
-- direct, VPN, proxy, provider network, queue, Artifact handoff, or intermediary.
+These remain valid dimensions for diagnosing future failures. They do not establish common ownership. A future experiment must select the minimum source-native facts needed for one trajectory and delete the rest.
 
-### Physical action and delivery
+## Identity rule retained
 
-- request/message/Artifact delivery identity;
-- provider operation or execution identity;
-- accepted, delivered, running, replied, succeeded, failed, rejected, cancelled,
-  compensated, or unknown states.
-
-### Result and evidence
-
-- Receipt, Artifact, Observation, callback, logs, content digests;
-- provider, body, path, identity, policy, build, method, time, and freshness;
-- verified, conditional, expired, superseded, or unresolved status.
-
-### Continuity
-
-- query/reconciliation key;
-- invalidation dependencies;
-- replacement of path, endpoint, identity, provider, body, transport, or
-  participant;
-- reconstruction inputs and residual state.
-
-## Cardinality
-
-One Task may create many interactions. One Effect may require several Dispatches
-but must preserve one semantic identity and reconcile before repetition. One
-provider execution may emit many Artifacts and use many external relationships.
-One path may carry many interactions. One Artifact may become input to many
-later interactions.
-
-## Identity rule
-
-Do not collapse Task, Effect, Dispatch, message delivery, provider execution,
-session, body generation, path observation, Receipt, and Artifact into one ID.
-A unified project needs one correlated graph, not one universal identifier.
+Do not collapse Task, Effect, Dispatch, provider request, session, path observation, Receipt, and Artifact into one ID. Correlate foreign identities only where the consuming owner needs them. Do not create a World ID merely to make a diagram connected.

@@ -2,78 +2,51 @@
 
 ## Mission
 
-Ordivon World is the Task-to-external-world interaction boundary. It unifies the
-former Edge and Link research objects because real remote work jointly depends
-on target, identity, path, transport, provider capability, execution, evidence,
-and recovery.
+Ordivon World carries real external-provider and network-observation modules and runs bounded experiments about Task-to-world continuity. W1 proved that the current Fetch response-loss path does not require an independent World correlation layer.
 
-The repository does not create a new network stack, proxy, VPN, CNI, service
-mesh, browser, Sandbox, scheduler, workflow engine, identity platform, or cloud
-control plane. Reuse mature mechanisms and add only proven Task-level semantics
-above them.
+Do not describe this repository as a mandatory production layer. The current retained composition is Host plus provider and observation adapters.
 
 ## Current slices
 
-- `providers/cloudflare/` is a production external capability provider imported
-  from `ordivon-edge`.
-- `modules/network-observation/` is an observation/research module imported from
-  `ordivon-link`.
-- Historical Node, Network World, wire, VPN, and command names are compatibility
-  and evidence surfaces, not top-level architecture.
+- `providers/cloudflare/` is a production external capability provider imported from `ordivon-edge`.
+- `modules/network-observation/` is a source-native observation and private-operations module imported from `ordivon-link`.
+- `experiments/` contains deletion-tested research implementations, not reusable production APIs by default.
+- historical Node, Network World, wire, VPN, and command names are compatibility and evidence surfaces, not top-level architecture.
 
-## Candidate unified vocabulary
+## W1 ownership result
 
-Use these terms only as research vocabulary until real workloads prove them:
-
-- World Interaction intent;
-- target/capability/path/identity candidate observation;
-- Interaction Binding;
-- provider execution and communication delivery identity;
-- conditioned Artifact/Observation provenance;
-- invalidation, reconciliation, rebinding, and residual closure.
-
-Do not introduce a universal schema, global World ID, or automatic resolver from
-documentation alone.
-
-## Ownership
-
-1. Host owns Goal, Task, Attempt, Effect, participant responsibility, strategy,
-   and completion.
+1. Host owns Goal, Task, Attempt, Effect, Dispatch, UNKNOWN, recovery frontier, Verification, and completion.
 2. Runtime owns trusted-local execution and process lifecycle.
-3. World may own exact external binding, remote uncertainty, conditioned
-   evidence, and rebinding correlation when those semantics are proven reusable.
-4. Providers and classical infrastructure own native endpoints, routes,
-   identities, sessions, bodies, storage, queues, and lifecycle.
-5. Security/domain systems own consequence authority and final validity.
+3. Provider adapters own native endpoint, request digest, idempotency, Receipt, Artifact, policy, capability, and provider-version semantics.
+4. Observation adapters own source-native observations and expose only bounded projections or references to Host.
+5. World-specific correlation state has no production owner unless a later experiment reproduces a failure that these boundaries cannot explain.
+6. Security/domain systems own consequence authority and final validity.
 
 ## Engineering constraints
 
-1. Preserve the Cloudflare provider's production reliability and release
-   boundary.
-2. Preserve secret-free network observation and explicit private-operation
-   boundaries.
-3. Do not centralize remote-to-remote data flow through Host or World merely for
-   observability; preserve references, digests, authority, and Receipts instead.
-4. Reconcile uncertain external work before retry or participant/provider
-   replacement.
-5. Path, region, endpoint, identity, provider, capability, policy, and time may
-   condition evidence; never silently generalize one observation.
-6. Do not automate route, DNS, VPN, firewall, provider, or participant changes
-   before the requirement and invalidation model is proved.
-7. Do not expand the inherited local body or Network World experiments into a
-   production Sandbox or data plane.
-8. Do not preserve Edge/Link project boundaries through artificial internal
-   protocols. Use ordinary modules until an external consumer proves a stable
-   contract.
-9. Keep migration provenance exact. Never rewrite historical evidence to pretend
-   the unified model existed earlier.
-10. Every new abstraction needs a strong classical baseline, two materially
-    different workloads, an observed failure when deleted, and a cost comparison.
+1. Preserve the Cloudflare provider's production reliability and release boundary.
+2. Preserve secret-free network observation and explicit private-operation boundaries.
+3. Reconcile uncertain external work by its original provider identity before retry.
+4. Never replace provider-native request or Receipt semantics with a generic digest or state machine.
+5. Never copy Host Task truth, provider request truth, or raw observation truth into a synchronized World database.
+6. Path, region, endpoint, identity, provider, capability, policy, and time may condition evidence; bind exact revisions where used.
+7. Do not automate route, DNS, VPN, firewall, provider, or participant changes before a concrete requirement and invalidation failure exists.
+8. Do not expand inherited Node or Network World fixtures into a production Sandbox or data plane.
+9. Keep migration provenance and invalid experiments exact; do not rewrite evidence to make a failed Trial valid.
+10. Every new abstraction needs a strong baseline, an observed failure when deleted, explicit ownership, measured net benefit, and a closeout disposition.
+
+## W2 activation gate
+
+W2 remains conditional. Activate it only after reproducing one exact failure caused by provider capability mismatch, provider contract drift, or a legitimate need to rebind one still-open semantic Effect.
+
+A provider marketplace, universal broker, automatic routing, or blind redispatch is never implied by activation.
 
 ## Required checks
 
 ```bash
 python3 scripts/check-repository-layout.py
+python3 scripts/check-w1-evidence.py
+cd experiments/w1-host-cloudflare && uv sync --frozen && uv run python -m unittest discover -s tests -v
 cd providers/cloudflare && pnpm run ci
 cd modules/network-observation && cargo fmt --all -- --check
 cd modules/network-observation && cargo clippy --workspace --all-targets -- -D warnings

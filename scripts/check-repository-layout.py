@@ -20,6 +20,9 @@ REQUIRED = [
     "docs/w0-carrier-inventory.json",
     "docs/w0-carrier-inventory.md",
     "docs/w1-experiment-contract.md",
+    "docs/w1-results.md",
+    "evidence/w1/w1-live-20260731c.json",
+    "scripts/check-w1-evidence.py",
     "experiments/w1-host-cloudflare/pyproject.toml",
     "experiments/w1-host-cloudflare/uv.lock",
     "experiments/w1-host-cloudflare/README.md",
@@ -48,11 +51,12 @@ if sources.get("schemaVersion") != 1 or len(sources.get("sources", [])) != 2:
 
 readme = (ROOT / "README.md").read_text()
 for phrase in [
-    "World Interaction",
+    "W1 did not earn an independent production World layer",
     "providers/cloudflare",
     "modules/network-observation",
-    "w0-carrier-inventory.md",
-    "w1-experiment-contract.md",
+    "docs/w1-results.md",
+    "evidence/w1/w1-live-20260731c.json",
+    "W2 conditional",
 ]:
     if phrase not in readme:
         raise SystemExit(f"README missing required phrase: {phrase}")

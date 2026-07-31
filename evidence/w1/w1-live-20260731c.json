@@ -1,0 +1,177 @@
+{
+  "arms": {
+    "b0-direct": {
+      "artifactBytes": 559,
+      "artifactDownloads": 1,
+      "artifactSha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+      "duplicateExternalEffects": 0,
+      "exactlyOnceCompletion": true,
+      "firstAdmissibleAfterRestart": "reconcile-original-request",
+      "hostDatabaseBytes": 77824,
+      "hostEventCount": 6,
+      "hostObjectBytes": 12522,
+      "hostObjectCount": 14,
+      "operatorInterventions": 0,
+      "providerExecutions": 1,
+      "providerPostAttempts": 1,
+      "providerReceiptDigest": "sha256:cdf77be130aeb860d77a49f94c2230600441dfe450f9e39b5cb409dd2941f717",
+      "providerRequestId": "w1_2d4d67027474db5c48ceb9ccc98a4554",
+      "receiptQueries": 1,
+      "recoveryLatencyMs": 3307,
+      "taskOutcomeEvents": 1,
+      "trialId": "w1-live-20260731c-b0-direct",
+      "unsafeRedispatchAttempts": 0
+    },
+    "b1-correlation": {
+      "artifactBytes": 559,
+      "artifactDownloads": 1,
+      "artifactSha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+      "correlationBytes": 4535,
+      "correlationEventCount": 6,
+      "correlationHeadDigest": "sha256:4e0db08119426aae9e0dfbf22caffb0a936a774f6403508cf1b82360eb046617",
+      "duplicateExternalEffects": 0,
+      "exactlyOnceCompletion": true,
+      "firstAdmissibleAfterRestart": "reconcile-original-request",
+      "hostDatabaseBytes": 77824,
+      "hostEventCount": 6,
+      "hostObjectBytes": 12527,
+      "hostObjectCount": 14,
+      "operatorInterventions": 0,
+      "providerExecutions": 1,
+      "providerPostAttempts": 1,
+      "providerReceiptDigest": "sha256:51f15d81e1cbd519a9ce49b16d7eae294e76f1dca79959c7ef8ddac35ac25ffd",
+      "providerRequestId": "w1_29b15968406761ec791c9c3eaceae338",
+      "receiptQueries": 1,
+      "recoveryLatencyMs": 3489,
+      "taskOutcomeEvents": 1,
+      "trialId": "w1-live-20260731c-b1-correlation",
+      "unsafeRedispatchAttempts": 0
+    }
+  },
+  "artifacts": {
+    "b0FinalReport": "sha256:ee34ec6c5badba0bfb0d40a6f72bf115757cb90c517c301f211eeda70372cad5",
+    "b0TrialEvents": "sha256:7f72c3d7575906e0a07d02eabd807e1daf112ec30e6d9d259156d38354f59af7",
+    "b1Correlation": "sha256:96a39e006a3360e448e2acd35f780f4b54e94e6373c3d77398480a9399802939",
+    "b1FinalReport": "sha256:0f8994b55b3494a1905effe8d5844ea8ac609a532c7cbcfdcec0a2e902f67de0",
+    "b1TrialEvents": "sha256:682e7f8c48828aa431f92128dba3100de08f3a65381d756fbf93d6d9812c9cd4",
+    "invalidTrialCloseout": "sha256:798818f84e0b15d2594e27c467c5cba0215fed943b0fd9cc8b8525548d9fc362",
+    "pairReport": "sha256:8bab4984a1a04d73f8cd55fe528203444a67d3d887abae513da8c41446be5685",
+    "probeProjection": "sha256:8d77610cc24f933886b3dbe6ba2c9f8b6f8fafb8db9b5e996fd3378ea7bd4e89",
+    "probeSource": "sha256:3dc3cf8528d96016fd2a21b6d166580a5261781568a956ce574a0564acc7738f"
+  },
+  "capturedAt": "2026-07-31T11:13:00Z",
+  "comparison": {
+    "b1AdditionalCorrelationEvents": 6,
+    "b1CorrelationBytes": 4535,
+    "b1HostObjectByteDelta": 5,
+    "b1HostObjectDelta": 0,
+    "bothAvoidedDuplicateEffects": true,
+    "bothCompletedExactlyOnce": true,
+    "correlationImplementationLines": 169,
+    "latencyInterpretation": "single live network pair; not evidence of performance benefit or regression",
+    "recoveryLatencyDeltaMs": 182,
+    "sameArtifactContent": true
+  },
+  "decision": {
+    "reason": "B0 preserved the same correctness, exact recovery, independent verification, and completion with fewer records and no independent World authority.",
+    "repository": "retain-provider-and-observation-modules-plus-historical-experiments",
+    "semantics": "absorb-into-host-and-provider-observation-adapters",
+    "w2": "remain-conditional-not-activated",
+    "worldCorrelationLayer": "do-not-retain"
+  },
+  "experimentId": "w1-live-20260731c",
+  "fieldDispositions": [
+    {
+      "disposition": "retain-experiment-only",
+      "field": "experimentId / arm",
+      "owner": "W1 evidence",
+      "reason": "comparison identity; not runtime state"
+    },
+    {
+      "disposition": "move-to-host",
+      "field": "Host Goal / Task / Attempt / Effect / Dispatch references",
+      "owner": "Ordivon Host",
+      "reason": "already authoritative and sufficient for recovery"
+    },
+    {
+      "disposition": "move-to-host-state-ref-and-probe-adapter",
+      "field": "path observation ref and digest",
+      "owner": "Host plus network observation adapter",
+      "reason": "Host Dispatch already binds the required source observation"
+    },
+    {
+      "disposition": "move-to-provider-adapter-and-host-dispatch",
+      "field": "provider endpoint, operation, Request ID, request digest",
+      "owner": "Cloudflare adapter plus Host",
+      "reason": "provider-native idempotency identity is authoritative"
+    },
+    {
+      "disposition": "move-to-provider-adapter-and-host-observation",
+      "field": "Receipt and Artifact references",
+      "owner": "Cloudflare provider plus Host verifier",
+      "reason": "provider Receipt and Host Observation/Verification already retain these facts"
+    },
+    {
+      "disposition": "retain-experiment-only",
+      "field": "response-loss fault event",
+      "owner": "W1 evidence",
+      "reason": "fault schedule, not production state"
+    },
+    {
+      "disposition": "delete-from-world",
+      "field": "reconciliation event",
+      "owner": "Host EffectLifecycle plus provider Receipt",
+      "reason": "duplicates reconcile-first Host and provider events"
+    },
+    {
+      "disposition": "delete-from-world",
+      "field": "verification and Task outcome",
+      "owner": "Ordivon Host",
+      "reason": "duplicates authoritative Host receipts"
+    },
+    {
+      "disposition": "delete-as-production-layer",
+      "field": "correlation hash chain and head digest",
+      "owner": "none",
+      "reason": "prevents no failure and reduces no Host/provider state; retain only historical experiment file"
+    }
+  ],
+  "frozenWorkload": {
+    "faultPoint": "after-provider-receipt-commit-before-host-admission",
+    "operation": "fetch",
+    "probeProjectionDigest": "sha256:10ace32aebc7708cddbdcf2325f7ff9ea91cbc94244a45455625efd1c07070ed",
+    "probeSourceSha256": "810fd7918c842b24daed445cfec6b1a2883e28d8c9a1264b55203bc1de6cff8f",
+    "providerRequestDigest": "8e6cebfe3a2abe4290e3e6b7517292612b8e2705d6db7533286bd19f53f1b9c4",
+    "target": "https://example.com/"
+  },
+  "kind": "ordivon.world.w1.closeout-evidence",
+  "negativeEvidence": {
+    "artifactSha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+    "artifactVerified": true,
+    "disposition": "invalid-run-retained; no redispatch; corrected fresh pair required",
+    "invalidTrialId": "w1-live-20260731a-b0-direct",
+    "providerReceiptDigest": "sha256:861c7cb6cc0eb3ab48ff4bad319ca44500cafa9935a17157c00b7f86d5750e2f",
+    "providerRequestId": "w1_54c5ee340ae54df8ff33ed795ced81fc",
+    "reasonCode": "provider-request-digest-semantics-mislabeled"
+  },
+  "schemaVersion": 1,
+  "source": {
+    "hostRevision": "4ac03b52322cb76ade8f2902ab5b08113141c3e7",
+    "implementationRevision": "41024df17e70b41c84705bf59c7966d6c90609ef",
+    "implementationTree": "aed29826456dd8cd95048d672d5cb17e8a002409",
+    "providerCapabilityVersion": "fetch.v2",
+    "providerDeploymentSourceCommit": "c86295d6a8a4",
+    "providerPolicyVersion": "p1.6.0276f25929e23c23",
+    "providerWorkerVersionId": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+    "worldBaseRevision": "eb74356b749fa0ef6dcc368f04c59330ef2e4bd6"
+  },
+  "validation": {
+    "clippyWarningsDenied": "passed",
+    "cloudflareNodeTestsPassed": 40,
+    "cloudflareNodeTestsSkipped": 1,
+    "cloudflarePythonTestsPassed": 19,
+    "deterministicW1TestsPassed": 6,
+    "format": "passed",
+    "networkTestsPassed": 82
+  }
+}

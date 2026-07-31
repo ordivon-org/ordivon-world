@@ -1,55 +1,40 @@
 # Research Route
 
-## W0 — Carrier audit and experiment freeze
+## W0 — completed
 
-Status: completed by [`w0-carrier-inventory.md`](w0-carrier-inventory.md) and
-[`w1-experiment-contract.md`](w1-experiment-contract.md).
+W0 classified 16 inherited carrier groups as `retain`, `adapter-only`, `historical`, or `delete-candidate` and froze the first experiment without admitting an inherited Edge or Link schema.
 
-W0 preserved both prototype histories and verified all current code, then
-classified every major carrier as `retain`, `adapter-only`, `historical`, or
-`delete-candidate`. No inherited Edge or Link type became an admitted World
-schema. W1 is frozen before implementation.
+See [`w0-carrier-inventory.md`](w0-carrier-inventory.md).
 
-## W1 — One Fetch response-loss comparison
+## W1 — completed; direct integration won
 
-Use one real Host research Task and one Cloudflare Fetch:
+W1 compared:
 
-```text
-Task / Attempt / Effect
-→ one explicit HTTP/TLS path observation
-→ stable provider Request ID and canonical Fetch payload
-→ provider commits Receipt and Artifact
-→ caller-visible response is discarded
-→ fresh Host process queries the original Receipt before redispatch
-→ exact Artifact retrieval and independent verification
-→ continuation and exactly-once Task completion
-```
+1. B0 direct Host integration using provider-native Request ID, Receipt lookup, and Artifact verification;
+2. B1 the exact same path plus one hash-chained World correlation journal.
 
-Compare direct Host-to-provider integration with one minimum experiment-local
-World correlation record. The path, provider, target, and capability remain
-fixed. W1 closeout deletes fields and decides whether the responsibility belongs
-in World, Host, provider adapters, or nowhere.
+Both arms survived a post-commit/pre-admission response loss, resumed in a fresh process, queried the original Receipt before any POST, verified the exact Artifact, and completed one Host Task exactly once. B1 added six events and 4,535 bytes while reducing no Host or provider state.
 
-## W2 — Conditional capability negotiation and Effect rebinding
+Decision:
 
-W2 remains inactive unless W1 reproduces a concrete failure caused by provider
-capability mismatch, contract drift, or a valid need to rebind one still-open
-Effect. When activated, compare static configuration, manual replacement through
-native receipts, and the smallest explicit capability/binding decision.
+- do not retain an independent World correlation layer;
+- keep Host semantic lifecycle unchanged;
+- keep provider-native reliability in provider adapters;
+- bind source-native observations through Host StateRefs;
+- retain W1 code and evidence as historical experiment material.
 
-No provider marketplace, universal broker, automatic routing, or blind
-redispatch is authorized.
+See [`w1-results.md`](w1-results.md).
 
-## Later work — only after W1/W2 evidence
+## W2 — conditional and inactive
 
-A materially different second workload may test asynchronous participant
-handoff or a programmable external Sandbox. Dynamic graph shapes, callbacks,
-remote-to-remote Artifact movement, fan-out, and join remain later hypotheses.
-They do not enter the first boundary decision.
+W2 activates only if a later trajectory reproduces one exact failure caused by provider capability mismatch, provider contract drift, or a valid need to rebind one still-open Effect.
 
-## Architecture outcomes
+When activated, compare static configuration, manual replacement through native Receipts, and the smallest explicit capability/binding decision. No marketplace, universal broker, automatic routing, or blind redispatch is authorized.
 
-- retain Ordivon World as a thin independent external-interaction layer;
-- absorb the surviving semantics into Host and provider/observation adapters;
-- retain only the Cloudflare product and private observation tools;
-- freeze or delete abstractions that do not beat direct integration.
+## Later work
+
+Callbacks, participant handoff, remote-to-remote Artifact movement, fan-out/join, and programmable Sandboxes remain hypotheses. They enter the portfolio only through a real failure and a strong direct-integration baseline.
+
+## Current portfolio disposition
+
+The repository retains provider and observation modules plus historical experiments. The top-level World semantic layer is not active work.
