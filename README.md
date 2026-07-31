@@ -1,164 +1,96 @@
 # Ordivon World
 
-Ordivon World is the external-interaction boundary of the Ordivon stack. It
-studies and supplies the narrow semantics through which an open Task discovers,
-connects to, invokes, observes, and recovers work in the external world without
-reimplementing cloud providers, network stacks, Sandboxes, browsers, queues,
-identity systems, or transports.
+Ordivon World is the repository for Ordivon's external-provider and network-observation carriers, their exact migration history, and bounded experiments about Task-to-world continuity.
+
+It contains two real but independently owned capabilities:
+
+- `providers/cloudflare/` — signed Fetch and Browser operations, private R2 Artifacts, authoritative request state, Receipts, response-loss reconciliation, release, rollback, policy, and operations;
+- `modules/network-observation/` — source-native path, DNS, HTTP/TLS, QUIC, transfer, and lifetime observations plus private local tooling and historical research fixtures.
+
+The former `ordivon-edge` and `ordivon-link` histories are preserved here. Their unification created a useful research question, but **W1 did not earn an independent production World layer**.
+
+## W1 result
+
+A real Host Task executed the same Cloudflare Fetch through two arms:
 
 ```text
-Host Goal / Task / Attempt / Effect
-                 │
-                 ▼
-       World Interaction intent
-                 │
-     ┌───────────┼───────────┐
-     ▼           ▼           ▼
- target and   path and     provider and
- identity     transport    capability
-     └───────────┼───────────┘
-                 ▼
-       exact Interaction Binding
-                 ▼
- mature API / Browser / Sandbox / service / Agent / device
-                 ▼
- Receipt / Artifact / Observation / callback / residual evidence
-                 ▼
- reconciliation, invalidation, rebinding, continued Task
+B0 direct
+Host Dispatch + provider Request ID
+→ provider commits Receipt and Artifact
+→ response is deliberately lost
+→ fresh Host process queries original Receipt
+→ exact Artifact verification
+→ exactly-once Task completion
+
+B1 correlation
+same complete path
++ separate hash-chained World correlation journal
 ```
 
-The repository replaces the former top-level `ordivon-edge` and
-`ordivon-link` prototypes. Their implementation histories are preserved in this
-Git graph and their useful code is retained as internal modules.
+Both arms executed the provider operation once, queried the original Receipt before any retry, produced no duplicate Effect or unsafe redispatch, verified the same Artifact independently, completed the original Host Task exactly once, and required zero operator intervention.
 
-## Why one project
-
-A real external action cannot be cleanly split into “connect first” and “act
-later.” The intended Effect determines the required endpoint, identity,
-transport, locality, session, and provider. The selected path and provider can
-change the observation or consequence. A timeout may mean that the path failed,
-the response failed, or the remote Effect succeeded and only its acknowledgement
-was lost.
-
-The atomic research object is therefore one **World Interaction**:
+B1 reduced no Host state or recovery step. It added six correlation events, 4,535 bytes per Trial, and a 169-line journal implementation. The decision is therefore:
 
 ```text
-Task intent
-→ external target and capability resolution
-→ connectivity and execution binding
-→ dispatch or handoff
-→ remote work and data movement
-→ evidence and uncertain outcome
-→ reconcile, invalidate, rebind, or continue
+Do not retain a World correlation layer.
+
+Host owns Task meaning, UNKNOWN, reconciliation, verification, and completion.
+Provider adapters own native request/Receipt/Artifact semantics.
+Observation adapters supply source-native facts through Host StateRefs.
 ```
 
-## Current implementation truth
+See [`docs/w1-results.md`](docs/w1-results.md) and the validated evidence in [`evidence/w1/w1-live-20260731c.json`](evidence/w1/w1-live-20260731c.json).
 
-### `providers/cloudflare/`
+## Current repository role
 
-The former Edge production plane:
+The repository remains useful as:
 
-- signed bounded HTTPS Fetch and Browser Run;
-- private R2 Artifacts;
-- authoritative pending/committed request state;
-- generation fencing, deterministic Receipts, response-loss reconciliation;
-- release, rollback, cleanup, policy, and operational tooling;
-- a narrow local body/lifecycle research adapter.
+1. the home of the production Cloudflare provider;
+2. the home of private network-observation tools;
+3. the preserved history of the Edge and Link prototypes;
+4. an experiment repository for future external-interaction failures.
 
-This is a real external capability provider. It is not a universal World
-resolver, general Sandbox, scheduler, proxy, or permanent Agent body.
+It is **not** a mandatory Host→Runtime→World pipeline, universal World schema, provider broker, network controller, proxy, VPN, service mesh, Sandbox, Browser implementation, workflow engine, or second authority store.
 
-### `modules/network-observation/`
+## Ownership after W1
 
-The former Link prototype:
+| Fact | Authority |
+|---|---|
+| Goal, Task, Attempt, Effect, Dispatch, UNKNOWN, Verification, TaskOutcome | Ordivon Host |
+| local Workspace, process, Job, cancellation, terminal evidence | Ordivon Runtime |
+| provider Request ID, idempotency digest, pending/committed state, Receipt, Artifact, policy and Worker identity | provider and provider adapter |
+| raw path, endpoint, protocol, latency, and failure observation | source-native observation module |
+| consequence authorization and domain validity | domain or Security system |
+| experiment arm, fault schedule, measurements, disposition | bounded experiment only |
 
-- route, DNS, endpoint, HTTP/TLS, QUIC, transfer, and lifetime observations;
-- reduced sanitized history and a read-only local console;
-- deterministic Network World and Security research fixtures;
-- bounded reference wire/QUIC experiments;
-- explicit private WireGuard namespace and provider-specific measurement tools.
-
-This is an observation and research module. It is not a new network stack,
-VPN, CNI, Service Mesh, automatic route controller, or production World data
-plane.
-
-## Unified responsibility
-
-Ordivon World may eventually own only the cross-workload semantics that survive
-strong-baseline and deletion tests:
-
-- **Interaction intent** — external relation, capability, consequence,
-  evidence, locality, data, and continuity needs;
-- **candidate observation** — versioned facts about providers, endpoints,
-  paths, identities, cost, availability, and limitations;
-- **Interaction Binding** — exact Task/Attempt/Effect/Dispatch references bound
-  to target, identity, path, transport, provider, execution, policy, and
-  observation revisions;
-- **remote uncertainty** — accepted, delivered, running, succeeded, failed, or
-  unknown without blind retry;
-- **conditioned provenance** — body, provider, path, identity, time, and policy
-  conditions under which an Artifact or Observation was produced;
-- **invalidation and reconciliation** — which conclusions and pending work
-  become stale after external change;
-- **rebinding and continuation** — replacement of path, provider, body,
-  transport, or participant while preserving the parent Task;
-- **residual closure** — what remains after sessions, bodies, callbacks, or
-  external effects end.
-
-These are research candidates, not frozen schemas or implemented universal
-control-plane objects.
-
-## Topology
-
-World Interactions are graph-shaped, not a single local-to-cloud pipeline:
-
-```text
-local → remote       API, Browser, Sandbox, storage, Agent
-remote → local       callback, webhook, stream, approval, result delivery
-remote → remote      direct Artifact transfer, provider chaining
-one → many           parallel research, verification, execution fan-out
-many → one           Artifact join, consensus, review, aggregation
-many ↔ many          multi-Agent and multi-provider work graphs
-```
-
-Ordivon should preserve why these transfers and actions occur, their authority,
-identity, evidence, and outcome. It should not proxy every byte through Host.
-
-## Ownership boundary
-
-- **Host / semantic Kernel** owns Goal, Task, Attempt, Effect, participant
-  commitments, strategy, completion, and the decision to replan.
-- **Runtime** owns trusted-local Workspace, Job, process, cancellation, local
-  Artifact, and recovery lifecycle.
-- **World** owns external candidate facts, exact external binding, provider and
-  communication correlation, remote uncertainty, conditioned evidence, and
-  rebinding evidence when those responsibilities prove reusable.
-- **Providers and classical infrastructure** own physical network, endpoint,
-  Browser, Sandbox, VM, queue, storage, identity, and native lifecycle.
-- **Security or the domain system** owns consequence authorization and final
-  validity.
+No universal World ID or synchronized World database exists.
 
 ## Repository layout
 
 ```text
-providers/cloudflare/             external Fetch/Browser/R2 provider
-modules/network-observation/      network observations and research fixtures
-docs/                             unified model, architecture, route, boundaries
-migration/                        exact source and retirement provenance
+providers/cloudflare/                 production Fetch/Browser/R2 provider
+modules/network-observation/          observations, private tools, research fixtures
+experiments/w1-host-cloudflare/       reproducible W1 comparison, not product code
+evidence/w1/                          validated closeout evidence
+docs/                                 W0/W1 contracts, results, boundaries, history
+migration/                            exact source and retirement provenance
 scripts/check-repository-layout.py
+scripts/check-w1-evidence.py
 ```
 
-The inherited module-local names and operational commands remain temporarily
-compatible. Their presence records implementation history; it does not restore
-separate Edge or Link ownership.
+Historical names remain where renaming would break local operations or falsify old receipts. They do not restore separate Edge or Link architectural ownership.
 
 ## Verification
 
 ```bash
 python3 scripts/check-repository-layout.py
+python3 scripts/check-w1-evidence.py
 
-cd providers/cloudflare
-corepack enable
+cd experiments/w1-host-cloudflare
+uv sync --frozen
+uv run python -m unittest discover -s tests -v
+
+cd ../../providers/cloudflare
 pnpm install --frozen-lockfile
 pnpm run ci
 
@@ -168,25 +100,10 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --all-targets
 ```
 
-## Active research route
+## Research route
 
-W0 is frozen in the [carrier inventory](docs/w0-carrier-inventory.md) and the
-[W1 experiment contract](docs/w1-experiment-contract.md). The first boundary
-test uses exactly one Cloudflare Fetch:
+- **W0 complete:** classified 16 inherited carrier groups without admitting an inherited schema.
+- **W1 complete:** direct Host integration matched the correlation arm with less state; semantics were absorbed into Host and adapters.
+- **W2 conditional:** remains inactive until a real capability mismatch, contract drift, or valid Effect-rebinding failure is reproduced.
 
-```text
-Host Task
-→ one explicit HTTP/TLS path observation
-→ stable provider Request ID
-→ provider commits Receipt and Artifact
-→ caller-visible response is discarded
-→ fresh Host process queries the original Receipt before redispatch
-→ exact Artifact verification
-→ continued and exactly-once Task completion
-```
-
-The comparison is direct Host integration versus one minimum experiment-local
-World correlation record. Browser Run, path change, provider replacement,
-Network World, custom transport, and universal schema work are excluded. W2
-remains conditional on a concrete failure observed in W1. See
-[`docs/research-route.md`](docs/research-route.md).
+Future work starts from a named failure. The existence of provider, network, Node, transport, or World fixture code is not sufficient evidence for another shared layer.

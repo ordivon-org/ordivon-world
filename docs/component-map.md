@@ -1,40 +1,42 @@
-# Component Map
+# Component Map After W1
 
-The authoritative W0 classification is
-[`w0-carrier-inventory.json`](w0-carrier-inventory.json). This page is the compact
-human map.
+The W0 source inventory remains in [`w0-carrier-inventory.json`](w0-carrier-inventory.json). W1 resolved the only active boundary question.
 
-## Retained provider capability
+## Production and operational carriers
 
-| Component | Owner | W1 role | Disposition |
-|---|---|---|---|
-| signed Cloudflare Fetch | provider | external operation | retain |
-| Browser Run | provider | excluded from W1 | retain |
-| pending/committed request state, leases, fencing | provider | authoritative operation state | retain |
-| private R2 Artifacts and Receipts | provider | result and reconciliation evidence | retain |
-| release, rollback, GC, policy tooling | provider operations | none | retain |
-| signed Python client | provider adapter | direct baseline | adapter-only |
+| Component | Authority | Disposition after W1 |
+|---|---|---|
+| signed Cloudflare Fetch and Browser Run | provider | retain |
+| pending/committed request state, lease, fencing | provider | retain |
+| private R2 Artifact and deterministic Receipt | provider | retain |
+| release, rollback, GC, policy tooling | provider operations | retain |
+| signed Python provider client | provider adapter | retain as adapter |
+| `link-probe` and used `ProbeResult` fields | observation module | retain as source-native adapter input |
+| reduced local history and loopback console | private local operations | retain while useful |
 
-## Network and inherited research carriers
+## Historical or deletion-tested carriers
 
-| Component | Owner | W1 role | Disposition |
-|---|---|---|---|
-| `link-probe` and used `ProbeResult` fields | network observation | one source-native observation | adapter-only |
-| reduced SQLite history and loopback console | private local operations | none | adapter-only |
-| deterministic Network World and Security port | inherited research fixture | none | historical |
-| disposable Node/unshare lifecycle | inherited research fixture | none | historical |
-| reference wire and QUIC transport | inherited transport experiment | none | historical |
-| WireGuard/Surfshark tools and protocol catalog | private operations and dated research | none | historical |
-| unused `Device`, `Edge`, `Target`, `Transport`, `RouteDecision` declarations | none | none | delete-candidate |
-| universal interaction field inventory | research hypothesis | none | delete-candidate |
+| Component | Disposition |
+|---|---|
+| W1 correlation journal | historical experiment; do not promote |
+| deterministic Network World and Security port | historical fixture |
+| disposable Node/unshare lifecycle | historical fixture |
+| reference wire and QUIC transport | historical experiment |
+| WireGuard/Surfshark and transport catalog | private or dated research |
+| unused `Device`, `Edge`, `Target`, `Transport`, `RouteDecision` declarations | delete-candidate |
+| universal World Interaction field inventory | delete-candidate |
 
-## W1 missing capability
+## Surviving cross-component path
 
-Only one capability remains untested:
+```text
+Host Dispatch
+  ├─ StateRef → source-native probe digest
+  └─ idempotency_key → provider Request ID
 
-> Can a small correlation record improve recovery and explanation after a real
-> provider Receipt commits but the Host loses the response, relative to direct
-> Host use of the same provider request identity and Receipt lookup?
+provider Receipt / Artifact
+  → Host Observation
+  → Host Verification
+  → Host TaskOutcome
+```
 
-W1 does not need a resolver, provider router, Network World, Browser/Sandbox
-model, automatic recovery service, or shared schema to answer that question.
+No separate World authority is required for this path.

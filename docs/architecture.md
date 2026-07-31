@@ -1,81 +1,67 @@
-# Architecture
+# Architecture After W1
 
-## Semantic flow
-
-```text
-Task / Attempt / Effect
-        │
-        ▼
-World Interaction intent
-  target relation
-  capability and consequence
-  data and locality
-  identity and evidence
-  continuity requirements
-        │
-        ▼
-Candidate observations
-  provider capability
-  endpoint and path
-  transport and session
-  identity and policy
-  availability, cost, freshness, uncertainty
-        │
-        ▼
-Interaction Binding
-  exact semantic references
-  exact target and participant references
-  exact path/transport/endpoint revisions
-  exact provider/body/execution revisions
-  authority and policy revisions
-        │
-        ▼
-Classical mechanisms execute and communicate
-        │
-        ▼
-Receipt / Artifact / Observation / callback / residual state
-        │
-        ▼
-reconcile → verify → invalidate → rebind → continue
-```
-
-## Internal analytical planes
-
-### Relationship and connectivity plane
-
-Explains logical source and target, communication identity, endpoint, path,
-transport, session, delivery state, callback, and path-conditioned evidence.
-It does not implement the network stack or own Task strategy.
-
-### Capability and action plane
-
-Explains external capability, provider, body or service, operation, Dispatch,
-provider execution, Receipt, Artifact, cancellation, compensation, and residual
-state. It does not implement provider-native lifecycle or own Task meaning.
-
-### Continuity plane
-
-Correlates communication and execution under one interaction, preserves unknown
-outcomes, invalidates condition-dependent evidence, and records rebinding. This
-is the principal reason to study the planes together.
-
-## Data topology
-
-Control and evidence may pass through Host while bulk data moves directly:
+## Retained composition
 
 ```text
-Host ──interaction intent──▶ World/provider
-Host ◀──Receipt/reference── World/provider
-Provider A ──Artifact bytes──▶ Object Store / Provider B
-Host ◀──digest + provenance── Object Store / Provider B
+Host Task / Effect / Dispatch
+        │
+        ├─ required StateRef ──▶ source-native observation adapter
+        │                         raw ProbeResult remains source-owned
+        │
+        └─ idempotency key ───▶ provider adapter
+                                  signed request
+                                  provider request digest
+                                  pending / committed state
+                                  Receipt / Artifact
+        │
+        ▼
+Host UNKNOWN → reconcile original Request ID → Observation
+        ▼
+independent Verification → TaskOutcome
 ```
 
-World is not a universal proxy.
+This composition completed the W1 response-loss trajectory without a World service, database, universal ID, binding object, or duplicated state machine.
 
-## Current code map
+## Authorities
 
-- `providers/cloudflare/` implements one provider and remote-effect reliability.
-- `modules/network-observation/` implements observations, local presentation,
-  private operations, and controlled research fixtures.
-- no universal resolver, Interaction Binding schema, provider router,
-  participant registry, or automatic recovery controller exists yet.
+### Host
+
+Owns the semantic lifecycle: Goal, Task, Attempt, Effect, Dispatch, required source references, UNKNOWN, reconciliation frontier, Verification, Artifact acceptance, and completion.
+
+### Provider and adapter
+
+Own native endpoint, signed body, idempotency algorithm, Request ID, lease, policy, capability, Worker identity, pending/committed request state, Receipt, Artifact key, and Artifact metadata.
+
+### Observation module and adapter
+
+Own raw source observation. The adapter may quantize or project fields into Host-compatible evidence, but it does not convert source state into a universal World schema.
+
+### Experiment
+
+Owns arm assignment, fault injection, measurements, and disposition only. Experiment logs are not production authority.
+
+## W1 rejected architecture
+
+The B1 candidate journal repeated six transitions:
+
+```text
+interaction prepared
+provider Receipt committed
+caller response dropped
+provider Receipt reconciled
+Host verification recorded
+Task outcome recorded
+```
+
+Each transition already belonged to Host, provider, or the experiment. The separate chain added 4,535 bytes and no recovery capability. It remains historical evidence only.
+
+## Retained modules
+
+- `providers/cloudflare/` remains a real production capability provider.
+- `modules/network-observation/` remains a source-native observation/private-operations module.
+- inherited Network World, Node, wire, QUIC, VPN, and Security ports remain historical or private surfaces.
+- `experiments/w1-host-cloudflare/` remains reproducible research code.
+
+## Conditional future architecture
+
+W2 may test capability negotiation and Effect rebinding only after an observed mismatch or drift failure. No current code implements a broker, router, automatic resolver, or rebinding authority.

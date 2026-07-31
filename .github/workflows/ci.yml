@@ -17,6 +17,21 @@ jobs:
         with:
           python-version: '3.12'
       - run: python3 scripts/check-repository-layout.py
+      - run: python3 scripts/check-w1-evidence.py
+
+  world-w1:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: experiments/w1-host-cloudflare
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run python -m unittest discover -s tests -v
 
   cloudflare-provider:
     runs-on: ubuntu-latest

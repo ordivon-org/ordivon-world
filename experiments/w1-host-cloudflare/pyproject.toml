@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ordivon-world-w1"
+version = "0.1.0"
+description = "W1 direct-integration versus minimum World-correlation experiment."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "ordivon-host @ git+https://github.com/zycxfyh/ordivon-host.git@4ac03b52322cb76ade8f2902ab5b08113141c3e7",
+]
+
+[project.scripts]
+ordivon-world-w1 = "ordivon_world_w1.cli:entrypoint"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
