@@ -35,6 +35,10 @@ class LifecycleTests(unittest.TestCase):
             by_prefix["requests/v2/"]["deleteObjectsTransition"]["condition"]["maxAge"],
             90 * 86400,
         )
+        self.assertEqual(
+            by_prefix["evidence-runs/v1/"]["deleteObjectsTransition"]["condition"]["maxAge"],
+            91 * 86400,
+        )
 
     def test_main_preserves_non_managed_rules_and_verifies_update(self) -> None:
         retention = {

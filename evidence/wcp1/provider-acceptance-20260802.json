@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "kind": "ordivon-world-consumer-evidence",
+  "consumer": "ordivon-world-release",
+  "workload": "provider-post-deployment-acceptance",
+  "health": {
+    "schema_version": 1,
+    "service": "ordivon-edge",
+    "status": "ok",
+    "policy_version": "p1.6.0276f25929e23c23",
+    "worker_version": {
+      "id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+      "timestamp": "2026-07-27T21:40:08.342306Z"
+    },
+    "deployment_identity": {
+      "source_commit": "c86295d6a8a4",
+      "worker_release_digest": "7cb367d6980b8da3"
+    }
+  },
+  "capability_ref": {
+    "sha256": "339a1fa58ee43347513dd52e4243c00890f612ad88e77a1664390133cf7af95f",
+    "policy_version": "p1.6.0276f25929e23c23",
+    "worker_version": {
+      "id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+      "timestamp": "2026-07-27T21:40:08.342306Z"
+    },
+    "deployment_identity": {
+      "source_commit": "c86295d6a8a4",
+      "worker_release_digest": "7cb367d6980b8da3"
+    },
+    "document": {
+      "schema_version": 1,
+      "service": "ordivon-edge",
+      "policy_version": "p1.6.0276f25929e23c23",
+      "retention": {
+        "idempotency_days": 90,
+        "request_state_days": 90,
+        "receipt_mirror_days": 90,
+        "artifact_days": 91,
+        "cleanup_task_days": 90
+      },
+      "capabilities": [
+        {
+          "id": "artifact.put",
+          "version": "artifact.put.v1",
+          "state": "ready",
+          "reason": "Bounded Edge operations can persist private artifacts in R2."
+        },
+        {
+          "id": "artifact.get",
+          "version": "artifact.get.v1",
+          "state": "ready",
+          "reason": "Authenticated clients can retrieve validated private artifact keys."
+        },
+        {
+          "id": "artifact.delete",
+          "version": "artifact.delete.planned",
+          "state": "planned",
+          "reason": "Deletion remains internal until a receipt-backed deletion contract is added."
+        },
+        {
+          "id": "fetch",
+          "version": "fetch.v2",
+          "state": "ready",
+          "reason": "Signed requests can execute allowlisted, bounded HTTPS fetches with transactional receipts."
+        },
+        {
+          "id": "browser.run",
+          "version": "browser.snapshot.v2",
+          "state": "ready",
+          "reason": "Signed requests can capture allowlisted same-origin browser snapshots with transactional artifacts."
+        },
+        {
+          "id": "receipt",
+          "version": "receipt.v2",
+          "state": "ready",
+          "reason": "Pending state, fenced leases, committed receipts, replay, and conflict detection are implemented."
+        }
+      ],
+      "worker_version": {
+        "id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+        "tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+        "timestamp": "2026-07-27T21:40:08.342306Z"
+      },
+      "deployment_identity": {
+        "source_commit": "c86295d6a8a4",
+        "worker_release_digest": "7cb367d6980b8da3"
+      }
+    }
+  },
+  "foreign_operation_ref": {
+    "provider": "cloudflare",
+    "request_id": "req_151bedb464c14734a8c558ff99bd0ca4",
+    "request_digest": "8e6cebfe3a2abe4290e3e6b7517292612b8e2705d6db7533286bd19f53f1b9c4"
+  },
+  "receipt": {
+    "schema_version": 1,
+    "receipt_id": "req_151bedb464c14734a8c558ff99bd0ca4",
+    "request_digest": "8e6cebfe3a2abe4290e3e6b7517292612b8e2705d6db7533286bd19f53f1b9c4",
+    "operation": "fetch",
+    "status": "succeeded",
+    "started_at": "2026-08-01T20:01:28.856Z",
+    "completed_at": "2026-08-01T20:01:30.238Z",
+    "duration_ms": 1382,
+    "execution": {
+      "policy_version": "p1.6.0276f25929e23c23",
+      "capability_version": "fetch.v2",
+      "worker_version_id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "worker_version_tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+      "worker_version_timestamp": "2026-07-27T21:40:08.342306Z",
+      "lease_generation": 1
+    },
+    "artifact": {
+      "key": "fetch/v2/req_151bedb464c14734a8c558ff99bd0ca4/g1/body",
+      "sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+      "bytes": 559,
+      "media_type": "text/html",
+      "etag": "c35dafa74975d89a1236a2591acb3616"
+    },
+    "artifacts": [
+      {
+        "key": "fetch/v2/req_151bedb464c14734a8c558ff99bd0ca4/g1/body",
+        "sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+        "bytes": 559,
+        "media_type": "text/html",
+        "etag": "c35dafa74975d89a1236a2591acb3616"
+      }
+    ],
+    "fetch": {
+      "requested_url": "https://example.com/",
+      "final_url": "https://example.com/",
+      "http_status": 200,
+      "redirect_count": 0
+    }
+  },
+  "artifact_verification": [
+    {
+      "key": "fetch/v2/req_151bedb464c14734a8c558ff99bd0ca4/g1/body",
+      "sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+      "bytes": 559,
+      "media_type": "text/html",
+      "verified": true
+    }
+  ],
+  "measurements": {
+    "elapsed_ms": 7472,
+    "artifact_count": 1,
+    "artifact_bytes": 559,
+    "operator_interventions": 0,
+    "unsafe_redispatch_attempts": 0
+  },
+  "evidence_sha256": "048f79971fbc1838b95415c645ea4912396a9806282d88f147c20f51d78c809c"
+}

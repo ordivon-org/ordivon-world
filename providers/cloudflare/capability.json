@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "adapter_id": "cloudflare",
+  "adapter_revision": "0.1.0",
+  "owner": "provider-adapter",
+  "authority": [
+    "provider request identity and idempotency digest",
+    "provider pending and committed request state",
+    "provider Receipt and Artifact metadata",
+    "provider capability, policy, Worker version, release and retention state"
+  ],
+  "real_consumers": [
+    "ordivon-computer research-source capture",
+    "ordivon-world provider post-deployment acceptance"
+  ],
+  "consequence_class": "bounded external read, browser execution, durable provider workflow and private Artifact write",
+  "cost_model": {
+    "fixed": "one Worker deployment, R2 retention, release and cleanup operations",
+    "variable": "provider-native request, Browser, Workflow and storage usage"
+  },
+  "retention_source": "config/edge-policy.json and Workflow instance retention",
+  "deletion_trigger": "delete an unused capability or adapter facet when no recurring consumer remains and direct provider use has lower total cost",
+  "facets": ["capability", "dispatch", "inspect-result", "artifact", "cancel-close"],
+  "capabilities": [
+    {"id": "fetch", "contract": "fetch.v2", "execution_mode": "immediate-pollable-receipt", "state": "ready"},
+    {"id": "browser.run", "contract": "browser.run.v2", "execution_mode": "immediate-pollable-receipt", "state": "ready"},
+    {"id": "artifact.r2", "contract": "artifact.reference.v1", "execution_mode": "provider-addressed-private-object", "state": "ready"},
+    {"id": "receipt", "contract": "receipt.v2", "execution_mode": "inspect-original-request", "state": "ready"},
+    {"id": "evidence.run", "contract": "evidence.run.v1", "execution_mode": "durable-workflow", "state": "ready"}
+  ]
+}

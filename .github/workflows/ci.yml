@@ -18,6 +18,7 @@ jobs:
           python-version: '3.12'
       - run: python3 scripts/check-repository-layout.py
       - run: python3 scripts/check-w1-evidence.py
+      - run: python3 scripts/generate-capability-portfolio.py --check
 
   world-w1:
     runs-on: ubuntu-latest
@@ -32,6 +33,19 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --frozen
       - run: uv run python -m unittest discover -s tests -v
+
+  world-wxp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 experiments/wxp1-callback-continuity/experiment.py
+      - run: python3 -m unittest -v experiments/wxp1-callback-continuity/test_experiment.py
+      - run: python3 experiments/wxp2-remote-artifact/experiment.py
+      - run: python3 -m unittest -v experiments/wxp2-remote-artifact/test_experiment.py
+      - run: git diff --exit-code -- experiments/wxp1-callback-continuity/evidence.json experiments/wxp2-remote-artifact/evidence.json
 
   cloudflare-provider:
     runs-on: ubuntu-latest

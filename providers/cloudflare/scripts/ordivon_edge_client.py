@@ -479,6 +479,56 @@ def command_artifact_get(config: Config, args: argparse.Namespace) -> int:
     return 0
 
 
+def command_evidence_run(config: Config, args: argparse.Namespace) -> int:
+    try:
+        payload = json.loads(pathlib.Path(args.manifest).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ClientError(f"Cannot read evidence-run manifest: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ClientError("Evidence-run manifest must be a JSON object")
+    body = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    status, _, response = request(
+        config,
+        "POST",
+        "/v1/evidence-runs",
+        body=body,
+        request_id=args.request_id,
+    )
+    print_json_bytes(response)
+    return 0 if 200 <= status < 300 else 1
+
+
+def command_evidence_status(config: Config, args: argparse.Namespace) -> int:
+    path = f"/v1/evidence-runs/{urllib.parse.quote(args.instance_id, safe='-_')}"
+    deadline = time.monotonic() + args.timeout
+    while True:
+        status, _, body = request(config, "GET", path)
+        try:
+            value = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise ClientError("Edge returned a non-JSON evidence-run response") from exc
+        provider = value.get("provider_status") if isinstance(value, dict) else None
+        provider_status = provider.get("status") if isinstance(provider, dict) else None
+        pending = status == 202 or provider_status in {
+            "queued", "running", "waiting", "waitingForPause", "paused", "unknown"
+        }
+        if not args.wait or not pending:
+            print(json.dumps(value, indent=2, ensure_ascii=False))
+            return 0 if 200 <= status < 300 else 1
+        if time.monotonic() >= deadline:
+            print(json.dumps(value, indent=2, ensure_ascii=False))
+            print(json.dumps({"ok": False, "error": "evidence-run wait timed out", "instance_id": args.instance_id}), file=sys.stderr)
+            return 3
+        time.sleep(args.interval)
+
+
+def command_evidence_terminate(config: Config, args: argparse.Namespace) -> int:
+    instance_id = urllib.parse.quote(args.instance_id, safe="-_")
+    status, _, body = request(config, "POST", f"/v1/evidence-runs/{instance_id}/terminate")
+    print_json_bytes(body)
+    return 0 if 200 <= status < 300 else 1
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="ordivon-edge")
     root.add_argument(
@@ -523,6 +573,19 @@ def parser() -> argparse.ArgumentParser:
     artifact.add_argument("key")
     artifact.add_argument("--output", required=True)
     artifact.add_argument("--sha256")
+
+    evidence_run = commands.add_parser("evidence-run")
+    evidence_run.add_argument("manifest")
+    evidence_run.add_argument("--request-id", default=make_request_id())
+
+    evidence_status = commands.add_parser("evidence-status")
+    evidence_status.add_argument("instance_id")
+    evidence_status.add_argument("--wait", action="store_true")
+    evidence_status.add_argument("--timeout", type=float, default=300.0)
+    evidence_status.add_argument("--interval", type=float, default=1.0)
+
+    evidence_terminate = commands.add_parser("evidence-terminate")
+    evidence_terminate.add_argument("instance_id")
     return root
 
 
@@ -546,6 +609,14 @@ def main() -> int:
             return command_receipt(config, args)
         if args.command == "artifact-get":
             return command_artifact_get(config, args)
+        if args.command == "evidence-run":
+            return command_evidence_run(config, args)
+        if args.command == "evidence-status":
+            if args.timeout <= 0 or args.interval <= 0:
+                raise ClientError("evidence-run wait timeout and interval must be positive")
+            return command_evidence_status(config, args)
+        if args.command == "evidence-terminate":
+            return command_evidence_terminate(config, args)
         raise ClientError(f"Unknown command: {args.command}")
     except ClientError as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)

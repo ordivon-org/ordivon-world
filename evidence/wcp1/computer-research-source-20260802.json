@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "kind": "ordivon-world-consumer-evidence",
+  "consumer": "ordivon-computer",
+  "workload": "research-source-capture",
+  "source": {
+    "url": "https://developers.cloudflare.com/workflows/",
+    "operation": "fetch"
+  },
+  "foreign_operation_ref": {
+    "provider": "cloudflare",
+    "request_id": "req_39b1a6843db04d0c9b6b08a287dfdc15",
+    "request_digest": "234ec378787f077600225d14cf6b9d224bda2ffbb53e91fd2ee8974d005c1063"
+  },
+  "capability_ref": {
+    "sha256": "339a1fa58ee43347513dd52e4243c00890f612ad88e77a1664390133cf7af95f",
+    "policy_version": "p1.6.0276f25929e23c23",
+    "worker_version": {
+      "id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+      "timestamp": "2026-07-27T21:40:08.342306Z"
+    },
+    "deployment_identity": {
+      "source_commit": "c86295d6a8a4",
+      "worker_release_digest": "7cb367d6980b8da3"
+    },
+    "document": {
+      "schema_version": 1,
+      "service": "ordivon-edge",
+      "policy_version": "p1.6.0276f25929e23c23",
+      "retention": {
+        "idempotency_days": 90,
+        "request_state_days": 90,
+        "receipt_mirror_days": 90,
+        "artifact_days": 91,
+        "cleanup_task_days": 90
+      },
+      "capabilities": [
+        {
+          "id": "artifact.put",
+          "version": "artifact.put.v1",
+          "state": "ready",
+          "reason": "Bounded Edge operations can persist private artifacts in R2."
+        },
+        {
+          "id": "artifact.get",
+          "version": "artifact.get.v1",
+          "state": "ready",
+          "reason": "Authenticated clients can retrieve validated private artifact keys."
+        },
+        {
+          "id": "artifact.delete",
+          "version": "artifact.delete.planned",
+          "state": "planned",
+          "reason": "Deletion remains internal until a receipt-backed deletion contract is added."
+        },
+        {
+          "id": "fetch",
+          "version": "fetch.v2",
+          "state": "ready",
+          "reason": "Signed requests can execute allowlisted, bounded HTTPS fetches with transactional receipts."
+        },
+        {
+          "id": "browser.run",
+          "version": "browser.snapshot.v2",
+          "state": "ready",
+          "reason": "Signed requests can capture allowlisted same-origin browser snapshots with transactional artifacts."
+        },
+        {
+          "id": "receipt",
+          "version": "receipt.v2",
+          "state": "ready",
+          "reason": "Pending state, fenced leases, committed receipts, replay, and conflict detection are implemented."
+        }
+      ],
+      "worker_version": {
+        "id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+        "tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+        "timestamp": "2026-07-27T21:40:08.342306Z"
+      },
+      "deployment_identity": {
+        "source_commit": "c86295d6a8a4",
+        "worker_release_digest": "7cb367d6980b8da3"
+      }
+    }
+  },
+  "receipt": {
+    "schema_version": 1,
+    "receipt_id": "req_39b1a6843db04d0c9b6b08a287dfdc15",
+    "request_digest": "234ec378787f077600225d14cf6b9d224bda2ffbb53e91fd2ee8974d005c1063",
+    "operation": "fetch",
+    "status": "succeeded",
+    "started_at": "2026-08-01T20:01:18.779Z",
+    "completed_at": "2026-08-01T20:01:20.728Z",
+    "duration_ms": 1949,
+    "execution": {
+      "policy_version": "p1.6.0276f25929e23c23",
+      "capability_version": "fetch.v2",
+      "worker_version_id": "3f67a73c-bfad-4032-b3bc-7e633781fa9d",
+      "worker_version_tag": "git-c86295d6a8a4-src-7cb367d6980b8da3-1785188401",
+      "worker_version_timestamp": "2026-07-27T21:40:08.342306Z",
+      "lease_generation": 1
+    },
+    "artifact": {
+      "key": "fetch/v2/req_39b1a6843db04d0c9b6b08a287dfdc15/g1/body",
+      "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+      "bytes": 129314,
+      "media_type": "text/html",
+      "etag": "c0cedf325945a003d5d08656738f148e"
+    },
+    "artifacts": [
+      {
+        "key": "fetch/v2/req_39b1a6843db04d0c9b6b08a287dfdc15/g1/body",
+        "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+        "bytes": 129314,
+        "media_type": "text/html",
+        "etag": "c0cedf325945a003d5d08656738f148e"
+      }
+    ],
+    "fetch": {
+      "requested_url": "https://developers.cloudflare.com/workflows/",
+      "final_url": "https://developers.cloudflare.com/workflows/",
+      "http_status": 200,
+      "redirect_count": 0
+    }
+  },
+  "artifact_verification": [
+    {
+      "key": "fetch/v2/req_39b1a6843db04d0c9b6b08a287dfdc15/g1/body",
+      "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+      "bytes": 129314,
+      "media_type": "text/html",
+      "verified": true
+    }
+  ],
+  "measurements": {
+    "elapsed_ms": 9232,
+    "artifact_count": 1,
+    "artifact_bytes": 129314,
+    "operator_interventions": 0,
+    "unsafe_redispatch_attempts": 0
+  },
+  "evidence_sha256": "a2627761d5f76c24eb1e81e31a15992d0d2e89daa49353d1a48722dc2962278f"
+}

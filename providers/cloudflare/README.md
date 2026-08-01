@@ -10,6 +10,7 @@ This module is Ordivon World's production Cloudflare provider adapter. The `ordi
 - authoritative pending/committed request state;
 - stable Request IDs, semantic request digests, lease generations, and stale-executor fencing;
 - Receipt lookup and deterministic replay after response loss;
+- durable `evidence.run.v1` Workflows with provider-native instance handles, inspect, termination, and immutable R2 manifests;
 - policy/capability/Worker-version binding;
 - release, zero-traffic smoke, promotion, rollback, retention, and cleanup.
 
@@ -37,7 +38,14 @@ ordivon-edge fetch https://developers.cloudflare.com/
 ordivon-edge browser-run https://example.com/ --full-page
 ordivon-edge receipt <request-id> --wait
 ordivon-edge artifact-get <artifact-key> --sha256 <receipt-sha256> --output ./artifact.bin
+ordivon-edge evidence-run ./evidence-run.json --request-id req_<stable-id>
+ordivon-edge evidence-status evidence-req_<stable-id> --wait
+ordivon-edge evidence-terminate evidence-req_<stable-id>
+ordivon-world-evidence capture-source https://developers.cloudflare.com/workflows/ --output ./source-evidence.json
+ordivon-world-evidence accept-provider --output ./provider-acceptance.json
 ```
+
+An evidence run contains one to eight bounded `fetch` or `browser.run` steps. Cloudflare Workflows owns durable step execution and the instance lifecycle; R2 owns input, result, failure, and source Artifacts; Host or the consumer owns why the run exists, independent Verification, and completion.
 
 Installed release and GC tools resolve `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` when the checkout lives elsewhere. New release receipts are written under `/root/backups/ordivon-world/`.
 

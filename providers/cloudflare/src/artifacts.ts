@@ -1,6 +1,12 @@
 const MAX_KEY_BYTES = 512;
 const SAFE_SEGMENT = /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$/;
-const ALLOWED_NAMESPACES = new Set(["artifacts", "browser", "fetch", "receipts"]);
+const ALLOWED_NAMESPACES = new Set([
+  "artifacts",
+  "browser",
+  "evidence-runs",
+  "fetch",
+  "receipts"
+]);
 
 export function validateArtifactKey(key: string): string {
   const encodedLength = new TextEncoder().encode(key).byteLength;

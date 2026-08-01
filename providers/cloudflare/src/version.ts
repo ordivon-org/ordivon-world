@@ -3,7 +3,8 @@ export const CAPABILITY_VERSIONS = {
   "browser.run": "browser.snapshot.v2",
   "artifact.put": "artifact.put.v1",
   "artifact.get": "artifact.get.v1",
-  "artifact.delete": "artifact.delete.planned"
+  "artifact.delete": "artifact.delete.planned",
+  "evidence.run": "evidence.run.v1"
 } as const;
 
 export interface WorkerDeploymentIdentity {

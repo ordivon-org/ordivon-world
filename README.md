@@ -102,7 +102,7 @@ cargo test --workspace --all-targets
 
 ## Capability program
 
-The post-W1 development design is [`docs/world-capability-program-v0.md`](docs/world-capability-program-v0.md). World now advances through a capability portfolio plus a failure-driven architecture laboratory. The first new capability class is a direct Cloudflare Workflows-backed durable evidence run; it does not introduce a World service or shared authority.
+The post-W1 development design is [`docs/world-capability-program-v0.md`](docs/world-capability-program-v0.md). World now advances through a capability portfolio plus a failure-driven architecture laboratory. WCP-0 adds adapter-local capability declarations and a generated read-only portfolio; WCP-1 records verified evidence from real Computer and release consumers; WCP-2 adds a direct Cloudflare Workflows durable evidence run; WXP-1 and WXP-2 retain reproducible callback and remote-to-remote Artifact comparisons. None introduces a World service or shared authority.
 
 ## Research route
 
