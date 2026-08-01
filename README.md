@@ -1,6 +1,6 @@
 # Ordivon World
 
-Ordivon World is the repository for Ordivon's external-provider and network-observation carriers, their exact migration history, and bounded experiments about Task-to-world continuity.
+Ordivon World is Ordivon's Task-to-World Interaction Continuity boundary: the place where we study how an open Task discovers, invokes, observes, reconciles, and conditionally rebinds external interactions. It also carries the production provider and observation modules used by current work.
 
 It contains two real but independently owned capabilities:
 
@@ -43,7 +43,7 @@ See [`docs/w1-results.md`](docs/w1-results.md) and the validated evidence in [`e
 
 ## Current repository role
 
-The repository remains useful as:
+The repository retains the unified World problem definition while serving as:
 
 1. the home of the production Cloudflare provider;
 2. the home of private network-observation tools;
@@ -104,6 +104,6 @@ cargo test --workspace --all-targets
 
 - **W0 complete:** classified 16 inherited carrier groups without admitting an inherited schema.
 - **W1 complete:** direct Host integration matched the correlation arm with less state; semantics were absorbed into Host and adapters.
-- **W2 conditional:** remains inactive until a real capability mismatch, contract drift, or valid Effect-rebinding failure is reproduced.
+- **W2 conditional:** remains inactive until a real capability mismatch, contract drift, callback discontinuity, participant handoff, remote-to-remote Artifact continuity, or valid Effect-rebinding failure is reproduced.
 
 Future work starts from a named failure. The existence of provider, network, Node, transport, or World fixture code is not sufficient evidence for another shared layer.

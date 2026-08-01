@@ -28,7 +28,7 @@ No code is moved by this documentation change.
 ## Ownership summary
 
 - Provider owns physical body and native lifecycle.
-- Edge may own the exact Task-to-provider execution binding and remote continuity
+- A future experiment may test whether any cross-provider binding responsibility is missing
   evidence.
 - Host owns why work occurs and how Task state advances.
 - Link owns how bodies and targets connect.

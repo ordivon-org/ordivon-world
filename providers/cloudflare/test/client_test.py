@@ -121,6 +121,38 @@ class ClientTests(unittest.TestCase):
             self.assertIn('"verified": true', output.getvalue().lower())
             self.assertEqual(list(pathlib.Path(directory).glob(".*.tmp")), [])
 
+    def test_release_digest_supports_monorepo_provider_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = pathlib.Path(directory)
+            provider = repository / "providers" / "cloudflare"
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.email", "test@example.invalid"],
+                check=True,
+            )
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.name", "Test"],
+                check=True,
+            )
+            for relative in client.WORKER_RELEASE_INPUTS:
+                target = provider / relative
+                if relative == "src":
+                    target.mkdir(parents=True, exist_ok=True)
+                    (target / "index.ts").write_text("worker\n")
+                else:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(relative + "\n")
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repository), "commit", "-qm", "worker"], check=True)
+            commit = subprocess.check_output(
+                ["git", "-C", str(repository), "rev-parse", "HEAD"],
+                text=True,
+            ).strip()
+            from_root = client.release_digest(repository, commit)
+            from_provider = client.release_digest(provider, commit)
+            self.assertEqual(from_root, from_provider)
+            self.assertEqual(len(from_root), 64)
+
     def test_status_reports_older_source_with_current_worker_inputs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             repository = pathlib.Path(directory)

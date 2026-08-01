@@ -27,7 +27,7 @@ See [`w1-results.md`](w1-results.md).
 
 ## W2 — conditional and inactive
 
-W2 activates only if a later trajectory reproduces one exact failure caused by provider capability mismatch, provider contract drift, or a valid need to rebind one still-open Effect.
+W2 activates only if a later trajectory reproduces one exact failure caused by provider capability mismatch, provider contract drift, callback discontinuity, participant handoff, remote-to-remote Artifact continuity, or a valid need to rebind one still-open Effect.
 
 When activated, compare static configuration, manual replacement through native Receipts, and the smallest explicit capability/binding decision. No marketplace, universal broker, automatic routing, or blind redispatch is authorized.
 

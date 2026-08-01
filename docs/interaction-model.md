@@ -13,7 +13,7 @@ The live Fetch response-loss trajectory required only existing owner fields:
 - one source-native path observation reference and digest;
 - experiment-only arm and fault identity.
 
-A separate correlated graph or World record prevented no additional failure. The candidate field inventory is therefore a hypothesis ledger and `delete-candidate`, not a stable model.
+A separate correlated graph or World record prevented no additional failure. The candidate field inventory is therefore retained only as a historical hypothesis ledger, not a stable model.
 
 ## Historical field families
 

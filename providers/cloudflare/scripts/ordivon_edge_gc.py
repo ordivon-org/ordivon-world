@@ -14,11 +14,34 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
+SCRIPT_PATH = pathlib.Path(__file__).resolve()
+DEFAULT_WORLD_REPOSITORY = pathlib.Path("/root/projects/ordivon-world")
+
+
+def resolve_provider_root(
+    script_path: pathlib.Path = SCRIPT_PATH,
+    repository_hint: pathlib.Path | None = None,
+) -> pathlib.Path:
+    script_root = script_path.resolve().parent.parent
+    configured = repository_hint
+    if configured is None:
+        configured = pathlib.Path(
+            os.environ.get("ORDIVON_WORLD_REPO", str(DEFAULT_WORLD_REPOSITORY))
+        ).expanduser()
+    for candidate in (script_root, configured.resolve()):
+        if (candidate / "wrangler.jsonc").is_file():
+            return candidate
+        nested = candidate / "providers" / "cloudflare"
+        if (nested / "wrangler.jsonc").is_file():
+            return nested
+    return script_root
+
+
+ROOT = resolve_provider_root()
 BUCKET = "ordivon-artifacts"
 CLEANUP_PREFIX = "cleanup/v2/"
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
-RECEIPT_DIR = pathlib.Path("/root/backups/ordivon-edge/gc")
+RECEIPT_DIR = pathlib.Path("/root/backups/ordivon-world/cloudflare-gc")
 
 
 class GarbageCollectionError(RuntimeError):

@@ -204,6 +204,26 @@ def resolve_commit(repository: pathlib.Path, reference: str) -> str:
     ).stdout.strip()
 
 
+def worker_release_pathspecs(repository: pathlib.Path) -> tuple[str, ...]:
+    top_level = pathlib.Path(
+        git(repository, "rev-parse", "--show-toplevel").stdout.strip()
+    ).resolve()
+    monorepo_provider = top_level / "providers" / "cloudflare"
+    if (monorepo_provider / "wrangler.jsonc").is_file():
+        prefix = "providers/cloudflare"
+    elif (top_level / "wrangler.jsonc").is_file():
+        prefix = ""
+    else:
+        raise ClientError(
+            "Repository does not contain the Cloudflare provider at the root "
+            "or providers/cloudflare"
+        )
+    return tuple(
+        f":(top){prefix}/{relative}" if prefix else f":(top){relative}"
+        for relative in WORKER_RELEASE_INPUTS
+    )
+
+
 def release_digest(repository: pathlib.Path, commit: str) -> str:
     listing = git(
         repository,
@@ -212,7 +232,7 @@ def release_digest(repository: pathlib.Path, commit: str) -> str:
         "--full-tree",
         commit,
         "--",
-        *WORKER_RELEASE_INPUTS,
+        *worker_release_pathspecs(repository),
     ).stdout
     if not listing.strip():
         raise ClientError(f"Worker release inputs are empty at commit: {commit}")

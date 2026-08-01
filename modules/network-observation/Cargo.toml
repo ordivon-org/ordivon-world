@@ -2,10 +2,12 @@
 members = [
   "crates/link-model",
   "crates/link-probe",
-  "crates/link-wire",
-  "crates/link-transport-quic",
   "crates/link-observer",
   "crates/link-console",
+]
+exclude = [
+  "crates/link-wire",
+  "crates/link-transport-quic",
   "crates/link-world",
 ]
 resolver = "2"

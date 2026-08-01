@@ -21,7 +21,10 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
+    "src/index.ts",
+    "test/helpers.ts",
+    "test/contracts.test.ts",
+    "test/transactions.test.ts",
+    "test/worker.test.ts"
   ]
 }

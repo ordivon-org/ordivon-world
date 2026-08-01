@@ -170,6 +170,28 @@ test("redirect destinations are revalidated before a second fetch", async () => 
   ]);
 });
 
+test("unknown fetch fields are rejected and receipted", async () => {
+  const memory = new MemoryR2();
+  const environment = makeEnv(memory);
+  const requestId = "request_fetch_unknown_field_001";
+  const response = await handleRequest(
+    signedRequest("https://edge.invalid/v1/fetch", {
+      method: "POST",
+      body: JSON.stringify({
+        url: "https://allowed.example.org/data",
+        timeout_mss: 1
+      }),
+      requestId
+    }),
+    environment
+  );
+  assert.equal(response.status, 422);
+  const envelope = (await response.json()) as EdgeReceiptEnvelope;
+  assert.equal(envelope.receipt.status, "rejected");
+  assert.equal(envelope.receipt.error_code, "unsupported_fetch_option");
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
+});
+
 test("rejected fetches receive persistent receipts", async () => {
   const memory = new MemoryR2();
   const environment = makeEnv(memory);
@@ -274,6 +296,8 @@ test("bounded browser run stores screenshot, content, manifest, and replays", as
   assert.equal(envelope.receipt.status, "succeeded");
   assert.equal(envelope.receipt.browser?.page_title, "Browser Test");
   assert.equal(envelope.receipt.browser?.browser_ms, 321);
+  assert.equal(envelope.receipt.browser?.final_url_observed, false);
+  assert.equal(envelope.receipt.browser?.final_url, undefined);
   assert.equal(envelope.receipt.artifacts?.length, 3);
   assert.equal(
     envelope.receipt.artifact?.key,

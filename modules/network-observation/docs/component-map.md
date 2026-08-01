@@ -39,7 +39,7 @@ code is moved by this documentation change.
 ## Ownership summary
 
 - Classical network systems own byte movement and native configuration.
-- Link may own the exact Task-conditioned relation/path/identity binding and its
+- A future experiment may test whether any cross-owner relation/path/identity responsibility and its
   evidence/invalidation semantics.
 - Host owns why the relation exists and how Task state advances.
 - Edge owns where external execution occurs.

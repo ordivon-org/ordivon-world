@@ -221,6 +221,7 @@ export async function executeBrowserRun(
 
     const browser: BrowserReceiptDetails = {
       requested_url: request.url.toString(),
+      final_url_observed: false,
       page_title: snapshot.meta.title.slice(0, 512),
       page_status: snapshot.meta.status,
       browser_ms: browserMs,

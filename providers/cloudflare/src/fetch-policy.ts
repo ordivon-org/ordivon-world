@@ -1,6 +1,8 @@
 import { EdgeError } from "./errors.js";
 import { FETCH_POLICY } from "./policy.js";
 
+const ALLOWED_FIELDS = new Set(["url", "maximum_bytes", "timeout_ms", "accept"]);
+
 const {
   max_url_bytes: MAX_URL_BYTES,
   max_response_bytes: MAX_RESPONSE_BYTES,
@@ -56,17 +58,21 @@ function parseAllowedHosts(value: string): string[] {
   if (hosts.length === 0) {
     throw new EdgeError("fetch_unavailable", 503, "No external fetch hosts are configured.", "failed");
   }
+  for (const host of hosts) {
+    if (host.startsWith("*.")) {
+      throw new EdgeError(
+        "fetch_unavailable",
+        503,
+        "Wildcard external fetch hosts are not supported.",
+        "failed"
+      );
+    }
+  }
   return hosts;
 }
 
 function hostnameAllowed(hostname: string, patterns: readonly string[]): boolean {
-  return patterns.some((pattern) => {
-    if (pattern.startsWith("*.")) {
-      const suffix = pattern.slice(1);
-      return hostname.endsWith(suffix) && hostname.length > suffix.length;
-    }
-    return hostname === pattern;
-  });
+  return patterns.includes(hostname);
 }
 
 export function validateExternalUrl(
@@ -113,6 +119,15 @@ export function validateFetchRequest(
   value: Record<string, unknown>,
   environment: FetchPolicyEnvironment
 ): ValidatedFetchRequest {
+  for (const field of Object.keys(value)) {
+    if (!ALLOWED_FIELDS.has(field)) {
+      throw new EdgeError(
+        "unsupported_fetch_option",
+        422,
+        `Fetch option ${field} is not supported.`
+      );
+    }
+  }
   if (typeof value.url !== "string") {
     throw new EdgeError("invalid_request", 422, "url must be a string.");
   }

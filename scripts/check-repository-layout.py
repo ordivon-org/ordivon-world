@@ -89,10 +89,32 @@ for carrier in carriers:
     paths = carrier.get("paths")
     if not isinstance(paths, list) or not paths:
         raise SystemExit(f"W0 carrier has no paths: {carrier.get('id')}")
-    for path in paths:
-        candidate = ROOT / path
-        if not candidate.exists():
-            raise SystemExit(f"W0 carrier path does not exist: {carrier.get('id')} -> {path}")
+    if disposition in {"retain", "adapter-only"}:
+        for path in paths:
+            candidate = ROOT / path
+            if not candidate.exists():
+                raise SystemExit(
+                    f"retained W0 carrier path does not exist: {carrier.get('id')} -> {path}"
+                )
+    elif disposition == "delete-candidate":
+        symbols = carrier.get("symbols", [])
+        if symbols:
+            for path in paths:
+                candidate = ROOT / path
+                if not candidate.is_file():
+                    continue
+                text = candidate.read_text()
+                for symbol in symbols:
+                    if re.search(rf"\b{re.escape(symbol)}\b", text):
+                        raise SystemExit(
+                            f"delete-candidate symbol still exists: {carrier.get('id')} -> {symbol}"
+                        )
+        else:
+            for path in paths:
+                if (ROOT / path).exists():
+                    raise SystemExit(
+                        f"delete-candidate path still exists: {carrier.get('id')} -> {path}"
+                    )
     role = carrier.get("w1Role")
     if role != "none" and disposition not in {"retain", "adapter-only"}:
         raise SystemExit(f"W1 cannot consume {disposition} carrier: {carrier.get('id')}")
@@ -132,7 +154,7 @@ for required_id, expected_disposition in {
     "deterministic-network-world": "historical",
     "cloudflare-node-lifecycle-research": "historical",
     "unused-link-model-entities": "delete-candidate",
-    "universal-world-interaction-schema": "delete-candidate",
+    "universal-world-interaction-schema": "historical",
 }.items():
     carrier = by_id.get(required_id)
     if carrier is None or carrier.get("disposition") != expected_disposition:

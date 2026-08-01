@@ -68,7 +68,10 @@
       "disposition": "retain",
       "owner": "Cloudflare provider module",
       "executionMode": "production-provider",
-      "currentConsumers": ["signed local client", "release smoke tests"],
+      "currentConsumers": [
+        "signed local client",
+        "release smoke tests"
+      ],
       "legacyTerminology": true,
       "w1Role": "provider",
       "postW1Decision": "retain independently of the World boundary result"
@@ -82,7 +85,10 @@
       "disposition": "retain",
       "owner": "Cloudflare provider module",
       "executionMode": "production-provider",
-      "currentConsumers": ["signed local client", "release smoke tests"],
+      "currentConsumers": [
+        "signed local client",
+        "release smoke tests"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "retain as a separate provider capability; exclude from W1 to preserve causal attribution"
@@ -99,7 +105,12 @@
       "disposition": "retain",
       "owner": "Cloudflare provider module",
       "executionMode": "production-provider",
-      "currentConsumers": ["Fetch", "Browser Run", "receipt lookup", "artifact retrieval"],
+      "currentConsumers": [
+        "Fetch",
+        "Browser Run",
+        "receipt lookup",
+        "artifact retrieval"
+      ],
       "legacyTerminology": true,
       "w1Role": "provider",
       "postW1Decision": "remain provider-owned; World must reference rather than reproduce this state machine"
@@ -116,7 +127,12 @@
       "disposition": "retain",
       "owner": "Cloudflare provider operations",
       "executionMode": "operator-tooling",
-      "currentConsumers": ["deployment", "rollback", "lifecycle policy", "garbage collection"],
+      "currentConsumers": [
+        "deployment",
+        "rollback",
+        "lifecycle policy",
+        "garbage collection"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "retain independently; do not move into a World control plane"
@@ -129,7 +145,11 @@
       "disposition": "adapter-only",
       "owner": "Cloudflare provider client",
       "executionMode": "operator-and-experiment-adapter",
-      "currentConsumers": ["direct provider invocation", "receipt polling", "artifact verification"],
+      "currentConsumers": [
+        "direct provider invocation",
+        "receipt polling",
+        "artifact verification"
+      ],
       "legacyTerminology": true,
       "w1Role": "direct-baseline",
       "postW1Decision": "retain as provider-specific client; do not promote its CLI or response model into World"
@@ -146,7 +166,10 @@
       "disposition": "historical",
       "owner": "inherited Edge body/lifecycle experiment",
       "executionMode": "research-fixture",
-      "currentConsumers": ["module-local tests", "historical Security acceptance composition"],
+      "currentConsumers": [
+        "module-local tests",
+        "historical Security acceptance composition"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "freeze; remove only after confirming no retained external acceptance consumer"
@@ -160,7 +183,11 @@
       "disposition": "adapter-only",
       "owner": "network observation module",
       "executionMode": "explicit-observation-tool",
-      "currentConsumers": ["probe CLI", "summary/report generation", "local observer"],
+      "currentConsumers": [
+        "probe CLI",
+        "summary/report generation",
+        "local observer"
+      ],
       "legacyTerminology": true,
       "w1Role": "observation-adapter",
       "postW1Decision": "retain ProbeResult and target registry only as source-native observations; project a smaller experiment-local digest for W1"
@@ -174,7 +201,10 @@
       "disposition": "adapter-only",
       "owner": "private local operations",
       "executionMode": "host-local-observer-and-presentation",
-      "currentConsumers": ["loopback console", "sanitized local history"],
+      "currentConsumers": [
+        "loopback console",
+        "sanitized local history"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "retain for local operations if still used; W1 reads one explicit probe result and does not depend on this database or UI"
@@ -188,7 +218,10 @@
       "disposition": "historical",
       "owner": "inherited Link network-condition experiment",
       "executionMode": "deterministic-research-fixture",
-      "currentConsumers": ["module-local tests", "historical Security lifecycle port"],
+      "currentConsumers": [
+        "module-local tests",
+        "historical Security lifecycle port"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "freeze as a fixture; never treat NetworkWorldManifest or WorldState as the W1 or universal World schema"
@@ -202,7 +235,10 @@
       "disposition": "historical",
       "owner": "historical Security acceptance integration",
       "executionMode": "acceptance-fixture",
-      "currentConsumers": ["module-local tests", "past Security composition"],
+      "currentConsumers": [
+        "module-local tests",
+        "past Security composition"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "freeze; future Security experiments must consume current component receipts rather than expand this port"
@@ -216,7 +252,9 @@
       "disposition": "historical",
       "owner": "inherited transport experiment",
       "executionMode": "localhost-reference-implementation",
-      "currentConsumers": ["module-local tests"],
+      "currentConsumers": [
+        "module-local tests"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "freeze; W1 reuses HTTPS and does not introduce a transport dependency"
@@ -230,7 +268,9 @@
       "disposition": "historical",
       "owner": "private operator environment",
       "executionMode": "explicit-private-tooling",
-      "currentConsumers": ["manual network diagnosis and isolated egress"],
+      "currentConsumers": [
+        "manual network diagnosis and isolated egress"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "retain only while operationally useful; exclude from World identity, routing, and automatic selection"
@@ -246,7 +286,10 @@
       "disposition": "historical",
       "owner": "transport research reference",
       "executionMode": "research-reference",
-      "currentConsumers": ["catalog renderer", "historical comparison"],
+      "currentConsumers": [
+        "catalog renderer",
+        "historical comparison"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "preserve as dated research; do not reactivate a custom data plane from W1"
@@ -256,27 +299,33 @@
       "paths": [
         "modules/network-observation/crates/link-model/src/lib.rs"
       ],
-      "symbols": ["Device", "Edge", "Target", "Transport", "RouteDecision"],
+      "symbols": [
+        "Device",
+        "Edge",
+        "Target",
+        "Transport",
+        "RouteDecision"
+      ],
       "disposition": "delete-candidate",
       "owner": "none",
       "executionMode": "unused-type-declarations",
       "currentConsumers": [],
       "legacyTerminology": true,
       "w1Role": "none",
-      "postW1Decision": "delete in a later cleanup after confirming no external crate consumer; they do not enter W1"
+      "postW1Decision": "deleted after a source-level deletion test proved the active observation workspace remains green"
     },
     {
       "id": "universal-world-interaction-schema",
       "paths": [
         "docs/interaction-model.md"
       ],
-      "disposition": "delete-candidate",
+      "disposition": "historical",
       "owner": "research hypothesis only",
-      "executionMode": "field-inventory-document",
+      "executionMode": "historical-field-inventory-document",
       "currentConsumers": [],
       "legacyTerminology": false,
       "w1Role": "none",
-      "postW1Decision": "retain only as a hypothesis ledger; delete any field not required by a measured W1 failure and do not generate code from it"
+      "postW1Decision": "retain only as a dated hypothesis ledger; no code, database, or protocol may be generated from it"
     },
     {
       "id": "legacy-edge-link-names-and-documents",
@@ -289,7 +338,11 @@
       "disposition": "historical",
       "owner": "migration history and module-local operations",
       "executionMode": "documentation-and-compatibility",
-      "currentConsumers": ["operators", "historical receipts", "module-local commands"],
+      "currentConsumers": [
+        "operators",
+        "historical receipts",
+        "module-local commands"
+      ],
       "legacyTerminology": true,
       "w1Role": "none",
       "postW1Decision": "keep exact historical claims; later remove misleading future-tense ownership statements without mass-renaming operational identifiers"

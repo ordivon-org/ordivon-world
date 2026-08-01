@@ -83,3 +83,7 @@ Temporary body state is not Task state. Results become durable Task inputs only
 when exported with content identity and exact execution provenance. Future
 research should add semantic references without weakening the provider's
 private R2, bounded Artifact, digest, and retention guarantees.
+
+## Browser navigation evidence
+
+Browser snapshot Receipts preserve the requested URL and explicitly report `final_url_observed: false` because the current provider response does not expose a trustworthy final navigation URL. Consumers must not infer final page identity from the requested URL.
