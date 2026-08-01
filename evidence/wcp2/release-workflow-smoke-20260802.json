@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "kind": "ordivon-world-release-workflow-smoke",
+  "workflow_resource": {
+    "created": false,
+    "workflow": {
+      "created_on": "2026-08-01T20:25:34.065Z",
+      "modified_on": "2026-08-01T20:48:43.323Z",
+      "name": "ordivon-evidence-run",
+      "id": "3818c7af-2ebd-4d10-8f1f-47f61ea96df8",
+      "script_name": "ordivon-edge",
+      "triggered_on": "2026-08-01T20:48:43.023Z",
+      "class_name": "EvidenceRunWorkflow",
+      "instances": {
+        "queued": 0,
+        "running": 0,
+        "paused": 0,
+        "errored": 0,
+        "terminated": 0,
+        "complete": 3,
+        "unknown": 0,
+        "waitingForPause": 0,
+        "waiting": 0,
+        "rollingBack": 0
+      }
+    }
+  },
+  "worker_version_id": "749dc76c-16cc-4d20-b209-e5df67d70143",
+  "policy_version": "p1.6.0276f25929e23c23",
+  "smoke": {
+    "request_id": "req_release_evidence_c6617788cfea486fbc092d520dc07af3",
+    "instance_id": "evidence-req_release_evidence_c6617788cfea486fbc092d520dc07af3",
+    "observations": [
+      "running",
+      "complete"
+    ],
+    "provider_status": "complete",
+    "result_manifest": {
+      "key": "evidence-runs/v1/evidence-req_release_evidence_c6617788cfea486fbc092d520dc07af3/result.json",
+      "sha256": "8ec1ea0fb1e8d894b790f6e90bd3937e133dec6d85a336a2937ec2ae7c957a8f",
+      "bytes": 2067,
+      "media_type": "application/json; charset=utf-8",
+      "etag": "b250f64719770255131e2ad5c7470c2a"
+    },
+    "failure_manifest": null
+  },
+  "measurements": {
+    "workflow_created_during_closeout": false,
+    "operator_interventions": 0,
+    "unsafe_redispatch_attempts": 0
+  },
+  "evidence_sha256": "a9c0232c8d17e7aab1e71e195ae5cc698a4e32dbb809bcabf66524d1a89ee64c"
+}

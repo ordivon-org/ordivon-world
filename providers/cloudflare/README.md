@@ -47,9 +47,11 @@ ordivon-world-evidence accept-provider --output ./provider-acceptance.json
 
 An evidence run contains one to eight bounded `fetch` or `browser.run` steps. Cloudflare Workflows owns durable step execution and the instance lifecycle; R2 owns input, result, failure, and source Artifacts; Host or the consumer owns why the run exists, independent Verification, and completion.
 
-Installed release and GC tools resolve `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` when the checkout lives elsewhere. New release receipts are written under `/root/backups/ordivon-world/`.
+Installed release and GC tools resolve `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` when the checkout lives elsewhere. The evidence consumer imports the shared client from `/usr/local/lib/ordivon-world/ordivon_edge_client.py`; the protocol implementation is not copied into a second package. New release receipts are written under `/root/backups/ordivon-world/`.
 
 ## Release and lifecycle
+
+The release controller uploads the candidate Worker at zero traffic, validates or bootstraps the `ordivon-evidence-run` Workflow resource, runs Fetch, Browser, and durable `evidence.run` candidate smokes, verifies the Workflow step's Worker version, and only then promotes the candidate. Existing Workflow resources are validated by script and class and are not rewritten on every release.
 
 ```bash
 python3 scripts/ordivon_edge_release.py release

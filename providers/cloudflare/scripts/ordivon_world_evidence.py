@@ -5,7 +5,12 @@ import argparse, hashlib, json, pathlib, sys, time, urllib.parse
 from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
+INSTALLED_LIBRARY = pathlib.Path(
+    "/usr/local/lib/ordivon-world"
+)
+for search_path in (HERE, INSTALLED_LIBRARY):
+    if str(search_path) not in sys.path:
+        sys.path.insert(0, str(search_path))
 from ordivon_edge_client import ClientError, Config, load_config, make_request_id, request  # noqa: E402
 
 

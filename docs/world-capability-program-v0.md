@@ -1,6 +1,6 @@
 # World Capability Program v0
 
-Status: design baseline; implementation proceeds through concrete adapters and experiments, not a new World service
+Status: completed through WCP-2, WXP-1, WXP-2, and W-A1; WCP-3 remains conditional
 
 Date: 2026-08-02
 
@@ -453,3 +453,11 @@ These systems are baselines and implementation substrates. Their existence does 
 | telemetry semantic-convention discipline | <https://opentelemetry.io/docs/specs/semconv/> |
 | managed harness/runtime separation | <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-vs-runtime.html> |
 | managed workload identity baseline | <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html> |
+
+## 15. Implementation closeout
+
+WCP-0, WCP-1, WCP-2, WXP-1, WXP-2, and W-A1 completed on 2026-08-02. The measured result is documented in [`wcp0-wxp2-results.md`](wcp0-wxp2-results.md) and the generated closeout evidence is [`../evidence/wcp0-wxp2-closeout.json`](../evidence/wcp0-wxp2-closeout.json).
+
+The program retained adapter-local declarations, the Cloudflare Workflow capability, R2 manifests, callback wake-up with inspect fallback, and provider-to-R2 Artifact movement. It rejected every candidate shared World authority because none reduced an observed cross-owner failure after permanent state and operational cost were counted.
+
+WCP-3 is deliberately deferred. It may begin only when a named external workload offers substantial capability gain and architectural contrast. It is not required to keep this completed program open.
