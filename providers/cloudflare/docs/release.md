@@ -63,7 +63,7 @@ python3 scripts/ordivon_edge_release.py rollback \
 Release and rollback receipts are stored root-only in:
 
 ```text
-/root/backups/ordivon-edge/releases/
+/root/backups/ordivon-world/cloudflare-releases/
 ```
 
 ## Smoke Artifact policy
@@ -87,3 +87,7 @@ The controller reads the candidate's Git source tag. It accepts an older source 
 ## Control-plane implementation
 
 Version and Deployment reads use the Cloudflare REST API directly. A 100% promotion or rollback also uses the Deployment API, with forced deployment enabled for rollback. The 0% candidate split remains a bounded Wrangler operation because the public API schema does not express zero-percent entries. Wrangler is placed in its own process group with a 30-second deadline; after normal exit, error, or timeout, the controller queries the Deployment API and treats the operation according to the actual Cloudflare state.
+
+## Installed release source
+
+`ordivon-edge-release` resolves provider source from `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` to a different World repository root when the checkout lives elsewhere.

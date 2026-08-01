@@ -23,8 +23,8 @@ The W0 source inventory remains in [`w0-carrier-inventory.json`](w0-carrier-inve
 | disposable Node/unshare lifecycle | historical fixture |
 | reference wire and QUIC transport | historical experiment |
 | WireGuard/Surfshark and transport catalog | private or dated research |
-| unused `Device`, `Edge`, `Target`, `Transport`, `RouteDecision` declarations | delete-candidate |
-| universal World Interaction field inventory | delete-candidate |
+| unused `Device`, `Edge`, `Target`, `Transport`, `RouteDecision` declarations | deleted after the active workspace passed without them |
+| universal World Interaction field inventory | historical hypothesis ledger; no schema admitted |
 
 ## Surviving cross-component path
 

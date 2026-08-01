@@ -20,6 +20,30 @@ SPEC.loader.exec_module(release_controller)
 
 
 class ReleaseControllerTests(unittest.TestCase):
+    def test_installed_release_controller_resolves_world_monorepo(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = pathlib.Path(directory)
+            provider = repository / "providers" / "cloudflare"
+            provider.mkdir(parents=True)
+            (provider / "wrangler.jsonc").write_text("{}\n")
+            resolved = release_controller.resolve_provider_root(
+                pathlib.Path("/usr/local/sbin/ordivon-edge-release"),
+                repository,
+            )
+            self.assertEqual(resolved, provider.resolve())
+
+    def test_source_release_controller_prefers_adjacent_provider(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            provider = pathlib.Path(directory) / "provider"
+            script = provider / "scripts" / "ordivon_edge_release.py"
+            script.parent.mkdir(parents=True)
+            (provider / "wrangler.jsonc").write_text("{}\n")
+            resolved = release_controller.resolve_provider_root(
+                script,
+                pathlib.Path("/does/not/exist"),
+            )
+            self.assertEqual(resolved, provider.resolve())
+
     def test_deployment_specifications_are_bounded_and_normalized(self) -> None:
         parsed = release_controller.parse_deployment_specifications(
             ["old@99.5", "new@0.5"]
@@ -97,6 +121,37 @@ class ReleaseControllerTests(unittest.TestCase):
         version, retention = release_controller.expected_policy()
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
         self.assertGreater(retention["artifacts"], retention["idempotency"])
+
+    def test_worker_release_digest_supports_monorepo_provider_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = pathlib.Path(directory)
+            provider = repository / "providers" / "cloudflare"
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.email", "test@example.invalid"],
+                check=True,
+            )
+            subprocess.run(
+                ["git", "-C", str(repository), "config", "user.name", "Test"],
+                check=True,
+            )
+            for relative in release_controller.WORKER_RELEASE_INPUTS:
+                target = provider / relative
+                if relative == "src":
+                    target.mkdir(parents=True, exist_ok=True)
+                    (target / "index.ts").write_text("worker\n")
+                else:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(relative + "\n")
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repository), "commit", "-qm", "worker"], check=True)
+            commit = subprocess.check_output(
+                ["git", "-C", str(repository), "rev-parse", "HEAD"],
+                text=True,
+            ).strip()
+            with mock.patch.object(release_controller, "ROOT", provider):
+                digest = release_controller.worker_release_digest(commit)
+            self.assertEqual(len(digest), 64)
 
     def test_worker_version_tag_binds_source_and_release_inputs(self) -> None:
         commit = "a" * 40

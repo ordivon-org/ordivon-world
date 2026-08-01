@@ -23,13 +23,37 @@ import uuid
 from dataclasses import dataclass
 from typing import Any, NoReturn
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
+SCRIPT_PATH = pathlib.Path(__file__).resolve()
+DEFAULT_WORLD_REPOSITORY = pathlib.Path("/root/projects/ordivon-world")
+
+
+def resolve_provider_root(
+    script_path: pathlib.Path = SCRIPT_PATH,
+    repository_hint: pathlib.Path | None = None,
+) -> pathlib.Path:
+    script_root = script_path.resolve().parent.parent
+    configured = repository_hint
+    if configured is None:
+        configured = pathlib.Path(
+            os.environ.get("ORDIVON_WORLD_REPO", str(DEFAULT_WORLD_REPOSITORY))
+        ).expanduser()
+    candidates = [script_root, configured.resolve()]
+    for candidate in candidates:
+        if (candidate / "wrangler.jsonc").is_file():
+            return candidate
+        nested = candidate / "providers" / "cloudflare"
+        if (nested / "wrangler.jsonc").is_file():
+            return nested
+    return script_root
+
+
+ROOT = resolve_provider_root()
 WORKER_NAME = "ordivon-edge"
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
 EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
 POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
 WRANGLER_CONFIG = ROOT / "wrangler.jsonc"
-RELEASE_DIR = pathlib.Path("/root/backups/ordivon-edge/releases")
+RELEASE_DIR = pathlib.Path("/root/backups/ordivon-world/cloudflare-releases")
 WORKER_RELEASE_INPUTS = (
     "src",
     "config/edge-policy.json",
@@ -38,6 +62,21 @@ WORKER_RELEASE_INPUTS = (
     "pnpm-lock.yaml",
     "tsconfig.json",
 )
+
+
+def worker_release_pathspecs() -> tuple[str, ...]:
+    repository = pathlib.Path(git_output("rev-parse", "--show-toplevel")).resolve()
+    try:
+        provider_relative = ROOT.resolve().relative_to(repository)
+    except ValueError as exc:
+        raise ReleaseError(
+            f"Cloudflare provider root is outside the Git repository: {ROOT}"
+        ) from exc
+    prefix = "" if provider_relative == pathlib.Path(".") else provider_relative.as_posix()
+    return tuple(
+        f":(top){prefix}/{relative}" if prefix else f":(top){relative}"
+        for relative in WORKER_RELEASE_INPUTS
+    )
 
 
 class ReleaseError(RuntimeError):
@@ -253,7 +292,7 @@ def worker_release_digest(commit: str) -> str:
             "--full-tree",
             commit,
             "--",
-            *WORKER_RELEASE_INPUTS,
+            *worker_release_pathspecs(),
         ],
         capture=True,
     ).stdout
@@ -366,7 +405,7 @@ def worker_source_equivalent(candidate_ref: str, current_commit: str) -> bool:
             candidate_commit,
             current_commit,
             "--",
-            *WORKER_RELEASE_INPUTS,
+            *worker_release_pathspecs(),
         ],
         cwd=ROOT,
         check=False,

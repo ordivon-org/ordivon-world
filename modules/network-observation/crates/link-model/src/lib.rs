@@ -49,42 +49,6 @@ impl fmt::Display for ProbeProtocol {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Device {
-    pub id: String,
-    pub label: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Edge {
-    pub id: String,
-    pub provider: String,
-    pub region: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Target {
-    pub id: String,
-    pub url: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Transport {
-    pub id: String,
-    pub implementation: String,
-    pub protocol: ProbeProtocol,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct RouteDecision {
-    pub device_id: String,
-    pub target_id: String,
-    pub selected_route: String,
-    pub selected_transport: String,
-    pub reason: String,
-    pub decided_at: DateTime<Utc>,
-}
-
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum FailureClass {

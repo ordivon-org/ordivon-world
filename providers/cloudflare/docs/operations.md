@@ -57,7 +57,7 @@ Requests outside a five-minute clock window are rejected. Reusing a Request ID w
 
 ```bash
 ordivon-edge health
-ordivon-edge status --repo /root/projects/ordivon-edge --expected-ref HEAD
+ordivon-edge status --repo /root/projects/ordivon-world --expected-ref HEAD
 ordivon-edge capabilities
 ordivon-edge fetch https://developers.cloudflare.com/ --maximum-bytes 262144
 ordivon-edge receipt <receipt-id>
@@ -184,3 +184,7 @@ Artifact downloads fail closed unless `X-Ordivon-Sha256` is present and matches 
 
 
 The lifecycle controller preserves non-Ordivon rules, replaces all rules whose IDs begin with `edge-v2-`, then rereads the API and requires an exact match. It does not depend on Wrangler or the local Node dependency tree.
+
+## Installed release source
+
+`ordivon-edge-release` resolves provider source from `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` to a different World repository root when the checkout lives elsewhere.

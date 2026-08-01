@@ -1,6 +1,6 @@
 # Privacy boundary
 
-Ordivon Edge is private by default.
+The network-observation module is private by default.
 
 ## Data not retained
 

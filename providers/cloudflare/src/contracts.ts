@@ -64,6 +64,8 @@ export interface FetchReceiptDetails {
 
 export interface BrowserReceiptDetails {
   readonly requested_url: string;
+  readonly final_url_observed: boolean;
+  readonly final_url?: string;
   readonly page_title: string;
   readonly page_status: number;
   readonly browser_ms: number;

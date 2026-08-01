@@ -88,7 +88,7 @@ test("artifact keys are normalized and namespaced", () => {
 });
 
 test("fetch policy is HTTPS-only, allowlisted, and bounded", () => {
-  const environment = { FETCH_ALLOWED_HOSTS: "allowed.example.org,*.trusted.example.org" };
+  const environment = { FETCH_ALLOWED_HOSTS: "allowed.example.org,api.trusted.example.org" };
   assert.equal(
     validateExternalUrl("https://allowed.example.org/path#fragment", environment).toString(),
     "https://allowed.example.org/path"
@@ -113,6 +113,24 @@ test("fetch policy is HTTPS-only, allowlisted, and bounded", () => {
   );
   assert.equal(request.maximumBytes, 1024);
   assert.equal(request.timeoutMs, 2000);
+  assert.throws(() =>
+    validateFetchRequest(
+      { url: "https://allowed.example.org/data", timeout_mss: 1 },
+      environment
+    )
+  );
+  assert.throws(() =>
+    validateExternalUrl(
+      "https://example.com/",
+      { FETCH_ALLOWED_HOSTS: "*.com" }
+    )
+  );
+  assert.throws(() =>
+    validateExternalUrl(
+      "https://api.trusted.example.org/",
+      { FETCH_ALLOWED_HOSTS: "*.trusted.example.org" }
+    )
+  );
 });
 
 
