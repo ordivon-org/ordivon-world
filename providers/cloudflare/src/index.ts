@@ -27,6 +27,19 @@ import {
 } from "./external-fetch.js";
 import { validateFetchRequest } from "./fetch-policy.js";
 import {
+  validateEvidenceRunRequest,
+  EVIDENCE_RUN_CAPABILITY_VERSION
+} from "./evidence-run-contracts.js";
+import {
+  EvidenceRunWorkflow,
+  evidenceManifestKey,
+  evidenceWorkflowInstanceId,
+  persistEvidenceSubmission,
+  type EvidenceRunParameters,
+  type EvidenceWorkflowEnvironment
+} from "./evidence-run.js";
+export { EvidenceRunWorkflow };
+import {
   beginRequest,
   commitReceipt,
   loadReceiptRecord
@@ -49,15 +62,18 @@ import { createReceipt } from "./receipts.js";
 import { workerDeploymentIdentity } from "./version.js";
 const RECEIPT_PREFIX = "/v1/receipts/";
 const ARTIFACT_PREFIX = "/v1/artifacts/";
+const EVIDENCE_RUN_PREFIX = "/v1/evidence-runs/";
 
 export interface Env
   extends AuthEnvironment,
     FetchExecutionEnvironment,
-    BrowserExecutionEnvironment {
+    BrowserExecutionEnvironment,
+    EvidenceWorkflowEnvironment {
   readonly ARTIFACTS: R2Bucket;
   readonly BROWSER: BrowserRun;
   readonly FETCH_RATE_LIMIT: RateLimit;
   readonly BROWSER_RATE_LIMIT: RateLimit;
+  readonly EVIDENCE_WORKFLOW: Workflow<EvidenceRunParameters>;
   readonly CF_VERSION_METADATA: WorkerVersionMetadata;
 }
 
@@ -464,6 +480,121 @@ async function handleArtifactGet(
   return new Response(object.body, { headers });
 }
 
+const EVIDENCE_INSTANCE_ID = /^evidence-[a-z0-9][a-z0-9_-]{7,72}$/;
+
+async function manifestReference(environment: Env, key: string) {
+  const object = await environment.ARTIFACTS.get(key);
+  if (object === null) return null;
+  const sha256 = object.customMetadata?.sha256;
+  if (sha256 === undefined) return null;
+  return {
+    key,
+    sha256,
+    bytes: object.size,
+    media_type: object.httpMetadata?.contentType ?? "application/json; charset=utf-8",
+    etag: object.etag
+  };
+}
+
+async function evidenceRunStatus(environment: Env, instanceId: string): Promise<Response> {
+  if (!EVIDENCE_INSTANCE_ID.test(instanceId)) {
+    throw new EdgeError("invalid_evidence_run_id", 400, "The evidence run ID is invalid.");
+  }
+  let instance: WorkflowInstance;
+  try {
+    instance = await environment.EVIDENCE_WORKFLOW.get(instanceId);
+  } catch {
+    return jsonResponse({error: "evidence_run_not_found"}, 404);
+  }
+  const status = await instance.status();
+  const resultManifest = await manifestReference(environment, evidenceManifestKey(instanceId, "result"));
+  const failureManifest = await manifestReference(environment, evidenceManifestKey(instanceId, "failure"));
+  const pending = ["queued", "running", "waiting", "waitingForPause", "paused", "unknown"].includes(status.status);
+  return jsonResponse({
+    schema_version: EDGE_SCHEMA_VERSION,
+    foreign_operation_ref: {provider: "cloudflare-workflows", workflow: "ordivon-evidence-run", instance_id: instanceId},
+    provider_status: status,
+    result_manifest: resultManifest,
+    failure_manifest: failureManifest
+  }, pending ? 202 : 200);
+}
+
+async function createEvidenceRun(
+  environment: Env,
+  body: Uint8Array,
+  requestId: string,
+  requestDigest: string,
+  dependencies: HandlerDependencies
+): Promise<Response> {
+  const evidenceRequest = validateEvidenceRunRequest(parseJsonObject(body), environment);
+  const instanceId = evidenceWorkflowInstanceId(requestId);
+  const parameters: EvidenceRunParameters = {
+    request: evidenceRequest,
+    submission: {
+      request_id: requestId,
+      request_digest: requestDigest,
+      policy_version: await effectivePolicyVersion(environment),
+      capability_version: EVIDENCE_RUN_CAPABILITY_VERSION,
+      worker_version: environment.CF_VERSION_METADATA
+    }
+  };
+  let submissionArtifact;
+  try {
+    submissionArtifact = await persistEvidenceSubmission(environment, instanceId, parameters);
+  } catch (error) {
+    const conflict = error instanceof Error && error.message.includes("conflict");
+    throw new EdgeError(
+      conflict ? "evidence_run_conflict" : "evidence_run_submission_unavailable",
+      conflict ? 409 : 503,
+      conflict ? "The evidence run request ID is already bound to different input." : "The evidence run submission could not be persisted.",
+      conflict ? "rejected" : "failed"
+    );
+  }
+  let instance: WorkflowInstance;
+  let replayed = false;
+  try {
+    instance = await environment.EVIDENCE_WORKFLOW.create({
+      id: instanceId,
+      params: parameters,
+      retention: {successRetention: "3 days", errorRetention: "3 days"}
+    });
+  } catch {
+    try {
+      instance = await environment.EVIDENCE_WORKFLOW.get(instanceId);
+      replayed = true;
+    } catch {
+      throw new EdgeError("evidence_run_unavailable", 503, "The evidence run could not be created or reconciled.", "failed", 10);
+    }
+  }
+  const status = await instance.status();
+  return jsonResponse({
+    schema_version: EDGE_SCHEMA_VERSION,
+    foreign_operation_ref: {provider: "cloudflare-workflows", workflow: "ordivon-evidence-run", instance_id: instance.id},
+    request_digest: requestDigest,
+    submission_artifact: submissionArtifact,
+    provider_status: status,
+    replayed
+  }, status.status === "complete" ? 200 : 202);
+}
+
+async function terminateEvidenceRun(environment: Env, instanceId: string): Promise<Response> {
+  if (!EVIDENCE_INSTANCE_ID.test(instanceId)) {
+    throw new EdgeError("invalid_evidence_run_id", 400, "The evidence run ID is invalid.");
+  }
+  let instance: WorkflowInstance;
+  try {
+    instance = await environment.EVIDENCE_WORKFLOW.get(instanceId);
+    await instance.terminate({rollback: false});
+  } catch {
+    throw new EdgeError("evidence_run_not_terminable", 409, "The evidence run does not exist or cannot be terminated.", "rejected");
+  }
+  return jsonResponse({
+    schema_version: EDGE_SCHEMA_VERSION,
+    foreign_operation_ref: {provider: "cloudflare-workflows", workflow: "ordivon-evidence-run", instance_id: instanceId},
+    provider_status: await instance.status()
+  });
+}
+
 export async function handleRequest(
   request: Request,
   environment: Env,
@@ -521,6 +652,30 @@ export async function handleRequest(
         auth.keyId,
         dependencies
       );
+    }
+
+    if (url.pathname === "/v1/evidence-runs") {
+      if (request.method !== "POST") return methodNotAllowed("POST");
+      return await createEvidenceRun(
+        environment,
+        body,
+        auth.requestId,
+        auth.requestDigest,
+        dependencies
+      );
+    }
+
+    if (url.pathname.startsWith(EVIDENCE_RUN_PREFIX)) {
+      const remainder = url.pathname.slice(EVIDENCE_RUN_PREFIX.length);
+      if (remainder.endsWith("/terminate")) {
+        if (request.method !== "POST") return methodNotAllowed("POST");
+        return await terminateEvidenceRun(
+          environment,
+          remainder.slice(0, -"/terminate".length)
+        );
+      }
+      if (request.method !== "GET") return methodNotAllowed("GET");
+      return await evidenceRunStatus(environment, remainder);
     }
 
     if (url.pathname.startsWith(RECEIPT_PREFIX)) {
