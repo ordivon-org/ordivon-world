@@ -100,6 +100,10 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --all-targets
 ```
 
+## Capability program
+
+The post-W1 development design is [`docs/world-capability-program-v0.md`](docs/world-capability-program-v0.md). World now advances through a capability portfolio plus a failure-driven architecture laboratory. The first new capability class is a direct Cloudflare Workflows-backed durable evidence run; it does not introduce a World service or shared authority.
+
 ## Research route
 
 - **W0 complete:** classified 16 inherited carrier groups without admitting an inherited schema.
