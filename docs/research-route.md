@@ -38,3 +38,7 @@ Callbacks, participant handoff, remote-to-remote Artifact movement, fan-out/join
 ## Current portfolio disposition
 
 The repository retains provider and observation modules plus historical experiments. The top-level World semantic layer is not active work.
+
+## Post-W1 capability program
+
+The detailed design is [`world-capability-program-v0.md`](world-capability-program-v0.md). Execution begins with recurring consumers for the existing Cloudflare provider, then a direct provider-native Cloudflare Workflow evidence-run adapter. Callback continuity and remote-to-remote Artifact movement remain bounded comparisons against direct integration. Shared World semantics remain conditional on the same promotion and deletion gates.
