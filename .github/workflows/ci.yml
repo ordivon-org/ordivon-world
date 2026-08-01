@@ -19,6 +19,7 @@ jobs:
       - run: python3 scripts/check-repository-layout.py
       - run: python3 scripts/check-w1-evidence.py
       - run: python3 scripts/generate-capability-portfolio.py --check
+      - run: python3 scripts/generate-wcp-closeout.py --check
 
   world-w1:
     runs-on: ubuntu-latest
@@ -44,7 +45,7 @@ jobs:
       - run: python3 experiments/wxp1-callback-continuity/experiment.py
       - run: python3 -m unittest -v experiments/wxp1-callback-continuity/test_experiment.py
       - run: python3 experiments/wxp2-remote-artifact/experiment.py
-      - run: python3 -m unittest -v experiments/wxp2-remote-artifact/test_experiment.py
+      - run: python3 -m unittest discover -s experiments/wxp2-remote-artifact -p 'test_*.py' -v
       - run: git diff --exit-code -- experiments/wxp1-callback-continuity/evidence.json experiments/wxp2-remote-artifact/evidence.json
 
   cloudflare-provider:

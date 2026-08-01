@@ -32,6 +32,14 @@ client = load("ordivon_edge_client_wxp2", CLIENT_PATH)
 experiment = load("wxp2_experiment", EXPERIMENT_PATH)
 
 
+def seal_evidence(value: dict[str, Any]) -> dict[str, Any]:
+    value.pop("evidence_sha256", None)
+    value["evidence_sha256"] = hashlib.sha256(
+        (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    ).hexdigest()
+    return value
+
+
 def parse_json(status: int, body: bytes, context: str) -> dict[str, Any]:
     try:
         value = json.loads(body)
@@ -153,10 +161,7 @@ def run(config_path: pathlib.Path, url: str, timeout: float, interval: float) ->
         "provider_status": provider.get("status"),
         "operator_interventions": 0,
     }
-    comparison["evidence_sha256"] = hashlib.sha256(
-        (json.dumps(comparison, sort_keys=True, separators=(",", ":")) + "\n").encode()
-    ).hexdigest()
-    return comparison
+    return seal_evidence(comparison)
 
 
 def main() -> int:

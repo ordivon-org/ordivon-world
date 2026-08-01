@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "experiment": "WCP-2 durable evidence run with provider bootstrap recovery and Host-process replacement",
+  "deployment": {
+    "worker_version_id": "749dc76c-16cc-4d20-b209-e5df67d70143",
+    "source_commit": "bac8c24f61a96bc1c6d717566d1670b4732ffc79",
+    "workflow_resource_id": "3818c7af-2ebd-4d10-8f1f-47f61ea96df8",
+    "workflow_version_id": "d7e343e7-3b8c-4fa5-9d60-f9228297226f"
+  },
+  "initial_submission_failure": {
+    "request_id": "req_wcp2_live_20260802_001",
+    "error": "evidence_run_unavailable",
+    "cause": "Workflow code and binding were deployed, but the provider Workflow control-plane resource did not yet exist.",
+    "provider_instance_created": false,
+    "unsafe_redispatch_attempts": 0
+  },
+  "provider_bootstrap": {
+    "action": "Create/modify Cloudflare Workflow resource in provider release control plane",
+    "operator_interventions": 1,
+    "task_recovery_interventions": 0,
+    "new_task_or_effect_created": false
+  },
+  "same_request_recovery": {
+    "request_id": "req_wcp2_live_20260802_001",
+    "foreign_operation_ref": {
+      "provider": "cloudflare-workflows",
+      "workflow": "ordivon-evidence-run",
+      "instance_id": "evidence-req_wcp2_live_20260802_001"
+    },
+    "request_digest": "38848fe42a583de77160de01c457986b9439e8f135b41f1a2053d35aab7210a5",
+    "submission_artifact": {
+      "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/submission.json",
+      "sha256": "5371ebe0c58d4fcf3aa1d867344cce60de5864c57eedf0e1ace34cff6c590ced",
+      "bytes": 845,
+      "media_type": "application/json; charset=utf-8",
+      "etag": "ba5737c0b5ef5ebee134f7aa236676f1"
+    },
+    "initial_provider_status": {
+      "status": "queued",
+      "error": null,
+      "output": null,
+      "rollback": null
+    },
+    "new_effect_dispatches": 0
+  },
+  "fresh_process_reconciliation": {
+    "carried_state": [
+      "foreign_operation_ref.instance_id"
+    ],
+    "provider_status": "complete",
+    "result_manifest": {
+      "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/result.json",
+      "sha256": "012ca251c91578b599d087d86e469b779a1a3e1073f26a1ec2fface81ed0aec8",
+      "bytes": 4337,
+      "media_type": "application/json; charset=utf-8",
+      "etag": "f6f9d3cdf5171359315cf0b8c2402036"
+    },
+    "failure_manifest": null,
+    "workflow_output": {
+      "schema_version": 1,
+      "workflow_instance_id": "evidence-req_wcp2_live_20260802_001",
+      "workflow_name": "ordivon-evidence-run",
+      "consumer": "ordivon-computer",
+      "workload": "durable-research-source-capture",
+      "status": "succeeded",
+      "input_manifest": {
+        "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/input.json",
+        "sha256": "26f24d48ba320a77d2d4e7ec60f0e31b9d871a2e65d3187d68eca5a6514884a5",
+        "bytes": 1021,
+        "media_type": "application/json; charset=utf-8",
+        "etag": "8aeed23067544214e77e7c7cefea8cfd"
+      },
+      "result_manifest": {
+        "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/result.json",
+        "sha256": "012ca251c91578b599d087d86e469b779a1a3e1073f26a1ec2fface81ed0aec8",
+        "bytes": 4337,
+        "media_type": "application/json; charset=utf-8",
+        "etag": "f6f9d3cdf5171359315cf0b8c2402036"
+      },
+      "steps": [
+        {
+          "schema_version": 1,
+          "step_id": "workflow-docs",
+          "operation": "fetch",
+          "provider_request_id": "wfr_e6391bee36216920f3b7a880035f3df424189b23eae70bcd",
+          "provider_request_digest": "7c0dfeb633035ee6b108e811706893ee0a859e379702953b6bd710b075582655",
+          "attempt": 1,
+          "started_at": "2026-08-01T20:28:14.686Z",
+          "completed_at": "2026-08-01T20:28:15.021Z",
+          "execution": {
+            "policy_version": "p1.6.0276f25929e23c23",
+            "capability_version": "fetch.v2",
+            "worker_version_id": "749dc76c-16cc-4d20-b209-e5df67d70143",
+            "lease_generation": 1
+          },
+          "artifacts": [
+            {
+              "key": "fetch/v2/wfr_e6391bee36216920f3b7a880035f3df424189b23eae70bcd/g1/body",
+              "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+              "bytes": 129314,
+              "media_type": "text/html",
+              "etag": "c0cedf325945a003d5d08656738f148e"
+            }
+          ],
+          "details": {
+            "requested_url": "https://developers.cloudflare.com/workflows/",
+            "final_url": "https://developers.cloudflare.com/workflows/",
+            "http_status": 200,
+            "redirect_count": 0
+          }
+        },
+        {
+          "schema_version": 1,
+          "step_id": "acceptance-page",
+          "operation": "browser.run",
+          "provider_request_id": "wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a",
+          "provider_request_digest": "ee61474128d2fd0cbcda6bc71ac61533d0869849c296d5892456e01055aab44e",
+          "attempt": 1,
+          "started_at": "2026-08-01T20:28:15.025Z",
+          "completed_at": "2026-08-01T20:28:18.556Z",
+          "execution": {
+            "policy_version": "p1.6.0276f25929e23c23",
+            "capability_version": "browser.snapshot.v2",
+            "worker_version_id": "749dc76c-16cc-4d20-b209-e5df67d70143",
+            "lease_generation": 1
+          },
+          "artifacts": [
+            {
+              "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/screenshot.png",
+              "sha256": "78085e7a8cbb44e5414db2a53f99fbf309ca89c4194ab9e27f4f7fa47c3b1dee",
+              "bytes": 29721,
+              "media_type": "image/png",
+              "etag": "30235f825d64a5ae28925c3f10146031"
+            },
+            {
+              "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/content.html",
+              "sha256": "7b6cd9a1d881c4a69bf70b9babb5a4a90e38aa6f9933785508a38f665d4d4aab",
+              "bytes": 559,
+              "media_type": "text/html; charset=utf-8",
+              "etag": "ff1fde76b557e37b41d829c00622040a"
+            },
+            {
+              "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/manifest.json",
+              "sha256": "2d5544abd5db89bd00d9eeae83e6f8bc49feb1264773cd7101d53d1ac89d5fbd",
+              "bytes": 1117,
+              "media_type": "application/json; charset=utf-8",
+              "etag": "bba87b9a4167751dc355ebba37a28392"
+            }
+          ],
+          "details": {
+            "requested_url": "https://example.com/",
+            "final_url_observed": false,
+            "page_title": "Example Domain",
+            "page_status": 200,
+            "browser_ms": 172,
+            "viewport": {
+              "width": 1365,
+              "height": 768
+            },
+            "full_page": true
+          }
+        }
+      ],
+      "artifacts": [
+        {
+          "key": "fetch/v2/wfr_e6391bee36216920f3b7a880035f3df424189b23eae70bcd/g1/body",
+          "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+          "bytes": 129314,
+          "media_type": "text/html",
+          "etag": "c0cedf325945a003d5d08656738f148e"
+        },
+        {
+          "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/screenshot.png",
+          "sha256": "78085e7a8cbb44e5414db2a53f99fbf309ca89c4194ab9e27f4f7fa47c3b1dee",
+          "bytes": 29721,
+          "media_type": "image/png",
+          "etag": "30235f825d64a5ae28925c3f10146031"
+        },
+        {
+          "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/content.html",
+          "sha256": "7b6cd9a1d881c4a69bf70b9babb5a4a90e38aa6f9933785508a38f665d4d4aab",
+          "bytes": 559,
+          "media_type": "text/html; charset=utf-8",
+          "etag": "ff1fde76b557e37b41d829c00622040a"
+        },
+        {
+          "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/manifest.json",
+          "sha256": "2d5544abd5db89bd00d9eeae83e6f8bc49feb1264773cd7101d53d1ac89d5fbd",
+          "bytes": 1117,
+          "media_type": "application/json; charset=utf-8",
+          "etag": "bba87b9a4167751dc355ebba37a28392"
+        },
+        {
+          "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/result.json",
+          "sha256": "012ca251c91578b599d087d86e469b779a1a3e1073f26a1ec2fface81ed0aec8",
+          "bytes": 4337,
+          "media_type": "application/json; charset=utf-8",
+          "etag": "f6f9d3cdf5171359315cf0b8c2402036"
+        }
+      ]
+    }
+  },
+  "artifact_verification": [
+    {
+      "key": "fetch/v2/wfr_e6391bee36216920f3b7a880035f3df424189b23eae70bcd/g1/body",
+      "sha256": "3cf6317b7dfbca1029758a7b40e3cebd979a575a3a3df34688f1caeb4de8e3e8",
+      "bytes": 129314,
+      "verified": true
+    },
+    {
+      "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/screenshot.png",
+      "sha256": "78085e7a8cbb44e5414db2a53f99fbf309ca89c4194ab9e27f4f7fa47c3b1dee",
+      "bytes": 29721,
+      "verified": true
+    },
+    {
+      "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/content.html",
+      "sha256": "7b6cd9a1d881c4a69bf70b9babb5a4a90e38aa6f9933785508a38f665d4d4aab",
+      "bytes": 559,
+      "verified": true
+    },
+    {
+      "key": "browser/v2/wfr_6c2526d954890864483f86b0bc7322dc70f24b93482e017a/g1/manifest.json",
+      "sha256": "2d5544abd5db89bd00d9eeae83e6f8bc49feb1264773cd7101d53d1ac89d5fbd",
+      "bytes": 1117,
+      "verified": true
+    },
+    {
+      "key": "evidence-runs/v1/evidence-req_wcp2_live_20260802_001/result.json",
+      "sha256": "012ca251c91578b599d087d86e469b779a1a3e1073f26a1ec2fface81ed0aec8",
+      "bytes": 4337,
+      "verified": true
+    }
+  ],
+  "measurements": {
+    "step_count": 2,
+    "artifact_count": 5,
+    "verified_artifact_count": 5,
+    "verified_artifact_bytes": 165048,
+    "unsafe_redispatch_attempts": 0,
+    "duplicate_workflow_instances": 0,
+    "false_completions": 0,
+    "world_database_records": 0,
+    "task_recovery_operator_interventions": 0,
+    "provider_release_bootstrap_interventions": 1
+  },
+  "decision": {
+    "disposition": "keep-provider-native-and-fix-release-bootstrap",
+    "retain": [
+      "Cloudflare Workflow instance handle",
+      "immutable submission/input/result/failure R2 manifests",
+      "provider-native inspect",
+      "Host independent Artifact verification"
+    ],
+    "reject": [
+      "World database",
+      "World workflow engine",
+      "new Task after provider-control-plane failure",
+      "blind redispatch"
+    ],
+    "reason": "The original Task continued through the same request identity after provider resource bootstrap, and a fresh process recovered the completed run from one opaque provider handle."
+  },
+  "evidence_sha256": "c816bf1a871e647b69d3a347aca52566f0e5529207391daf7825ee15483088e0"
+}

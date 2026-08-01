@@ -117,6 +117,118 @@ class ReleaseControllerTests(unittest.TestCase):
         killpg.assert_called_once_with(1234, release_controller.signal.SIGKILL)
         reconcile.assert_called_once_with(expected)
 
+    def test_existing_evidence_workflow_is_validated_without_mutation(self) -> None:
+        existing = {
+            "name": release_controller.EVIDENCE_WORKFLOW_NAME,
+            "script_name": release_controller.WORKER_NAME,
+            "class_name": release_controller.EVIDENCE_WORKFLOW_CLASS,
+            "id": "workflow-id",
+        }
+        with (
+            mock.patch.object(
+                release_controller,
+                "list_workflows",
+                return_value=[existing],
+            ),
+            mock.patch.object(release_controller, "cloudflare_api") as api,
+        ):
+            result = release_controller.ensure_evidence_workflow()
+        self.assertFalse(result["created"])
+        self.assertEqual(result["workflow"], existing)
+        api.assert_not_called()
+
+    def test_missing_evidence_workflow_is_bootstrapped_once(self) -> None:
+        created = {
+            "name": release_controller.EVIDENCE_WORKFLOW_NAME,
+            "script_name": release_controller.WORKER_NAME,
+            "class_name": release_controller.EVIDENCE_WORKFLOW_CLASS,
+            "id": "workflow-id",
+        }
+        credentials = release_controller.CloudflareCredentials(
+            api_token="test-token",
+            account_id="test-account",
+        )
+        with (
+            mock.patch.object(release_controller, "list_workflows", return_value=[]),
+            mock.patch.object(
+                release_controller,
+                "load_cloudflare_credentials",
+                return_value=credentials,
+            ),
+            mock.patch.object(
+                release_controller,
+                "cloudflare_api",
+                return_value=created,
+            ) as api,
+        ):
+            result = release_controller.ensure_evidence_workflow()
+        self.assertTrue(result["created"])
+        api.assert_called_once_with(
+            "PUT",
+            "/accounts/test-account/workflows/ordivon-evidence-run",
+            body={
+                "script_name": "ordivon-edge",
+                "class_name": "EvidenceRunWorkflow",
+                "default_retention": {
+                    "success_retention": "3 days",
+                    "error_retention": "3 days",
+                },
+                "limits": {"steps": 32},
+            },
+        )
+
+    def test_evidence_workflow_smoke_polls_original_instance(self) -> None:
+        submitted = {
+            "foreign_operation_ref": {
+                "instance_id": "evidence-req_release_evidence_test"
+            }
+        }
+        running = {"provider_status": {"status": "running"}}
+        complete = {
+            "provider_status": {
+                "status": "complete",
+                "output": {
+                    "steps": [
+                        {
+                            "execution": {
+                                "worker_version_id": "candidate-version"
+                            }
+                        }
+                    ]
+                },
+            }
+        }
+        edge = release_controller.EdgeConfig(
+            endpoint="https://edge.invalid",
+            key_id="runtime-v1",
+            secret=b"x" * 32,
+        )
+        with mock.patch.object(
+            release_controller,
+            "signed_request",
+            side_effect=[
+                (202, {}, submitted),
+                (202, {}, running),
+                (200, {}, complete),
+            ],
+        ) as signed:
+            result = release_controller.smoke_evidence_workflow(
+                edge,
+                "candidate-version",
+                sleep=lambda _: None,
+                monotonic=iter([0.0, 1.0]).__next__,
+            )
+        self.assertEqual(
+            result["instance_id"],
+            "evidence-req_release_evidence_test",
+        )
+        self.assertEqual(result["observations"], ["running", "complete"])
+        self.assertEqual(signed.call_count, 3)
+        self.assertEqual(
+            signed.call_args_list[1].args[2],
+            "/v1/evidence-runs/evidence-req_release_evidence_test",
+        )
+
     def test_expected_policy_matches_local_configuration(self) -> None:
         version, retention = release_controller.expected_policy()
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
@@ -354,6 +466,11 @@ class ReleaseControllerTests(unittest.TestCase):
                 "wait_for_version_propagation",
                 return_value={"attempts": 1},
             ),
+            mock.patch.object(
+                release_controller,
+                "ensure_evidence_workflow",
+                return_value={"created": False, "workflow": {"id": "workflow-id"}},
+            ) as ensure_workflow,
             mock.patch.object(release_controller, "smoke_version", return_value={}),
             mock.patch.object(
                 release_controller,
@@ -367,6 +484,7 @@ class ReleaseControllerTests(unittest.TestCase):
 
         self.assertEqual(result, 0)
         self.assertEqual(deploy_versions.call_count, 2)
+        ensure_workflow.assert_called_once_with()
         wrangler.assert_not_called()
         self.assertEqual(reports[0][0], "release")
         self.assertTrue(reports[0][1]["candidate_reused"])

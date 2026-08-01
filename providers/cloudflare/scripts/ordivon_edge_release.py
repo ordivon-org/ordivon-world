@@ -49,6 +49,10 @@ def resolve_provider_root(
 
 ROOT = resolve_provider_root()
 WORKER_NAME = "ordivon-edge"
+EVIDENCE_WORKFLOW_NAME = "ordivon-evidence-run"
+EVIDENCE_WORKFLOW_CLASS = "EvidenceRunWorkflow"
+EVIDENCE_WORKFLOW_RETENTION = "3 days"
+EVIDENCE_WORKFLOW_STEP_LIMIT = 32
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
 EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
 POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
@@ -182,6 +186,57 @@ def cloudflare_api(
         f"Cloudflare API request failed after {attempts} attempts: "
         f"{method.upper()} {path}\n{last_error}"
     ) from last_error
+
+
+def list_workflows() -> list[dict[str, Any]]:
+    credentials = load_cloudflare_credentials()
+    result = cloudflare_api(
+        "GET",
+        f"/accounts/{credentials.account_id}/workflows",
+    )
+    if not isinstance(result, list):
+        fail("Cloudflare Workflow list is not an array")
+    return [item for item in result if isinstance(item, dict)]
+
+
+def ensure_evidence_workflow() -> dict[str, Any]:
+    workflows = list_workflows()
+    existing = next(
+        (item for item in workflows if item.get("name") == EVIDENCE_WORKFLOW_NAME),
+        None,
+    )
+    if existing is not None:
+        if existing.get("script_name") != WORKER_NAME:
+            fail(
+                f"Workflow {EVIDENCE_WORKFLOW_NAME} belongs to script "
+                f"{existing.get('script_name')!r}, expected {WORKER_NAME!r}"
+            )
+        if existing.get("class_name") != EVIDENCE_WORKFLOW_CLASS:
+            fail(
+                f"Workflow {EVIDENCE_WORKFLOW_NAME} uses class "
+                f"{existing.get('class_name')!r}, expected {EVIDENCE_WORKFLOW_CLASS!r}"
+            )
+        return {"created": False, "workflow": existing}
+
+    credentials = load_cloudflare_credentials()
+    created = cloudflare_api(
+        "PUT",
+        f"/accounts/{credentials.account_id}/workflows/{EVIDENCE_WORKFLOW_NAME}",
+        body={
+            "script_name": WORKER_NAME,
+            "class_name": EVIDENCE_WORKFLOW_CLASS,
+            "default_retention": {
+                "success_retention": EVIDENCE_WORKFLOW_RETENTION,
+                "error_retention": EVIDENCE_WORKFLOW_RETENTION,
+            },
+            "limits": {"steps": EVIDENCE_WORKFLOW_STEP_LIMIT},
+        },
+    )
+    if not isinstance(created, dict):
+        fail("Cloudflare Workflow bootstrap returned no Workflow object")
+    if created.get("name") != EVIDENCE_WORKFLOW_NAME:
+        fail("Cloudflare Workflow bootstrap returned an unexpected name")
+    return {"created": True, "workflow": created}
 
 
 def expected_policy() -> tuple[str, dict[str, int]]:
@@ -811,6 +866,106 @@ def smoke_operation(
     fail(f"Smoke operation {path} remained rate limited: HTTP {last_status}: {last_value}")
 
 
+def smoke_evidence_workflow(
+    config: EdgeConfig,
+    version_id: str,
+    *,
+    timeout_seconds: float = 120.0,
+    interval_seconds: float = 1.0,
+    sleep: Any = time.sleep,
+    monotonic: Any = time.monotonic,
+) -> dict[str, Any]:
+    if timeout_seconds <= 0 or interval_seconds <= 0:
+        fail("Evidence Workflow smoke timing is invalid")
+    body = json.dumps(
+        {
+            "schema_version": 1,
+            "consumer": "ordivon-edge-release",
+            "workload": "candidate-workflow-smoke",
+            "steps": [
+                {
+                    "id": "source",
+                    "operation": "fetch",
+                    "input": {
+                        "url": "https://example.com/",
+                        "maximum_bytes": 65536,
+                        "timeout_ms": 10000,
+                        "accept": "text/html",
+                    },
+                }
+            ],
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    request_id = f"req_release_evidence_{uuid.uuid4().hex}"
+    status, _, submitted = signed_request(
+        config,
+        "POST",
+        "/v1/evidence-runs",
+        body=body,
+        request_id=request_id,
+        version_override=version_id,
+        timeout=90.0,
+    )
+    if status not in {200, 202} or not isinstance(submitted, dict):
+        fail(f"Evidence Workflow smoke submission failed: HTTP {status}: {submitted}")
+    reference = submitted.get("foreign_operation_ref")
+    instance_id = reference.get("instance_id") if isinstance(reference, dict) else None
+    if not isinstance(instance_id, str) or not instance_id:
+        fail("Evidence Workflow smoke returned no provider instance ID")
+
+    deadline = monotonic() + timeout_seconds
+    observations: list[str | None] = []
+    while True:
+        current_status, _, current = signed_request(
+            config,
+            "GET",
+            f"/v1/evidence-runs/{urllib.parse.quote(instance_id, safe='-_')}",
+            version_override=version_id,
+            timeout=30.0,
+        )
+        if current_status not in {200, 202} or not isinstance(current, dict):
+            fail(
+                "Evidence Workflow smoke status failed: "
+                f"HTTP {current_status}: {current}"
+            )
+        provider = current.get("provider_status")
+        state = provider.get("status") if isinstance(provider, dict) else None
+        observations.append(state if isinstance(state, str) else None)
+        if state == "complete":
+            output = provider.get("output") if isinstance(provider, dict) else None
+            steps = output.get("steps") if isinstance(output, dict) else None
+            if not isinstance(steps, list) or len(steps) != 1:
+                fail("Evidence Workflow smoke returned an invalid step result")
+            execution = steps[0].get("execution") if isinstance(steps[0], dict) else None
+            actual_version = (
+                execution.get("worker_version_id")
+                if isinstance(execution, dict)
+                else None
+            )
+            if actual_version != version_id:
+                fail(
+                    "Evidence Workflow smoke executed Worker version "
+                    f"{actual_version!r}, expected {version_id!r}"
+                )
+            return {
+                "request_id": request_id,
+                "instance_id": instance_id,
+                "submission": submitted,
+                "status": current,
+                "observations": observations,
+            }
+        if state in {"errored", "terminated"}:
+            fail(f"Evidence Workflow smoke reached terminal state {state}: {current}")
+        if monotonic() >= deadline:
+            fail(
+                "Evidence Workflow smoke timed out: "
+                f"instance={instance_id}, observations={observations[-20:]}"
+            )
+        sleep(interval_seconds)
+
+
 def smoke_version(
     config: EdgeConfig,
     version_id: str,
@@ -899,6 +1054,7 @@ def smoke_version(
         fail(f"Version-specific Browser smoke failed: {browser_result}")
     assert_version(browser_result, version_id, "Browser smoke")
     browser_receipt = browser_result["receipt"]
+    evidence_workflow = smoke_evidence_workflow(config, version_id)
 
     return {
         "health": health,
@@ -907,6 +1063,7 @@ def smoke_version(
         "fetch_receipt": fetch_receipt,
         "browser_request_id": browser_id,
         "browser_receipt": browser_receipt,
+        "evidence_workflow": evidence_workflow,
     }
 
 def write_receipt(prefix: str, report: dict[str, Any]) -> pathlib.Path:
@@ -1021,6 +1178,9 @@ def release(args: argparse.Namespace) -> int:
             f"Smoke candidate {commit[:12]}",
         )
         zero_deployed = True
+        report["status"] = "workflow_bootstrap_pending"
+        report["workflow_resource"] = ensure_evidence_workflow()
+        report["status"] = "smoke_pending"
         report["candidate_propagation"] = wait_for_version_propagation(
             edge,
             new_version,
