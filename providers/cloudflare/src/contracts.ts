@@ -4,21 +4,14 @@ import { CAPABILITY_VERSIONS } from "./version.js";
 export const EDGE_SCHEMA_VERSION = 1 as const;
 export const REQUEST_STATE_SCHEMA_VERSION = 2 as const;
 
-export type CapabilityState = "ready" | "planned" | "disabled";
-
-export type EdgeOperation =
-  | "fetch"
-  | "browser.run"
-  | "artifact.put"
-  | "artifact.get"
-  | "artifact.delete";
+export type EdgeOperation = "fetch" | "browser.run";
 
 export type ReceiptStatus = "succeeded" | "failed" | "rejected";
 
 export interface EdgeCapability {
-  readonly id: EdgeOperation | "receipt";
+  readonly id: EdgeOperation | "artifact.get" | "receipt";
   readonly version: string;
-  readonly state: CapabilityState;
+  readonly state: "ready";
   readonly reason: string;
 }
 
@@ -127,22 +120,10 @@ export function capabilitiesDocument(
     },
     capabilities: [
       {
-        id: "artifact.put",
-        version: CAPABILITY_VERSIONS["artifact.put"],
-        state: "ready",
-        reason: "Bounded Edge operations can persist private artifacts in R2."
-      },
-      {
         id: "artifact.get",
         version: CAPABILITY_VERSIONS["artifact.get"],
         state: "ready",
         reason: "Authenticated clients can retrieve validated private artifact keys."
-      },
-      {
-        id: "artifact.delete",
-        version: CAPABILITY_VERSIONS["artifact.delete"],
-        state: "planned",
-        reason: "Deletion remains internal until a receipt-backed deletion contract is added."
       },
       {
         id: "fetch",

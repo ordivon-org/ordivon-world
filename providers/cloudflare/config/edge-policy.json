@@ -6,10 +6,7 @@
   },
   "leases_ms": {
     "fetch": 60000,
-    "browser.run": 120000,
-    "artifact.put": 60000,
-    "artifact.get": 30000,
-    "artifact.delete": 60000
+    "browser.run": 120000
   },
   "retention_days": {
     "idempotency": 90,
