@@ -10,15 +10,12 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --loader ./test/cloudflare-loader.mjs --test test/contracts.test.ts test/transactions.test.ts test/worker.test.ts test/evidence-run-contracts.test.ts test/evidence-run.test.ts test/evidence-run-worker.test.ts",
-    "check:python": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py scripts/ordivon_world_evidence.py scripts/check-policy-config.py scripts/configure_r2_lifecycle.py && python3 -m unittest discover -s test -p 'client_test.py' && python3 -m unittest discover -s test -p 'release_controller_test.py' && python3 -m unittest discover -s test -p 'gc_test.py' && python3 -m unittest discover -s test -p 'lifecycle_test.py' && python3 -m unittest discover -s test -p 'evidence_consumer_test.py'",
+    "test": "node --import tsx --test test/contracts.test.ts test/transactions.test.ts test/worker.test.ts",
+    "check:python": "python3 -m py_compile scripts/ordivon_edge_client.py scripts/ordivon_edge_release.py scripts/ordivon_edge_gc.py scripts/check-policy-config.py scripts/configure_r2_lifecycle.py && python3 -m unittest discover -s test -p 'client_test.py' && python3 -m unittest discover -s test -p 'release_controller_test.py' && python3 -m unittest discover -s test -p 'gc_test.py' && python3 -m unittest discover -s test -p 'lifecycle_test.py'",
     "check:operations": "scripts/check-operations",
-    "check:boundary": "node scripts/check-boundary.mjs",
-    "check:node-policy": "node scripts/check-node-policy.mjs",
-    "build": "node scripts/wrangler-dry-run.mjs",
-    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:policy && pnpm check:operations && pnpm check:boundary && pnpm build",
     "check:policy": "python3 scripts/check-policy-config.py",
-    "node-control": "node --import tsx scripts/ordivon_edge_node_control.ts"
+    "build": "node scripts/wrangler-dry-run.mjs",
+    "ci": "pnpm typecheck && pnpm test && pnpm check:python && pnpm check:policy && pnpm check:operations && pnpm build"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "5.20260727.1",

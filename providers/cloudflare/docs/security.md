@@ -32,7 +32,7 @@ Fetch is intentionally constrained:
 - HTTPS and port 443 only;
 - no URL credentials;
 - no IP literals, localhost, private naming suffixes, or onion names;
-- exact or wildcard hostname allowlist;
+- exact hostname allowlist; wildcard entries are rejected;
 - redirects handled manually and revalidated at every hop;
 - at most three redirects;
 - no caller cookies, authorization headers, or arbitrary outbound headers;

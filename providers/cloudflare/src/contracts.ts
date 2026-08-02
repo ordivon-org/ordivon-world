@@ -16,7 +16,7 @@ export type EdgeOperation =
 export type ReceiptStatus = "succeeded" | "failed" | "rejected";
 
 export interface EdgeCapability {
-  readonly id: EdgeOperation | "receipt" | "evidence.run";
+  readonly id: EdgeOperation | "receipt";
   readonly version: string;
   readonly state: CapabilityState;
   readonly reason: string;
@@ -155,12 +155,6 @@ export function capabilitiesDocument(
         version: CAPABILITY_VERSIONS["browser.run"],
         state: "ready",
         reason: "Signed requests can capture allowlisted same-origin browser snapshots with transactional artifacts."
-      },
-      {
-        id: "evidence.run",
-        version: CAPABILITY_VERSIONS["evidence.run"],
-        state: "ready",
-        reason: "Signed requests can create and inspect durable Cloudflare Workflow evidence runs with R2 manifests."
       },
       {
         id: "receipt",
