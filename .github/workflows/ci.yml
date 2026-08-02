@@ -34,4 +34,5 @@ jobs:
         working-directory: modules/network-observation
     steps:
       - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y wireguard-tools
       - run: scripts/check-vpn-controller
