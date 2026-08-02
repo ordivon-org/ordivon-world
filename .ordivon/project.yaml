@@ -1,0 +1,21 @@
+schema_version: 1
+id: ordivon-world
+name: Ordivon World
+repository: https://github.com/zycxfyh/ordivon-world
+kind: adapter
+default_profiles:
+  - provider
+  - engineering
+  - organization
+documentation_roots:
+  - README.md
+  - AGENTS.md
+  - docs
+  - providers
+  - modules
+managed_paths: []
+enforcement: advisory
+maintainers:
+  - zycxfyh
+public_projection: ordivon-web
+description: External provider adapters and private operator tools that connect Ordivon work to external systems.
