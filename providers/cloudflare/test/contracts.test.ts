@@ -24,14 +24,20 @@ test("capabilities expose only the Edge execution surface", () => {
     document.capabilities.map((capability) => [capability.id, capability.state])
   );
   assert.ok(document.retention.artifact_days > document.retention.idempotency_days);
-  assert.equal(states.get("fetch"), "ready");
-  assert.equal(states.get("artifact.get"), "ready");
-  assert.equal(states.get("browser.run"), "ready");
+  assert.deepEqual(
+    [...states.entries()],
+    [
+      ["artifact.get", "ready"],
+      ["fetch", "ready"],
+      ["browser.run", "ready"],
+      ["receipt", "ready"]
+    ]
+  );
 });
 
 test("receipt timestamps and request digests are explicit", () => {
   const receipt = createReceipt({
-    operation: "artifact.put",
+    operation: "fetch",
     status: "succeeded",
     requestDigest: DIGEST,
     startedAt: new Date("2026-07-27T00:00:00.000Z"),
