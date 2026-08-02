@@ -20,7 +20,7 @@ Their non-replaceable role is operational rather than architectural: current gen
 
 The repository has no World service, database, workflow engine, callback authority, provider broker, router, universal interaction schema, capability registry, or active historical experiment framework.
 
-Completed W0/W1/WCP/WXP experiments, negative results, imported Edge/Link prototypes, Node-control research, QUIC/wire experiments, and Network World implementations remain recoverable from Git history and merged pull requests. They are not replayed by default CI.
+Completed W0/W1/WCP/WXP experiments, negative results, imported Edge/Link prototypes, Node-control research, QUIC/wire experiments, and Network World implementations remain outside active `main`. [`docs/archive/world-negative-experiments.md`](docs/archive/world-negative-experiments.md) binds the final revision and reproduction commands; default CI does not replay closed architecture decisions.
 
 ## Why each active check remains
 
