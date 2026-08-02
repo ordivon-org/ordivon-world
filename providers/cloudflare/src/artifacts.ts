@@ -3,7 +3,6 @@ const SAFE_SEGMENT = /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$/;
 const ALLOWED_NAMESPACES = new Set([
   "artifacts",
   "browser",
-  "evidence-runs",
   "fetch",
   "receipts"
 ]);

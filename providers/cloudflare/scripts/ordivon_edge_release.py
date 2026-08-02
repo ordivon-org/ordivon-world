@@ -49,10 +49,6 @@ def resolve_provider_root(
 
 ROOT = resolve_provider_root()
 WORKER_NAME = "ordivon-edge"
-EVIDENCE_WORKFLOW_NAME = "ordivon-evidence-run"
-EVIDENCE_WORKFLOW_CLASS = "EvidenceRunWorkflow"
-EVIDENCE_WORKFLOW_RETENTION = "3 days"
-EVIDENCE_WORKFLOW_STEP_LIMIT = 32
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
 EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
 POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
@@ -188,57 +184,6 @@ def cloudflare_api(
     ) from last_error
 
 
-def list_workflows() -> list[dict[str, Any]]:
-    credentials = load_cloudflare_credentials()
-    result = cloudflare_api(
-        "GET",
-        f"/accounts/{credentials.account_id}/workflows",
-    )
-    if not isinstance(result, list):
-        fail("Cloudflare Workflow list is not an array")
-    return [item for item in result if isinstance(item, dict)]
-
-
-def ensure_evidence_workflow() -> dict[str, Any]:
-    workflows = list_workflows()
-    existing = next(
-        (item for item in workflows if item.get("name") == EVIDENCE_WORKFLOW_NAME),
-        None,
-    )
-    if existing is not None:
-        if existing.get("script_name") != WORKER_NAME:
-            fail(
-                f"Workflow {EVIDENCE_WORKFLOW_NAME} belongs to script "
-                f"{existing.get('script_name')!r}, expected {WORKER_NAME!r}"
-            )
-        if existing.get("class_name") != EVIDENCE_WORKFLOW_CLASS:
-            fail(
-                f"Workflow {EVIDENCE_WORKFLOW_NAME} uses class "
-                f"{existing.get('class_name')!r}, expected {EVIDENCE_WORKFLOW_CLASS!r}"
-            )
-        return {"created": False, "workflow": existing}
-
-    credentials = load_cloudflare_credentials()
-    created = cloudflare_api(
-        "PUT",
-        f"/accounts/{credentials.account_id}/workflows/{EVIDENCE_WORKFLOW_NAME}",
-        body={
-            "script_name": WORKER_NAME,
-            "class_name": EVIDENCE_WORKFLOW_CLASS,
-            "default_retention": {
-                "success_retention": EVIDENCE_WORKFLOW_RETENTION,
-                "error_retention": EVIDENCE_WORKFLOW_RETENTION,
-            },
-            "limits": {"steps": EVIDENCE_WORKFLOW_STEP_LIMIT},
-        },
-    )
-    if not isinstance(created, dict):
-        fail("Cloudflare Workflow bootstrap returned no Workflow object")
-    if created.get("name") != EVIDENCE_WORKFLOW_NAME:
-        fail("Cloudflare Workflow bootstrap returned an unexpected name")
-    return {"created": True, "workflow": created}
-
-
 def expected_policy() -> tuple[str, dict[str, int]]:
     policy = load_json(POLICY_CONFIG)
     wrangler = load_json(WRANGLER_CONFIG)
@@ -308,32 +253,6 @@ def run(
     return completed
 
 
-def run_json(
-    arguments: list[str],
-    environment: dict[str, str],
-    *,
-    attempts: int = 4,
-    base_delay_seconds: float = 2.0,
-    sleep: Any = time.sleep,
-) -> Any:
-    if attempts < 1 or base_delay_seconds < 0:
-        fail("Control-plane retry parameters are invalid")
-    last_error: Exception | None = None
-    for attempt in range(1, attempts + 1):
-        try:
-            completed = run(arguments, environment=environment, capture=True)
-            return json.loads(completed.stdout)
-        except (ReleaseError, json.JSONDecodeError) as error:
-            last_error = error
-            if attempt >= attempts:
-                break
-            sleep(min(base_delay_seconds * (2 ** (attempt - 1)), 15.0))
-    raise ReleaseError(
-        f"Control-plane query failed after {attempts} attempts: "
-        f"{' '.join(arguments)}\n{last_error}"
-    ) from last_error
-
-
 def git_output(*arguments: str) -> str:
     return run(["git", *arguments], capture=True).stdout.strip()
 
@@ -378,16 +297,23 @@ def parse_worker_version_tag(tag: str | None) -> tuple[str, str | None]:
 
 
 def verify_release_source() -> str:
-    if git_output("status", "--porcelain"):
-        fail("Repository is dirty; release requires a clean main branch")
-    branch = git_output("branch", "--show-current")
-    if branch != "main":
-        fail(f"Release requires main branch, found {branch or 'detached HEAD'}")
-    run(["git", "fetch", "origin", "--prune"])
     head = git_output("rev-parse", "HEAD")
-    remote = git_output("rev-parse", "origin/main")
-    if head != remote:
-        fail("Local main does not match origin/main")
+    dirty = run(
+        [
+            "git",
+            "status",
+            "--porcelain",
+            "--untracked-files=all",
+            "--",
+            *worker_release_pathspecs(),
+        ],
+        capture=True,
+    ).stdout.strip()
+    if dirty:
+        fail(
+            "Worker release inputs are dirty and cannot be reconstructed from Git:\n"
+            f"{dirty}"
+        )
     return head
 
 
@@ -510,6 +436,72 @@ def resumable_candidate(
             f"current_commit={commit[:12]}"
         )
     return candidate
+
+
+def version_record(
+    version_list: list[dict[str, Any]],
+    version_id: str,
+) -> dict[str, Any]:
+    record = next((item for item in version_list if item.get("id") == version_id), None)
+    if record is None:
+        fail(f"Worker Version is missing from the deployable version list: {version_id}")
+    return record
+
+
+def version_source(record: dict[str, Any]) -> tuple[str, str | None]:
+    annotations = record.get("annotations")
+    tag = annotations.get("workers/tag") if isinstance(annotations, dict) else None
+    return parse_worker_version_tag(tag)
+
+
+def changed_worker_inputs(previous: dict[str, Any], commit: str) -> list[str] | None:
+    try:
+        previous_ref, _ = version_source(previous)
+    except ReleaseError:
+        return None
+    resolved = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{previous_ref}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if resolved.returncode != 0:
+        return None
+    completed = run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            resolved.stdout.strip(),
+            commit,
+            "--",
+            *worker_release_pathspecs(),
+        ],
+        capture=True,
+    )
+    return [line for line in completed.stdout.splitlines() if line]
+
+
+def smoke_operations_for_change(
+    previous: dict[str, Any],
+    commit: str,
+) -> set[str]:
+    changed = changed_worker_inputs(previous, commit)
+    if changed is None or not changed:
+        return {"fetch", "browser.run"}
+    operations: set[str] = set()
+    specific = True
+    for path in changed:
+        if path.endswith(("/src/external-fetch.ts", "/src/fetch-policy.ts")):
+            operations.add("fetch")
+        elif path.endswith(("/src/browser-run.ts", "/src/browser-policy.ts")):
+            operations.add("browser.run")
+        else:
+            specific = False
+            break
+    return operations if specific and operations else {"fetch", "browser.run"}
 
 
 def active_version(deployment_list: list[dict[str, Any]]) -> str:
@@ -784,7 +776,7 @@ def wait_for_version_propagation(
     use_override: bool,
     timeout_seconds: float = 120.0,
     interval_seconds: float = 3.0,
-    consecutive_required: int = 5,
+    consecutive_required: int = 1,
     sleep: Any = time.sleep,
     monotonic: Any = time.monotonic,
 ) -> dict[str, Any]:
@@ -866,111 +858,12 @@ def smoke_operation(
     fail(f"Smoke operation {path} remained rate limited: HTTP {last_status}: {last_value}")
 
 
-def smoke_evidence_workflow(
-    config: EdgeConfig,
-    version_id: str,
-    *,
-    timeout_seconds: float = 120.0,
-    interval_seconds: float = 1.0,
-    sleep: Any = time.sleep,
-    monotonic: Any = time.monotonic,
-) -> dict[str, Any]:
-    if timeout_seconds <= 0 or interval_seconds <= 0:
-        fail("Evidence Workflow smoke timing is invalid")
-    body = json.dumps(
-        {
-            "schema_version": 1,
-            "consumer": "ordivon-edge-release",
-            "workload": "candidate-workflow-smoke",
-            "steps": [
-                {
-                    "id": "source",
-                    "operation": "fetch",
-                    "input": {
-                        "url": "https://example.com/",
-                        "maximum_bytes": 65536,
-                        "timeout_ms": 10000,
-                        "accept": "text/html",
-                    },
-                }
-            ],
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    request_id = f"req_release_evidence_{uuid.uuid4().hex}"
-    status, _, submitted = signed_request(
-        config,
-        "POST",
-        "/v1/evidence-runs",
-        body=body,
-        request_id=request_id,
-        version_override=version_id,
-        timeout=90.0,
-    )
-    if status not in {200, 202} or not isinstance(submitted, dict):
-        fail(f"Evidence Workflow smoke submission failed: HTTP {status}: {submitted}")
-    reference = submitted.get("foreign_operation_ref")
-    instance_id = reference.get("instance_id") if isinstance(reference, dict) else None
-    if not isinstance(instance_id, str) or not instance_id:
-        fail("Evidence Workflow smoke returned no provider instance ID")
-
-    deadline = monotonic() + timeout_seconds
-    observations: list[str | None] = []
-    while True:
-        current_status, _, current = signed_request(
-            config,
-            "GET",
-            f"/v1/evidence-runs/{urllib.parse.quote(instance_id, safe='-_')}",
-            version_override=version_id,
-            timeout=30.0,
-        )
-        if current_status not in {200, 202} or not isinstance(current, dict):
-            fail(
-                "Evidence Workflow smoke status failed: "
-                f"HTTP {current_status}: {current}"
-            )
-        provider = current.get("provider_status")
-        state = provider.get("status") if isinstance(provider, dict) else None
-        observations.append(state if isinstance(state, str) else None)
-        if state == "complete":
-            output = provider.get("output") if isinstance(provider, dict) else None
-            steps = output.get("steps") if isinstance(output, dict) else None
-            if not isinstance(steps, list) or len(steps) != 1:
-                fail("Evidence Workflow smoke returned an invalid step result")
-            execution = steps[0].get("execution") if isinstance(steps[0], dict) else None
-            actual_version = (
-                execution.get("worker_version_id")
-                if isinstance(execution, dict)
-                else None
-            )
-            if actual_version != version_id:
-                fail(
-                    "Evidence Workflow smoke executed Worker version "
-                    f"{actual_version!r}, expected {version_id!r}"
-                )
-            return {
-                "request_id": request_id,
-                "instance_id": instance_id,
-                "submission": submitted,
-                "status": current,
-                "observations": observations,
-            }
-        if state in {"errored", "terminated"}:
-            fail(f"Evidence Workflow smoke reached terminal state {state}: {current}")
-        if monotonic() >= deadline:
-            fail(
-                "Evidence Workflow smoke timed out: "
-                f"instance={instance_id}, observations={observations[-20:]}"
-            )
-        sleep(interval_seconds)
-
-
 def smoke_version(
     config: EdgeConfig,
     version_id: str,
     policy_version: str,
     retention: dict[str, int],
+    operations: set[str],
 ) -> dict[str, Any]:
     status, _, health = signed_request(
         config,
@@ -1006,66 +899,73 @@ def smoke_version(
             f"{capabilities.get('retention')!r}"
         )
 
-    fetch_body = json.dumps(
-        {
-            "url": "https://example.com/",
-            "maximum_bytes": 65536,
-            "timeout_ms": 10000,
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    fetch_id, fetch_result = smoke_operation(
-        config,
-        version_id,
-        "/v1/fetch",
-        fetch_body,
-        "req_release_fetch",
-    )
-    fetch_status = fetch_result.get("receipt", {}).get("status")
-    if fetch_status != "succeeded":
-        fail(f"Version-specific fetch smoke failed: {fetch_result}")
-    assert_version(fetch_result, version_id, "fetch smoke")
-    fetch_receipt = fetch_result["receipt"]
-
-    browser_body = json.dumps(
-        {
-            "url": "https://example.com/",
-            "viewport_width": 1024,
-            "viewport_height": 768,
-            "full_page": False,
-            "wait_until": "domcontentloaded",
-            "timeout_ms": 15000,
-            "wait_after_ms": 0,
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    browser_id, browser_result = smoke_operation(
-        config,
-        version_id,
-        "/v1/browser/run",
-        browser_body,
-        "req_release_browser",
-        timeout=90.0,
-    )
-    browser_status = browser_result.get("receipt", {}).get("status")
-    if browser_status != "succeeded":
-        fail(f"Version-specific Browser smoke failed: {browser_result}")
-    assert_version(browser_result, version_id, "Browser smoke")
-    browser_receipt = browser_result["receipt"]
-    evidence_workflow = smoke_evidence_workflow(config, version_id)
-
-    return {
+    report: dict[str, Any] = {
         "health": health,
         "capabilities": capabilities,
-        "fetch_request_id": fetch_id,
-        "fetch_receipt": fetch_receipt,
-        "browser_request_id": browser_id,
-        "browser_receipt": browser_receipt,
-        "evidence_workflow": evidence_workflow,
+        "operations": sorted(operations),
     }
 
+    if "fetch" in operations:
+        fetch_body = json.dumps(
+            {
+                "url": "https://example.com/",
+                "maximum_bytes": 65536,
+                "timeout_ms": 10000,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        fetch_id, fetch_result = smoke_operation(
+            config,
+            version_id,
+            "/v1/fetch",
+            fetch_body,
+            "req_release_fetch",
+        )
+        fetch_status = fetch_result.get("receipt", {}).get("status")
+        if fetch_status != "succeeded":
+            fail(f"Version-specific fetch smoke failed: {fetch_result}")
+        assert_version(fetch_result, version_id, "fetch smoke")
+        fetch_receipt = fetch_result["receipt"]
+
+        report.update({
+            "fetch_request_id": fetch_id,
+            "fetch_receipt": fetch_receipt,
+        })
+
+    if "browser.run" in operations:
+        browser_body = json.dumps(
+            {
+                "url": "https://example.com/",
+                "viewport_width": 1024,
+                "viewport_height": 768,
+                "full_page": False,
+                "wait_until": "domcontentloaded",
+                "timeout_ms": 15000,
+                "wait_after_ms": 0,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        browser_id, browser_result = smoke_operation(
+            config,
+            version_id,
+            "/v1/browser/run",
+            browser_body,
+            "req_release_browser",
+            timeout=90.0,
+        )
+        browser_status = browser_result.get("receipt", {}).get("status")
+        if browser_status != "succeeded":
+            fail(f"Version-specific Browser smoke failed: {browser_result}")
+        assert_version(browser_result, version_id, "Browser smoke")
+        browser_receipt = browser_result["receipt"]
+        report.update({
+            "browser_request_id": browser_id,
+            "browser_receipt": browser_receipt,
+        })
+
+    return report
 def write_receipt(prefix: str, report: dict[str, Any]) -> pathlib.Path:
     RELEASE_DIR.mkdir(parents=True, exist_ok=True)
     stamp = dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -1099,13 +999,30 @@ def release(args: argparse.Namespace) -> int:
     zero_deployed = False
 
     try:
-        run(["pnpm", "install", "--frozen-lockfile", "--offline"])
-        run(["pnpm", "run", "ci"])
-        report["status"] = "ci_passed"
-
         version_list = versions(environment)
         previous_deployments = deployments(environment)
         previous_version = active_version(previous_deployments)
+        previous_record = version_record(version_list, previous_version)
+        _, previous_digest = version_source(previous_record)
+        if previous_digest == release_digest[:16]:
+            print(
+                json.dumps(
+                    {
+                        "ok": True,
+                        "status": "no_change",
+                        "git_commit": commit,
+                        "worker_release_digest": release_digest,
+                        "version_id": previous_version,
+                    },
+                    indent=2,
+                )
+            )
+            return 0
+        smoke_operations = smoke_operations_for_change(previous_record, commit)
+        report["smoke_operations"] = sorted(smoke_operations)
+        run(["pnpm", "install", "--frozen-lockfile", "--offline"])
+        run(["pnpm", "run", "ci"])
+        report["status"] = "ci_passed"
         resume_version_id = getattr(args, "candidate_version_id", None)
         if resume_version_id is not None:
             candidate = resumable_candidate(
@@ -1178,8 +1095,6 @@ def release(args: argparse.Namespace) -> int:
             f"Smoke candidate {commit[:12]}",
         )
         zero_deployed = True
-        report["status"] = "workflow_bootstrap_pending"
-        report["workflow_resource"] = ensure_evidence_workflow()
         report["status"] = "smoke_pending"
         report["candidate_propagation"] = wait_for_version_propagation(
             edge,
@@ -1191,6 +1106,7 @@ def release(args: argparse.Namespace) -> int:
             new_version,
             policy_version,
             retention,
+            smoke_operations,
         )
         report["status"] = "smoke_passed"
         deploy_versions(

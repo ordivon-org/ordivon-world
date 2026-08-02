@@ -142,7 +142,7 @@ Apply the managed lifecycle rules through the Cloudflare R2 Lifecycle API with:
 scripts/configure-r2-lifecycle
 ```
 
-Retention is defined once in `config/edge-policy.json`. Request states, Receipt mirrors, cleanup tombstones, and Request-ID idempotency are retained for 90 days. Fetch and Browser Artifacts are retained for 91 days so a replayable Receipt does not outlive its result. Legacy v1 evidence is not modified.
+Retention is defined once in `config/edge-policy.json`. Request states, Receipt mirrors, cleanup tombstones, and Request-ID idempotency are retained for 90 days. Fetch and Browser Artifacts are retained for 91 days so a replayable Receipt does not outlive its result. Legacy Receipt objects remain untouched until their existing lifecycle expires.
 
 When immediate Artifact cleanup is deferred, inspect or execute the bounded GC controller:
 

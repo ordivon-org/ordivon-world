@@ -1,51 +1,17 @@
-# Network Observation for Ordivon World
+# Ordivon Network Operator Tools
 
-This module supplies source-native network observations and private local operations to Ordivon World. Legacy `link-*` names preserve command and evidence compatibility; there is no independent Link authority or production data plane.
+This module contains explicit private tools used to inspect and control VPN paths on the current Windows/WSL workstation.
 
-## Active default workspace
+## Retained commands
 
-```text
-link-model ← link-probe ← link-observer ← link-console
-```
+- `ordivon-vpn` — create an isolated WireGuard namespace without changing the WSL root route;
+- `ordivon-vpn-keypair` — validate and atomically install the canonical key pair and rendered profiles;
+- `surfshark-measure` — compare Windows/WSL route state before and after Surfshark connection;
+- `surfshark-profile-scan` — validate, probe, resume, and rank profiles;
+- `install-ordivon-vpn` — install commands and the namespace service.
 
-It provides bounded HTTPS/QUIC reachability, transfer, and connection-lifetime probes; reduced route/service observations; sanitized SQLite history; and a loopback-only console. These are method- and time-conditioned observations, not complete path truth, participant authority, isolation proof, or routing decisions.
+These tools remain because generic WireGuard and network utilities do not encode the current Windows service state, nested-VPN rejection, key/profile consistency, namespace birth ordering, evidence locations, and recovery procedure.
 
-Host may reference or project these facts into Task Context. The module does not own Task requirements, Interaction Binding, provider selection, Effect recovery, participant handoff, or completion.
+They are not a World routing layer and never select or mutate the default path automatically.
 
-## Historical and private carriers
-
-- `link-world` — deterministic network-condition research fixture;
-- `link-wire` and `link-transport-quic` — reference transport experiments;
-- VPN and Surfshark scripts — explicit private operator tools.
-
-The historical crates are excluded from the default Cargo workspace. Private network mutation is outside default CI and remains manual, isolated, and recoverable.
-
-## Local observation
-
-```bash
-cargo run -p link-probe -- --help
-cargo run -p link-console -- \
-  --bind 127.0.0.1:8787 \
-  --database artifacts/runtime/link.db \
-  --targets config/targets/web.toml \
-  --interval-seconds 30
-```
-
-## Explicit isolated VPN operation
-
-```bash
-sudo scripts/install-ordivon-vpn
-sudo ordivon-vpn-keypair
-ordivon-vpn doctor jp-tok
-sudo ordivon-vpn up jp-tok
-sudo ordivon-vpn exec curl -fsS https://www.cloudflare.com/cdn-cgi/trace
-sudo ordivon-vpn down
-```
-
-## Verification
-
-```bash
-cargo fmt --all -- --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace --all-targets
-```
+See `docs/vpn-namespace.md`.

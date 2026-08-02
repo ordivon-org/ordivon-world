@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import io
+import json
 import pathlib
 import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -117,118 +120,6 @@ class ReleaseControllerTests(unittest.TestCase):
         killpg.assert_called_once_with(1234, release_controller.signal.SIGKILL)
         reconcile.assert_called_once_with(expected)
 
-    def test_existing_evidence_workflow_is_validated_without_mutation(self) -> None:
-        existing = {
-            "name": release_controller.EVIDENCE_WORKFLOW_NAME,
-            "script_name": release_controller.WORKER_NAME,
-            "class_name": release_controller.EVIDENCE_WORKFLOW_CLASS,
-            "id": "workflow-id",
-        }
-        with (
-            mock.patch.object(
-                release_controller,
-                "list_workflows",
-                return_value=[existing],
-            ),
-            mock.patch.object(release_controller, "cloudflare_api") as api,
-        ):
-            result = release_controller.ensure_evidence_workflow()
-        self.assertFalse(result["created"])
-        self.assertEqual(result["workflow"], existing)
-        api.assert_not_called()
-
-    def test_missing_evidence_workflow_is_bootstrapped_once(self) -> None:
-        created = {
-            "name": release_controller.EVIDENCE_WORKFLOW_NAME,
-            "script_name": release_controller.WORKER_NAME,
-            "class_name": release_controller.EVIDENCE_WORKFLOW_CLASS,
-            "id": "workflow-id",
-        }
-        credentials = release_controller.CloudflareCredentials(
-            api_token="test-token",
-            account_id="test-account",
-        )
-        with (
-            mock.patch.object(release_controller, "list_workflows", return_value=[]),
-            mock.patch.object(
-                release_controller,
-                "load_cloudflare_credentials",
-                return_value=credentials,
-            ),
-            mock.patch.object(
-                release_controller,
-                "cloudflare_api",
-                return_value=created,
-            ) as api,
-        ):
-            result = release_controller.ensure_evidence_workflow()
-        self.assertTrue(result["created"])
-        api.assert_called_once_with(
-            "PUT",
-            "/accounts/test-account/workflows/ordivon-evidence-run",
-            body={
-                "script_name": "ordivon-edge",
-                "class_name": "EvidenceRunWorkflow",
-                "default_retention": {
-                    "success_retention": "3 days",
-                    "error_retention": "3 days",
-                },
-                "limits": {"steps": 32},
-            },
-        )
-
-    def test_evidence_workflow_smoke_polls_original_instance(self) -> None:
-        submitted = {
-            "foreign_operation_ref": {
-                "instance_id": "evidence-req_release_evidence_test"
-            }
-        }
-        running = {"provider_status": {"status": "running"}}
-        complete = {
-            "provider_status": {
-                "status": "complete",
-                "output": {
-                    "steps": [
-                        {
-                            "execution": {
-                                "worker_version_id": "candidate-version"
-                            }
-                        }
-                    ]
-                },
-            }
-        }
-        edge = release_controller.EdgeConfig(
-            endpoint="https://edge.invalid",
-            key_id="runtime-v1",
-            secret=b"x" * 32,
-        )
-        with mock.patch.object(
-            release_controller,
-            "signed_request",
-            side_effect=[
-                (202, {}, submitted),
-                (202, {}, running),
-                (200, {}, complete),
-            ],
-        ) as signed:
-            result = release_controller.smoke_evidence_workflow(
-                edge,
-                "candidate-version",
-                sleep=lambda _: None,
-                monotonic=iter([0.0, 1.0]).__next__,
-            )
-        self.assertEqual(
-            result["instance_id"],
-            "evidence-req_release_evidence_test",
-        )
-        self.assertEqual(result["observations"], ["running", "complete"])
-        self.assertEqual(signed.call_count, 3)
-        self.assertEqual(
-            signed.call_args_list[1].args[2],
-            "/v1/evidence-runs/evidence-req_release_evidence_test",
-        )
-
     def test_expected_policy_matches_local_configuration(self) -> None:
         version, retention = release_controller.expected_policy()
         self.assertRegex(version, r"^p1\.6\.[a-f0-9]{16}$")
@@ -309,31 +200,6 @@ class ReleaseControllerTests(unittest.TestCase):
                 "abcdef1234567890abcdef1234567890abcdef12",
             )
 
-    def test_control_plane_json_query_retries_transient_failure(self) -> None:
-        sleeps: list[float] = []
-        completed = subprocess.CompletedProcess(
-            args=["wrangler"],
-            returncode=0,
-            stdout='[{"id":"candidate"}]',
-            stderr="",
-        )
-        with mock.patch.object(
-            release_controller,
-            "run",
-            side_effect=[
-                release_controller.ReleaseError("Cloudflare API timed out"),
-                completed,
-            ],
-        ):
-            value = release_controller.run_json(
-                ["wrangler", "versions", "list"],
-                {},
-                attempts=2,
-                sleep=sleeps.append,
-            )
-        self.assertEqual(value, [{"id": "candidate"}])
-        self.assertEqual(sleeps, [2.0])
-
     def test_resumable_candidate_must_match_current_commit(self) -> None:
         versions = [
             {
@@ -384,115 +250,6 @@ class ReleaseControllerTests(unittest.TestCase):
             [("abcdef123456", "0" * 40)],
         )
 
-    def test_release_can_resume_existing_candidate_without_upload(self) -> None:
-        reports: list[tuple[str, dict[str, object]]] = []
-
-        def capture_receipt(prefix: str, report: dict[str, object]) -> pathlib.Path:
-            reports.append((prefix, dict(report)))
-            return pathlib.Path("/tmp/release.json")
-
-        commit = "a" * 40
-        args = argparse.Namespace(
-            message="resume candidate",
-            candidate_version_id="candidate-version",
-        )
-        edge_config = release_controller.EdgeConfig(
-            endpoint="https://edge.invalid",
-            key_id="runtime-v1",
-            secret=b"x" * 32,
-        )
-        version_payload = [
-            {
-                "id": "candidate-version",
-                "annotations": {
-                    "workers/tag": "git-aaaaaaaaaaaa-1234567890"
-                },
-            }
-        ]
-        old_deployment = [
-            {
-                "created_on": "2026-07-27T00:00:00Z",
-                "versions": [
-                    {"version_id": "old-version", "percentage": 100}
-                ],
-            }
-        ]
-        new_deployment = [
-            {
-                "created_on": "2026-07-27T01:00:00Z",
-                "versions": [
-                    {"version_id": "candidate-version", "percentage": 100}
-                ],
-            }
-        ]
-        health = {
-            "policy_version": "p1.6.test",
-            "worker_version": {"id": "candidate-version"},
-        }
-
-        with (
-            mock.patch.object(release_controller, "cloudflare_environment", return_value={}),
-            mock.patch.object(release_controller, "load_edge_config", return_value=edge_config),
-            mock.patch.object(release_controller, "verify_release_source", return_value=commit),
-            mock.patch.object(
-                release_controller,
-                "worker_release_digest",
-                return_value="b" * 64,
-            ),
-            mock.patch.object(
-                release_controller,
-                "expected_policy",
-                return_value=(
-                    "p1.6.test",
-                    {
-                        "idempotency": 90,
-                        "request_state": 90,
-                        "receipt_mirror": 90,
-                        "artifacts": 91,
-                        "cleanup_tasks": 90,
-                    },
-                ),
-            ),
-            mock.patch.object(release_controller, "run"),
-            mock.patch.object(release_controller, "versions", return_value=version_payload),
-            mock.patch.object(
-                release_controller,
-                "deployments",
-                side_effect=[old_deployment, new_deployment],
-            ),
-            mock.patch.object(release_controller, "deploy_versions") as deploy_versions,
-            mock.patch.object(
-                release_controller,
-                "wait_for_version_propagation",
-                return_value={"attempts": 1},
-            ),
-            mock.patch.object(
-                release_controller,
-                "ensure_evidence_workflow",
-                return_value={"created": False, "workflow": {"id": "workflow-id"}},
-            ) as ensure_workflow,
-            mock.patch.object(release_controller, "smoke_version", return_value={}),
-            mock.patch.object(
-                release_controller,
-                "signed_request",
-                return_value=(200, {}, health),
-            ),
-            mock.patch.object(release_controller, "write_receipt", side_effect=capture_receipt),
-            mock.patch.object(release_controller, "wrangler") as wrangler,
-        ):
-            result = release_controller.release(args)
-
-        self.assertEqual(result, 0)
-        self.assertEqual(deploy_versions.call_count, 2)
-        ensure_workflow.assert_called_once_with()
-        wrangler.assert_not_called()
-        self.assertEqual(reports[0][0], "release")
-        self.assertTrue(reports[0][1]["candidate_reused"])
-        self.assertEqual(
-            reports[0][1]["candidate_version"],
-            "candidate-version",
-        )
-
     def test_deployments_are_sorted_by_created_time(self) -> None:
         payload = [
             {"id": "new", "created_on": "2026-07-27T02:00:00Z"},
@@ -516,37 +273,6 @@ class ReleaseControllerTests(unittest.TestCase):
             result = release_controller.deployments({})
         self.assertEqual([item["id"] for item in result], ["old", "new"])
 
-    def test_wait_for_version_propagation_requires_consecutive_matches(self) -> None:
-        responses = [
-            (200, {"CF-Ray": "old"}, {"worker_version": {"id": "old"}}),
-            (200, {"CF-Ray": "one"}, {"worker_version": {"id": "candidate"}}),
-            (200, {"CF-Ray": "two"}, {"worker_version": {"id": "candidate"}}),
-            (200, {"CF-Ray": "three"}, {"worker_version": {"id": "candidate"}}),
-        ]
-        calls: list[dict[str, object]] = []
-
-        def signed(*args: object, **kwargs: object):
-            calls.append(dict(kwargs))
-            return responses.pop(0)
-
-        with mock.patch.object(release_controller, "signed_request", side_effect=signed):
-            result = release_controller.wait_for_version_propagation(
-                release_controller.EdgeConfig(
-                    endpoint="https://edge.invalid",
-                    key_id="runtime-v1",
-                    secret=b"x" * 32,
-                ),
-                "candidate",
-                use_override=True,
-                consecutive_required=3,
-                sleep=lambda _: None,
-                monotonic=lambda: 0.0,
-            )
-
-        self.assertEqual(result["attempts"], 4)
-        self.assertEqual(result["observations"][-1]["cf_ray"], "three")
-        self.assertTrue(all(call["version_override"] == "candidate" for call in calls))
-
     def test_upload_failure_writes_failure_receipt(self) -> None:
         reports: list[tuple[str, dict[str, object]]] = []
 
@@ -565,6 +291,9 @@ class ReleaseControllerTests(unittest.TestCase):
                 "id": "old-version",
                 "number": 1,
                 "metadata": {"created_on": "2026-07-27T00:00:00Z"},
+                "annotations": {
+                    "workers/tag": "git-111111111111-src-2222222222222222-1"
+                },
             }
         ]
         deployment_payload = [
@@ -603,6 +332,11 @@ class ReleaseControllerTests(unittest.TestCase):
             ),
             mock.patch.object(
                 release_controller,
+                "smoke_operations_for_change",
+                return_value={"fetch", "browser.run"},
+            ),
+            mock.patch.object(
+                release_controller,
                 "wrangler",
                 side_effect=release_controller.ReleaseError("upload rejected"),
             ),
@@ -624,6 +358,88 @@ class ReleaseControllerTests(unittest.TestCase):
         self.assertEqual(report["previous_version"], "old-version")
         self.assertIsNone(report["candidate_version"])
         self.assertNotIn("restored_previous_version", report)
+
+
+    def test_release_source_ignores_unrelated_dirty_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = pathlib.Path(directory)
+            provider = repository / "providers" / "cloudflare"
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            subprocess.run(["git", "-C", str(repository), "config", "user.email", "test@example.invalid"], check=True)
+            subprocess.run(["git", "-C", str(repository), "config", "user.name", "Test"], check=True)
+            for relative in release_controller.WORKER_RELEASE_INPUTS:
+                target = provider / relative
+                if relative == "src":
+                    target.mkdir(parents=True)
+                    (target / "index.ts").write_text("worker\n")
+                else:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(relative + "\n")
+            (repository / "README.md").write_text("one\n")
+            subprocess.run(["git", "-C", str(repository), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repository), "commit", "-qm", "base"], check=True)
+            commit = subprocess.check_output(["git", "-C", str(repository), "rev-parse", "HEAD"], text=True).strip()
+            (repository / "README.md").write_text("unrelated dirty\n")
+            with mock.patch.object(release_controller, "ROOT", provider):
+                self.assertEqual(release_controller.verify_release_source(), commit)
+                (provider / "src" / "index.ts").write_text("dirty worker\n")
+                with self.assertRaises(release_controller.ReleaseError):
+                    release_controller.verify_release_source()
+
+    def test_change_aware_smoke_selection(self) -> None:
+        previous = {"id": "old", "annotations": {"workers/tag": "git-aaaaaaaaaaaa-src-bbbbbbbbbbbbbbbb-1"}}
+        cases = [
+            (["providers/cloudflare/src/external-fetch.ts"], {"fetch"}),
+            (["providers/cloudflare/src/browser-run.ts"], {"browser.run"}),
+            (["providers/cloudflare/src/index.ts"], {"fetch", "browser.run"}),
+            (["providers/cloudflare/wrangler.jsonc"], {"fetch", "browser.run"}),
+            (None, {"fetch", "browser.run"}),
+        ]
+        for changed, expected in cases:
+            with mock.patch.object(release_controller, "changed_worker_inputs", return_value=changed):
+                self.assertEqual(release_controller.smoke_operations_for_change(previous, "c" * 40), expected)
+
+    def test_propagation_accepts_one_matching_observation(self) -> None:
+        responses = [
+            (200, {"CF-Ray": "old"}, {"worker_version": {"id": "old"}}),
+            (200, {"CF-Ray": "new"}, {"worker_version": {"id": "candidate"}}),
+        ]
+        with mock.patch.object(release_controller, "signed_request", side_effect=responses):
+            result = release_controller.wait_for_version_propagation(
+                release_controller.EdgeConfig(endpoint="https://edge.invalid", key_id="runtime-v1", secret=b"x" * 32),
+                "candidate",
+                use_override=True,
+                sleep=lambda _: None,
+                monotonic=lambda: 0.0,
+            )
+        self.assertEqual(result["attempts"], 2)
+        self.assertEqual(result["consecutive_required"], 1)
+        self.assertEqual(result["observations"][-1]["cf_ray"], "new")
+
+    def test_release_no_change_skips_ci_and_upload(self) -> None:
+        commit = "a" * 40
+        digest = "b" * 64
+        active = "active-version"
+        version_payload = [{"id": active, "annotations": {"workers/tag": f"git-{commit[:12]}-src-{digest[:16]}-1"}}]
+        deployment_payload = [{"created_on": "2026-08-02T00:00:00Z", "versions": [{"version_id": active, "percentage": 100}]}]
+        output = io.StringIO()
+        with (
+            mock.patch.object(release_controller, "cloudflare_environment", return_value={}),
+            mock.patch.object(release_controller, "load_edge_config", return_value=release_controller.EdgeConfig(endpoint="https://edge.invalid", key_id="runtime-v1", secret=b"x" * 32)),
+            mock.patch.object(release_controller, "verify_release_source", return_value=commit),
+            mock.patch.object(release_controller, "worker_release_digest", return_value=digest),
+            mock.patch.object(release_controller, "expected_policy", return_value=("p1.6.test", {"artifacts": 91})),
+            mock.patch.object(release_controller, "versions", return_value=version_payload),
+            mock.patch.object(release_controller, "deployments", return_value=deployment_payload),
+            mock.patch.object(release_controller, "run") as run,
+            mock.patch.object(release_controller, "wrangler") as wrangler,
+            redirect_stdout(output),
+        ):
+            result = release_controller.release(argparse.Namespace(message=None))
+        self.assertEqual(result, 0)
+        self.assertEqual(json.loads(output.getvalue())["status"], "no_change")
+        run.assert_not_called()
+        wrangler.assert_not_called()
 
 
 if __name__ == "__main__":

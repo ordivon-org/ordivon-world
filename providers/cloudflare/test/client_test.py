@@ -212,55 +212,6 @@ class ClientTests(unittest.TestCase):
             self.assertEqual(report["deployment"]["worker_inputs"], "current")
             self.assertEqual(report["deployment"]["source_commit"], deployed)
 
-    def test_evidence_run_preserves_manifest_and_request_identity(self) -> None:
-        manifest = {
-            "schema_version": 1,
-            "consumer": "ordivon-computer",
-            "workload": "capture",
-            "steps": [
-                {"id": "source", "operation": "fetch", "input": {"url": "https://example.com/"}}
-            ],
-        }
-        with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "run.json"
-            path.write_text(json.dumps(manifest), encoding="utf-8")
-            args = argparse.Namespace(manifest=str(path), request_id="request_evidence_client_001")
-            output = io.StringIO()
-            with (
-                mock.patch.object(
-                    client,
-                    "request",
-                    return_value=(202, {}, b'{"replayed":false}'),
-                ) as call,
-                redirect_stdout(output),
-            ):
-                result = client.command_evidence_run(self.config, args)
-            self.assertEqual(result, 0)
-            self.assertEqual(call.call_args.args[1], "POST")
-            self.assertEqual(call.call_args.args[2], "/v1/evidence-runs")
-            self.assertEqual(call.call_args.kwargs["request_id"], args.request_id)
-            self.assertEqual(json.loads(call.call_args.kwargs["body"]), manifest)
-
-    def test_evidence_status_waits_until_provider_terminal_state(self) -> None:
-        responses = [
-            (202, {}, b'{"provider_status":{"status":"running"}}'),
-            (200, {}, b'{"provider_status":{"status":"complete"}}'),
-        ]
-        args = argparse.Namespace(
-            instance_id="evidence-request_001",
-            wait=True,
-            timeout=10.0,
-            interval=0.001,
-        )
-        output = io.StringIO()
-        with (
-            mock.patch.object(client, "request", side_effect=responses),
-            mock.patch.object(client.time, "sleep"),
-            redirect_stdout(output),
-        ):
-            result = client.command_evidence_status(self.config, args)
-        self.assertEqual(result, 0)
-        self.assertEqual(json.loads(output.getvalue())["provider_status"]["status"], "complete")
 
 
 if __name__ == "__main__":

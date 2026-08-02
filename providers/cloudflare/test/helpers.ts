@@ -225,14 +225,6 @@ export function makeEnv(memory = new MemoryR2()): Env {
         return { success: true };
       }
     } as RateLimit,
-    EVIDENCE_WORKFLOW: {
-      async create() {
-        throw new Error("Evidence Workflow was not injected in the test.");
-      },
-      async get() {
-        throw new Error("Evidence Workflow was not injected in the test.");
-      }
-    } as unknown as Workflow,
     CF_VERSION_METADATA: {
       id: "test-worker-version",
       tag: "test",

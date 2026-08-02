@@ -61,7 +61,6 @@ def managed_rules(retention: dict[str, int]) -> list[dict[str, Any]]:
         ("receipt-mirror", "receipts/v2/", retention["receipt_mirror"]),
         ("fetch-artifacts", "fetch/v2/", retention["artifacts"]),
         ("browser-artifacts", "browser/v2/", retention["artifacts"]),
-        ("evidence-run-artifacts", "evidence-runs/v1/", retention["artifacts"]),
         ("cleanup-tasks", "cleanup/v2/", retention["cleanup_tasks"]),
     ]
     return [
