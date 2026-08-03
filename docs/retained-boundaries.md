@@ -1,8 +1,52 @@
+---
+schema_version: 1
+id: world.boundaries
+title: Retained Boundaries After A11 Reduction
+type: decision
+profile: engineering
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+audience:
+  - maintainer
+  - builder
+  - operator
+  - agent
+updated: 2026-08-03
+summary: Canonical decision retaining only the Cloudflare provider adapter and private network operator tools, with non-replaceable effects, removed machinery, validation, and reactivation rules.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - ordivon-world
+related:
+  - world.start
+  - world.cloudflare.capabilities
+  - world.network-tools
+  - world.authority
+---
 # Retained Boundaries After A11 Reduction
+
+## Context
+
+World previously accumulated provider, network, capability-program, control, protocol, console, experiment, and generated-governance structures. Most had no active consumer and duplicated Host, Runtime, Provider, network-substrate, or domain responsibility.
+
+## Decision
+
+Retain only the Cloudflare provider adapter and private network operator tools. Preserve their focused tests, policy coupling, release validation, recovery evidence, and explicit deletion conditions. Restore anything else from Git only when a named current workload demonstrates a non-replaceable responsibility.
+
+## Consequences
+
+World has no service, database, workflow engine, provider broker, universal interaction schema, capability registry, active research-control plane, or default replay of closed W0, W1, WCP, or WXP experiments. Provider and operating-system primitives remain authoritative; World binds only the identities, uncertainty, verification, and machine-specific procedures required by current Ordivon use.
+
+## Status
+
+Accepted and active. [`../providers/cloudflare/README.md`](../providers/cloudflare/README.md) defines the provider surface, [`../modules/network-observation/README.md`](../modules/network-observation/README.md) defines the private tools, and [`authority.md`](authority.md) records authority. Reopen for a deleted component only when absence causes a demonstrated current failure, no natural owner or mature mechanism can solve it, net acceleration exceeds maintenance cost, and a deletion condition is stated.
 
 Date: 2026-08-02
 
-## Decision
+## Retention decision details
 
 World remains a repository boundary for two concrete capabilities, not a runtime layer:
 

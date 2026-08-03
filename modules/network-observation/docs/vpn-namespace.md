@@ -1,4 +1,51 @@
+---
+schema_version: 1
+id: world.vpn-namespace
+title: Isolated VPN namespace
+type: operations
+profile: engineering
+lifecycle: active
+source_role: canonical
+visibility: private
+owners:
+  - ordivon-world
+  - workstation-operator
+audience:
+  - operator
+  - builder
+  - agent
+updated: 2026-08-03
+summary: Canonical operating and recovery procedure for an explicit WireGuard namespace that preserves the WSL root route and records bounded private evidence.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - modules/network-observation
+related:
+  - world.network-tools
+  - world.boundaries
+  - world.authority
+---
 # Isolated VPN namespace
+
+## Scope
+
+Provide a selected-command WireGuard path inside `ordivon-vpn` while Runtime, MCP, Cloudflare Tunnel, and ordinary WSL traffic remain on the root namespace and route.
+
+## Normal operation
+
+Install the tools and canonical key pair, run `doctor`, explicitly bring up one named profile, inspect status, execute only selected commands inside the namespace, and bring the namespace down after use. Profile measurement and scanning remain separate explicit operations.
+
+## Failure detection
+
+Detect active Windows Surfshark, WireGuard, or OpenVPN tunnels; key or profile mismatch; missing dependencies; namespace, interface, or route divergence; partial setup; invalid private-file permissions; mislabeled samples; unsafe endpoint data; and interrupted scans.
+
+## Recovery
+
+`up` is transactional and cleans partial state. `down` is idempotent and is the primary recovery action after interruption. The namespace service is installed but never enabled automatically. Raw evidence remains under private backup paths and never contains exported secret keys.
+
+## Verification
+
+Use `ordivon-vpn doctor`, status inspection, root-route comparison, selected-command Cloudflare trace, key-pair and rendered-profile validation, bounded handshake probes, private evidence review, focused tests, shell syntax checks, systemd unit validation, and secret scanning. [`../README.md`](../README.md) defines the command contract, [`../../../docs/retained-boundaries.md`](../../../docs/retained-boundaries.md) defines retention, and [`../../../docs/authority.md`](../../../docs/authority.md) records authority.
 
 These tools provide an explicit WireGuard path for selected commands without replacing the WSL root route used by Ordivon Runtime, MCP, and Cloudflare Tunnel.
 
