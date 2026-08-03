@@ -1,4 +1,52 @@
+---
+schema_version: 1
+id: world.cloudflare.reliability
+title: Reliability model
+type: reliability
+profile: provider
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+  - ordivon-cloudflare-provider
+audience:
+  - builder
+  - operator
+  - agent
+updated: 2026-08-03
+summary: Canonical failure model for authoritative request state, conditional transitions, lease fencing, generation-bound Artifacts, ambiguous writes, cleanup, retention, and replay.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - providers/cloudflare
+related:
+  - world.cloudflare.capabilities
+  - world.cloudflare.operations
+  - world.cloudflare.security
+  - world.authority
+---
 # Reliability model
+
+## Failure model
+
+A remote request may be rejected before admission, remain pending, commit successfully while the response is lost, fail after writing some Artifacts, be taken over after lease expiry, encounter policy drift, or leave deferred cleanup. Transport failure alone does not establish whether an external Effect occurred.
+
+## Retries
+
+Clients may retry transient transport failures only with the same signed Request ID and exact body. Receipt replay occurs before rate-budget consumption. A different request digest under the same ID fails with conflict, and an expired request under a changed policy requires a new ID.
+
+## Uncertainty
+
+`requests/v2/<request-id>.json` is the sole authoritative request state. Pending, lease generation, ETag fencing, committed Receipt, policy fingerprint, capability identity, and Worker identity distinguish active, stale, ambiguous, and final work. Receipt mirrors and timestamps are not independent truth.
+
+## Recovery
+
+Reread authoritative state after ambiguous writes, accept a matching committed Receipt, clean only the executor's generation-bound Artifacts when commit did not win, use conditional takeover for same-policy expired leases, and process validated cleanup tombstones through bounded GC.
+
+## Evidence
+
+Tests inject R2, commit, takeover, cleanup, policy, rate-limit, and replay failures. Every final Receipt excludes private lease tokens and ETags, binds execution and policy identity, and references Artifacts whose bytes are independently verified by the client. See [`operations.md`](operations.md) for recovery commands, [`security.md`](security.md) for protection controls, and [`../../../docs/authority.md`](../../../docs/authority.md) for authority.
 
 ## Authoritative request state
 
@@ -85,7 +133,6 @@ The test suite injects R2 failures and proves:
 - rate-limited operations are receipted and replay does not consume the budget again;
 - Receipt serialization excludes lease tokens and ETags.
 
-
 ## Deferred cleanup
 
 If immediate R2 deletion fails, Edge writes a bounded cleanup tombstone:
@@ -95,7 +142,6 @@ cleanup/v2/<request-id>/g<generation>.json
 ```
 
 The tombstone contains only Request ID, operation, lease generation, Artifact keys, reason, and timestamp. It contains no lease token or ETag. The GC controller validates that every requested deletion belongs to the same Request ID and generation and is under `fetch/v2` or `browser/v2` before deleting anything.
-
 
 ## Policy fingerprint and retention window
 

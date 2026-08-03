@@ -1,4 +1,53 @@
+---
+schema_version: 1
+id: world.start
+title: Ordivon World
+type: start
+profile: organization
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+audience:
+  - builder
+  - operator
+  - agent
+updated: 2026-08-03
+summary: Canonical entry to World's retained Cloudflare provider adapter and private network operator tools after removal of unused semantic and experimental layers.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - ordivon-world
+related:
+  - world.boundaries
+  - world.cloudflare.capabilities
+  - world.cloudflare.operations
+  - world.cloudflare.reliability
+  - world.cloudflare.security
+  - world.cloudflare.release
+  - world.network-tools
+  - world.vpn-namespace
+  - world.authority
+---
 # Ordivon World
+
+## Purpose
+
+Carry only the external provider adapters and private operator tools that still serve current Ordivon work and whose machine- or provider-specific recovery semantics cannot be replaced by ordinary libraries or undocumented commands.
+
+## Start here
+
+- [`docs/retained-boundaries.md`](docs/retained-boundaries.md) records what survived A11 reduction and why.
+- [`providers/cloudflare/README.md`](providers/cloudflare/README.md) defines callable Cloudflare capabilities and authority.
+- [`providers/cloudflare/docs/operations.md`](providers/cloudflare/docs/operations.md), [`reliability.md`](providers/cloudflare/docs/reliability.md), [`security.md`](providers/cloudflare/docs/security.md), and [`release.md`](providers/cloudflare/docs/release.md) define operation, uncertainty, protection, release, and rollback.
+- [`modules/network-observation/README.md`](modules/network-observation/README.md) defines the retained private network tools.
+- [`modules/network-observation/docs/vpn-namespace.md`](modules/network-observation/docs/vpn-namespace.md) defines their privileged operating and recovery procedure.
+- [`docs/authority.md`](docs/authority.md) separates callable capability, operator procedure, machine truth, and archived experiments.
+
+## Current boundary
+
+World is a repository boundary, not an independent service or semantic layer. Its active scope is one Cloudflare provider adapter plus workstation-specific network operator tools. Host owns Task and commitment meaning, Runtime owns local physical execution, Cloudflare owns remote Worker and R2 state, and operators explicitly invoke private network changes.
 
 Ordivon World carries the external adapters and private operator tools that still serve current Ordivon work. It is not an independent semantic layer.
 

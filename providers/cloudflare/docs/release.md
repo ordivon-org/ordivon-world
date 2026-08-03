@@ -1,6 +1,54 @@
+---
+schema_version: 1
+id: world.cloudflare.release
+title: Release and rollback
+type: release
+profile: engineering
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+  - ordivon-cloudflare-provider
+audience:
+  - operator
+  - builder
+  - agent
+updated: 2026-08-03
+summary: Canonical release contract for Worker-input identity, zero-traffic candidate admission, affected-capability smoke, ambiguous deployment reconciliation, promotion, rollback, and private receipts.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - providers/cloudflare
+related:
+  - world.cloudflare.capabilities
+  - world.cloudflare.operations
+  - world.cloudflare.reliability
+  - world.authority
+---
 # Release and rollback
 
 ## Release identity
+
+A release is identified by the exact committed deployable Worker inputs and their digest. The source commit is provenance; unrelated documentation, tests, evidence, branch names, detached state, and non-Worker changes do not alter Worker identity.
+
+## Changes
+
+A changed input digest creates one immutable zero-traffic candidate. Admission verifies version-bound health, effective policy, capability identity, and only the affected Fetch or Browser operation unless shared code or configuration changed. A matching active digest produces `no_change`.
+
+## Compatibility
+
+The candidate must expose the expected signed capability and Receipt contracts, Cloudflare bindings, policy fingerprint, private R2 behavior, and current client expectations. Dirty Worker inputs are incompatible because the deployed bytes cannot be reconstructed.
+
+## Verification
+
+Run local provider CI, upload the candidate, observe it once through a version override, perform affected smokes, promote to 100 percent, observe once without override, query authoritative Deployment state after ambiguous responses, and write a private source- and version-bound receipt. [`operations.md`](operations.md) defines installed operation, [`reliability.md`](reliability.md) defines reconciliation, and [`../../../docs/authority.md`](../../../docs/authority.md) records authority.
+
+## Rollback
+
+On failed admission, restore the previous version to 100 percent and preserve a failure receipt. Operators may explicitly roll back to the prior or specified version. An uploaded candidate may remain for diagnosis but receives no ordinary traffic.
+
+## Deployable input identity
 
 A Worker release is identified by the committed tree of deployable inputs:
 

@@ -1,4 +1,49 @@
+---
+schema_version: 1
+id: world.cloudflare.security
+title: Security boundary
+type: security
+profile: provider
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+  - ordivon-cloudflare-provider
+audience:
+  - security-reviewer
+  - builder
+  - operator
+  - agent
+updated: 2026-08-03
+summary: Canonical threat and control boundary for HMAC identity, replay, Fetch and Browser restrictions, private R2 Artifacts, public routes, execution confidentiality, and client verification.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - providers/cloudflare
+related:
+  - world.cloudflare.capabilities
+  - world.cloudflare.operations
+  - world.cloudflare.reliability
+  - world.authority
+---
 # Security boundary
+
+## Threat boundary
+
+The provider assumes callers may replay requests, alter bodies, reuse identities, target disallowed destinations, exploit redirects or browser subresources, expose returned HTML, race stale executors, infer private lease state, or accept corrupted Artifact bytes. It does not authorize arbitrary Internet access or browser interaction.
+
+## Controls
+
+Controls include HMAC-SHA256 signing over method, path, Request ID, timestamp, and body digest; bounded clock window; exact idempotency binding; conditional R2 state transitions; generation fencing; strict HTTPS hostname allowlists; redirect revalidation; same-origin Browser restriction; blocked active subresources; private R2; attachment-only no-store Artifact delivery; response headers; rate limits; secret-field whitelisting; and client-side SHA-256 verification.
+
+## Residual risk
+
+The shared HMAC key remains a high-value secret, allowlisted public hosts may still serve malicious content, requested URL is not proof of final Browser URL, Cloudflare and R2 remain trusted provider dependencies, policy duplication can drift before checks run, and the current Browser contract cannot safely support arbitrary actions or credentials.
+
+## Verification
+
+Verify signature rejection, timestamp and digest binding, request conflict behavior, stale-generation fencing, policy-version takeover rejection, redirect and hostname validation, Browser request blocking, private Artifact headers and bytes, absence of lease tokens and ETags, capability and policy coupling, and failed-download atomicity. [`reliability.md`](reliability.md) defines uncertain delivery, [`operations.md`](operations.md) defines operation, and [`../../../docs/authority.md`](../../../docs/authority.md) records authority.
 
 ## Authentication
 
@@ -43,7 +88,6 @@ Fetch is intentionally constrained:
 
 The fetched body is stored in private R2 and referenced by SHA-256, byte length, media type, and ETag. Artifact reads are always served as `application/octet-stream` with `Content-Disposition: attachment` and `Cache-Control: no-store, no-transform`; the original media type is exposed only as `X-Ordivon-Media-Type`. This preserves exact bytes and prevents HTML execution or Cloudflare JavaScript Detection injection.
 
-
 ## Browser Run P1
 
 Browser Run is constrained to a single snapshot operation:
@@ -78,7 +122,6 @@ The Worker stores the screenshot, rendered HTML, and a manifest as private R2 ar
 
 Arbitrary browser interaction remains disabled until a separate action contract and per-action authorization model are implemented.
 
-
 ## P1.5 execution confidentiality
 
 Final Receipts explicitly whitelist execution metadata fields. Private lease tokens and R2 state ETags never enter Receipt JSON, public responses, or structured operation logs.
@@ -86,7 +129,6 @@ Final Receipts explicitly whitelist execution metadata fields. Private lease tok
 Every new Receipt records the policy version, capability version, Worker version ID/tag/timestamp, and lease generation. An expired pending request cannot be taken over after a policy or capability version change; callers must use a new Request ID.
 
 Rate Limit bindings fail closed when the budget service is unavailable. Replays return an already committed Receipt without invoking the budget or external capability again.
-
 
 ## Client-side Artifact verification
 

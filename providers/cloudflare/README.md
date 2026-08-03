@@ -1,4 +1,49 @@
+---
+schema_version: 1
+id: world.cloudflare.capabilities
+title: Ordivon Cloudflare Provider
+type: capabilities
+profile: provider
+lifecycle: active
+source_role: canonical
+visibility: public
+owners:
+  - ordivon-world
+  - ordivon-cloudflare-provider
+audience:
+  - builder
+  - operator
+  - agent
+updated: 2026-08-03
+summary: Canonical capability contract for signed bounded Cloudflare Fetch, Browser snapshot, Receipt, private Artifact, release, rollback, lifecycle, and garbage collection operations.
+evidence_status: verified
+readiness: READY
+applies_to:
+  - providers/cloudflare
+related:
+  - world.cloudflare.operations
+  - world.cloudflare.reliability
+  - world.cloudflare.security
+  - world.cloudflare.release
+  - world.authority
+---
 # Ordivon Cloudflare Provider
+
+## Scope
+
+Provide a signed adapter for bounded remote Fetch and same-origin Browser snapshot work, authoritative request state, replayable Receipts, private R2 Artifacts, and version-bound release operations.
+
+## Supported operations
+
+The supported surface is `fetch.v2`, `browser.snapshot.v2`, `receipt.v2`, authenticated Artifact retrieval, release, rollback, lifecycle configuration, and bounded garbage collection. The exact callable set is reported by the deployed capability endpoint and must match local policy and source identity.
+
+## Authority boundary
+
+Cloudflare owns Worker versions, Deployments, Browser and Fetch execution, R2 request state, lease generations, Receipts, and Artifact objects. The adapter owns signed Request ID and input binding plus client verification. Host retains Task, Effect, uncertainty, Verification, and completion authority.
+
+## Limitations
+
+Fetch is allowlisted HTTPS GET with bounded redirects, time, and bytes. Browser supports navigation and snapshot only; no caller scripts, cookies, credentials, arbitrary headers, clicks, forms, or downloads are accepted. The provider is not a general browser automation service, callback authority, provider broker, or workflow engine.
 
 A signed provider adapter for bounded remote Fetch and Browser work.
 
