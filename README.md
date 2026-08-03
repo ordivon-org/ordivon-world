@@ -13,7 +13,7 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-03
+updated: 2026-08-04
 summary: Canonical entry to World's retained Cloudflare provider adapter and private network operator tools after removal of unused semantic and experimental layers.
 evidence_status: verified
 readiness: READY
@@ -83,3 +83,9 @@ Completed W0/W1/WCP/WXP experiments, negative results, imported Edge/Link protot
 | Release candidate smoke | the uploaded Worker version cannot execute the changed capability | local tests cannot prove the deployed Cloudflare version and bindings | run only for changed capabilities; delete with remote release control |
 
 See [`docs/retained-boundaries.md`](docs/retained-boundaries.md).
+
+## Project family
+
+- [Public project directory](https://ordivon.com/projects) — reader-facing retained scope, maturity, and rejected-layer status.
+- [Cross-project map](https://github.com/zycxfyh/ordivon-computing/blob/main/projects/README.md) — stable roles, repository links, and authority entry points for all nine repositories.
+- Related owners: [Ordivon Host](https://github.com/zycxfyh/ordivon-host) owns Task meaning, [Ordivon Runtime](https://github.com/zycxfyh/ordivon-runtime) owns local physical execution, and Cloudflare or the local machine remains authoritative for provider and network facts.
