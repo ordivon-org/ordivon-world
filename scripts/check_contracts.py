@@ -118,6 +118,26 @@ def check_policy_coupling() -> None:
 
 
 def provider_fixtures() -> dict[str, Any]:
+    typecheck = subprocess.run(
+        [
+            "pnpm",
+            "exec",
+            "tsc",
+            "--project",
+            "scripts/tsconfig.contracts.json",
+            "--noEmit",
+        ],
+        cwd=PROVIDER,
+        text=True,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if typecheck.returncode != 0:
+        raise ContractCheckError(
+            "TypeScript contract fixture typecheck failed: "
+            + (typecheck.stderr or typecheck.stdout).strip()
+        )
     completed = subprocess.run(
         ["pnpm", "exec", "tsx", str(EMITTER)],
         cwd=PROVIDER,

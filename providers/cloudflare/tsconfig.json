@@ -22,7 +22,6 @@
   },
   "include": [
     "src/index.ts",
-    "scripts/emit-contract-fixtures.ts",
     "test/helpers.ts",
     "test/contracts.test.ts",
     "test/transactions.test.ts",
