@@ -29,7 +29,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - relative Schema references resolve exclusively from packaged local resources;
 - contract fixture type checking no longer changes the Worker release-input digest;
 - Browser non-PNG output now fails before Artifact commit;
-- Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes.
+- Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes;
+- zero-traffic Worker admission no longer treats one transient version-override hit as stable routing; read-only checks retry and every external smoke POST is guarded by three consecutive version-bound health observations.
 
 ### Changed
 

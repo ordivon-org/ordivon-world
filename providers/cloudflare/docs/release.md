@@ -42,7 +42,7 @@ The candidate must expose the expected signed capability and Receipt contracts, 
 
 ## Verification
 
-Run local provider CI, upload the candidate, observe it once through a version override, perform affected smokes, promote to 100 percent, observe once without override, query authoritative Deployment state after ambiguous responses, and write a private source- and version-bound receipt. [`operations.md`](operations.md) defines installed operation, [`reliability.md`](reliability.md) defines reconciliation, and [`../../../docs/authority.md`](../../../docs/authority.md) records authority.
+Run local provider CI, upload the candidate, require a stable consecutive sequence of version-bound health observations through an override, retry only read-only health and capability checks when an edge still serves the previous version, guard every external smoke POST with another stable override sequence, promote to 100 percent, verify stable unoverridden routing, query authoritative Deployment state after ambiguous responses, and write a private source- and version-bound receipt. [`operations.md`](operations.md) defines installed operation, [`reliability.md`](reliability.md) defines reconciliation, and [`../../../docs/authority.md`](../../../docs/authority.md) records authority.
 
 ## Rollback
 
@@ -79,14 +79,16 @@ read active Cloudflare version and deployment
 → run local provider CI
 → upload one immutable candidate
 → deploy previous 100% + candidate 0%
-→ observe candidate version once through an override
-→ verify health, policy, capabilities, and affected operations
+→ require three consecutive candidate health observations through an override
+→ retry only version-bound health and capability GETs when an edge is stale
+→ guard each external smoke POST with another three-observation override sequence
+→ verify policy, capabilities, and affected operations
 → promote candidate 100%
-→ observe promoted version once without override
+→ require three consecutive promoted health observations without override
 → write a private release receipt
 ```
 
-One matching observation establishes the property checked. Repeating the same health request five times does not establish global propagation.
+A single matching observation does not establish stable override routing: the same deployment may still serve the previous version on the next request while edge state converges. The controller therefore requires three consecutive version-bound health observations and resets the sequence on any mismatch. This is a bounded admission guard, not a claim of global propagation.
 
 Fetch-only and Browser-only source changes run only their corresponding operation smoke. Shared routing, authentication, policy, configuration, dependency, or build changes run both. Local tests remain broader than deployment smoke because they exercise state-machine failure paths without creating remote Effects.
 

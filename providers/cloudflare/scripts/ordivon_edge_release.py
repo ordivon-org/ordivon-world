@@ -54,6 +54,7 @@ EDGE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/edge-client.json")
 POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
 WRANGLER_CONFIG = ROOT / "wrangler.jsonc"
 RELEASE_DIR = pathlib.Path("/root/backups/ordivon-world/cloudflare-releases")
+ROUTE_STABILITY_OBSERVATIONS = 3
 WORKER_RELEASE_INPUTS = (
     "src",
     "config/edge-policy.json",
@@ -551,14 +552,16 @@ def deployment_matches(
     actual = deployment.get("versions")
     if not isinstance(actual, list):
         return False
-    normalize = lambda rows: sorted(
-        (
-            str(row.get("version_id")),
-            float(row.get("percentage", -1)),
+    def normalize(rows: list[dict[str, Any]]) -> list[tuple[str, float]]:
+        return sorted(
+            (
+                str(row.get("version_id")),
+                float(row.get("percentage", -1)),
+            )
+            for row in rows
+            if isinstance(row, dict)
         )
-        for row in rows
-        if isinstance(row, dict)
-    )
+
     return normalize(actual) == normalize(expected_versions)
 
 
@@ -776,7 +779,7 @@ def wait_for_version_propagation(
     use_override: bool,
     timeout_seconds: float = 120.0,
     interval_seconds: float = 3.0,
-    consecutive_required: int = 1,
+    consecutive_required: int = ROUTE_STABILITY_OBSERVATIONS,
     sleep: Any = time.sleep,
     monotonic: Any = time.monotonic,
 ) -> dict[str, Any]:
@@ -820,6 +823,55 @@ def wait_for_version_propagation(
             )
         sleep(interval_seconds)
 
+
+def read_versioned_document(
+    config: EdgeConfig,
+    version_id: str,
+    path: str,
+    context: str,
+    *,
+    use_override: bool,
+    timeout_seconds: float = 60.0,
+    interval_seconds: float = 2.0,
+    sleep: Any = time.sleep,
+    monotonic: Any = time.monotonic,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    if timeout_seconds <= 0 or interval_seconds <= 0:
+        fail("Versioned read retry parameters are invalid")
+    deadline = monotonic() + timeout_seconds
+    observations: list[dict[str, Any]] = []
+    while True:
+        status, headers, value = signed_request(
+            config,
+            "GET",
+            path,
+            version_override=version_id if use_override else None,
+        )
+        actual = observed_version(value)
+        normalized = {key.lower(): item for key, item in headers.items()}
+        observations.append(
+            {
+                "status": status,
+                "worker_version_id": actual,
+                "cf_ray": normalized.get("cf-ray"),
+            }
+        )
+        if status == 200 and actual == version_id and isinstance(value, dict):
+            return value, {
+                "path": path,
+                "target_version": version_id,
+                "use_override": use_override,
+                "attempts": len(observations),
+                "observations": observations[-20:],
+            }
+        if monotonic() >= deadline:
+            fail(
+                f"{context} did not reach the requested Worker version: "
+                f"target={version_id}, last={actual}, status={status}, "
+                f"attempts={len(observations)}"
+            )
+        sleep(interval_seconds)
+
 def smoke_operation(
     config: EdgeConfig,
     version_id: str,
@@ -828,10 +880,18 @@ def smoke_operation(
     request_prefix: str,
     *,
     timeout: float = 75.0,
-) -> tuple[str, dict[str, Any]]:
+) -> tuple[str, dict[str, Any], list[dict[str, Any]]]:
     last_status = 0
     last_value: Any = None
+    route_guards: list[dict[str, Any]] = []
     for attempt in range(1, 4):
+        route_guards.append(
+            wait_for_version_propagation(
+                config,
+                version_id,
+                use_override=True,
+            )
+        )
         request_id = f"{request_prefix}_{uuid.uuid4().hex}"
         status, headers, value = signed_request(
             config,
@@ -844,10 +904,11 @@ def smoke_operation(
         )
         last_status = status
         last_value = value
+        if not isinstance(value, dict):
+            fail(f"Smoke operation {path} returned a non-object response")
+        assert_version(value, version_id, f"smoke operation {path}")
         if status != 429:
-            if not isinstance(value, dict):
-                fail(f"Smoke operation {path} returned a non-object response")
-            return request_id, value
+            return request_id, value, route_guards
         if attempt < 3:
             normalized = {key.lower(): val for key, val in headers.items()}
             try:
@@ -865,26 +926,22 @@ def smoke_version(
     retention: dict[str, int],
     operations: set[str],
 ) -> dict[str, Any]:
-    status, _, health = signed_request(
+    health, health_read = read_versioned_document(
         config,
-        "GET",
+        version_id,
         "/health",
-        version_override=version_id,
+        "version-specific health smoke",
+        use_override=True,
     )
-    if status != 200:
-        fail(f"Version-specific health smoke returned HTTP {status}: {health}")
-    assert_version(health, version_id, "health smoke")
     assert_policy(health, policy_version, "health smoke")
 
-    status, _, capabilities = signed_request(
+    capabilities, capabilities_read = read_versioned_document(
         config,
-        "GET",
+        version_id,
         "/v1/capabilities",
-        version_override=version_id,
+        "version-specific capability smoke",
+        use_override=True,
     )
-    if status != 200:
-        fail(f"Version-specific capability smoke returned HTTP {status}: {capabilities}")
-    assert_version(capabilities, version_id, "capability smoke")
     assert_policy(capabilities, policy_version, "capability smoke")
     expected_retention = {
         "idempotency_days": retention["idempotency"],
@@ -901,7 +958,9 @@ def smoke_version(
 
     report: dict[str, Any] = {
         "health": health,
+        "health_read": health_read,
         "capabilities": capabilities,
+        "capabilities_read": capabilities_read,
         "operations": sorted(operations),
     }
 
@@ -915,7 +974,7 @@ def smoke_version(
             sort_keys=True,
             separators=(",", ":"),
         ).encode("utf-8")
-        fetch_id, fetch_result = smoke_operation(
+        fetch_id, fetch_result, fetch_route_guards = smoke_operation(
             config,
             version_id,
             "/v1/fetch",
@@ -925,12 +984,12 @@ def smoke_version(
         fetch_status = fetch_result.get("receipt", {}).get("status")
         if fetch_status != "succeeded":
             fail(f"Version-specific fetch smoke failed: {fetch_result}")
-        assert_version(fetch_result, version_id, "fetch smoke")
         fetch_receipt = fetch_result["receipt"]
 
         report.update({
             "fetch_request_id": fetch_id,
             "fetch_receipt": fetch_receipt,
+            "fetch_route_guards": fetch_route_guards,
         })
 
     if "browser.run" in operations:
@@ -947,7 +1006,7 @@ def smoke_version(
             sort_keys=True,
             separators=(",", ":"),
         ).encode("utf-8")
-        browser_id, browser_result = smoke_operation(
+        browser_id, browser_result, browser_route_guards = smoke_operation(
             config,
             version_id,
             "/v1/browser/run",
@@ -958,11 +1017,11 @@ def smoke_version(
         browser_status = browser_result.get("receipt", {}).get("status")
         if browser_status != "succeeded":
             fail(f"Version-specific Browser smoke failed: {browser_result}")
-        assert_version(browser_result, version_id, "Browser smoke")
         browser_receipt = browser_result["receipt"]
         report.update({
             "browser_request_id": browser_id,
             "browser_receipt": browser_receipt,
+            "browser_route_guards": browser_route_guards,
         })
 
     return report
@@ -1119,16 +1178,20 @@ def release(args: argparse.Namespace) -> int:
             new_version,
             use_override=False
         )
-        status, _, health = signed_request(edge, "GET", "/health")
-        if status != 200:
-            fail(f"Post-promotion health returned HTTP {status}: {health}")
-        assert_version(health, new_version, "post-promotion health")
+        health, post_promotion_read = read_versioned_document(
+            edge,
+            new_version,
+            "/health",
+            "post-promotion health",
+            use_override=False,
+        )
         assert_policy(health, policy_version, "post-promotion health")
         report.update(
             {
                 "status": "promoted",
                 "completed_at": dt.datetime.now(dt.UTC).isoformat(),
                 "post_promotion_health": health,
+                "post_promotion_read": post_promotion_read,
                 "deployment": deployments(environment)[-1],
             }
         )

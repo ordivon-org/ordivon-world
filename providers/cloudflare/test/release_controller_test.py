@@ -399,22 +399,119 @@ class ReleaseControllerTests(unittest.TestCase):
             with mock.patch.object(release_controller, "changed_worker_inputs", return_value=changed):
                 self.assertEqual(release_controller.smoke_operations_for_change(previous, "c" * 40), expected)
 
-    def test_propagation_accepts_one_matching_observation(self) -> None:
+    def test_propagation_requires_three_consecutive_matches(self) -> None:
         responses = [
-            (200, {"CF-Ray": "old"}, {"worker_version": {"id": "old"}}),
-            (200, {"CF-Ray": "new"}, {"worker_version": {"id": "candidate"}}),
+            (200, {"CF-Ray": "old-1"}, {"worker_version": {"id": "old"}}),
+            (
+                200,
+                {"CF-Ray": "candidate-1"},
+                {"worker_version": {"id": "candidate"}},
+            ),
+            (200, {"CF-Ray": "old-2"}, {"worker_version": {"id": "old"}}),
+            (
+                200,
+                {"CF-Ray": "candidate-2"},
+                {"worker_version": {"id": "candidate"}},
+            ),
+            (
+                200,
+                {"CF-Ray": "candidate-3"},
+                {"worker_version": {"id": "candidate"}},
+            ),
+            (
+                200,
+                {"CF-Ray": "candidate-4"},
+                {"worker_version": {"id": "candidate"}},
+            ),
         ]
-        with mock.patch.object(release_controller, "signed_request", side_effect=responses):
+        with mock.patch.object(
+            release_controller,
+            "signed_request",
+            side_effect=responses,
+        ):
             result = release_controller.wait_for_version_propagation(
-                release_controller.EdgeConfig(endpoint="https://edge.invalid", key_id="runtime-v1", secret=b"x" * 32),
+                release_controller.EdgeConfig(
+                    endpoint="https://edge.invalid",
+                    key_id="runtime-v1",
+                    secret=b"x" * 32,
+                ),
                 "candidate",
                 use_override=True,
                 sleep=lambda _: None,
                 monotonic=lambda: 0.0,
             )
-        self.assertEqual(result["attempts"], 2)
-        self.assertEqual(result["consecutive_required"], 1)
-        self.assertEqual(result["observations"][-1]["cf_ray"], "new")
+        self.assertEqual(result["attempts"], 6)
+        self.assertEqual(result["consecutive_required"], 3)
+        self.assertEqual(result["observations"][-1]["cf_ray"], "candidate-4")
+
+    def test_versioned_read_retries_read_only_version_drift(self) -> None:
+        responses = [
+            (200, {"CF-Ray": "old"}, {"worker_version": {"id": "old"}}),
+            (
+                200,
+                {"CF-Ray": "candidate"},
+                {"worker_version": {"id": "candidate"}, "ok": True},
+            ),
+        ]
+        with mock.patch.object(
+            release_controller,
+            "signed_request",
+            side_effect=responses,
+        ):
+            value, report = release_controller.read_versioned_document(
+                release_controller.EdgeConfig(
+                    endpoint="https://edge.invalid",
+                    key_id="runtime-v1",
+                    secret=b"x" * 32,
+                ),
+                "candidate",
+                "/health",
+                "health read",
+                use_override=True,
+                sleep=lambda _: None,
+                monotonic=lambda: 0.0,
+            )
+        self.assertTrue(value["ok"])
+        self.assertEqual(report["attempts"], 2)
+        self.assertEqual(report["observations"][-1]["cf_ray"], "candidate")
+
+    def test_smoke_post_is_guarded_and_never_accepts_wrong_version(self) -> None:
+        guard = {
+            "target_version": "candidate",
+            "consecutive_required": 3,
+            "attempts": 3,
+        }
+        response = (
+            200,
+            {"CF-Ray": "old"},
+            {"worker_version": {"id": "old"}, "receipt": {"status": "succeeded"}},
+        )
+        with (
+            mock.patch.object(
+                release_controller,
+                "wait_for_version_propagation",
+                return_value=guard,
+            ) as wait,
+            mock.patch.object(
+                release_controller,
+                "signed_request",
+                return_value=response,
+            ) as request,
+            self.assertRaises(release_controller.ReleaseError),
+        ):
+            release_controller.smoke_operation(
+                release_controller.EdgeConfig(
+                    endpoint="https://edge.invalid",
+                    key_id="runtime-v1",
+                    secret=b"x" * 32,
+                ),
+                "candidate",
+                "/v1/fetch",
+                b"{}",
+                "req_test",
+            )
+        wait.assert_called_once()
+        request.assert_called_once()
 
     def test_release_no_change_skips_ci_and_upload(self) -> None:
         commit = "a" * 40
