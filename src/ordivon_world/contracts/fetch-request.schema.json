@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/fetch-request.schema.json",
+  "title": "Ordivon World Cloudflare Fetch Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["url", "maximum_bytes", "timeout_ms", "accept"],
+  "properties": {
+    "url": {"type": "string", "format": "uri", "maxLength": 2048, "pattern": "^https://"},
+    "maximum_bytes": {"type": "integer", "minimum": 1, "maximum": 1048576},
+    "timeout_ms": {"type": "integer", "minimum": 1000, "maximum": 15000},
+    "accept": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[^\\r\\n\\u0000]+$"}
+  }
+}

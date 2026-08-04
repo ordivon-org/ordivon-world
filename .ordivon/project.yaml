@@ -9,13 +9,26 @@ default_profiles:
   - organization
 documentation_roots:
   - README.md
+  - ARCHITECTURE.md
+  - STATUS.md
   - AGENTS.md
   - docs
   - providers
   - modules
 managed_paths:
   - README.md
+  - ARCHITECTURE.md
+  - STATUS.md
+  - SECURITY.md
+  - CONTRIBUTING.md
+  - CHANGELOG.md
+  - docs/authority.md
+  - docs/compatibility.md
+  - docs/contracts.md
+  - docs/data-and-privacy.md
+  - docs/operations.md
   - docs/retained-boundaries.md
+  - docs/verification.md
   - providers/cloudflare/README.md
   - providers/cloudflare/docs/operations.md
   - providers/cloudflare/docs/reliability.md
@@ -23,9 +36,8 @@ managed_paths:
   - providers/cloudflare/docs/release.md
   - modules/network-observation/README.md
   - modules/network-observation/docs/vpn-namespace.md
-  - docs/authority.md
 enforcement: strict
 maintainers:
   - zycxfyh
 public_projection: ordivon-web
-description: External provider adapters and private operator tools that connect Ordivon work to external systems.
+description: Recoverable external capability adapters and condition observations for Host-owned work.

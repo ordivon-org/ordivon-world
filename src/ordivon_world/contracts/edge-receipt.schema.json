@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/edge-receipt.schema.json",
+  "title": "Ordivon Edge Receipt Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "request_digest",
+    "operation",
+    "status",
+    "started_at",
+    "execution"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{7,63}$"},
+    "request_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "operation": {"type": "string", "enum": ["fetch", "browser.run"]},
+    "status": {"type": "string", "enum": ["pending", "succeeded", "failed", "rejected"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "lease_expires_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "duration_ms": {"type": "integer", "minimum": 0},
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_version",
+        "capability_version",
+        "worker_version_id",
+        "worker_version_tag",
+        "worker_version_timestamp",
+        "lease_generation"
+      ],
+      "properties": {
+        "policy_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "capability_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "worker_version_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "worker_version_tag": {"type": "string", "minLength": 1, "maxLength": 256},
+        "worker_version_timestamp": {"type": "string", "format": "date-time"},
+        "lease_generation": {"type": "integer", "minimum": 1}
+      }
+    },
+    "artifact": {"$ref": "#/$defs/artifact"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "fetch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested_url", "final_url", "http_status", "redirect_count"],
+      "properties": {
+        "requested_url": {"type": "string", "format": "uri"},
+        "final_url": {"type": "string", "format": "uri"},
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599},
+        "redirect_count": {"type": "integer", "minimum": 0, "maximum": 3}
+      }
+    },
+    "browser": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_url",
+        "final_url_observed",
+        "page_title",
+        "page_status",
+        "browser_ms",
+        "viewport",
+        "full_page"
+      ],
+      "properties": {
+        "requested_url": {"type": "string", "format": "uri"},
+        "final_url_observed": {"type": "boolean"},
+        "final_url": {"type": "string", "format": "uri"},
+        "page_title": {"type": "string"},
+        "page_status": {"type": "integer", "minimum": 0, "maximum": 599},
+        "browser_ms": {"type": "integer", "minimum": 0},
+        "viewport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "height"],
+          "properties": {
+            "width": {"type": "integer", "minimum": 320, "maximum": 1920},
+            "height": {"type": "integer", "minimum": 240, "maximum": 1080}
+          }
+        },
+        "full_page": {"type": "boolean"}
+      }
+    },
+    "error_code": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "sha256", "bytes", "media_type"],
+      "properties": {
+        "key": {"type": "string", "minLength": 1, "maxLength": 512},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "minLength": 1, "maxLength": 256},
+        "etag": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "pending"}}},
+      "then": {
+        "required": ["lease_expires_at"],
+        "not": {"anyOf": [
+          {"required": ["completed_at"]},
+          {"required": ["duration_ms"]},
+          {"required": ["error_code"]},
+          {"required": ["artifacts"]}
+        ]}
+      },
+      "else": {
+        "required": ["completed_at", "duration_ms"]
+      }
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["failed", "rejected"]}}},
+      "then": {"required": ["error_code"]}
+    }
+  ]
+}

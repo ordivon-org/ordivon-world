@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+cd "$ROOT"
+
+UV=${UV:-$(command -v uv)}
+UVX=${UVX:-$(command -v uvx)}
+
+"$UV" lock --check
+"$UV" sync --locked
+"$UV" run python -m compileall -q src tests scripts
+"$UVX" ruff==0.15.17 check src tests scripts providers/cloudflare/scripts/ordivon_edge_gc.py providers/cloudflare/test/gc_test.py
+"$UV" run python -W error::ResourceWarning -m unittest discover -s tests -v
+"$UV" run python scripts/check_dependencies.py
+"$UV" run python scripts/check_docs.py
+
+(
+  cd providers/cloudflare
+  pnpm install --frozen-lockfile
+)
+"$UV" run python scripts/check_contracts.py
+(
+  cd providers/cloudflare
+  pnpm run ci
+)
+(
+  cd modules/network-observation
+  scripts/check-vpn-controller
+)
+
+"$UVX" pip-audit -r requirements-audit.txt
+
+rm -rf target/local-acceptance-wheel
+mkdir -p target/local-acceptance-wheel
+"$UV" build --wheel --out-dir target/local-acceptance-wheel
+"$UV" run python scripts/check_wheel.py target/local-acceptance-wheel
+
+git diff --check

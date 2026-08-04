@@ -14,102 +14,113 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-03
-summary: Canonical decision retaining only the Cloudflare provider adapter and private network operator tools, with non-replaceable effects, removed machinery, validation, and reactivation rules.
+updated: 2026-08-04
+summary: Decision retaining direct Host-facing provider adapters and private network tools while continuing to reject an independent World runtime or universal interaction layer.
 evidence_status: verified
 readiness: READY
 applies_to:
   - ordivon-world
 related:
   - world.start
-  - world.cloudflare.capabilities
-  - world.network-tools
   - world.authority
 ---
 # Retained Boundaries After A11 Reduction
 
-## Context
+## Original reduction
 
-World previously accumulated provider, network, capability-program, control, protocol, console, experiment, and generated-governance structures. Most had no active consumer and duplicated Host, Runtime, Provider, network-substrate, or domain responsibility.
+World previously accumulated provider, network, capability-program, control, protocol, console, experiment and generated-governance structures. Most had no active consumer and duplicated Host, Runtime, provider, network-substrate or domain responsibility.
 
-## Decision
+A11 therefore retained only:
 
-Retain only the Cloudflare provider adapter and private network operator tools. Preserve their focused tests, policy coupling, release validation, recovery evidence, and explicit deletion conditions. Restore anything else from Git only when a named current workload demonstrates a non-replaceable responsibility.
+1. the Cloudflare provider implementation and its provider-local recovery controls;
+2. private network operator tools whose Windows/WSL/Surfshark behavior was not captured by ordinary commands.
 
-## Consequences
+It deleted the proposed independent World correlation layer because Host plus direct provider and observation adapters prevented the same failures with less state.
 
-World has no service, database, workflow engine, provider broker, universal interaction schema, capability registry, active research-control plane, or default replay of closed W0, W1, WCP, or WXP experiments. Provider and operating-system primitives remain authoritative; World binds only the identities, uncertainty, verification, and machine-specific procedures required by current Ordivon use.
+## Current reactivation
 
-## Status
+P0–P1 does **not** reverse the absorb decision. It reactivates the missing direct-integration seam required by the named current workload:
 
-Accepted and active. [`../providers/cloudflare/README.md`](../providers/cloudflare/README.md) defines the provider surface, [`../modules/network-observation/README.md`](../modules/network-observation/README.md) defines the private tools, and [`authority.md`](authority.md) records authority. Reopen for a deleted component only when absence causes a demonstrated current failure, no natural owner or mature mechanism can solve it, net acceleration exceeds maintenance cost, and a deletion condition is stated.
+```text
+Host Dispatch
+→ Cloudflare request
+→ provider Receipt / Artifact
+→ Host Observation
+→ independent Verification
+```
 
-Date: 2026-08-02
+The retained Python package is an adapter and Host extension, not a World service. It adds no daemon, database, workflow engine, provider scheduler, callback authority, global World ID or universal interaction object.
 
-## Retention decision details
+The reactivated responsibility is admitted because its absence reproduced concrete failures:
 
-World remains a repository boundary for two concrete capabilities, not a runtime layer:
+- the Cloudflare provider had no production Host consumer;
+- provider Receipt and Artifact facts did not enter Host continuity;
+- a response-lost external action could not be recovered from a fresh Host through a repository-owned path;
+- current capability conditions were not bound to Host Dispatch identity;
+- provider and Python contract surfaces could drift independently.
 
-1. the Cloudflare provider adapter;
-2. private network operator tools.
+## Retained Cloudflare responsibilities
 
-Everything else is restored from Git only when a named workload reopens it.
-
-## Cloudflare provider
-
-### Retained
-
-- HMAC request authentication and bounded request bodies;
+- HMAC authentication and bounded request bodies;
 - exact Request ID/input binding;
-- pending state, fenced leases, committed Receipts, replay, and reconciliation;
-- allowlisted Fetch and same-origin Browser execution;
+- pending state, generation-fenced leases, committed Receipts and replay;
+- allowlisted Fetch and same-origin Browser Snapshot execution;
 - private R2 Artifacts with digest and byte verification;
-- source-input digest release identity, candidate deployment, rollback, and GC;
-- policy/binding/lifecycle checks where configuration is duplicated by Cloudflare contracts.
+- source-input release identity, candidate deployment and rollback;
+- lifecycle and deferred cleanup;
+- current R2 API contract tests.
 
-### Non-replaceable effect
+Cloudflare remains authoritative for provider state. World maps those facts but does not duplicate their lifecycle.
 
-Removing these mechanisms can duplicate an external Effect after response loss, accept a stale executor, expose private Artifact bytes, publish an unbuildable Worker, or make rollback ambiguous. Cloudflare primitives remain authoritative; the adapter only binds them to Ordivon's signed request and Receipt contract.
+## Retained Host-facing responsibilities
 
-### Removed
+- validate current capabilities and derive a condition digest;
+- derive a deterministic provider request ID from one Host Dispatch;
+- persist prepared intent before delivery;
+- record transport uncertainty as UNKNOWN;
+- reconstruct the original request after Host replacement;
+- query, validate and map the original provider Receipt;
+- map R2 Artifacts into Host `ArtifactRef` values;
+- preserve Task state and Ready Frontier while appending opaque extension facts;
+- keep provider success separate from Host Verification and completion.
 
-- `evidence.run` and the Cloudflare Workflow resource: no persistent Computer, Host, Harness, Web, service, timer, or automation consumed it;
-- capability portfolio and generated closeout machinery;
-- historical local Node/research-control implementation;
-- lexical boundary checks;
-- W0/W1/WCP/WXP replay in default CI.
+## Retained network responsibilities
 
-## Network operator tools
-
-### Retained
-
-- `ordivon-vpn` and key-pair installer;
-- isolated namespace systemd unit;
+- explicit `ordivon-vpn` and key-pair operations;
+- isolated WireGuard namespace topology;
 - Surfshark before/after measurement;
-- profile validation, discovery, and bounded ranking;
-- their focused tests and secret scan.
+- profile validation, discovery and bounded ranking;
+- focused secret, key, namespace and scheduler tests.
 
-### Non-replaceable effect
+Network mutation remains operator-only. The published `network-observation` Schema reserves a future read-only evidence shape; it does not grant automatic path selection.
 
-The tools encode this workstation's WSL/Windows/VPN interaction, reject nested VPN startup, preserve the root route, validate a canonical WireGuard identity, and leave recovery evidence. Replacing them with generic `wg` commands would lose these machine-specific invariants.
+## Still removed
 
-### Removed
+- independent World daemon or database;
+- provider broker and automatic router;
+- capability registry beyond live provider discovery;
+- callback, queue, fan-out or join orchestration;
+- general MCP, RAG, Sandbox or connector platform;
+- historical Rust World, Link, Edge, WCP, WXP, QUIC and wire layers;
+- default replay of closed research experiments;
+- duplicated Task, workflow, identity or verification models.
 
-- unused Rust observation, console, model, protocol, QUIC, wire, and Network World crates;
-- protocol and architecture documents with no active executable consumer;
-- generated capability declaration.
+## Release and evidence
 
-## Release validation
+Release admission is based on the facts that changed:
 
-Release admission is based on Worker input digest, not repository ceremony. A branch, detached commit, or unrelated documentation change is acceptable. Dirty Worker inputs remain forbidden because they cannot be reconstructed.
-
-A release is a no-op when the active Worker already carries the same Worker-input digest. When code changes, health and capability identity are always checked; Fetch and Browser smokes run only when their own path or shared runtime code changed. One matching deployed observation is sufficient; repeated identical health probes do not prove additional correctness.
+- Worker deployment uses Worker-input digest, not repository ceremony;
+- Python distribution uses exact Host/Protocol pins and packaged Schemas;
+- operator controllers must match installed file digests;
+- effect/recovery changes require a clean commit-bound live W1 receipt;
+- CI proves portable source behavior but cannot prove live provider or machine health.
 
 ## Reactivation rule
 
-A deleted component may return only when a named current workload demonstrates:
+Another deleted component may return only when a named current workload demonstrates all of the following:
 
-- a responsibility not owned by Host, Runtime, Provider, network substrate, or domain authority;
-- failure when the component is absent;
-- net acceleration after permanent maintenance and operator cost;
-- a deletion condition.
+1. absence causes a reproduced failure, duplicated Effect, false completion, unrecoverable uncertainty, authority confusion or material manual recovery cost;
+2. Host, Runtime, the provider, operating system or domain authority cannot own the responsibility more cleanly;
+3. at least two real consumers need the same retained semantics before a shared abstraction is introduced;
+4. total implementation and operating cost is lower than direct adapters;
+5. every retained field and service has a deletion condition.

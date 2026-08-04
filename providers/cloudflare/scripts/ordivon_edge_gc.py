@@ -89,6 +89,26 @@ def api_json(token: str, url: str) -> dict[str, Any]:
     return value
 
 
+def cleanup_list_url(
+    account_id: str,
+    maximum: int,
+    cursor: str | None = None,
+) -> str:
+    if maximum < 1:
+        raise GarbageCollectionError("R2 object-list page size must be positive")
+    query = {
+        "prefix": CLEANUP_PREFIX,
+        "per_page": str(min(1000, maximum)),
+    }
+    if cursor is not None:
+        query["cursor"] = cursor
+    return (
+        "https://api.cloudflare.com/client/v4/accounts/"
+        f"{urllib.parse.quote(account_id, safe='')}/r2/buckets/{BUCKET}/objects?"
+        + urllib.parse.urlencode(query)
+    )
+
+
 def list_cleanup_keys(
     token: str,
     account_id: str,
@@ -97,17 +117,7 @@ def list_cleanup_keys(
     keys: list[str] = []
     cursor: str | None = None
     while len(keys) < maximum:
-        query = {
-            "prefix": CLEANUP_PREFIX,
-            "limit": str(min(1000, maximum - len(keys))),
-        }
-        if cursor is not None:
-            query["cursor"] = cursor
-        url = (
-            "https://api.cloudflare.com/client/v4/accounts/"
-            f"{urllib.parse.quote(account_id, safe='')}/r2/buckets/{BUCKET}/objects?"
-            + urllib.parse.urlencode(query)
-        )
+        url = cleanup_list_url(account_id, maximum - len(keys), cursor)
         payload = api_json(token, url)
         result = payload.get("result")
         if isinstance(result, dict):

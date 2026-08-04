@@ -14,8 +14,8 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-03
-summary: Decision separating World's repository boundary, callable Cloudflare capabilities, provider operation and release contracts, private workstation procedures, machine truth, and archived experiments.
+updated: 2026-08-04
+summary: Authority map for Host-facing World bindings, Cloudflare provider truth, network operator state, operational health and archived experiments.
 evidence_status: not_applicable
 readiness: READY
 applies_to:
@@ -23,30 +23,72 @@ applies_to:
 related:
   - world.start
   - world.boundaries
-  - world.cloudflare.capabilities
-  - world.cloudflare.operations
-  - world.cloudflare.reliability
-  - world.cloudflare.security
-  - world.cloudflare.release
-  - world.network-tools
-  - world.vpn-namespace
 ---
 # World Content Authority
 
-## Context
+## Repository facts
 
-World contains one active Cloudflare provider, one private network-operator module, retained-boundary decisions, provider capability and operations documents, release and reliability contracts, installation procedures, tests, configuration, private receipts, and an archive of removed World, Link, Edge, WCP, WXP, QUIC, and network experiments. These sources have different authority.
+- [`../README.md`](../README.md) is the public entry and scope summary.
+- [`../ARCHITECTURE.md`](../ARCHITECTURE.md) owns component responsibilities and execution flow.
+- [`../STATUS.md`](../STATUS.md) owns current maturity and known limits.
+- [`retained-boundaries.md`](retained-boundaries.md) owns deletion and reactivation decisions.
+- [`contracts.md`](contracts.md) owns adapter contract and identity semantics.
+- [`compatibility.md`](compatibility.md) owns supported revisions and migration expectations.
+- [`operations.md`](operations.md) owns current commands and recovery procedures.
+- [`verification.md`](verification.md) owns evidence interpretation and gates.
 
-## Decision
+Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 
-[`../README.md`](../README.md) is the repository entry. [`retained-boundaries.md`](retained-boundaries.md) owns the active repository scope and reactivation rule. [`../providers/cloudflare/README.md`](../providers/cloudflare/README.md) owns the supported provider capability surface. Its `docs/operations.md`, `reliability.md`, `security.md`, and `release.md` own operation, failure, protection, release, and rollback contracts. [`../modules/network-observation/README.md`](../modules/network-observation/README.md) and its [`vpn-namespace.md`](../modules/network-observation/docs/vpn-namespace.md) own the current private workstation tools and procedure.
+## Host-facing facts
 
-Deployed Cloudflare capability output, Worker Version and Deployment state, authoritative R2 request objects, committed Receipts, Artifact metadata and bytes, effective bindings, source-input digests, exact local configuration, systemd state, WireGuard and namespace state, tests, and private operation receipts remain stronger owners for current machine and provider facts. [`archive/world-negative-experiments.md`](archive/world-negative-experiments.md) is historical reproduction authority only and cannot reactivate removed layers.
+Host remains authoritative for Task, Effect, Dispatch, Task revision, Ready Frontier, authority, UNKNOWN, Verification and completion. World owns only the extension objects and events it emits:
 
-## Consequences
+```text
+world.dispatch-prepared
+world.outcome-unknown
+world.dispatch-observed
+```
 
-Only the retained capability and operations set enters strict content management. Historical experiments, negative results, and removed architecture remain available without bulk conversion. Later human-centered reconstruction may simplify operator guides and provider concepts, but it must preserve exact machine contracts, private/public separation, and explicit supersession rather than replacing executable truth with prose.
+`PreparedWorldDispatch` and `WorldObservation` are World-owned CAS schemas embedded in Host storage. Host owns their admission order and revision fence. A World object cannot alter Task meaning merely because it is stored by Host.
 
-## Status
+## Cloudflare facts
 
-Accepted and active. Reopen when a callable capability changes, the private workstation environment changes, a mature tool replaces retained behavior, or a deleted World component is admitted under the reactivation rule.
+The following are authoritative for current provider reality:
+
+- live `/health` and `/v1/capabilities` output;
+- Worker Version and deployment state;
+- R2 request records, committed Receipts and Artifact bytes;
+- effective Worker bindings and policy inputs;
+- R2 lifecycle API state;
+- source-input release digest;
+- private release and GC receipts.
+
+[`../providers/cloudflare/README.md`](../providers/cloudflare/README.md) documents the callable capability surface. Its operation, reliability, security and release documents own provider-local procedures. World JSON Schemas own the external adapter contract; TypeScript fixtures prove the Worker documents still conform.
+
+## Local machine facts
+
+For current installation and network reality, the stronger owners are:
+
+- installed file digests;
+- systemd unit and timer state;
+- root-only configuration and file modes;
+- WireGuard interface, namespace and key/profile validation;
+- live network observations;
+- `ordivon-world-doctor` output derived from those sources.
+
+CI cannot claim live health. Repository-only doctor output marks these checks as skipped.
+
+## Historical facts
+
+[`archive/world-negative-experiments.md`](archive/world-negative-experiments.md) is historical reproduction authority for removed World, Edge, Link, WCP, WXP and network experiments. It cannot reactivate a deleted component. Reactivation requires a named current workload and a new failure proof under [`retained-boundaries.md`](retained-boundaries.md).
+
+## Precedence
+
+When sources conflict, use this order:
+
+1. provider, Host and operating-system durable state;
+2. executable source and locked machine-readable contracts;
+3. commit-bound acceptance receipts;
+4. current operational and status documents;
+5. design explanation;
+6. historical studies and archives.

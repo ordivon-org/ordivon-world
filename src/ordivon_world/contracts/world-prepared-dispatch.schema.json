@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/world-prepared-dispatch.schema.json",
+  "title": "Ordivon World Prepared Dispatch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "operation",
+    "path",
+    "providerRequestId",
+    "providerRequestDigest",
+    "request",
+    "capabilityConditionDigest",
+    "capabilityVersion",
+    "dispatch",
+    "traceContext"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world-prepared-dispatch"},
+    "operation": {"type": "string", "enum": ["fetch", "browser.run"]},
+    "path": {"type": "string", "enum": ["/v1/fetch", "/v1/browser/run"]},
+    "providerRequestId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{7,63}$"},
+    "providerRequestDigest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request": {"type": "object"},
+    "capabilityConditionDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "capabilityVersion": {"type": "string", "minLength": 1, "maxLength": 128},
+    "dispatch": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "kind",
+        "dispatchId",
+        "effectId",
+        "executorId",
+        "requestDigest",
+        "idempotencyKey",
+        "requiredStateRefs",
+        "expectedObservationKind"
+      ]
+    },
+    "traceContext": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["traceparent", "tracestate"],
+      "properties": {
+        "traceparent": {"type": "string", "pattern": "^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$"},
+        "tracestate": {"type": ["string", "null"], "maxLength": 512}
+      }
+    }
+  }
+}

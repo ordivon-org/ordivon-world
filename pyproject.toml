@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ordivon-world"
+version = "0.1.0"
+description = "Recoverable external capability adapters and condition observations for Ordivon."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "jsonschema>=4.23,<5",
+  "ordivon-host @ git+https://github.com/zycxfyh/ordivon-host.git@1a4027bb26d77a2e051ca933bf664578f071a5a9",
+]
+
+[project.scripts]
+ordivon-world-doctor = "ordivon_world.doctor:entrypoint"
+
+[project.urls]
+Repository = "https://github.com/zycxfyh/ordivon-world"
+Issues = "https://github.com/zycxfyh/ordivon-world/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ordivon_world = ["contracts/*.schema.json"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100

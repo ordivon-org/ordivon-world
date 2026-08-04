@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/world-observation.schema.json",
+  "title": "Ordivon World Cloudflare Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "envelope", "receipt", "reconciled", "replayed"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world-cloudflare-observation"},
+    "envelope": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "kind",
+        "dispatchId",
+        "executorId",
+        "status",
+        "payloadDigest",
+        "evidenceRefs"
+      ]
+    },
+    "receipt": {"$ref": "edge-receipt.schema.json"},
+    "reconciled": {"type": "boolean"},
+    "replayed": {"type": "boolean"}
+  }
+}

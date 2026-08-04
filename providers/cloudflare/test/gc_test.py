@@ -5,6 +5,8 @@ import pathlib
 import sys
 import tempfile
 import unittest
+import urllib.parse
+from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MODULE_PATH = ROOT / "scripts" / "ordivon_edge_gc.py"
@@ -28,6 +30,49 @@ class GarbageCollectionTests(unittest.TestCase):
                 repository,
             )
             self.assertEqual(resolved, provider.resolve())
+
+    def test_r2_list_contract_uses_per_page_and_cursor(self) -> None:
+        responses = [
+            {
+                "success": True,
+                "result": {
+                    "objects": [{"key": "cleanup/v2/request_001/g1.json"}],
+                    "truncated": True,
+                    "cursor": "next-page",
+                },
+            },
+            {
+                "success": True,
+                "result": {
+                    "objects": [{"key": "cleanup/v2/request_002/g1.json"}],
+                    "truncated": False,
+                },
+            },
+        ]
+        urls: list[str] = []
+
+        def fake_api_json(token: str, url: str):
+            self.assertEqual(token, "token")
+            urls.append(url)
+            return responses.pop(0)
+
+        with mock.patch.object(gc, "api_json", side_effect=fake_api_json):
+            keys = gc.list_cleanup_keys("token", "account", 100)
+
+        self.assertEqual(
+            keys,
+            [
+                "cleanup/v2/request_001/g1.json",
+                "cleanup/v2/request_002/g1.json",
+            ],
+        )
+        first = urllib.parse.parse_qs(urllib.parse.urlsplit(urls[0]).query)
+        second = urllib.parse.parse_qs(urllib.parse.urlsplit(urls[1]).query)
+        self.assertEqual(first["per_page"], ["100"])
+        self.assertNotIn("limit", first)
+        self.assertEqual(first["prefix"], ["cleanup/v2/"])
+        self.assertEqual(second["cursor"], ["next-page"])
+        self.assertEqual(second["per_page"], ["99"])
 
     def test_cleanup_scope_is_generation_and_operation_bounded(self) -> None:
         task = {

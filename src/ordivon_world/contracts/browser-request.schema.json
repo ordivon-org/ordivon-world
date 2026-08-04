@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/browser-request.schema.json",
+  "title": "Ordivon World Cloudflare Browser Snapshot Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "url",
+    "viewport_width",
+    "viewport_height",
+    "full_page",
+    "wait_until",
+    "timeout_ms",
+    "wait_after_ms"
+  ],
+  "properties": {
+    "url": {"type": "string", "format": "uri", "maxLength": 2048, "pattern": "^https://"},
+    "viewport_width": {"type": "integer", "minimum": 320, "maximum": 1920},
+    "viewport_height": {"type": "integer", "minimum": 240, "maximum": 1080},
+    "full_page": {"type": "boolean"},
+    "wait_until": {
+      "type": "string",
+      "enum": ["load", "domcontentloaded", "networkidle0", "networkidle2"]
+    },
+    "timeout_ms": {"type": "integer", "minimum": 1000, "maximum": 30000},
+    "wait_after_ms": {"type": "integer", "minimum": 0, "maximum": 3000}
+  }
+}

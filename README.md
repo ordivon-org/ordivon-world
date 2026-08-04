@@ -14,78 +14,106 @@ audience:
   - operator
   - agent
 updated: 2026-08-04
-summary: Canonical entry to World's retained Cloudflare provider adapter and private network operator tools after removal of unused semantic and experimental layers.
+summary: External capability adapters and condition observers that turn provider facts into recoverable Host Dispatches, Observations, Receipts, and Artifacts.
 evidence_status: verified
 readiness: READY
 applies_to:
   - ordivon-world
 related:
-  - world.boundaries
-  - world.cloudflare.capabilities
-  - world.cloudflare.operations
-  - world.cloudflare.reliability
-  - world.cloudflare.security
-  - world.cloudflare.release
-  - world.network-tools
-  - world.vpn-namespace
   - world.authority
+  - world.boundaries
 ---
 # Ordivon World
 
-## Purpose
+Ordivon World connects Host-owned Tasks and Effects to systems that Ordivon does not own. It discovers current capability conditions, binds one exact Dispatch to a provider request, observes provider Receipts and Artifacts, and reconciles uncertain outcomes without blindly repeating the external action.
 
-Carry only the external provider adapters and private operator tools that still serve current Ordivon work and whose machine- or provider-specific recovery semantics cannot be replaced by ordinary libraries or undocumented commands.
+```text
+Host Task / Effect / Dispatch
+        ↓
+World provider adapter
+        ↓
+external provider request / operation
+        ↓
+Receipt / Artifact / condition observation
+        ↓
+Host Observation / independent Verification
+```
+
+World is a repository and adapter boundary. It is **not** a World daemon, workflow engine, provider broker, general connector platform, network control plane, Sandbox service, Task database, or completion authority.
 
 ## Start here
 
-- [`docs/retained-boundaries.md`](docs/retained-boundaries.md) records what survived A11 reduction and why.
-- [`providers/cloudflare/README.md`](providers/cloudflare/README.md) defines callable Cloudflare capabilities and authority.
-- [`providers/cloudflare/docs/operations.md`](providers/cloudflare/docs/operations.md), [`reliability.md`](providers/cloudflare/docs/reliability.md), [`security.md`](providers/cloudflare/docs/security.md), and [`release.md`](providers/cloudflare/docs/release.md) define operation, uncertainty, protection, release, and rollback.
-- [`modules/network-observation/README.md`](modules/network-observation/README.md) defines the retained private network tools.
-- [`modules/network-observation/docs/vpn-namespace.md`](modules/network-observation/docs/vpn-namespace.md) defines their privileged operating and recovery procedure.
-- [`docs/authority.md`](docs/authority.md) separates callable capability, operator procedure, machine truth, and archived experiments.
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — ownership and execution flow.
+- [`STATUS.md`](STATUS.md) — what is implemented, deployed, verified, or still pending.
+- [`docs/operations.md`](docs/operations.md) — setup, doctor, GC, deployment and recovery.
+- [`docs/contracts.md`](docs/contracts.md) — JSON Schema, deterministic identities and Host mapping.
+- [`docs/verification.md`](docs/verification.md) — deterministic, provider and live-system gates.
+- [`SECURITY.md`](SECURITY.md) and [`docs/data-and-privacy.md`](docs/data-and-privacy.md) — trust and data boundaries.
+- [`docs/authority.md`](docs/authority.md) — which source owns each fact.
+- [`docs/retained-boundaries.md`](docs/retained-boundaries.md) — why the active scope remains narrow.
 
-## Current boundary
+## Active capabilities
 
-World is a repository boundary, not an independent service or semantic layer. Its active scope is one Cloudflare provider adapter plus workstation-specific network operator tools. Host owns Task and commitment meaning, Runtime owns local physical execution, Cloudflare owns remote Worker and R2 state, and operators explicitly invoke private network changes.
+### Host-facing Cloudflare adapter
 
-Ordivon World carries the external adapters and private operator tools that still serve current Ordivon work. It is not an independent semantic layer.
+The Python package in `src/ordivon_world/` provides:
 
-## Active components
+- current Cloudflare capability snapshots;
+- deterministic Dispatch-to-provider request identity;
+- Fetch and Browser Snapshot request construction;
+- pre-dispatch capability-condition fencing;
+- response-loss reconciliation by the original provider request ID;
+- Cloudflare Receipt and R2 Artifact mapping into Host `ObservationEnvelope` and `ArtifactRef` values;
+- Host CAS/Journal persistence through `HostWorldExtension`;
+- W3C Trace Context propagation as non-authoritative telemetry.
+
+The public package depends on exact remote-reachable Host and Protocol revisions. It does not copy Host Task semantics into World.
 
 ### Cloudflare provider
 
-`providers/cloudflare/` supplies signed, bounded Fetch and Browser operations, private R2 Artifacts, replayable Receipts, release/rollback, and garbage collection.
+[`providers/cloudflare/`](providers/cloudflare/) contains the TypeScript Worker and operator controllers for:
 
-Its non-replaceable role is narrow: Cloudflare owns the remote execution, Worker version, request state, Receipt, and R2 object. Host retains Task, Effect, uncertainty, Verification, and completion.
+- bounded HTTPS Fetch;
+- bounded Browser Rendering snapshots;
+- private R2 Artifacts;
+- pending and committed request state;
+- generation-fenced leases;
+- replay and idempotency conflict detection;
+- release, rollback, lifecycle and deferred garbage collection.
 
-### Network operator tools
+Cloudflare remains authoritative for Worker execution, R2 state, provider versions and provider Receipts.
 
-`modules/network-observation/` retains explicit VPN and Surfshark measurement tools used on this workstation. They create an isolated WireGuard namespace, validate key/profile consistency, and measure paths without silently changing the WSL root route.
+### Network condition tools
 
-Their non-replaceable role is operational rather than architectural: current generic network libraries do not contain this machine's Windows/WSL/Surfshark coordination and recovery procedure.
+[`modules/network-observation/`](modules/network-observation/) retains workstation-specific WireGuard and Surfshark tools. They report or explicitly alter operator-controlled network conditions. They do not automatically select routes or grant an Agent network mutation authority.
 
-## Deliberately absent
+## Core rules
 
-The repository has no World service, database, workflow engine, callback authority, provider broker, router, universal interaction schema, capability registry, or active historical experiment framework.
+1. **Host owns meaning.** Task, Effect, Dispatch authority, UNKNOWN, Verification and completion remain Host-owned.
+2. **Provider owns provider truth.** World maps exact provider identities and evidence; it does not reinterpret a successful provider response as Task completion.
+3. **Reconcile before redispatch.** A lost response creates UNKNOWN. Recovery queries the original provider request before another external action is considered.
+4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
+5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
+6. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
 
-Completed W0/W1/WCP/WXP experiments, negative results, imported Edge/Link prototypes, Node-control research, QUIC/wire experiments, and Network World implementations remain outside active `main`. [`docs/archive/world-negative-experiments.md`](docs/archive/world-negative-experiments.md) binds the final revision and reproduction commands; default CI does not replay closed architecture decisions.
+## Development
 
-## Why each active check remains
+```bash
+uv sync --locked
+cd providers/cloudflare && pnpm install --frozen-lockfile && cd ../..
+scripts/local-acceptance
+```
 
-| Check | Failure it prevents | Why ordinary source review is insufficient | Deletion condition |
-|---|---|---|---|
-| Provider typecheck and unit tests | malformed request/Receipt contracts, duplicate Effects, lease and replay regressions | these failures appear only across state transitions and failure injection | delete a test when its production path or failure class is deleted |
-| Policy coupling check | Worker bindings, allowlists, rate limits, and retention silently disagree | values exist in Cloudflare and local policy surfaces | delete after one generated or authoritative configuration replaces duplicates |
-| Wrangler dry run | deploy bundle or binding cannot be constructed | TypeScript success does not validate Wrangler configuration | delete only if deployment itself performs an equivalent zero-effect build |
-| Operation installer checks | broken shell syntax or invalid systemd units | these files are outside TypeScript tests | delete with the installer/timer |
-| VPN tool checks | key/profile mismatch or unsafe topology regression | behavior crosses shell, WireGuard, namespace, and Windows state | delete when the private VPN tools are removed |
-| Release candidate smoke | the uploaded Worker version cannot execute the changed capability | local tests cannot prove the deployed Cloudflare version and bindings | run only for changed capabilities; delete with remote release control |
+Repository-only health:
 
-See [`docs/retained-boundaries.md`](docs/retained-boundaries.md).
+```bash
+uv run ordivon-world-doctor --repo . --offline
+```
 
-## Project family
+Live machine and provider health:
 
-- [Public project directory](https://ordivon.com/projects) — reader-facing retained scope, maturity, and rejected-layer status.
-- [Cross-project map](https://github.com/zycxfyh/ordivon-computing/blob/main/projects/README.md) — stable roles, repository links, and authority entry points for all nine repositories.
-- Related owners: [Ordivon Host](https://github.com/zycxfyh/ordivon-host) owns Task meaning, [Ordivon Runtime](https://github.com/zycxfyh/ordivon-runtime) owns local physical execution, and Cloudflare or the local machine remains authoritative for provider and network facts.
+```bash
+uv run ordivon-world-doctor --repo /root/projects/ordivon-world
+```
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) before changing an external action, request identity, Receipt, Artifact, retention or recovery contract.

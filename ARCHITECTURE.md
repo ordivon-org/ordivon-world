@@ -1,0 +1,116 @@
+# Architecture
+
+## Purpose
+
+World is the boundary between Host-owned work semantics and systems whose state, execution and identity are owned elsewhere. Its minimum responsibilities are:
+
+```text
+Bind → Observe → Act → Reconcile
+```
+
+It does not centralize all external systems into one World object. Each provider keeps its native request, operation, state and error model. World retains only the facts required to bind those provider facts to one Host Dispatch and continue the Task safely.
+
+## Ownership
+
+| Layer | Owns | Does not own |
+|---|---|---|
+| Host | Task, Effect, Dispatch, revision fencing, authority, UNKNOWN, Verification, completion | provider execution and remote bytes |
+| Harness | model loop, Tool proposal, Provider Call, Tool Step and Run evidence | provider infrastructure truth |
+| Runtime | local Workspace, Job, process, cancellation and local Artifacts | remote provider success or domain truth |
+| World adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
+| Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
+| Domain verifier | whether observed external facts satisfy the Task | provider transport or retry |
+
+## Components
+
+```text
+src/ordivon_world/
+├── cloudflare.py       signed provider transport and adapter
+├── host.py             opaque Host extension persistence
+├── schemas.py          local Draft 2020-12 Schema Registry
+├── telemetry.py        W3C Trace Context validation and propagation
+├── doctor.py           repository, installation and live health projection
+└── contracts/          packaged provider and Host-facing contracts
+
+providers/cloudflare/
+├── src/                Cloudflare Worker
+├── scripts/            client, release, lifecycle and GC controllers
+├── config/             provider policy authority
+└── test/               provider state-machine and operations tests
+
+modules/network-observation/
+└── scripts/            private path observation and explicit VPN operations
+```
+
+## Dispatch flow
+
+### Preparation
+
+1. Read and validate `/v1/capabilities`.
+2. Derive a condition digest from policy, capability, Worker and deployment identity.
+3. Validate the provider-local request against packaged JSON Schema.
+4. Derive the provider request ID from Host Dispatch, Effect, operation and request digest.
+5. Construct a Host `DispatchEnvelope` with the provider request ID as its idempotency key.
+6. Persist `PreparedWorldDispatch` in Host CAS before external delivery.
+
+The captured timestamp is excluded from the condition digest. Re-observing identical provider conditions therefore does not invalidate a binding merely because time advanced.
+
+### Delivery
+
+Before POST, the adapter can reread capabilities and compare the exact condition digest. Drift fails before the external action. The provider receives:
+
+- the exact deterministic request ID;
+- the canonical request body;
+- HMAC authentication;
+- optional W3C trace headers and Dispatch correlation for telemetry.
+
+The provider request digest remains provider-native and is verified against the returned Receipt.
+
+### Response loss
+
+```text
+Provider commits Receipt and Artifact
+→ caller loses response
+→ Host records world.outcome-unknown
+→ process is replaced
+→ fresh Host loads PreparedWorldDispatch from CAS
+→ adapter queries /v1/receipts/<original-request-id>
+→ no second POST
+→ Receipt becomes Host Observation
+```
+
+A missing Receipt remains UNKNOWN. It is not proof that no Effect occurred and does not authorize automatic redispatch.
+
+### Observation and verification
+
+World maps provider Artifacts to Host `ArtifactRef` values and the complete provider Receipt to an `ObservationEnvelope` payload digest. Provider success remains an observation. A separate domain or product verifier constructs a Host `VerificationReceipt`; only Host decides whether completion may be proposed or committed.
+
+## Persistence model
+
+World has no database. Durable state is divided by authority:
+
+- Host CAS/Journal: prepared Dispatch, uncertainty record, mapped Observation and Verification references;
+- R2: provider pending/committed request state, Receipt mirror and Artifact bytes;
+- Cloudflare control plane: Worker Version, Deployment, bindings and lifecycle;
+- local private storage: release, GC and acceptance receipts;
+- systemd and the operating system: installed controller and timer state.
+
+## Contract boundary
+
+JSON Schema Draft 2020-12 is the machine-readable authority for the public adapter envelope and provider request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
+
+See [`docs/contracts.md`](docs/contracts.md) and [`docs/compatibility.md`](docs/compatibility.md).
+
+## Deliberately absent
+
+World does not currently contain:
+
+- a daemon or database;
+- a universal `WorldInteraction` record;
+- automatic provider or network routing;
+- callbacks, queues or fan-out/join orchestration;
+- a general MCP, RAG or connector platform;
+- a Sandbox or code-execution runtime;
+- domain verification logic.
+
+A new shared abstraction requires two materially different workloads, two real consumers and a reproduced failure that direct Host plus provider adapters cannot own cleanly.
