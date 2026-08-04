@@ -13,15 +13,29 @@ The active source boundary consists of one Host-facing Cloudflare adapter, the C
 | Cloudflare Fetch provider | operational | provider tests, deployed health and Receipt replay |
 | Cloudflare Browser Snapshot provider | operational | provider tests and deployed capability output |
 | private R2 Artifact reads | operational | provider and client digest tests |
-| deterministic Host Dispatch binding | implemented | Python adapter and Host integration tests |
-| response-loss fresh-Host recovery | deterministic test verified | one provider POST, fresh Host Receipt lookup, preserved Task state |
-| live Host→Cloudflare W1 acceptance | pending final commit-bound receipt | run after the release candidate commit is clean |
-| cross-language JSON Schema | implemented | TypeScript fixtures validated by packaged Python Registry |
+| deterministic Host Dispatch binding | verified | Python adapter, exact identity and Host integration tests |
+| response-loss fresh-Host recovery | verified | one provider POST, fresh Host Receipt lookup and preserved Task state |
+| live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
+| cross-language JSON Schema | verified | TypeScript capabilities plus Fetch, Browser, pending and rejected Receipts validated by the packaged Python Registry |
 | W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |
-| World doctor | implemented | repository/offline and live machine/provider modes |
-| Cloudflare GC source fix | implemented | R2 List Objects now uses `per_page` with cursor tests |
-| installed GC controller repair | pending source integration | install and execute after final source commit |
-| Network condition tools | operational, operator-only | static, key-pair, namespace and scheduler tests |
+| World doctor | operational | repository-only and live machine/provider modes; live aggregate status is `ok` |
+| Cloudflare GC source contract | operational | R2 List Objects uses `per_page` and cursor with focused tests |
+| installed GC controller | operational | source/installed digests match; oneshot exits with `Result=success` and status 0 |
+| Network condition tools | operational, operator-only | static, key-pair, namespace, scheduler and live doctor checks |
+| GitHub CI, CodeQL and dependency automation | configured | remote execution begins after the local commits are pushed |
+
+## P0–P1 closeout
+
+P0–P1 is closed for a source revision only when the following evidence is regenerated for that exact clean revision:
+
+1. the locked portable gate passes, including Python, Worker, provider-controller, network, dependency-audit and wheel checks;
+2. Cloudflare GC succeeds through the corrected API contract;
+3. `ordivon-world-doctor` reports no unresolved repository, installation, provider, lifecycle, GC or network fault on the target machine;
+4. a live W1 receipt proves response loss, fresh-Host recovery, exactly one provider POST, Artifact verification and no Task completion claim;
+5. source and installed controller digests agree;
+6. the source repository remains clean after private receipts are written to ignored storage.
+
+The current local `main` follows this closeout path. Remote CI execution and public publication are separate release actions and are not implied until the commits are pushed.
 
 ## Known limits
 
@@ -32,16 +46,5 @@ The active source boundary consists of one Host-facing Cloudflare adapter, the C
 - Network tools do not grant Agents route, VPN or key-management authority.
 - World does not yet implement RAG, SaaS, database, webhook, MQTT, OPC UA or Sandbox adapters.
 - No package-index publication or production support guarantee exists.
-
-## Completion criteria for P0–P1
-
-P0–P1 close when all of the following are true:
-
-1. local and CI gates pass from locked dependency graphs;
-2. Cloudflare GC runs successfully with the corrected API contract;
-3. `ordivon-world-doctor` reports no unresolved repository/provider/GC fault on the target machine;
-4. a clean commit-bound live W1 receipt proves response loss, fresh-Host recovery, exactly one provider POST, Artifact verification and no Task completion claim;
-5. source and installed controller digests agree;
-6. the source repository is clean and the final commit is recorded.
 
 See [`docs/verification.md`](docs/verification.md).
