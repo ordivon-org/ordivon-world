@@ -30,7 +30,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - contract fixture type checking no longer changes the Worker release-input digest;
 - Browser non-PNG output now fails before Artifact commit;
 - Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes;
-- zero-traffic Worker admission no longer treats one transient version-override hit as stable routing; read-only checks retry and every external smoke POST is guarded by three consecutive version-bound health observations.
+- zero-traffic Worker admission no longer treats one transient version-override hit as stable routing; read-only checks retry and every external smoke POST is guarded by three consecutive version-bound health observations;
+- World doctor includes the Browser Manifest and reports all eight published Schemas.
 
 ### Changed
 
@@ -42,4 +43,5 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 - the portable P0–P1 matrix covers Python, Worker, provider-controller, network, dependency audit, contract, documentation and isolated wheel installation gates;
 - live doctor reports current installation, Worker inputs, R2 lifecycle, GC and network prerequisites as healthy;
-- live W1 proves one external POST, injected response loss, Host UNKNOWN, fresh-Host reconciliation by the original request ID, digest-verified Artifact recovery, independent Verification and no Task completion claim.
+- live W1 proves one external POST, injected response loss, Host UNKNOWN, fresh-Host reconciliation by the original request ID, digest-verified Artifact recovery, independent Verification and no Task completion claim;
+- live P2 proves one first-execution Browser POST, committed-response loss, Host UNKNOWN, fresh-Host reconciliation, screenshot/HTML/Manifest integrity, three independent Verification items, preserved Task state and no completion claim.

@@ -5,6 +5,7 @@ import unittest
 
 from ordivon_world.doctor import (
     CommandResult,
+    contract_check,
     expected_lifecycle_rules,
     network_check,
     overall_status,
@@ -14,6 +15,12 @@ from ordivon_world.doctor import (
 
 
 class DoctorTests(unittest.TestCase):
+    def test_contract_check_covers_all_published_schemas(self) -> None:
+        result = contract_check()
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["count"], 8)
+        self.assertEqual(result["draft"], "2020-12")
+
     def test_overall_status_surfaces_attention(self) -> None:
         self.assertEqual(
             overall_status(

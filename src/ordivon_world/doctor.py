@@ -87,6 +87,7 @@ def repository_check(repository: Path, runner: CommandRunner) -> dict[str, Any]:
 
 def contract_check() -> dict[str, Any]:
     names = (
+        "browser-manifest",
         "browser-request",
         "edge-capabilities",
         "edge-receipt",
