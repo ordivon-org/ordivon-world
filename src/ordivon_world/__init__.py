@@ -1,3 +1,4 @@
+from .browser import BrowserArtifactBundle, BrowserBundleError, RetrievedArtifact
 from .cloudflare import (
     CapabilitySnapshot,
     CloudflareConfig,
@@ -23,6 +24,8 @@ from .telemetry import TraceContext
 from .version import __version__
 
 __all__ = [
+    "BrowserArtifactBundle",
+    "BrowserBundleError",
     "CapabilitySnapshot",
     "CloudflareConfig",
     "CloudflareWorldAdapter",
@@ -33,6 +36,7 @@ __all__ = [
     "HostWorldSuperseded",
     "PreparedWorldDispatch",
     "ReconciliationResult",
+    "RetrievedArtifact",
     "SignedHttpTransport",
     "TraceContext",
     "TransportError",

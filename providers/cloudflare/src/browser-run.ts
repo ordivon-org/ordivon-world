@@ -1,4 +1,5 @@
 import { sha256Hex } from "./auth.js";
+import { createBrowserManifest } from "./browser-manifest.js";
 import {
   browserRunOptions,
   type ValidatedBrowserRunRequest
@@ -103,7 +104,23 @@ function decodeScreenshot(value: string): Uint8Array {
   if (decoded.length > BROWSER_POLICY.max_screenshot_bytes) {
     throw new EdgeError("browser_output_too_large", 502, "Browser screenshot exceeded its budget.", "failed");
   }
-  return Uint8Array.from(decoded, (character) => character.charCodeAt(0));
+  const screenshot = Uint8Array.from(
+    decoded,
+    (character) => character.charCodeAt(0)
+  );
+  const pngSignature = [137, 80, 78, 71, 13, 10, 26, 10];
+  if (
+    screenshot.byteLength < pngSignature.length ||
+    pngSignature.some((byte, index) => screenshot[index] !== byte)
+  ) {
+    throw new EdgeError(
+      "invalid_browser_output",
+      502,
+      "Browser Run returned a non-PNG screenshot.",
+      "failed"
+    );
+  }
+  return screenshot;
 }
 
 function parseSnapshot(body: Uint8Array): SnapshotSuccess {
@@ -228,20 +245,14 @@ export async function executeBrowserRun(
       viewport: request.viewport,
       full_page: request.fullPage
     };
-    const manifestBody = new TextEncoder().encode(JSON.stringify({
-      schema_version: 2,
-      receipt_id: lease.request_id,
-      execution: {
-        policy_version: lease.policy_version,
-        capability_version: lease.capability_version,
-        worker_version_id: lease.worker_version_id,
-        worker_version_tag: lease.worker_version_tag,
-        worker_version_timestamp: lease.worker_version_timestamp,
-        lease_generation: lease.lease_generation
-      },
+    const manifest = createBrowserManifest({
+      receiptId: lease.request_id,
+      execution: lease,
       browser,
-      artifacts: [screenshotArtifact, contentArtifact]
-    }));
+      screenshot: screenshotArtifact,
+      content: contentArtifact
+    });
+    const manifestBody = new TextEncoder().encode(JSON.stringify(manifest));
     const manifestArtifact = await storeArtifact(
       environment.ARTIFACTS,
       `${base}/manifest.json`,

@@ -232,6 +232,7 @@ test("authenticated clients can retrieve persisted artifacts", async () => {
   assert.equal(response.headers.get("content-disposition"), "attachment; filename=artifact.bin");
   assert.equal(response.headers.get("cache-control"), "no-store, no-transform");
   assert.equal(response.headers.get("x-ordivon-media-type"), "text/plain");
+  assert.equal(response.headers.get("content-length"), "13");
   assert.equal(response.headers.get("x-ordivon-sha256"), "b".repeat(64));
 });
 
@@ -394,4 +395,44 @@ test("Browser Run rate limits produce failed receipts without upstream details",
   const envelope = JSON.parse(text) as EdgeReceiptEnvelope;
   assert.equal(envelope.receipt.status, "failed");
   assert.equal(envelope.receipt.error_code, "browser_rate_limited");
+});
+
+
+test("non-PNG Browser output fails before Browser Artifacts commit", async () => {
+  const memory = new MemoryR2();
+  const environment = makeEnv(memory);
+  const requestId = "request_browser_invalid_png_001";
+  const browserRunner = {
+    async quickAction() {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          result: {
+            content: "<!doctype html><title>Invalid Screenshot</title>",
+            screenshot: Buffer.from("not-a-png").toString("base64")
+          },
+          meta: { status: 200, title: "Invalid Screenshot" }
+        }),
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
+    }
+  };
+  const response = await handleRequest(
+    signedRequest("https://edge.invalid/v1/browser/run", {
+      method: "POST",
+      body: JSON.stringify({ url: "https://allowed.example.org/" }),
+      requestId
+    }),
+    environment,
+    { browserRunner }
+  );
+  assert.equal(response.status, 502);
+  const envelope = (await response.json()) as EdgeReceiptEnvelope;
+  assert.equal(envelope.receipt.status, "failed");
+  assert.equal(envelope.receipt.error_code, "invalid_browser_output");
+  assert.equal(
+    [...memory.objects].some(([key]) => key.startsWith(`browser/v2/${requestId}/`)),
+    false
+  );
+  assert.ok(memory.objects.has(`receipts/v2/${requestId}.json`));
 });

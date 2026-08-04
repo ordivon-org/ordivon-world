@@ -16,6 +16,7 @@ import uuid
 
 from ordivon_host import ArtifactRef, DispatchEnvelope, ObservationEnvelope, StateRef
 
+from .browser import BrowserArtifactBundle, RetrievedArtifact
 from .canonical import canonical_bytes, sha256_digest, sha256_hex
 from .schemas import validate_contract
 from .telemetry import TraceContext
@@ -589,6 +590,9 @@ class CloudflareWorldAdapter:
         )
 
     def read_artifact(self, reference: ArtifactRef) -> bytes:
+        return self.read_artifact_record(reference).body
+
+    def read_artifact_record(self, reference: ArtifactRef) -> RetrievedArtifact:
         if not reference.ref.startswith("cloudflare-r2:"):
             raise WorldAdapterError(
                 "ArtifactRef is not a Cloudflare R2 reference"
@@ -612,7 +616,33 @@ class CloudflareWorldAdapter:
         header = response.headers.get("x-ordivon-sha256")
         if header != expected or observed != expected:
             raise WorldProviderError("Cloudflare Artifact digest differs")
-        return response.body
+        media_type = response.headers.get("x-ordivon-media-type")
+        if media_type is None or media_type != reference.kind:
+            raise WorldProviderError("Cloudflare Artifact media type differs")
+        if response.headers.get("content-type") != "application/octet-stream":
+            raise WorldProviderError("Cloudflare Artifact download type differs")
+        length_text = response.headers.get("content-length")
+        try:
+            content_length = int(length_text) if length_text is not None else -1
+        except ValueError as error:
+            raise WorldProviderError(
+                "Cloudflare Artifact content length is invalid"
+            ) from error
+        if content_length != len(response.body):
+            raise WorldProviderError("Cloudflare Artifact content length differs")
+        return RetrievedArtifact(
+            reference=reference,
+            body=response.body,
+            media_type=media_type,
+            content_length=content_length,
+            etag=response.headers.get("etag"),
+        )
+
+    def read_browser_bundle(
+        self,
+        observation: WorldObservation,
+    ) -> BrowserArtifactBundle:
+        return BrowserArtifactBundle.retrieve(self, observation)
 
     def _observation(
         self,

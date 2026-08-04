@@ -73,7 +73,7 @@ def inspect_wheel(wheel: Path) -> dict[str, object]:
         raise WheelError("wheel jsonschema dependency is absent")
     if "ordivon-world-doctor = ordivon_world.doctor:entrypoint" not in entries:
         raise WheelError("wheel doctor entry point is absent")
-    if len(schema_names) != 7:
+    if len(schema_names) != 8:
         raise WheelError(f"wheel contains {len(schema_names)} contract schemas")
     return {
         "name": metadata["Name"],
@@ -91,15 +91,17 @@ def install_and_import(wheel: Path) -> None:
         command(["uv", "pip", "install", "--python", str(python), str(wheel)])
         program = (
             "import json; "
-            "from ordivon_world import CloudflareWorldAdapter, HostWorldExtension, load_schema; "
-            "names=('browser-request','edge-capabilities','edge-receipt','fetch-request',"
-            "'network-observation','world-observation','world-prepared-dispatch'); "
+            "from ordivon_world import (BrowserArtifactBundle, CloudflareWorldAdapter, "
+            "HostWorldExtension, RetrievedArtifact, load_schema); "
+            "names=('browser-manifest','browser-request','edge-capabilities','edge-receipt',"
+            "'fetch-request','network-observation','world-observation',"
+            "'world-prepared-dispatch'); "
             "[load_schema(name) for name in names]; "
-            "print(json.dumps({'api':2,'schemas':len(names)}))"
+            "print(json.dumps({'api':4,'schemas':len(names)}))"
         )
         output = command([str(python), "-I", "-c", program], cwd=root)
         value = json.loads(output)
-        if value != {"api": 2, "schemas": 7}:
+        if value != {"api": 4, "schemas": 8}:
             raise WheelError("isolated wheel import returned an unexpected result")
         command([str(environment / "bin" / "ordivon-world-doctor"), "--help"], cwd=root)
 

@@ -58,9 +58,9 @@ uv run ordivon-world-doctor --repo /root/projects/ordivon-world
 
 This is the current machine/provider health projection. CI cannot substitute for it.
 
-### 7. Live W1 layer
+### 7. Live Fetch W1 and Browser P2 layers
 
-[`operations.md`](operations.md) documents the commit-bound response-loss scenario. Its receipt must prove:
+[`operations.md`](operations.md) documents the commit-bound response-loss scenarios. Both receipts must prove:
 
 - intent persisted before POST;
 - one external POST;
@@ -74,6 +74,8 @@ This is the current machine/provider health projection. CI cannot substitute for
 - independent Host Verification accepted the evidence;
 - Task state and Ready Frontier were preserved;
 - no completion claim was made.
+
+Browser P2 additionally requires exactly three Artifacts, Receipt-primary Manifest identity, one lease generation, PNG signature, UTF-8 HTML, Manifest equality with Receipt execution/page facts, and a Verification result item for every Artifact. It does not assert that the rendered page is semantically correct.
 
 ## Evidence interpretation
 

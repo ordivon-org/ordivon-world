@@ -26,6 +26,7 @@ It does not centralize all external systems into one World object. Each provider
 ```text
 src/ordivon_world/
 ├── cloudflare.py       signed provider transport and adapter
+├── browser.py          Browser Receipt/Manifest/Artifact bundle verification
 ├── host.py             opaque Host extension persistence
 ├── schemas.py          local Draft 2020-12 Schema Registry
 ├── telemetry.py        W3C Trace Context validation and propagation
@@ -84,6 +85,8 @@ A missing Receipt remains UNKNOWN. It is not proof that no Effect occurred and d
 ### Observation and verification
 
 World maps provider Artifacts to Host `ArtifactRef` values and the complete provider Receipt to an `ObservationEnvelope` payload digest. Provider success remains an observation. A separate domain or product verifier constructs a Host `VerificationReceipt`; only Host decides whether completion may be proposed or committed.
+
+A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
 
 ## Persistence model
 

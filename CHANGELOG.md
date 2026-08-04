@@ -16,6 +16,9 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - repository and live-system `ordivon-world-doctor`;
 - wheel, dependency, documentation and local acceptance gates;
 - clean-commit live Host→Cloudflare W1 acceptance scenario;
+- Browser Manifest machine contract and three-Artifact bundle reader;
+- Browser response-loss and fresh-Host continuity tests;
+- Fetch/Browser dual-mode clean-revision acceptance runner;
 - pinned GitHub CI, CodeQL, secret scanning and dependency automation.
 
 ### Fixed
@@ -24,7 +27,9 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - GC pagination tests now verify `prefix`, `per_page` and `cursor` behavior;
 - the installed GC controller now completes successfully and remains scheduled by the active timer;
 - relative Schema references resolve exclusively from packaged local resources;
-- contract fixture type checking no longer changes the Worker release-input digest.
+- contract fixture type checking no longer changes the Worker release-input digest;
+- Browser non-PNG output now fails before Artifact commit;
+- Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes.
 
 ### Changed
 

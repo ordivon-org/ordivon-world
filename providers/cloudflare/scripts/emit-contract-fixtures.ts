@@ -1,3 +1,4 @@
+import { createBrowserManifest } from "../src/browser-manifest.js";
 import {
   capabilitiesDocument,
   type EdgePendingReceipt
@@ -21,12 +22,40 @@ const fetchArtifact = {
   etag: '"fixture-fetch-etag"'
 };
 
-const browserArtifact = {
+const browserExecution = {
+  ...execution,
+  capability_version: "browser.snapshot.v2"
+};
+const browserDetails = {
+  requested_url: "https://developers.cloudflare.com/",
+  final_url_observed: true,
+  final_url: "https://developers.cloudflare.com/",
+  page_title: "Cloudflare Developers",
+  page_status: 200,
+  browser_ms: 1500,
+  viewport: { width: 1365, height: 768 },
+  full_page: false
+};
+const screenshotArtifact = {
   key: "browser/v2/world_fixture_browser/g1/screenshot.png",
-  sha256: "c".repeat(64),
+  sha256: "b".repeat(64),
   bytes: 32,
   media_type: "image/png",
-  etag: '"fixture-browser-etag"'
+  etag: '"fixture-screenshot-etag"'
+};
+const contentArtifact = {
+  key: "browser/v2/world_fixture_browser/g1/content.html",
+  sha256: "c".repeat(64),
+  bytes: 128,
+  media_type: "text/html; charset=utf-8",
+  etag: '"fixture-content-etag"'
+};
+const manifestArtifact = {
+  key: "browser/v2/world_fixture_browser/g1/manifest.json",
+  sha256: "d".repeat(64),
+  bytes: 512,
+  media_type: "application/json; charset=utf-8",
+  etag: '"fixture-manifest-etag"'
 };
 
 const capabilities = {
@@ -45,7 +74,7 @@ const capabilities = {
 const fetchReceipt = createReceipt({
   operation: "fetch",
   status: "succeeded",
-  requestDigest: "b".repeat(64),
+  requestDigest: "e".repeat(64),
   receiptId: "world_fixture_fetch",
   startedAt: new Date("2026-08-04T00:00:00.000Z"),
   completedAt: new Date("2026-08-04T00:00:01.000Z"),
@@ -60,35 +89,31 @@ const fetchReceipt = createReceipt({
   }
 });
 
+const browserManifest = createBrowserManifest({
+  receiptId: "world_fixture_browser",
+  execution: browserExecution,
+  browser: browserDetails,
+  screenshot: screenshotArtifact,
+  content: contentArtifact
+});
+
 const browserReceipt = createReceipt({
   operation: "browser.run",
   status: "succeeded",
-  requestDigest: "d".repeat(64),
+  requestDigest: "f".repeat(64),
   receiptId: "world_fixture_browser",
   startedAt: new Date("2026-08-04T00:00:00.000Z"),
   completedAt: new Date("2026-08-04T00:00:02.000Z"),
-  execution: {
-    ...execution,
-    capability_version: "browser.snapshot.v2"
-  },
-  artifact: browserArtifact,
-  artifacts: [browserArtifact],
-  browser: {
-    requested_url: "https://developers.cloudflare.com/",
-    final_url_observed: true,
-    final_url: "https://developers.cloudflare.com/",
-    page_title: "Cloudflare Developers",
-    page_status: 200,
-    browser_ms: 1500,
-    viewport: { width: 1365, height: 768 },
-    full_page: false
-  }
+  execution: browserExecution,
+  artifact: manifestArtifact,
+  artifacts: [screenshotArtifact, contentArtifact, manifestArtifact],
+  browser: browserDetails
 });
 
 const pendingReceipt: EdgePendingReceipt = {
   schema_version: 1,
   receipt_id: "world_fixture_pending",
-  request_digest: "e".repeat(64),
+  request_digest: "1".repeat(64),
   operation: "fetch",
   status: "pending",
   started_at: "2026-08-04T00:00:00.000Z",
@@ -99,7 +124,7 @@ const pendingReceipt: EdgePendingReceipt = {
 const rejectedReceipt = createReceipt({
   operation: "fetch",
   status: "rejected",
-  requestDigest: "f".repeat(64),
+  requestDigest: "2".repeat(64),
   receiptId: "world_fixture_rejected",
   startedAt: new Date("2026-08-04T00:00:00.000Z"),
   completedAt: new Date("2026-08-04T00:00:00.010Z"),
@@ -111,6 +136,7 @@ process.stdout.write(
   JSON.stringify({
     capabilities,
     fetchReceipt,
+    browserManifest,
     browserReceipt,
     pendingReceipt,
     rejectedReceipt

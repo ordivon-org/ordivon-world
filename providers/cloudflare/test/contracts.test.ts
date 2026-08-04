@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { validateArtifactKey } from "../src/artifacts.js";
+import { createBrowserManifest } from "../src/browser-manifest.js";
 import { browserRunOptions, validateBrowserRunRequest } from "../src/browser-policy.js";
 import { capabilitiesDocument } from "../src/contracts.js";
 import { validateExternalUrl, validateFetchRequest } from "../src/fetch-policy.js";
@@ -35,7 +36,13 @@ test("capabilities expose only the Edge execution surface", () => {
   );
 });
 
-test("receipt timestamps and request digests are explicit", () => {
+test("receipt timestamps, request digests, and evidence are explicit", () => {
+  const artifact = {
+    key: "fetch/v2/receipt-test/g1/body",
+    sha256: "b".repeat(64),
+    bytes: 12,
+    media_type: "text/plain"
+  };
   const receipt = createReceipt({
     operation: "fetch",
     status: "succeeded",
@@ -43,11 +50,20 @@ test("receipt timestamps and request digests are explicit", () => {
     startedAt: new Date("2026-07-27T00:00:00.000Z"),
     completedAt: new Date("2026-07-27T00:00:01.000Z"),
     receiptId: "receipt-test",
-    execution: EXECUTION
+    execution: { ...EXECUTION, capability_version: "fetch.v2" },
+    artifact,
+    artifacts: [artifact],
+    fetch: {
+      requested_url: "https://allowed.example.org/",
+      final_url: "https://allowed.example.org/",
+      http_status: 200,
+      redirect_count: 0
+    }
   });
   assert.equal(receipt.receipt_id, "receipt-test");
   assert.equal(receipt.request_digest, DIGEST);
   assert.equal(receipt.duration_ms, 1_000);
+  assert.deepEqual(receipt.artifacts, [artifact]);
 });
 
 test("receipt rejects invalid outcome combinations", () => {
@@ -191,4 +207,99 @@ test("effective policy version is stable across host order and changes with poli
   assert.match(first, /^p1\.6\.[a-f0-9]{16}$/);
   assert.equal(first, reordered);
   assert.notEqual(first, changed);
+});
+
+
+test("Browser Manifest preserves execution, page, and Artifact order", () => {
+  const screenshot = {
+    key: "browser/v2/request_browser_manifest_001/g1/screenshot.png",
+    sha256: "b".repeat(64),
+    bytes: 8,
+    media_type: "image/png",
+    etag: '"screenshot"'
+  };
+  const content = {
+    key: "browser/v2/request_browser_manifest_001/g1/content.html",
+    sha256: "c".repeat(64),
+    bytes: 64,
+    media_type: "text/html; charset=utf-8",
+    etag: '"content"'
+  };
+  const execution = {
+    ...EXECUTION,
+    capability_version: "browser.snapshot.v2"
+  };
+  const browser = {
+    requested_url: "https://allowed.example.org/",
+    final_url_observed: false,
+    page_title: "Manifest Test",
+    page_status: 200,
+    browser_ms: 42,
+    viewport: { width: 1280, height: 720 },
+    full_page: false
+  };
+  const manifest = createBrowserManifest({
+    receiptId: "request_browser_manifest_001",
+    execution,
+    browser,
+    screenshot,
+    content
+  });
+  assert.equal(manifest.schema_version, 2);
+  assert.equal(manifest.receipt_id, "request_browser_manifest_001");
+  assert.deepEqual(manifest.execution, execution);
+  assert.deepEqual(manifest.browser, browser);
+  assert.deepEqual(manifest.artifacts, [screenshot, content]);
+});
+
+
+test("receipt factory rejects evidence, status, and operation drift", () => {
+  const artifact = {
+    key: "fetch/v2/receipt-drift/g1/body",
+    sha256: "d".repeat(64),
+    bytes: 1,
+    media_type: "text/plain"
+  };
+  const common = {
+    requestDigest: DIGEST,
+    receiptId: "receipt-drift",
+    startedAt: new Date("2026-07-27T00:00:00.000Z"),
+    completedAt: new Date("2026-07-27T00:00:01.000Z"),
+    execution: { ...EXECUTION, capability_version: "fetch.v2" }
+  };
+  assert.throws(() =>
+    createReceipt({
+      ...common,
+      operation: "fetch",
+      status: "succeeded"
+    })
+  );
+  assert.throws(() =>
+    createReceipt({
+      ...common,
+      operation: "fetch",
+      status: "failed",
+      errorCode: "timeout",
+      artifact,
+      artifacts: [artifact]
+    })
+  );
+  assert.throws(() =>
+    createReceipt({
+      ...common,
+      operation: "browser.run",
+      status: "succeeded",
+      artifact,
+      artifacts: [artifact],
+      browser: {
+        requested_url: "https://allowed.example.org/",
+        final_url_observed: false,
+        page_title: "Drift",
+        page_status: 200,
+        browser_ms: 1,
+        viewport: { width: 1280, height: 720 },
+        full_page: false
+      }
+    })
+  );
 });

@@ -27,6 +27,59 @@ export interface ReceiptFactoryOptions {
 const ERROR_CODE_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
 const DIGEST_PATTERN = /^[a-f0-9]{64}$/;
 
+function sameArtifact(
+  left: ArtifactReference,
+  right: ArtifactReference
+): boolean {
+  return (
+    left.key === right.key &&
+    left.sha256 === right.sha256 &&
+    left.bytes === right.bytes &&
+    left.media_type === right.media_type &&
+    left.etag === right.etag
+  );
+}
+
+function validateSucceededEvidence(options: ReceiptFactoryOptions): void {
+  if (
+    options.artifact === undefined ||
+    options.artifacts === undefined ||
+    options.artifacts.length === 0
+  ) {
+    throw new Error("a succeeded receipt requires a primary Artifact and Artifact set");
+  }
+  if (!options.artifacts.some((artifact) => sameArtifact(artifact, options.artifact!))) {
+    throw new Error("the primary Artifact must be present in the Artifact set");
+  }
+  if (options.operation === "fetch") {
+    if (options.fetch === undefined || options.browser !== undefined) {
+      throw new Error("a succeeded fetch receipt requires only fetch details");
+    }
+    return;
+  }
+  if (
+    options.browser === undefined ||
+    options.fetch !== undefined ||
+    options.artifacts.length !== 3 ||
+    !options.artifact.key.endsWith("/manifest.json")
+  ) {
+    throw new Error(
+      "a succeeded Browser receipt requires Browser details and three Artifacts with a primary Manifest"
+    );
+  }
+}
+
+function validateFailedEvidence(options: ReceiptFactoryOptions): void {
+  if (
+    options.artifact !== undefined ||
+    options.artifacts !== undefined ||
+    options.fetch !== undefined ||
+    options.browser !== undefined
+  ) {
+    throw new Error("a non-succeeded receipt cannot carry operation evidence");
+  }
+}
+
 export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
   const durationMs = options.completedAt.getTime() - options.startedAt.getTime();
   if (durationMs < 0) {
@@ -47,11 +100,13 @@ export function createReceipt(options: ReceiptFactoryOptions): EdgeReceipt {
   ) {
     throw new Error("errorCode must be a bounded snake_case identifier");
   }
-  if (options.artifacts !== undefined && options.artifacts.length === 0) {
-    throw new Error("artifacts must not be empty");
-  }
   if (!Number.isSafeInteger(options.execution.lease_generation) || options.execution.lease_generation < 1) {
     throw new Error("lease generation must be a positive integer");
+  }
+  if (options.status === "succeeded") {
+    validateSucceededEvidence(options);
+  } else {
+    validateFailedEvidence(options);
   }
 
   return {

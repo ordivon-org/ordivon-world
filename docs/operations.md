@@ -82,6 +82,21 @@ uv run python scripts/live_host_cloudflare_w1.py \
 
 The output is written with mode `0600`. It contains no Secret or Artifact body.
 
+## Live P2 Browser acceptance
+
+After the committed Worker candidate has passed release-controller smoke and deployment, run the same response-loss schedule against Browser Snapshot:
+
+```bash
+revision=$(git rev-parse HEAD)
+uv run python scripts/live_host_cloudflare_w1.py \
+  --source-repo /root/projects/ordivon-world \
+  --source-revision "$revision" \
+  --operation browser \
+  --output "/root/projects/ordivon-world/target/acceptance/world-p2-browser-${revision:0:7}.json"
+```
+
+The scenario verifies one Browser POST, Host UNKNOWN, fresh-Host Receipt reconciliation, screenshot/HTML/Manifest download integrity, exact request generation and independent three-item Verification. A successful bundle still does not complete the Task or assert page truth.
+
 ## Recovery rules
 
 - Transport failure after POST creates UNKNOWN.

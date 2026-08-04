@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/browser-manifest.schema.json",
+  "title": "Ordivon Cloudflare Browser Artifact Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "execution", "browser", "artifacts"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{7,63}$"},
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_version",
+        "capability_version",
+        "worker_version_id",
+        "worker_version_tag",
+        "worker_version_timestamp",
+        "lease_generation"
+      ],
+      "properties": {
+        "policy_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "capability_version": {"const": "browser.snapshot.v2"},
+        "worker_version_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "worker_version_tag": {"type": "string", "minLength": 1, "maxLength": 256},
+        "worker_version_timestamp": {"type": "string", "format": "date-time"},
+        "lease_generation": {"type": "integer", "minimum": 1}
+      }
+    },
+    "browser": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_url",
+        "final_url_observed",
+        "page_title",
+        "page_status",
+        "browser_ms",
+        "viewport",
+        "full_page"
+      ],
+      "properties": {
+        "requested_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "final_url_observed": {"type": "boolean"},
+        "final_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "page_title": {"type": "string", "maxLength": 512},
+        "page_status": {"type": "integer", "minimum": 0, "maximum": 599},
+        "browser_ms": {"type": "integer", "minimum": 0},
+        "viewport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "height"],
+          "properties": {
+            "width": {"type": "integer", "minimum": 320, "maximum": 1920},
+            "height": {"type": "integer", "minimum": 240, "maximum": 1080}
+          }
+        },
+        "full_page": {"type": "boolean"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"final_url_observed": {"const": true}}},
+          "then": {"required": ["final_url"]},
+          "else": {"not": {"required": ["final_url"]}}
+        }
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "prefixItems": [
+        {"$ref": "#/$defs/screenshot"},
+        {"$ref": "#/$defs/content"}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    }
+  },
+  "$defs": {
+    "baseArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "sha256", "bytes", "media_type"],
+      "properties": {
+        "key": {"type": "string", "minLength": 1, "maxLength": 512},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "media_type": {"type": "string"},
+        "etag": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    },
+    "screenshot": {
+      "allOf": [
+        {"$ref": "#/$defs/baseArtifact"},
+        {
+          "type": "object",
+          "properties": {
+            "key": {"type": "string", "pattern": "^browser/v2/[a-z0-9][a-z0-9_-]{7,63}/g[1-9][0-9]*/screenshot\\.png$"},
+            "media_type": {"const": "image/png"}
+          }
+        }
+      ]
+    },
+    "content": {
+      "allOf": [
+        {"$ref": "#/$defs/baseArtifact"},
+        {
+          "type": "object",
+          "properties": {
+            "key": {"type": "string", "pattern": "^browser/v2/[a-z0-9][a-z0-9_-]{7,63}/g[1-9][0-9]*/content\\.html$"},
+            "media_type": {"const": "text/html; charset=utf-8"}
+          }
+        }
+      ]
+    }
+  }
+}

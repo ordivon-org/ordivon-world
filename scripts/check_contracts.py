@@ -14,6 +14,7 @@ PROVIDER = ROOT / "providers" / "cloudflare"
 POLICY = PROVIDER / "config" / "edge-policy.json"
 EMITTER = PROVIDER / "scripts" / "emit-contract-fixtures.ts"
 CONTRACTS = (
+    "browser-manifest",
     "browser-request",
     "edge-capabilities",
     "edge-receipt",
@@ -173,6 +174,7 @@ def main() -> int:
     if not args.skip_provider_fixtures:
         fixtures = provider_fixtures()
         validate_contract("edge-capabilities", fixtures.get("capabilities"))
+        validate_contract("browser-manifest", fixtures.get("browserManifest"))
         for name in (
             "fetchReceipt",
             "browserReceipt",
@@ -180,7 +182,7 @@ def main() -> int:
             "rejectedReceipt",
         ):
             validate_contract("edge-receipt", fixtures.get(name))
-        fixture_count = 5
+        fixture_count = 6
     print(
         json.dumps(
             {

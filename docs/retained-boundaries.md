@@ -39,7 +39,7 @@ It deleted the proposed independent World correlation layer because Host plus di
 
 ## Current reactivation
 
-P0–P1 does **not** reverse the absorb decision. It reactivates the missing direct-integration seam required by the named current workload:
+P0–P2 does **not** reverse the absorb decision. It reactivates and strengthens the missing direct-integration seam required by the named current Fetch and Browser workloads:
 
 ```text
 Host Dispatch
@@ -81,6 +81,7 @@ Cloudflare remains authoritative for provider state. World maps those facts but 
 - reconstruct the original request after Host replacement;
 - query, validate and map the original provider Receipt;
 - map R2 Artifacts into Host `ArtifactRef` values;
+- verify Browser screenshot, rendered HTML and Manifest as one generation-scoped bundle;
 - preserve Task state and Ready Frontier while appending opaque extension facts;
 - keep provider success separate from Host Verification and completion.
 
@@ -92,12 +93,12 @@ Cloudflare remains authoritative for provider state. World maps those facts but 
 - profile validation, discovery and bounded ranking;
 - focused secret, key, namespace and scheduler tests.
 
-Network mutation remains operator-only. The published `network-observation` Schema reserves a future read-only evidence shape; it does not grant automatic path selection.
+Network mutation remains operator-only. The published `network-observation` Schema reserves a future read-only evidence shape; it does not grant automatic path selection. Local VPN or route observations are not required state for remote Cloudflare Fetch or Browser execution because no measured failure shows that local path identity changes the semantics of the already-bound remote operation.
 
 ## Still removed
 
 - independent World daemon or database;
-- provider broker and automatic router;
+- provider broker, automatic router and untriggered provider rebinding;
 - capability registry beyond live provider discovery;
 - callback, queue, fan-out or join orchestration;
 - general MCP, RAG, Sandbox or connector platform;

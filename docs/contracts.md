@@ -10,6 +10,7 @@ Published schemas:
 |---|---|
 | `fetch-request` | bounded Cloudflare Fetch body |
 | `browser-request` | bounded Browser Snapshot body |
+| `browser-manifest` | Browser screenshot and rendered-content bundle manifest |
 | `edge-capabilities` | current provider capability and deployment condition |
 | `edge-receipt` | pending or final provider Receipt |
 | `world-prepared-dispatch` | durable Host-to-provider binding |
@@ -58,6 +59,16 @@ It excludes observation time. `observation_digest` includes `capturedAt` and ide
 `PreparedWorldDispatch` embeds a native Host `DispatchEnvelope` and records the capability condition as a required `StateRef`. `WorldObservation` embeds a native Host `ObservationEnvelope`; each provider Artifact becomes a Host `ArtifactRef` with provider key, media type and SHA-256 digest.
 
 Provider success is not converted to a Host `VerificationReceipt`. Verification remains a separate domain or product action.
+
+## Browser bundle contract
+
+A succeeded `browser.run` Receipt must carry exactly three generation-scoped Artifacts in this order:
+
+1. `screenshot.png` with media type `image/png`;
+2. `content.html` with media type `text/html; charset=utf-8`;
+3. `manifest.json` with media type `application/json; charset=utf-8`.
+
+The Manifest is the Receipt's primary Artifact and contains the first two Artifact references, execution identity and page facts. The Host-facing reader verifies Receipt, Manifest and downloaded bytes as one closed bundle. A failed, rejected or pending Receipt cannot carry operation evidence. These checks establish provenance and integrity only; they do not verify the truth or usefulness of rendered content.
 
 ## Telemetry
 

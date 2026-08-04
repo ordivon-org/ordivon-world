@@ -64,6 +64,7 @@ The Python package in `src/ordivon_world/` provides:
 - pre-dispatch capability-condition fencing;
 - response-loss reconciliation by the original provider request ID;
 - Cloudflare Receipt and R2 Artifact mapping into Host `ObservationEnvelope` and `ArtifactRef` values;
+- Browser screenshot, rendered HTML and Manifest bundle verification across Receipt, Host evidence and downloaded bytes;
 - Host CAS/Journal persistence through `HostWorldExtension`;
 - W3C Trace Context propagation as non-authoritative telemetry.
 

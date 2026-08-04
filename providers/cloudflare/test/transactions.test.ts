@@ -143,7 +143,13 @@ test("lease takeover increments generation and fences the stale executor", async
     completedAt: new Date("2026-07-27T00:01:02.000Z"),
     execution: first.lease,
     artifact: artifact(staleKey),
-    artifacts: [artifact(staleKey)]
+    artifacts: [artifact(staleKey)],
+    fetch: {
+      requested_url: "https://allowed.example.org/fenced",
+      final_url: "https://allowed.example.org/fenced",
+      http_status: 200,
+      redirect_count: 0
+    }
   });
   await assert.rejects(
     commitReceipt({
@@ -166,7 +172,13 @@ test("lease takeover increments generation and fences the stale executor", async
     completedAt: new Date("2026-07-27T00:01:03.000Z"),
     execution: second.lease,
     artifact: artifact(currentKey),
-    artifacts: [artifact(currentKey)]
+    artifacts: [artifact(currentKey)],
+    fetch: {
+      requested_url: "https://allowed.example.org/fenced",
+      final_url: "https://allowed.example.org/fenced",
+      http_status: 200,
+      redirect_count: 0
+    }
   });
   await commitReceipt({
     bucket,

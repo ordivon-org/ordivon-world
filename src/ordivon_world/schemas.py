@@ -10,6 +10,7 @@ from referencing import Registry
 from referencing.jsonschema import DRAFT202012
 
 _CONTRACT_NAMES = (
+    "browser-manifest",
     "browser-request",
     "edge-capabilities",
     "edge-receipt",

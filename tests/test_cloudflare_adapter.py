@@ -109,6 +109,7 @@ class FakeCloudflareTransport:
         self.capabilities_document = capability_document()
         self.receipts: dict[str, dict[str, object]] = {}
         self.artifacts: dict[str, bytes] = {}
+        self.artifact_media_types: dict[str, str] = {}
         self.posts = 0
         self.drop_after_commit = False
         self.post_headers: dict[str, str] | None = None
@@ -135,7 +136,9 @@ class FakeCloudflareTransport:
             self.receipts[request_id] = value
             artifact = value["artifact"]
             assert isinstance(artifact, dict)
-            self.artifacts[str(artifact["key"])] = b"world-result"
+            artifact_key = str(artifact["key"])
+            self.artifacts[artifact_key] = b"world-result"
+            self.artifact_media_types[artifact_key] = str(artifact["media_type"])
             if self.drop_after_commit:
                 self.drop_after_commit = False
                 raise TransportError("response dropped after provider commit")
@@ -157,7 +160,13 @@ class FakeCloudflareTransport:
                 return HttpResponse(404, {}, b"")
             return HttpResponse(
                 200,
-                {"x-ordivon-sha256": sha256_hex(value)},
+                {
+                    "content-type": "application/octet-stream",
+                    "content-length": str(len(value)),
+                    "etag": '"test-etag"',
+                    "x-ordivon-media-type": self.artifact_media_types[key],
+                    "x-ordivon-sha256": sha256_hex(value),
+                },
                 value,
             )
         raise AssertionError((method, path, request_id, extra_headers, body))
