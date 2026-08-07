@@ -257,6 +257,26 @@ class BrowserBundleTests(unittest.TestCase):
         self.assertEqual(len(bundle.artifacts), 3)
         self.assertEqual(bundle.browser["page_title"], "Browser Bundle")
 
+    def test_receipt_content_identity_drift_fails_closed(self) -> None:
+        observation = self.adapter.deliver(self.prepare(), check_conditions=False)
+        screenshot = observation.receipt["artifacts"][0]
+        assert isinstance(screenshot, dict)
+        original_digest = screenshot["sha256"]
+        original_bytes = screenshot["bytes"]
+
+        screenshot["bytes"] = int(original_bytes) + 1
+        with self.assertRaisesRegex(BrowserBundleError, "byte count differs"):
+            self.adapter.read_browser_bundle(observation)
+
+        screenshot["bytes"] = original_bytes
+        screenshot["sha256"] = "0" * 64
+        with self.assertRaisesRegex(BrowserBundleError, "Host digest differs"):
+            self.adapter.read_browser_bundle(observation)
+
+        screenshot["sha256"] = original_digest
+        bundle = self.adapter.read_browser_bundle(observation)
+        self.assertEqual(bundle.screenshot.body, _PNG)
+
     def test_manifest_semantic_drift_fails_after_digest_verification(self) -> None:
         self.backend.manifest_browser_override = {
             "requested_url": "https://developers.cloudflare.com/",
