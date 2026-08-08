@@ -38,6 +38,7 @@ related:
 - [`verification.md`](verification.md) owns evidence interpretation and gates.
 - [`w4-agency-authority-boundaries.md`](w4-agency-authority-boundaries.md) owns the cross-repository Agency/Authority decision: Presence is not authority, authority remains owner-scoped, source evidence does not become destination authority, and no global World capability/delegation service is justified by current evidence.
 - [`w5-agent-embodiment.md`](w5-agent-embodiment.md) owns the active W5-A research boundary: source Entity departure, continuity ownership, destination carrier materialization, active embodiment and current Presence remain distinct until experiments prove otherwise.
+- [`w5-presence.md`](w5-presence.md) owns the active W5-B research boundary: Agent-facing current subject/body relation evidence is query-scoped informational truth, not a global Presence registry or action authority.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 
