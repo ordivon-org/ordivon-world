@@ -270,7 +270,8 @@ class HostEntityMigrationJournal(_HostTrajectoryJournal):
         ("destination World", "destination_world_id", "destination_world_id"),
         ("source departure identity", "source_departure_digest", "source_departure_digest"),
     )
-    materialization_fields = (
+    terminal_state = "materialized"
+    terminal_fields = (
         ("worldEntityMaterializationId", "materialization_id"),
         ("worldEntityMaterializationDigest", "materialization_digest"),
     )

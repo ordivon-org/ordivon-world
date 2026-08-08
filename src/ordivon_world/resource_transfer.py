@@ -258,7 +258,8 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
         ("destination World", "destination_world_id", "destination_world_id"),
         ("payload identity", "payload_digest", "payload_digest"),
     )
-    materialization_fields = (
+    terminal_state = "materialized"
+    terminal_fields = (
         ("worldResourceMaterializationId", "materialization_id"),
         ("worldResourceMaterializationDigest", "materialization_digest"),
     )

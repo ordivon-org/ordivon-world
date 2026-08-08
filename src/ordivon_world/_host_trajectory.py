@@ -47,7 +47,8 @@ class _HostTrajectoryJournal:
     slots: ClassVar[tuple[_PayloadSlot, ...]]
     correlation_fields: ClassVar[tuple[tuple[str, str], ...]]
     receipt_bindings: ClassVar[tuple[tuple[str, str, str], ...]]
-    materialization_fields: ClassVar[tuple[tuple[str, str], ...]]
+    terminal_state: ClassVar[str]
+    terminal_fields: ClassVar[tuple[tuple[str, str], ...]]
 
     def __init__(self, port: HostExtensionPort) -> None:
         self.port = port
@@ -131,11 +132,11 @@ class _HostTrajectoryJournal:
         receipt = self._load_receipt_from_data(current.data, plan)
         if receipt is not None:
             return self._step(
-                task_id, current.projection.revision, plan, "materialized", receipt, False
+                task_id, current.projection.revision, plan, self.terminal_state, receipt, False
             )
         if current.data.get(self.state_field) == "unknown":
             raise self.error_type(
-                f"{self.label} outcome is unknown; reconcile the original operation before any new materialization"
+                f"{self.label} outcome is unknown; reconcile the original operation before any new execution"
             )
         try:
             receipt = materialize(bundle)
@@ -154,7 +155,7 @@ class _HostTrajectoryJournal:
         receipt = self._load_receipt_from_data(current.data, plan)
         if receipt is not None:
             return self._step(
-                task_id, current.projection.revision, plan, "materialized", receipt, True
+                task_id, current.projection.revision, plan, self.terminal_state, receipt, True
             )
         receipt = observe(plan)
         if receipt is None:
@@ -167,7 +168,7 @@ class _HostTrajectoryJournal:
         receipt = self._load_receipt_from_data(current.data, plan)
         if receipt is not None:
             return self._step(
-                task_id, current.projection.revision, plan, "materialized", receipt, False
+                task_id, current.projection.revision, plan, self.terminal_state, receipt, False
             )
         if current.data.get(self.state_field) == "unknown":
             return self._step(task_id, current.projection.revision, plan, "unknown", None, False)
@@ -219,31 +220,29 @@ class _HostTrajectoryJournal:
                 task_id,
                 current.projection.revision,
                 plan,
-                "materialized",
+                self.terminal_state,
                 retained,
                 reconciled,
             )
         receipt_object = self.port.put_object(value, kind=self.receipt_kind)
         updates = {
-            self.state_field: "materialized",
+            self.state_field: self.terminal_state,
             self.receipt_digest_field: digest,
             self.receipt_object_field: receipt_object.digest,
         }
-        updates.update(
-            {field: getattr(receipt, attr) for field, attr in self.materialization_fields}
-        )
+        updates.update({field: getattr(receipt, attr) for field, attr in self.terminal_fields})
         committed = self.port.append_preserving(
             task_id=task_id,
             expected_revision=current.projection.revision,
-            event_id=self._event_id(task_id, "materialized", current.projection.revision + 1),
-            kind=EventKind(f"{self.event_kind_prefix}-materialized"),
+            event_id=self._event_id(task_id, self.terminal_state, current.projection.revision + 1),
+            kind=EventKind(f"{self.event_kind_prefix}-{self.terminal_state}"),
             updates=updates,
             remove_fields=(self.uncertainty_object_field,),
             referenced_objects=(*self._retained_objects(current.data, plan), receipt_object),
             label=self.label,
         )
         return self._step(
-            task_id, committed.projection.revision, plan, "materialized", receipt, reconciled
+            task_id, committed.projection.revision, plan, self.terminal_state, receipt, reconciled
         )
 
     def load_receipt(self, task_id: str) -> Any:

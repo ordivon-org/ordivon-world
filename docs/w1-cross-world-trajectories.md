@@ -208,6 +208,58 @@ P1 also deleted native SampleVault bytes after a valid Host receipt had already 
 
 Current Presence remains a native observation problem and is not inferred from a historical receipt.
 
+## P2 — Durable Message Delivery
+
+P2 added a third materially different trajectory to test whether the private Host-backed journal was truly shared infrastructure or merely an accidental similarity between Resource Transfer and Entity Migration.
+
+The third consumer immediately exposed one overfit in the private helper: it had hard-coded `materialized` as the terminal state. Message delivery requires a different terminal vocabulary:
+
+```text
+Resource Transfer    → materialized
+Entity Migration     → materialized
+Message Delivery     → delivered
+```
+
+The private helper now owns a configurable terminal state and terminal receipt fields. No public World state machine was introduced.
+
+### Delivery is not knowledge
+
+The verified Message trajectory carries two independently digested objects:
+
+- source provenance;
+- message payload.
+
+The semantic plan contains message identity, source and destination World identity, message kind, provenance digest and payload digest. Link binding and destination knowledge are deliberately absent.
+
+A real Linux network-namespace/TCP acceptance delivered a source claim whose confidence was `confirmed-in-source-world`. The destination persisted exactly one inbox receipt while its separate knowledge store remained `{}`. The receipt explicitly recorded `knowledgePromoted=false`.
+
+Therefore:
+
+```text
+message delivered
+  ≠ claim verified
+  ≠ destination knowledge promoted
+  ≠ destination Reality changed
+```
+
+This is the durable counterpart of the earlier W0 epistemic experiments.
+
+### Binding and recovery
+
+The real Message acceptance replaced the A↔B native endpoints three times around one durable message:
+
+1. binding 1 became stale before send and produced zero deliveries;
+2. the unchanged Message plan committed once under binding 2;
+3. the response was lost, Host was reopened, and binding 3 was used only to reconcile the original inbox receipt.
+
+The retained receipt continued to identify binding 2 as the commit binding. The message plan digest remained unchanged, and the fresh recovery path performed zero deliveries.
+
+### Third-consumer extraction result
+
+Message Delivery reuses the private `_HostTrajectoryJournal` without direct Host CAS or Journal calls in the Message module. Resource Transfer and Entity Migration also retain zero such direct Host mechanics.
+
+The third consumer did not force a public `WorldTrajectory` protocol. It forced only one internal correction: terminal vocabulary belongs to each trajectory, while prepare/uncertainty/original-operation reconciliation/receipt retention are shared mechanics.
+
 ## What W1 has not promoted
 
 W1-P0 does **not** establish any of the following as a public shared contract:
@@ -243,10 +295,10 @@ A W1 mechanism becomes a stable public World contract only if later real consume
 
 Useful next falsifiers include:
 
-1. a third materially different trajectory, such as durable Message Delivery or a non-Security physical destination;
-2. multi-hop federation where each hop has independent durable admission and receipt state;
-3. destination rematerialization where World continuity survives but native body identity changes;
-4. end-to-end provenance that must survive an untrusted or compromised relay;
-5. concurrent independent transfers whose receipts and recovery paths must not accidentally serialize through one global World head.
+1. multi-hop federation where each hop has independent durable admission and receipt state;
+2. destination rematerialization where World continuity survives but native body identity changes;
+3. end-to-end provenance that must survive an untrusted or compromised relay;
+4. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
+5. a non-Security physical destination that independently forces the same boundary semantics.
 
 Until those tests force a broader contract, the W1 modules remain experimental and non-exported.
