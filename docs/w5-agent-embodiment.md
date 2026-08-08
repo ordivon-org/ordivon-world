@@ -332,6 +332,139 @@ Body current + no current Subject binding => UNKNOWN
 
 A4-P0 does not justify `PresenceRegistry`, `AgentLocationTable` or a global Presence epoch. The next hypothesis should first test whether an Agent needs a bounded owner-authored **current relation observation** before its next body-bound action, and whether that observation can stay query-shaped rather than becoming new durable global state.
 
+## A4-P1: current relation queries without a Presence registry
+
+A4-P1 tested whether a fresh caller can obtain a useful current answer without introducing durable global Presence state. The successful experimental shape is query-oriented:
+
+```text
+CurrentRelationQuery
+  queryId
+  subjectRef
+  bodyRef
+  ownerId
+  exact owner scope
+      │
+      │ queryDigest
+      ▼
+destination owner
+  re-observes native current state
+      │
+      ▼
+CurrentRelationObservation
+  queryDigest
+  bodyCurrentness
+  bindingCurrentness
+  owner evidence
+      │
+      ▼
+World projection
+  present-within-scope
+  absent-through-body
+  unknown
+```
+
+The projection is explicitly `informational-current-observation-not-action-authority`. The destination's normal action admission remains authoritative for an effect.
+
+### Query identity prevents cross-query replay
+
+The owner observation binds the exact query digest. Replaying one observation against a fresh query ID is rejected even when subject, body and scope are otherwise identical. Subject substitution and body substitution are rejected for the same reason.
+
+This does not make an observation permanently fresh. Once returned, it is historical evidence that the owner observed a relation for that exact query. A later action still requires destination-native current checks. The query nonce prevents accidental reuse as a different current query; it does not replace liveness or authority.
+
+### Game: the same Subject/Body can move PRESENT → UNKNOWN → PRESENT
+
+Using the non-main Game A3 research candidate and one persistent `medic-reyes` Actor body, A4-P1 observed three scopes:
+
+```text
+r0
+  Body current
+  exact r0 subject/cognition admission current
+  → present-within-scope
+
+r1 before new cognition/admission
+  same Body current
+  old r0 binding stale
+  → unknown
+
+r1 after fresh cognition/admission
+  same Body current
+  new exact r1 binding current
+  → present-within-scope
+```
+
+The r1 cognition was a new live DeepSeek Harness Run on Harness revision `98314d30de68412c3089fbe934eb049c2843bc98`. It saw the new r1 Station Zero Context and independently selected a legal `guard` action on Command Deck. The first attempt was rejected before any Provider call because the request upper-bound estimate was 15,378 tokens while the Run had only 12,000 total tokens remaining; the experiment raised the explicit Run token budget to 24,000 and then completed normally. This is Harness budget fencing, not a Presence failure.
+
+The successful r1 cognition was bound through the same A3 cross-owner mechanism and admitted by Game for the exact r1 Planning. A new current relation query then returned `present-within-scope`. The old r0 observation could not answer the new r1 query.
+
+Therefore Presence did not “stay on” because the Subject and Actor were unchanged. The relation became unknown when its scope expired and became present again only after a fresh cognition/body/action relation was admitted.
+
+### Security: native observation failure degrades to UNKNOWN
+
+A4-P1 also asked Security for a fresh relation observation of a physically materialized KVM carrier. A fresh QMP observation exceeded the bounded Runtime deadline. The probe retained the historical Receipt and residual process/ledger evidence but did **not** promote that incomplete evidence to current Body truth:
+
+```text
+fresh native observation timed out
+→ bodyCurrentness = unknown
+→ bindingCurrentness = unknown
+→ relation = unknown
+```
+
+After Security cleanly destroyed the exact carrier, a new query was answered from current owner evidence showing the recorded QEMU identity absent, run ledger absent and run path absent while the historical materialization Receipt remained. That query projected `absent-through-body`.
+
+This establishes a useful fail-soft rule:
+
+> Current observation failure yields `UNKNOWN`; historical success must not fill the gap.
+
+### Exact-body absence is not global Agent absence
+
+A4-P1 finally issued fresh queries for the same `continuity-subject:medic-reyes` across two different domain bodies after the Game r1 admission and Security carrier destruction:
+
+```text
+Game Actor body
+  → present-within-scope
+
+Security KVM body A
+  → absent-through-body
+```
+
+Both are simultaneously consistent because the body references differ. Therefore:
+
+```text
+absent-through-body-A
+!=
+Subject absent everywhere
+```
+
+A replacement Security carrier B was also physically materialized during exploration and had a different materialization/body identity. Its long-lived current-observation attempt was discarded because the Runtime holder expired before a valid owner observation completed; no Presence claim from that failed attempt is retained. The old Body-A observation was nevertheless correctly rejected when presented for Body B. This failure is evidence for keeping Body identity and owner-lifecycle boundaries explicit, not evidence that B was current.
+
+### P1 result
+
+The current minimal model is therefore relational and query-shaped:
+
+```text
+(subject, body, owner scope, one exact query)
+    ↓ owner observation
+bodyCurrentness
+bindingCurrentness
+    ↓
+present-within-scope | absent-through-body | unknown
+```
+
+No experiment required a global Presence database, Agent location table, liveness daemon, global epoch or World-owned heartbeat. World only needed to bind the question to the answer and preserve the distinction between current owner observation and historical evidence.
+
+The stronger laws are:
+
+```text
+Presence is not a durable boolean property of Subject or Body.
+Presence observation is query-bound informational evidence, not action authority.
+Fresh-query replay of an old observation is stale and rejected.
+Current native observation failure => UNKNOWN.
+Body current + current scoped subject binding => present-within-scope.
+Exact Body absence => absent-through-that-body.
+Absent through one Body != global Subject absence.
+Scope change requires a fresh relation; Subject continuity does not preserve Presence automatically.
+```
+
 ## Current W5-A decomposition
 
 The experiments now force the following concepts apart:
@@ -382,26 +515,37 @@ A3 proves that one real active destination can require owner-separated, action-s
 
 [`../evidence/acceptance/w5a-a4-presence-888ca4e.json`](../evidence/acceptance/w5a-a4-presence-888ca4e.json) is the A4-P0 Presence falsifier receipt, SHA-256 `450023b63b13d05f6937e1a90925650906904810ccd854a8cc8794df539743c9`. It binds World base `888ca4efd10cb063e6603025c991e5a3a797ff49`, current Harness `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, Game canonical plus the non-main A3 admission candidate, and current Security `d532014dc4ff1d3fc9e825b5c087f1d2f1bac4ee`. Game proved that an active surviving Body plus a historical A3 occurrence leaves current Subject Presence unknown at the next Planning; Security physically proved that a retained historical materialization receipt can survive after QEMU, ledger and run path are gone while `reconcile` still returns migration status `materialized`.
 
-## Next experiment
+## W5-A closeout
 
-A4-P1 should test **current relation observation without a Presence registry**.
+W5-A has now reached its research stopping condition. The experiments proved enough structure to distinguish a real bounded Agent embodiment occurrence from carrier creation, Provider attribution, durable history and current Presence, while repeatedly failing to justify a shared production `AgentIdentity`, `EmbodimentBinding` or `PresenceRegistry`.
 
-The next falsifier should give a fresh Agent a bounded owner-authored answer to a concrete question such as “can this subject currently act through this body?” and compare at least Game and Security. The view should be derived from current native observation and current binding/admission coordinates rather than copied from historical receipts.
-
-The experiment should determine whether the minimum useful projection is closer to:
+The retained W5-A laws are:
 
 ```text
-subjectRef
-bodyRef
-scope / generation
-bodyCurrentness
-bindingCurrentness
-relationState = present-within-scope | absent-through-body | unknown
-evidence digests
+Continuity Subject != Current Cognition Instance
+Continuity Integrity != Continuity Ownership
+Provider Attribution != Agent Embodiment
+Carrier Materialization != Subject Activation
+Evidence Reference != Evidence Interpretation != Destination Admission
+Actionable Embodiment Admission = scoped Subject × Cognition × Body × Action relation
+Bounded Embodiment Occurrence != Current Presence
+Presence Observation != Action Authority
+Body Currentness != Subject Presence
+Absent Through One Body != Subject Absent Everywhere
 ```
 
-without freezing those fields into a production schema yet. It must also test stale observation replay, body generation replacement, another cognition instance for the same subject, and—if practical—one subject with two bodies so `absent-through-body-A` cannot be mistaken for global Agent absence.
+The productive World responsibility is therefore narrow: bind independently owned subject/cognition/body evidence across a transition or question, preserve exact currentness coordinates, and refuse to upgrade historical or incomplete evidence. Native domains continue to own Bodies, liveness and final action admission.
 
-Do not create a global Presence database, liveness daemon or location table. If query-shaped owner observations plus fresh action admission are sufficient, World should keep Presence as evidence/currentness semantics rather than become the owner of live Agent location.
+No W5-A experiment requires World to own a global Agent identity service, live Body registry, location table, heartbeat service, universal embodiment manager or Presence database. The non-main Game admission candidate remains research evidence rather than product code.
 
-Production Entity Migration remains unchanged, and the A3 Game admission implementation remains a non-main research candidate until another materially different destination reproduces the same embodiment-admission need.
+## Hand-off to W5-B Presence
+
+W5-B may start from the A4 laws, but it should not begin by implementing a Presence service. Its first question should be whether materially different active destinations reproduce a need for the same current subject/body relation beyond one bounded Game action. Priority falsifiers include:
+
+1. a second active destination, ideally Security Guest-side subject activation or another independently owned environment;
+2. a genuinely longer-lived relation where several actions occur without confusing subject continuity with action authority;
+3. one subject with multiple concurrently meaningful Bodies, where Body-local absence must remain local;
+4. fresh-Agent consumption of owner-authored relation observations without turning those observations into authority;
+5. untrusted-relay authentication only if the workload leaves the current trusted-local owner boundary.
+
+Until those workloads reproduce the need, the query-shaped A4-P1 projection is research vocabulary, not a production World contract.
