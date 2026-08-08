@@ -9,6 +9,7 @@ from ordivon_host import EventKind, HostExtensionPort, HostKernel, HostStorage
 from ordivon_world.canonical import sha256_digest
 from ordivon_world.entity_migration import (
     EntityMigrationBundle,
+    EntityMigrationError,
     EntityMigrationOutcomeUnknown,
     EntityMigrationReceipt,
     EntityMigrationSuperseded,
@@ -200,6 +201,29 @@ class HostEntityMigrationTests(unittest.TestCase):
             self.assertEqual(
                 storage.read_task_event(created.task_id).data["worldEntityMigrationState"],
                 "prepared",
+            )
+
+    def test_unknown_state_forbids_blind_rematerialization_after_destination_receipt_loss(
+        self,
+    ) -> None:
+        destination = DurableDestination()
+        destination.drop_after_commit = True
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(55_000).__next__, owner_id="host:w1-p1-entity"
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostEntityMigrationJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, bundle())
+            self.assertEqual(journal.materialize(created.task_id, destination).status, "unknown")
+            self.assertEqual(destination.materializations, 1)
+            destination.receipts.clear()
+            with self.assertRaises(EntityMigrationError):
+                journal.materialize(created.task_id, destination)
+            self.assertEqual(destination.materializations, 1)
+            self.assertEqual(
+                storage.read_task_event(created.task_id).data["worldEntityMigrationState"],
+                "unknown",
             )
 
     def test_bundle_tamper_fails_before_destination(self) -> None:

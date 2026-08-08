@@ -11,6 +11,7 @@ from ordivon_world.resource_transfer import (
     HostResourceTransferJournal,
     PreparedResourceTransfer,
     ResourceTransferBundle,
+    ResourceTransferError,
     ResourceTransferOutcomeUnknown,
     ResourceTransferReceipt,
     ResourceTransferSuperseded,
@@ -42,7 +43,9 @@ def payload() -> dict[str, object]:
     }
 
 
-def bundle(*, transfer_id: str = "transfer:w1:research-core", body: dict[str, object] | None = None) -> ResourceTransferBundle:
+def bundle(
+    *, transfer_id: str = "transfer:w1:research-core", body: dict[str, object] | None = None
+) -> ResourceTransferBundle:
     return ResourceTransferBundle.create(
         transfer_id=transfer_id,
         source_world_id="game-run:w1:A",
@@ -85,7 +88,9 @@ class DurableDestination:
         self.receipts[value.plan.transfer_id] = receipt
         if self.drop_after_commit:
             self.drop_after_commit = False
-            raise ResourceTransferOutcomeUnknown(value.plan, RuntimeError("response lost after destination commit"))
+            raise ResourceTransferOutcomeUnknown(
+                value.plan, RuntimeError("response lost after destination commit")
+            )
         return receipt
 
     def reconcile(self, plan: PreparedResourceTransfer) -> ResourceTransferReceipt | None:
@@ -93,7 +98,9 @@ class DurableDestination:
 
 
 class HostResourceTransferTests(unittest.TestCase):
-    def create_task(self, storage: HostStorage, kernel: HostKernel, task_id: str = "task:w1-resource"):
+    def create_task(
+        self, storage: HostStorage, kernel: HostKernel, task_id: str = "task:w1-resource"
+    ):
         return kernel.create_task(
             event_id=f"event:{task_id.removeprefix('task:')}:create",
             kind=EventKind.TASK_CREATED,
@@ -105,7 +112,9 @@ class HostResourceTransferTests(unittest.TestCase):
 
     def test_prepare_retains_source_payload_and_plan_without_changing_task_meaning(self) -> None:
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(storage, clock_ms=itertools.count(10_000).__next__, owner_id="host:w1:first")
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(10_000).__next__, owner_id="host:w1:first"
+            )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
             first = journal.prepare(created.task_id, bundle())
@@ -118,10 +127,16 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertEqual(snapshot.projection.state, created.state)
             self.assertEqual(snapshot.projection.ready_frontier, created.ready_frontier)
             self.assertEqual(snapshot.event_kind, EventKind("world.resource-transfer-prepared"))
-            self.assertEqual(snapshot.data["worldResourcePayloadDigest"], loaded.plan.payload_digest)
-            self.assertNotEqual(snapshot.data["worldResourcePayloadObjectDigest"], loaded.plan.payload_digest)
+            self.assertEqual(
+                snapshot.data["worldResourcePayloadDigest"], loaded.plan.payload_digest
+            )
+            self.assertNotEqual(
+                snapshot.data["worldResourcePayloadObjectDigest"], loaded.plan.payload_digest
+            )
             self.assertEqual(snapshot.data["worldResourceTransferPlanDigest"], loaded.plan.digest)
-            self.assertNotEqual(snapshot.data["worldResourceTransferPlanObjectDigest"], loaded.plan.digest)
+            self.assertNotEqual(
+                snapshot.data["worldResourceTransferPlanObjectDigest"], loaded.plan.digest
+            )
 
     def test_response_loss_reopens_host_and_reconciles_original_destination_commit(self) -> None:
         destination = DurableDestination()
@@ -150,7 +165,9 @@ class HostResourceTransferTests(unittest.TestCase):
     def test_known_receipt_prevents_second_destination_materialization(self) -> None:
         destination = DurableDestination()
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(storage, clock_ms=itertools.count(30_000).__next__, owner_id="host:w1")
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(30_000).__next__, owner_id="host:w1"
+            )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
             journal.prepare(created.task_id, bundle())
@@ -162,7 +179,9 @@ class HostResourceTransferTests(unittest.TestCase):
 
     def test_same_task_cannot_silently_change_transfer_or_payload(self) -> None:
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(storage, clock_ms=itertools.count(40_000).__next__, owner_id="host:w1")
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(40_000).__next__, owner_id="host:w1"
+            )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
             journal.prepare(created.task_id, bundle())
@@ -185,7 +204,9 @@ class HostResourceTransferTests(unittest.TestCase):
             destination_evidence={"authority": "test"},
         )
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(storage, clock_ms=itertools.count(50_000).__next__, owner_id="host:w1")
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(50_000).__next__, owner_id="host:w1"
+            )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
             journal.prepare(created.task_id, good)
@@ -198,7 +219,9 @@ class HostResourceTransferTests(unittest.TestCase):
     def test_reconcile_missing_never_materializes_or_redispatches(self) -> None:
         destination = DurableDestination()
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(storage, clock_ms=itertools.count(60_000).__next__, owner_id="host:w1")
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(60_000).__next__, owner_id="host:w1"
+            )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
             journal.prepare(created.task_id, bundle())
@@ -206,6 +229,29 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertEqual(step.status, "unknown")
             self.assertTrue(step.reconciled)
             self.assertEqual(destination.materializations, 0)
+
+    def test_unknown_state_forbids_blind_redispatch_even_if_destination_receipt_is_lost(
+        self,
+    ) -> None:
+        destination = DurableDestination()
+        destination.drop_after_commit = True
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(65_000).__next__, owner_id="host:w1-p1-resource"
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, bundle())
+            self.assertEqual(journal.deliver(created.task_id, destination).status, "unknown")
+            self.assertEqual(destination.materializations, 1)
+            destination.receipts.clear()
+            with self.assertRaises(ResourceTransferError):
+                journal.deliver(created.task_id, destination)
+            self.assertEqual(destination.materializations, 1)
+            self.assertEqual(
+                storage.read_task_event(created.task_id).data["worldResourceTransferState"],
+                "unknown",
+            )
 
     def test_bundle_rejects_tampered_source_evidence_or_payload(self) -> None:
         valid = bundle()

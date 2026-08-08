@@ -133,6 +133,10 @@ class _HostTrajectoryJournal:
             return self._step(
                 task_id, current.projection.revision, plan, "materialized", receipt, False
             )
+        if current.data.get(self.state_field) == "unknown":
+            raise self.error_type(
+                f"{self.label} outcome is unknown; reconcile the original operation before any new materialization"
+            )
         try:
             receipt = materialize(bundle)
         except self.outcome_unknown_type as error:
