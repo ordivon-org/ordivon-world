@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/resource-transfer-not-committed.schema.json",
+  "title": "Ordivon World Resource Transfer Not-Committed Proof",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "transferId",
+    "planDigest",
+    "destinationWorldId",
+    "payloadDigest",
+    "evidence"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world.resource-transfer-not-committed"},
+    "transferId": {"type": "string", "pattern": "^transfer:.+", "maxLength": 512},
+    "planDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "destinationWorldId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "payloadDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "evidence": {
+      "type": "object",
+      "required": ["authority", "exactOriginalRetrySafe"],
+      "properties": {
+        "authority": {"type": "string", "minLength": 1, "maxLength": 512},
+        "exactOriginalRetrySafe": {"const": true}
+      }
+    }
+  }
+}

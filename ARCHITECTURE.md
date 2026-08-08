@@ -2,10 +2,11 @@
 
 ## Purpose
 
-World is the boundary between Host-owned work semantics and systems whose state, execution and identity are owned elsewhere. Its minimum responsibilities are:
+World is the boundary between Host-owned work semantics and independently authoritative environments. Two proven responsibility shapes now exist:
 
 ```text
-Bind → Observe → Act → Reconcile
+external provider: Bind → Observe → Act → Reconcile
+inter-World Resource: Source Egress → Bind → Destination Ingress → Reconcile
 ```
 
 It does not centralize all external systems into one World object. Each provider keeps its native request, operation, state and error model. World retains only the facts required to bind those provider facts to one Host Dispatch and continue the Task safely.
@@ -17,7 +18,10 @@ It does not centralize all external systems into one World object. Each provider
 | Host | Task, Effect, Dispatch, revision fencing, authority, UNKNOWN, Verification, completion | provider execution and remote bytes |
 | Harness | model loop, Tool proposal, Provider Call, Tool Step and Run evidence | provider infrastructure truth |
 | Runtime | local Workspace, Job, process, cancellation and local Artifacts | remote provider success or domain truth |
-| World adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
+| World provider adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
+| World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
+| Source domain (Game first) | native source occurrence, egress policy and source-specific evidence | destination admission/materialization |
+| Destination domain (Security first) | ingress policy, transfer-specific admission, SampleVault materialization and `not_committed` proof | source-domain truth or cross-relay source authentication unless explicitly configured |
 | Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
 | Domain verifier | whether observed external facts satisfy the Task | provider transport or retry |
 
@@ -28,6 +32,9 @@ src/ordivon_world/
 ├── cloudflare.py       signed provider transport and adapter
 ├── browser.py          Browser Receipt/Manifest/Artifact bundle verification
 ├── host.py             opaque Host extension persistence
+├── resource_egress.py  source-World Resource Egress contract
+├── resource_transfer.py durable Resource Transfer / Host journal
+├── resource_wire.py    destination wire mapping and failure classification
 ├── schemas.py          local Draft 2020-12 Schema Registry
 ├── telemetry.py        W3C Trace Context validation and propagation
 ├── doctor.py           repository, installation and live health projection
@@ -92,7 +99,7 @@ A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 
 
 World has no database. Durable state is divided by authority:
 
-- Host CAS/Journal: prepared Dispatch, uncertainty record, mapped Observation and Verification references;
+- Host CAS/Journal: prepared Dispatches plus Resource plans, egress receipts, portable payloads, uncertainty / `not_committed` proofs and destination receipts;
 - R2: provider pending/committed request state, Receipt mirror and Artifact bytes;
 - Cloudflare control plane: Worker Version, Deployment, bindings and lifecycle;
 - local private storage: release, GC and acceptance receipts;
@@ -100,7 +107,7 @@ World has no database. Durable state is divided by authority:
 
 ## Contract boundary
 
-JSON Schema Draft 2020-12 is the machine-readable authority for the public adapter envelope and provider request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
+JSON Schema Draft 2020-12 is the machine-readable authority for public provider and Resource Transfer request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
 
 See [`docs/contracts.md`](docs/contracts.md) and [`docs/compatibility.md`](docs/compatibility.md).
 

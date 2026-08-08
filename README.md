@@ -14,7 +14,7 @@ audience:
   - operator
   - agent
 updated: 2026-08-04
-summary: External capability adapters and condition observers that turn provider facts into recoverable Host Dispatches, Observations, Receipts, and Artifacts.
+summary: Recoverable external-provider adapters plus a production cross-World Resource Transfer contract with explicit source-egress and destination-ingress authority.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -25,7 +25,7 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned Tasks and Effects to systems that Ordivon does not own. It discovers current capability conditions, binds one exact Dispatch to a provider request, observes provider Receipts and Artifacts, and reconciles uncertain outcomes without blindly repeating the external action.
+Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path and now also exposes one production inter-World trajectory: Resource Transfer with source-egress authority, destination-ingress authority and durable uncertainty recovery.
 
 ```text
 Host Task / Effect / Dispatch
@@ -53,6 +53,14 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 - [`docs/retained-boundaries.md`](docs/retained-boundaries.md) — why the active scope remains narrow.
 
 ## Active capabilities
+
+### Cross-World Resource Transfer
+
+The Python package exposes `ResourceEgressReceipt`, `ResourceTransferBundle`, `HostResourceTransferJournal`, `ResourceTransferWireDestination` and the packaged Resource JSON contracts. The first production trajectory is Station Zero Game → Security SampleVault.
+
+The source World must first issue an exact `ResourceEgressReceipt`; the destination then independently admits/materializes the transfer. A response loss remains UNKNOWN until the original destination operation is reconciled. A destination-authored, identity-bound `not_committed` proof may release UNKNOWN back to PREPARED for the exact original retry.
+
+The current Security CLI trusts its local caller to carry an authentic source-authority receipt. Untrusted-relay deployments require independent source-authority authentication; World 0.2 does not claim a universal PKI. See [`docs/w2-resource-transfer-production.md`](docs/w2-resource-transfer-production.md).
 
 ### Host-facing Cloudflare adapter
 
@@ -90,12 +98,13 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 
 ## Core rules
 
-1. **Host owns meaning.** Task, Effect, Dispatch authority, UNKNOWN, Verification and completion remain Host-owned.
+1. **Native owners keep authority.** Source Worlds own egress facts, destination Worlds own ingress/materialization facts, and Host owns Task/uncertainty continuity.
 2. **Provider owns provider truth.** World maps exact provider identities and evidence; it does not reinterpret a successful provider response as Task completion.
 3. **Reconcile before redispatch.** A lost response creates UNKNOWN. Recovery queries the original provider request before another external action is considered.
 4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
 5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
-6. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
+6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
+7. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
 
 ## Development
 

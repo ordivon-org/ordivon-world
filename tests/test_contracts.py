@@ -2,7 +2,17 @@ from __future__ import annotations
 
 import unittest
 
-from ordivon_world import ContractError, load_schema, validate_contract
+from ordivon_world.canonical import sha256_digest
+from ordivon_world import (
+    ContractError,
+    ResourceEgressAuthority,
+    ResourceEgressReceipt,
+    ResourceTransferBundle,
+    ResourceTransferNotCommitted,
+    ResourceTransferReceipt,
+    load_schema,
+    validate_contract,
+)
 
 
 def execution(capability: str) -> dict[str, object]:
@@ -25,6 +35,26 @@ def artifact(key: str, media_type: str) -> dict[str, object]:
     }
 
 
+def resource_bundle(transfer_id: str) -> ResourceTransferBundle:
+    payload = {"kind": "resource", "value": transfer_id}
+    evidence = {"kind": "source", "transferId": transfer_id}
+    egress = ResourceEgressReceipt(
+        transfer_id=transfer_id,
+        source_world_id="world:w2:A",
+        destination_world_id="world:w2:B",
+        resource_kind="contract-test",
+        payload_digest=sha256_digest(payload),
+        source_occurrence_id=f"resource-occurrence:{transfer_id}",
+        source_occurrence_digest=sha256_digest(evidence),
+        authority=ResourceEgressAuthority(
+            authority_id="source-authority:w2:A",
+            mechanism="contract-test.v1",
+            evidence=evidence,
+        ),
+    )
+    return ResourceTransferBundle.create(source_egress=egress, payload=payload)
+
+
 class ContractTests(unittest.TestCase):
     def test_all_published_contracts_are_valid_draft_2020_12(self) -> None:
         names = (
@@ -34,6 +64,12 @@ class ContractTests(unittest.TestCase):
             "edge-receipt",
             "fetch-request",
             "network-observation",
+            "resource-egress-receipt",
+            "resource-transfer-destination-request",
+            "resource-transfer-destination-response",
+            "resource-transfer-not-committed",
+            "resource-transfer-plan",
+            "resource-transfer-receipt",
             "world-observation",
             "world-prepared-dispatch",
         )
@@ -43,6 +79,64 @@ class ContractTests(unittest.TestCase):
                     load_schema(name)["$schema"],
                     "https://json-schema.org/draft/2020-12/schema",
                 )
+
+    def test_public_resource_models_validate_against_published_contracts(self) -> None:
+        bundle = resource_bundle("transfer:w2:contract")
+        validate_contract("resource-egress-receipt", bundle.source_egress)
+        validate_contract("resource-transfer-plan", bundle.plan.to_dict())
+        receipt = ResourceTransferReceipt(
+            transfer_id=bundle.plan.transfer_id,
+            plan_digest=bundle.plan.digest,
+            destination_world_id=bundle.plan.destination_world_id,
+            payload_digest=bundle.plan.payload_digest,
+            materialization_id="resource:w2:contract",
+            materialization_digest="sha256:" + "2" * 64,
+            destination_evidence={"authority": "contract-test"},
+        )
+        validate_contract("resource-transfer-receipt", receipt.to_dict())
+        proof = ResourceTransferNotCommitted(
+            transfer_id=bundle.plan.transfer_id,
+            plan_digest=bundle.plan.digest,
+            destination_world_id=bundle.plan.destination_world_id,
+            payload_digest=bundle.plan.payload_digest,
+            evidence={"authority": "contract-test", "exactOriginalRetrySafe": True},
+        )
+        validate_contract("resource-transfer-not-committed", proof.to_dict())
+
+    def test_resource_reconcile_contract_forbids_materialize_payload_fields(self) -> None:
+        bundle = resource_bundle("transfer:w2:reconcile")
+        with self.assertRaises(ContractError):
+            validate_contract(
+                "resource-transfer-destination-request",
+                {
+                    "schemaVersion": 1,
+                    "kind": "ordivon.world.resource-transfer-destination-request",
+                    "operation": "reconcile",
+                    "plan": bundle.plan.to_dict(),
+                    "planDigest": bundle.plan.digest,
+                    "payload": bundle.payload,
+                },
+            )
+
+    def test_not_committed_wire_contract_requires_explicit_retry_safety(self) -> None:
+        bundle = resource_bundle("transfer:w2:not-committed")
+        with self.assertRaises(ContractError):
+            validate_contract(
+                "resource-transfer-destination-response",
+                {
+                    "schemaVersion": 1,
+                    "kind": "ordivon.world.resource-transfer-destination-response",
+                    "status": "not_committed",
+                    "transferId": bundle.plan.transfer_id,
+                    "planDigest": bundle.plan.digest,
+                    "destinationWorldId": bundle.plan.destination_world_id,
+                    "payloadDigest": bundle.plan.payload_digest,
+                    "evidence": {
+                        "authority": "contract-test",
+                        "exactOriginalRetrySafe": False,
+                    },
+                },
+            )
 
     def test_fetch_contract_rejects_unowned_options(self) -> None:
         with self.assertRaises(ContractError):

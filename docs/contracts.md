@@ -16,6 +16,21 @@ Published schemas:
 | `world-prepared-dispatch` | durable Host-to-provider binding |
 | `world-observation` | provider Receipt mapped to Host evidence |
 | `network-observation` | future normalized read-only network condition evidence |
+| `resource-egress-receipt` | source-World admission of one exact Resource occurrence |
+| `resource-transfer-plan` | exact source/destination/payload transfer identity |
+| `resource-transfer-destination-request` | materialize/reconcile destination wire request |
+| `resource-transfer-destination-response` | materialized, not-committed, missing or rejected response |
+| `resource-transfer-receipt` | historical destination semantic-admission receipt |
+| `resource-transfer-not-committed` | destination proof that exact original retry is safe |
+
+
+## Resource Transfer contracts
+
+`ResourceEgressReceipt` is produced by the native source authority and binds one source occurrence to one transfer, destination and portable payload digest. `PreparedResourceTransfer` binds the canonical egress receipt digest and payload digest. The destination request carries the exact egress receipt only for materialization; reconciliation carries only the retained plan identity.
+
+A `not_committed` response is stronger than absence. It must bind the exact transfer/plan/destination/payload and explicitly state `exactOriginalRetrySafe=true`. World persists the proof before releasing UNKNOWN for the exact original retry.
+
+Contract validation proves structure and identity binding. It does **not** by itself authenticate a source authority across an untrusted relay. The first Security consumer declares a `caller-trust-boundary`; stronger deployments must independently verify source authority.
 
 ## Deterministic identities
 
@@ -80,7 +95,7 @@ A contract change must update:
 
 1. JSON Schema;
 2. Python parser/mapping;
-3. TypeScript fixture emission;
+3. cross-language fixture/producer validation where the contract has a non-Python producer;
 4. provider policy coupling where bounds changed;
 5. compatibility documentation;
 6. response-loss and stale-condition tests when semantics changed.

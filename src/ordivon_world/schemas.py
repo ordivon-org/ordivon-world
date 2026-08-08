@@ -16,6 +16,12 @@ _CONTRACT_NAMES = (
     "edge-receipt",
     "fetch-request",
     "network-observation",
+    "resource-egress-receipt",
+    "resource-transfer-destination-request",
+    "resource-transfer-destination-response",
+    "resource-transfer-not-committed",
+    "resource-transfer-plan",
+    "resource-transfer-receipt",
     "world-observation",
     "world-prepared-dispatch",
 )

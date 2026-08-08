@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/resource-transfer-destination-request.schema.json",
+  "title": "Ordivon World Resource Transfer Destination Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "operation",
+    "plan",
+    "planDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.resource-transfer-destination-request"
+    },
+    "operation": {
+      "enum": [
+        "materialize",
+        "reconcile"
+      ]
+    },
+    "plan": {
+      "$ref": "https://ordivon.com/contracts/world/resource-transfer-plan.schema.json"
+    },
+    "planDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "payload": {},
+    "sourceEgress": {
+      "$ref": "https://ordivon.com/contracts/world/resource-egress-receipt.schema.json"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "materialize"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "required": [
+          "sourceEgress",
+          "payload"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "sourceEgress"
+              ]
+            },
+            {
+              "required": [
+                "payload"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

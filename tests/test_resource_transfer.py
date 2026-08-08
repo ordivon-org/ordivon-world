@@ -7,6 +7,7 @@ import unittest
 from ordivon_host import EventKind, HostExtensionPort, HostKernel, HostStorage
 
 from ordivon_world.canonical import sha256_digest
+from ordivon_world.resource_egress import ResourceEgressAuthority, ResourceEgressReceipt
 from ordivon_world.resource_transfer import (
     HostResourceTransferJournal,
     PreparedResourceTransfer,
@@ -19,21 +20,6 @@ from ordivon_world.resource_transfer import (
 )
 
 
-def source_evidence() -> dict[str, object]:
-    return {
-        "kind": "station-zero-v3-item-extracted-evidence",
-        "sourceWorldId": "game-run:w1:A",
-        "recordDigest": "1" * 64,
-        "fact": {
-            "factId": "fact:batch:w1:0001:item_extracted",
-            "kind": "item_extracted",
-            "actorId": "pirate-captain-veyra",
-            "factionId": "pirate",
-            "itemId": "research-core",
-        },
-    }
-
-
 def payload() -> dict[str, object]:
     return {
         "schemaVersion": 1,
@@ -44,16 +30,40 @@ def payload() -> dict[str, object]:
     }
 
 
-def bundle(
-    *, transfer_id: str = "transfer:w1:research-core", body: dict[str, object] | None = None
-) -> ResourceTransferBundle:
-    return ResourceTransferBundle.create(
+def source_egress(
+    *,
+    transfer_id: str = "transfer:w1:research-core",
+    body: dict[str, object] | None = None,
+) -> ResourceEgressReceipt:
+    resource = payload() if body is None else body
+    occurrence = {
+        "sourceWorldId": "game-run:w1:A",
+        "recordDigest": "sha256:" + "1" * 64,
+        "factId": "fact:batch:w1:0001:item_extracted",
+    }
+    return ResourceEgressReceipt(
         transfer_id=transfer_id,
         source_world_id="game-run:w1:A",
         destination_world_id="security-world:w1:B",
         resource_kind="station-zero-v3-item",
-        source_evidence=source_evidence(),
-        payload=payload() if body is None else body,
+        payload_digest=sha256_digest(resource),
+        source_occurrence_id="resource-occurrence:w1:research-core",
+        source_occurrence_digest=sha256_digest(occurrence),
+        authority=ResourceEgressAuthority(
+            authority_id="ordivon.game.station-zero-v3:game-run:w1:A",
+            mechanism="test-retained-source-egress.v1",
+            evidence=occurrence,
+        ),
+    )
+
+
+def bundle(
+    *, transfer_id: str = "transfer:w1:research-core", body: dict[str, object] | None = None
+) -> ResourceTransferBundle:
+    resource = payload() if body is None else body
+    return ResourceTransferBundle.create(
+        source_egress=source_egress(transfer_id=transfer_id, body=resource),
+        payload=resource,
     )
 
 
@@ -315,18 +325,21 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertEqual(completed.status, "materialized")
             self.assertEqual(destination.materializations, 2)
 
-    def test_bundle_rejects_tampered_source_evidence_or_payload(self) -> None:
+    def test_bundle_rejects_tampered_source_egress_or_payload(self) -> None:
         valid = bundle()
         with self.assertRaises(ValueError):
             ResourceTransferBundle(
                 plan=valid.plan,
-                source_evidence=source_evidence() | {"recordDigest": "2" * 64},
+                source_egress={
+                    **valid.source_egress,
+                    "sourceOccurrenceId": "resource-occurrence:tampered",
+                },
                 payload=valid.payload,
             )
         with self.assertRaises(ValueError):
             ResourceTransferBundle(
                 plan=valid.plan,
-                source_evidence=valid.source_evidence,
+                source_egress=valid.source_egress,
                 payload=payload() | {"itemId": "medkit"},
             )
 

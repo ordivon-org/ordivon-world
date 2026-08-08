@@ -25,6 +25,7 @@ from ordivon_world.message_delivery import (
     MessageDeliveryReceipt,
     MessageDeliverySuperseded,
 )
+from ordivon_world.resource_egress import ResourceEgressAuthority, ResourceEgressReceipt
 from ordivon_world.resource_transfer import (
     HostResourceTransferJournal,
     ResourceTransferBundle,
@@ -38,14 +39,23 @@ def _bundle(kind: str, index: int):
     source = f"world-instance:w1-p5:source:{index}"
     destination = f"world-instance:w1-p5:destination:{index}"
     if kind == "resource":
-        return ResourceTransferBundle.create(
+        payload = {"kind": "portable-resource", "index": index}
+        evidence = {"kind": "source-fact", "index": index}
+        egress = ResourceEgressReceipt(
             transfer_id=f"transfer:w1-p5:{index}",
             source_world_id=source,
             destination_world_id=destination,
             resource_kind="test-resource",
-            source_evidence={"kind": "source-fact", "index": index},
-            payload={"kind": "portable-resource", "index": index},
+            payload_digest=sha256_digest(payload),
+            source_occurrence_id=f"resource-occurrence:w1-p5:{index}",
+            source_occurrence_digest=sha256_digest(evidence),
+            authority=ResourceEgressAuthority(
+                authority_id=f"source-authority:w1-p5:{index}",
+                mechanism="test-source-egress.v1",
+                evidence=evidence,
+            ),
         )
+        return ResourceTransferBundle.create(source_egress=egress, payload=payload)
     if kind == "entity":
         return EntityMigrationBundle.create(
             migration_id=f"migration:w1-p5:{index}",
@@ -187,13 +197,21 @@ def _run_one(
                 )(),
             )
             conflict_type = ResourceTransferSuperseded
+            changed_payload = {"kind": "portable-resource", "index": index, "changed": True}
+            original_egress = bundle.egress_receipt
+            changed_egress = ResourceEgressReceipt(
+                transfer_id=original_egress.transfer_id,
+                source_world_id=original_egress.source_world_id,
+                destination_world_id=original_egress.destination_world_id,
+                resource_kind=original_egress.resource_kind,
+                payload_digest=sha256_digest(changed_payload),
+                source_occurrence_id=original_egress.source_occurrence_id,
+                source_occurrence_digest=original_egress.source_occurrence_digest,
+                authority=original_egress.authority,
+            )
             changed = ResourceTransferBundle.create(
-                transfer_id=bundle.plan.transfer_id,
-                source_world_id=bundle.plan.source_world_id,
-                destination_world_id=bundle.plan.destination_world_id,
-                resource_kind=bundle.plan.resource_kind,
-                source_evidence=bundle.source_evidence,
-                payload={"kind": "portable-resource", "index": index, "changed": True},
+                source_egress=changed_egress,
+                payload=changed_payload,
             )
         elif kind == "entity":
             journal = HostEntityMigrationJournal(port)

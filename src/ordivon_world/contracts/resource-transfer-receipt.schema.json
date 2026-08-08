@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/resource-transfer-receipt.schema.json",
+  "title": "Ordivon World Resource Transfer Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "transferId",
+    "planDigest",
+    "destinationWorldId",
+    "payloadDigest",
+    "materializationId",
+    "materializationDigest",
+    "destinationEvidence"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world.resource-transfer-receipt"},
+    "transferId": {"type": "string", "pattern": "^transfer:.+", "maxLength": 512},
+    "planDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "destinationWorldId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "payloadDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "materializationId": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "materializationDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "destinationEvidence": {"type": "object"}
+  }
+}

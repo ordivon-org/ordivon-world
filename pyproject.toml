@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ordivon-world"
-version = "0.1.0"
-description = "Recoverable external capability adapters and condition observations for Ordivon."
+version = "0.2.0"
+description = "Recoverable external capability adapters and durable cross-World resource trajectories for Ordivon."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"

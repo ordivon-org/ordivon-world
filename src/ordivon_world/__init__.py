@@ -19,6 +19,28 @@ from .host import (
     HostWorldStep,
     HostWorldSuperseded,
 )
+from .resource_egress import ResourceEgressAuthority, ResourceEgressReceipt
+from .resource_transfer import (
+    HostResourceTransferJournal,
+    HostResourceTransferStep,
+    PreparedResourceTransfer,
+    ResourceTransferBundle,
+    ResourceTransferDestination,
+    ResourceTransferError,
+    ResourceTransferNotCommitted,
+    ResourceTransferOutcomeUnknown,
+    ResourceTransferReceipt,
+    ResourceTransferSuperseded,
+)
+from .resource_wire import (
+    ResourceTransferDestinationRejected,
+    ResourceTransferPreDispatchError,
+    ResourceTransferTransportError,
+    ResourceTransferTransportOutcomeUnknown,
+    ResourceTransferWireDestination,
+    ResourceTransferWireError,
+    ResourceTransferWireTransport,
+)
 from .schemas import ContractError, load_schema, validate_contract
 from .telemetry import TraceContext
 from .version import __version__
@@ -34,6 +56,25 @@ __all__ = [
     "HostWorldExtension",
     "HostWorldStep",
     "HostWorldSuperseded",
+    "ResourceTransferWireTransport",
+    "ResourceTransferWireError",
+    "ResourceTransferWireDestination",
+    "ResourceTransferTransportOutcomeUnknown",
+    "ResourceTransferTransportError",
+    "ResourceTransferSuperseded",
+    "ResourceTransferReceipt",
+    "ResourceTransferPreDispatchError",
+    "ResourceTransferOutcomeUnknown",
+    "ResourceTransferNotCommitted",
+    "ResourceTransferError",
+    "ResourceTransferDestinationRejected",
+    "ResourceTransferDestination",
+    "ResourceTransferBundle",
+    "PreparedResourceTransfer",
+    "HostResourceTransferStep",
+    "HostResourceTransferJournal",
+    "ResourceEgressReceipt",
+    "ResourceEgressAuthority",
     "PreparedWorldDispatch",
     "ReconciliationResult",
     "RetrievedArtifact",

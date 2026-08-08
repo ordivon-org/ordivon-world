@@ -15,6 +15,7 @@ from ordivon_world.entity_migration import (
     HostEntityMigrationJournal,
     PreparedEntityMigration,
 )
+from ordivon_world.resource_egress import ResourceEgressAuthority, ResourceEgressReceipt
 from ordivon_world.resource_transfer import (
     HostResourceTransferJournal,
     PreparedResourceTransfer,
@@ -25,25 +26,27 @@ from ordivon_world.resource_transfer import (
 
 
 def resource_bundle() -> ResourceTransferBundle:
-    evidence = {
-        "kind": "station-zero-v3-item-extracted-evidence",
-        "sourceWorldId": "game-run:w1-p1:A",
-        "recordDigest": "1" * 64,
-        "fact": {"factId": "fact:w1-p1:item", "kind": "item_extracted", "itemId": "research-core"},
-    }
     payload = {
         "schemaVersion": 1,
         "kind": "ordivon.w1.portable-resource",
         "itemId": "research-core",
     }
-    return ResourceTransferBundle.create(
+    evidence = {"recordDigest": "sha256:" + "1" * 64, "factId": "fact:w1-p1:item"}
+    egress = ResourceEgressReceipt(
         transfer_id="transfer:w1-p1:resource",
         source_world_id="game-run:w1-p1:A",
         destination_world_id="security-world:w1-p1:B",
         resource_kind="station-zero-v3-item",
-        source_evidence=evidence,
-        payload=payload,
+        payload_digest=sha256_digest(payload),
+        source_occurrence_id="resource-occurrence:w1-p1:item",
+        source_occurrence_digest=sha256_digest(evidence),
+        authority=ResourceEgressAuthority(
+            authority_id="source-authority:w1-p1:A",
+            mechanism="test-source-egress.v1",
+            evidence=evidence,
+        ),
     )
+    return ResourceTransferBundle.create(source_egress=egress, payload=payload)
 
 
 def entity_bundle() -> EntityMigrationBundle:

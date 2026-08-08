@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/resource-transfer-plan.schema.json",
+  "title": "Ordivon World Prepared Resource Transfer",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "transferId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "resourceKind",
+    "sourceEgressDigest",
+    "payloadDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.prepared-resource-transfer"
+    },
+    "transferId": {
+      "type": "string",
+      "pattern": "^transfer:.+",
+      "maxLength": 512
+    },
+    "sourceWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "resourceKind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "payloadDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sourceEgressDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

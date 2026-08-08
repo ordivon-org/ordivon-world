@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/resource-egress-receipt.schema.json",
+  "title": "Ordivon World Resource Egress Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "transferId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "resourceKind",
+    "payloadDigest",
+    "sourceOccurrenceId",
+    "sourceOccurrenceDigest",
+    "authority"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world.resource-egress-receipt"},
+    "transferId": {"type": "string", "pattern": "^transfer:.+", "maxLength": 512},
+    "sourceWorldId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "destinationWorldId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "resourceKind": {"type": "string", "minLength": 1, "maxLength": 256},
+    "payloadDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceOccurrenceId": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "sourceOccurrenceDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorityId", "mechanism", "evidence"],
+      "properties": {
+        "authorityId": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "mechanism": {"type": "string", "minLength": 1, "maxLength": 512},
+        "evidence": {"type": "object"}
+      }
+    }
+  }
+}

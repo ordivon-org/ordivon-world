@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
+from .schemas import ContractError, validate_contract
 from .resource_transfer import (
     PreparedResourceTransfer,
     ResourceTransferBundle,
@@ -60,9 +61,10 @@ class ResourceTransferWireDestination:
             "operation": "materialize",
             "plan": bundle.plan.to_dict(),
             "planDigest": bundle.plan.digest,
-            "sourceEvidence": bundle.source_evidence,
+            "sourceEgress": bundle.source_egress,
             "payload": bundle.payload,
         }
+        self._validate_request(request)
         try:
             response = self.transport.exchange(request)
         except ResourceTransferTransportOutcomeUnknown as error:
@@ -87,6 +89,7 @@ class ResourceTransferWireDestination:
             "plan": plan.to_dict(),
             "planDigest": plan.digest,
         }
+        self._validate_request(request)
         response = self.transport.exchange(request)
         self._validate_response_envelope(response)
         status = response.get("status")
@@ -153,11 +156,24 @@ class ResourceTransferWireDestination:
             ) from error
 
     @staticmethod
+    def _validate_request(request: dict[str, Any]) -> None:
+        try:
+            validate_contract("resource-transfer-destination-request", request)
+        except ContractError as error:
+            raise ResourceTransferWireError(
+                "resource destination request violates the published wire contract"
+            ) from error
+
+    @staticmethod
     def _validate_response_envelope(response: dict[str, Any]) -> None:
         if not isinstance(response, dict):
             raise ResourceTransferWireError("resource destination response must be an object")
-        if response.get("schemaVersion") != 1 or response.get("kind") != _RESPONSE_KIND:
-            raise ResourceTransferWireError("resource destination response schema is unsupported")
+        try:
+            validate_contract("resource-transfer-destination-response", response)
+        except ContractError as error:
+            raise ResourceTransferWireError(
+                "resource destination response violates the published wire contract"
+            ) from error
 
     @staticmethod
     def _rejected(response: dict[str, Any]) -> ResourceTransferDestinationRejected:

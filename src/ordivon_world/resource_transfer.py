@@ -7,9 +7,10 @@ from ordivon_host import EventKind
 
 from ._host_trajectory import _HostTrajectoryJournal, _PayloadSlot
 from .canonical import sha256_digest
+from .resource_egress import ResourceEgressReceipt
 
 _PLAN_KIND = "world-resource-transfer-plan"
-_SOURCE_EVIDENCE_KIND = "world-resource-source-evidence"
+_SOURCE_EGRESS_KIND = "world-resource-source-egress"
 _PAYLOAD_KIND = "world-resource-portable-payload"
 _RECEIPT_KIND = "world-resource-destination-receipt"
 _UNCERTAINTY_KIND = "world-resource-transfer-uncertainty"
@@ -29,7 +30,7 @@ class PreparedResourceTransfer:
     """One exact cross-World resource-transfer intent.
 
     The plan deliberately owns no source-domain or destination-domain state. It
-    binds one source evidence object and one portable payload object retained in
+    binds one source-World egress receipt and one portable payload retained in
     Host CAS to one destination World identity.
     """
 
@@ -37,7 +38,7 @@ class PreparedResourceTransfer:
     source_world_id: str
     destination_world_id: str
     resource_kind: str
-    source_evidence_digest: str
+    source_egress_digest: str
     payload_digest: str
 
     def __post_init__(self) -> None:
@@ -51,7 +52,7 @@ class PreparedResourceTransfer:
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"{label} must be non-empty")
         for label, value in (
-            ("source evidence digest", self.source_evidence_digest),
+            ("source egress digest", self.source_egress_digest),
             ("payload digest", self.payload_digest),
         ):
             if not isinstance(value, str) or not value.startswith("sha256:") or len(value) != 71:
@@ -69,7 +70,7 @@ class PreparedResourceTransfer:
             "sourceWorldId": self.source_world_id,
             "destinationWorldId": self.destination_world_id,
             "resourceKind": self.resource_kind,
-            "sourceEvidenceDigest": self.source_evidence_digest,
+            "sourceEgressDigest": self.source_egress_digest,
             "payloadDigest": self.payload_digest,
         }
 
@@ -85,7 +86,7 @@ class PreparedResourceTransfer:
             source_world_id=str(value["sourceWorldId"]),
             destination_world_id=str(value["destinationWorldId"]),
             resource_kind=str(value["resourceKind"]),
-            source_evidence_digest=str(value["sourceEvidenceDigest"]),
+            source_egress_digest=str(value["sourceEgressDigest"]),
             payload_digest=str(value["payloadDigest"]),
         )
 
@@ -93,36 +94,55 @@ class PreparedResourceTransfer:
 @dataclass(frozen=True, slots=True)
 class ResourceTransferBundle:
     plan: PreparedResourceTransfer
-    source_evidence: Any
+    source_egress: dict[str, Any]
     payload: Any
 
     def __post_init__(self) -> None:
-        if sha256_digest(self.source_evidence) != self.plan.source_evidence_digest:
-            raise ValueError("Resource transfer source evidence digest mismatch")
+        try:
+            egress = ResourceEgressReceipt.from_dict(self.source_egress)
+        except (KeyError, TypeError, ValueError) as error:
+            raise ValueError("Resource transfer source egress receipt is invalid") from error
+        if egress.digest != self.plan.source_egress_digest:
+            raise ValueError("Resource transfer source egress digest mismatch")
         if sha256_digest(self.payload) != self.plan.payload_digest:
             raise ValueError("Resource transfer payload digest mismatch")
+        if (
+            egress.transfer_id != self.plan.transfer_id
+            or egress.source_world_id != self.plan.source_world_id
+            or egress.destination_world_id != self.plan.destination_world_id
+            or egress.resource_kind != self.plan.resource_kind
+            or egress.payload_digest != self.plan.payload_digest
+        ):
+            raise ValueError(
+                "Resource Egress receipt does not bind the exact Resource Transfer plan"
+            )
+
+    @property
+    def egress_receipt(self) -> ResourceEgressReceipt:
+        return ResourceEgressReceipt.from_dict(self.source_egress)
 
     @classmethod
     def create(
         cls,
         *,
-        transfer_id: str,
-        source_world_id: str,
-        destination_world_id: str,
-        resource_kind: str,
-        source_evidence: Any,
+        source_egress: ResourceEgressReceipt,
         payload: Any,
     ) -> ResourceTransferBundle:
+        payload_digest = sha256_digest(payload)
+        if source_egress.payload_digest != payload_digest:
+            raise ValueError(
+                "Resource Egress receipt payload identity differs from portable payload"
+            )
         return cls(
             plan=PreparedResourceTransfer(
-                transfer_id=transfer_id,
-                source_world_id=source_world_id,
-                destination_world_id=destination_world_id,
-                resource_kind=resource_kind,
-                source_evidence_digest=sha256_digest(source_evidence),
-                payload_digest=sha256_digest(payload),
+                transfer_id=source_egress.transfer_id,
+                source_world_id=source_egress.source_world_id,
+                destination_world_id=source_egress.destination_world_id,
+                resource_kind=source_egress.resource_kind,
+                source_egress_digest=source_egress.digest,
+                payload_digest=payload_digest,
             ),
-            source_evidence=source_evidence,
+            source_egress=source_egress.to_dict(),
             payload=payload,
         )
 
@@ -277,11 +297,11 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
     superseded_type = ResourceTransferSuperseded
     slots = (
         _PayloadSlot(
-            "worldResourceSourceEvidenceDigest",
-            "worldResourceSourceEvidenceObjectDigest",
-            _SOURCE_EVIDENCE_KIND,
-            "source_evidence",
-            "source_evidence_digest",
+            "worldResourceSourceEgressDigest",
+            "worldResourceSourceEgressObjectDigest",
+            _SOURCE_EGRESS_KIND,
+            "source_egress",
+            "source_egress_digest",
         ),
         _PayloadSlot(
             "worldResourcePayloadDigest",

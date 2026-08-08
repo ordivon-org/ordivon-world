@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from ordivon_world.canonical import sha256_digest
+from ordivon_world.resource_egress import ResourceEgressAuthority, ResourceEgressReceipt
 from ordivon_world.resource_transfer import (
     ResourceTransferBundle,
     ResourceTransferOutcomeUnknown,
@@ -17,14 +18,22 @@ from ordivon_world.resource_wire import (
 
 
 def bundle() -> ResourceTransferBundle:
-    return ResourceTransferBundle.create(
+    payload = {"kind": "portable-resource", "value": 7}
+    egress = ResourceEgressReceipt(
         transfer_id="transfer:w2:wire",
         source_world_id="world-instance:w2:A",
         destination_world_id="world-instance:w2:B",
         resource_kind="test-resource",
-        source_evidence={"kind": "source", "factId": "fact:w2"},
-        payload={"kind": "portable-resource", "value": 7},
+        payload_digest=sha256_digest(payload),
+        source_occurrence_id="resource-occurrence:w2:wire",
+        source_occurrence_digest=sha256_digest({"factId": "fact:w2"}),
+        authority=ResourceEgressAuthority(
+            authority_id="source-authority:w2:A",
+            mechanism="test-source-egress.v1",
+            evidence={"factId": "fact:w2"},
+        ),
     )
+    return ResourceTransferBundle.create(source_egress=egress, payload=payload)
 
 
 def receipt(value: ResourceTransferBundle) -> dict[str, object]:
@@ -77,7 +86,7 @@ class ResourceTransferWireTests(unittest.TestCase):
                     "operation": "materialize",
                     "plan": value.plan.to_dict(),
                     "planDigest": value.plan.digest,
-                    "sourceEvidence": value.source_evidence,
+                    "sourceEgress": value.source_egress,
                     "payload": value.payload,
                 }
             ],
@@ -126,7 +135,7 @@ class ResourceTransferWireTests(unittest.TestCase):
         self.assertIsNone(destination.reconcile(value.plan))
         self.assertEqual(transport.requests[0]["operation"], "reconcile")
         self.assertNotIn("payload", transport.requests[0])
-        self.assertNotIn("sourceEvidence", transport.requests[0])
+        self.assertNotIn("sourceEgress", transport.requests[0])
 
     def test_reconcile_not_committed_returns_identity_bound_retry_proof(self) -> None:
         value = bundle()
