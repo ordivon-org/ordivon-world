@@ -9,8 +9,30 @@ import subprocess
 import tempfile
 import zipfile
 
-EXPECTED_VERSION = "0.1.0"
-HOST_REVISION = "1a4027bb26d77a2e051ca933bf664578f071a5a9"
+EXPECTED_VERSION = "0.3.0"
+HOST_REVISION = "428a6f2f90b4050535507c9be078c450552177e5"
+EXPECTED_SCHEMA_NAMES = (
+    "browser-manifest",
+    "browser-request",
+    "edge-capabilities",
+    "edge-receipt",
+    "fetch-request",
+    "message-delivery-destination-request",
+    "message-delivery-destination-response",
+    "message-delivery-not-committed",
+    "message-delivery-plan",
+    "message-delivery-receipt",
+    "message-issuance-receipt",
+    "network-observation",
+    "resource-egress-receipt",
+    "resource-transfer-destination-request",
+    "resource-transfer-destination-response",
+    "resource-transfer-not-committed",
+    "resource-transfer-plan",
+    "resource-transfer-receipt",
+    "world-observation",
+    "world-prepared-dispatch",
+)
 
 
 class WheelError(RuntimeError):
@@ -51,11 +73,13 @@ def inspect_wheel(wheel: Path) -> dict[str, object]:
             raise WheelError("wheel has no unique metadata or entry-point document")
         metadata = BytesParser().parsebytes(archive.read(metadata_names[0]))
         entries = archive.read(entry_names[0]).decode("utf-8")
-        schema_names = [
-            name
-            for name in archive.namelist()
-            if "/contracts/" in name and name.endswith(".schema.json")
-        ]
+        schema_names = tuple(
+            sorted(
+                Path(name).name.removesuffix(".schema.json")
+                for name in archive.namelist()
+                if "/contracts/" in name and name.endswith(".schema.json")
+            )
+        )
     if metadata["Name"] != "ordivon-world":
         raise WheelError("wheel project name differs")
     if metadata["Version"] != EXPECTED_VERSION:
@@ -73,8 +97,8 @@ def inspect_wheel(wheel: Path) -> dict[str, object]:
         raise WheelError("wheel jsonschema dependency is absent")
     if "ordivon-world-doctor = ordivon_world.doctor:entrypoint" not in entries:
         raise WheelError("wheel doctor entry point is absent")
-    if len(schema_names) != 8:
-        raise WheelError(f"wheel contains {len(schema_names)} contract schemas")
+    if schema_names != EXPECTED_SCHEMA_NAMES:
+        raise WheelError("wheel contract schema set differs from the current public contract set")
     return {
         "name": metadata["Name"],
         "version": metadata["Version"],
@@ -91,17 +115,18 @@ def install_and_import(wheel: Path) -> None:
         command(["uv", "pip", "install", "--python", str(python), str(wheel)])
         program = (
             "import json; "
-            "from ordivon_world import (BrowserArtifactBundle, CloudflareWorldAdapter, "
-            "HostWorldExtension, RetrievedArtifact, load_schema); "
-            "names=('browser-manifest','browser-request','edge-capabilities','edge-receipt',"
-            "'fetch-request','network-observation','world-observation',"
-            "'world-prepared-dispatch'); "
+            "from ordivon_world import (MessageDeliveryBundle, ResourceTransferBundle, load_schema); "
+            f"names={EXPECTED_SCHEMA_NAMES!r}; "
             "[load_schema(name) for name in names]; "
-            "print(json.dumps({'api':4,'schemas':len(names)}))"
+            "print(json.dumps({'api':['MessageDeliveryBundle','ResourceTransferBundle'],"
+            "'schemas':len(names)}))"
         )
         output = command([str(python), "-I", "-c", program], cwd=root)
         value = json.loads(output)
-        if value != {"api": 4, "schemas": 8}:
+        if value != {
+            "api": ["MessageDeliveryBundle", "ResourceTransferBundle"],
+            "schemas": len(EXPECTED_SCHEMA_NAMES),
+        }:
             raise WheelError("isolated wheel import returned an unexpected result")
         command([str(environment / "bin" / "ordivon-world-doctor"), "--help"], cwd=root)
 
