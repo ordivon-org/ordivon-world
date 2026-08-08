@@ -163,9 +163,12 @@ def run(game_path: Path, harness_path: Path, subject_ref: str) -> dict[str, Any]
     harness = _object(json.loads(harness_path.read_text(encoding="utf-8")), "Harness cognition evidence")
     verified = verify_binding(subject_ref=subject_ref, game_input=game, harness_evidence=harness)
 
-    wrong_subject = lambda: verify_binding(
-        subject_ref="continuity-subject:mallory", game_input=game, harness_evidence=harness
-    )
+    def wrong_subject() -> dict[str, Any]:
+        return verify_binding(
+            subject_ref="continuity-subject:mallory",
+            game_input=game,
+            harness_evidence=harness,
+        )
     changed_conclusion = copy.deepcopy(harness)
     changed_conclusion["conclusion"]["summary"] = json.dumps(
         {
