@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from ordivon_host import EventKind
+
 from ._host_trajectory import _HostTrajectoryJournal, _PayloadSlot
 from .canonical import sha256_digest
 
@@ -11,6 +13,7 @@ _SOURCE_EVIDENCE_KIND = "world-resource-source-evidence"
 _PAYLOAD_KIND = "world-resource-portable-payload"
 _RECEIPT_KIND = "world-resource-destination-receipt"
 _UNCERTAINTY_KIND = "world-resource-transfer-uncertainty"
+_NOT_COMMITTED_KIND = "world-resource-transfer-not-committed"
 
 
 class ResourceTransferError(RuntimeError):
@@ -183,6 +186,40 @@ class ResourceTransferReceipt:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class ResourceTransferNotCommitted:
+    transfer_id: str
+    plan_digest: str
+    destination_world_id: str
+    payload_digest: str
+    evidence: dict[str, Any]
+
+    def __post_init__(self) -> None:
+        if not self.transfer_id.startswith("transfer:"):
+            raise ValueError("Resource not-committed identity must start with transfer:")
+        for label, value in (
+            ("plan digest", self.plan_digest),
+            ("payload digest", self.payload_digest),
+        ):
+            if not isinstance(value, str) or not value.startswith("sha256:") or len(value) != 71:
+                raise ValueError(f"{label} must be a sha256: digest")
+        if not self.destination_world_id:
+            raise ValueError("Resource not-committed destination World must be non-empty")
+        if not isinstance(self.evidence, dict):
+            raise ValueError("Resource not-committed evidence must be an object")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schemaVersion": 1,
+            "kind": "ordivon.world.resource-transfer-not-committed",
+            "transferId": self.transfer_id,
+            "planDigest": self.plan_digest,
+            "destinationWorldId": self.destination_world_id,
+            "payloadDigest": self.payload_digest,
+            "evidence": self.evidence,
+        }
+
+
 class ResourceTransferOutcomeUnknown(ResourceTransferError):
     def __init__(self, plan: PreparedResourceTransfer, cause: BaseException) -> None:
         self.plan = plan
@@ -195,7 +232,10 @@ class ResourceTransferOutcomeUnknown(ResourceTransferError):
 class ResourceTransferDestination(Protocol):
     def materialize(self, bundle: ResourceTransferBundle) -> ResourceTransferReceipt: ...
 
-    def reconcile(self, plan: PreparedResourceTransfer) -> ResourceTransferReceipt | None: ...
+    def reconcile(
+        self,
+        plan: PreparedResourceTransfer,
+    ) -> ResourceTransferReceipt | ResourceTransferNotCommitted | None: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -276,4 +316,111 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
         task_id: str,
         destination: ResourceTransferDestination,
     ) -> HostResourceTransferStep:
-        return super().reconcile(task_id, destination.reconcile)
+        bundle = self.load_bundle(task_id)
+        plan = bundle.plan
+        current = self.port.load(task_id)
+        retained = self._load_receipt_from_data(current.data, plan)
+        if retained is not None:
+            return self._step(
+                task_id,
+                current.projection.revision,
+                plan,
+                self.terminal_state,
+                retained,
+                True,
+            )
+        result = destination.reconcile(plan)
+        if isinstance(result, ResourceTransferNotCommitted):
+            return self.record_not_committed(task_id, plan, result)
+        if result is None:
+            return self._step(
+                task_id,
+                current.projection.revision,
+                plan,
+                "unknown",
+                None,
+                True,
+            )
+        return self.record_receipt(task_id, plan, result, reconciled=True)
+
+    def record_not_committed(
+        self,
+        task_id: str,
+        plan: PreparedResourceTransfer,
+        proof: ResourceTransferNotCommitted,
+    ) -> HostResourceTransferStep:
+        self._validate_not_committed(plan, proof)
+        current = self.port.load(task_id)
+        self._require_current(current.data, plan)
+        retained = self._load_receipt_from_data(current.data, plan)
+        if retained is not None:
+            return self._step(
+                task_id,
+                current.projection.revision,
+                plan,
+                self.terminal_state,
+                retained,
+                True,
+            )
+        if current.data.get(self.state_field) == "prepared":
+            return self._step(
+                task_id,
+                current.projection.revision,
+                plan,
+                "prepared",
+                None,
+                True,
+            )
+        if current.data.get(self.state_field) != "unknown":
+            raise ResourceTransferError(
+                "not-committed proof can only release an unknown Resource Transfer"
+            )
+        proof_value = proof.to_dict()
+        proof_digest = sha256_digest(proof_value)
+        proof_object = self.port.put_object(proof_value, kind=_NOT_COMMITTED_KIND)
+        committed = self.port.append_preserving(
+            task_id=task_id,
+            expected_revision=current.projection.revision,
+            event_id=self._event_id(task_id, "not-committed", current.projection.revision + 1),
+            kind=EventKind("world.resource-transfer-not-committed"),
+            updates={
+                self.state_field: "prepared",
+                "worldResourceTransferNotCommittedDigest": proof_digest,
+                "worldResourceTransferNotCommittedObjectDigest": proof_object.digest,
+            },
+            remove_fields=(self.uncertainty_object_field,),
+            referenced_objects=(*self._retained_objects(current.data, plan), proof_object),
+            label=self.label,
+        )
+        return self._step(
+            task_id,
+            committed.projection.revision,
+            plan,
+            "prepared",
+            None,
+            True,
+        )
+
+    @staticmethod
+    def _validate_not_committed(
+        plan: PreparedResourceTransfer,
+        proof: ResourceTransferNotCommitted,
+    ) -> None:
+        if proof.transfer_id != plan.transfer_id:
+            raise ResourceTransferSuperseded(
+                "not-committed proof belongs to another Resource Transfer"
+            )
+        if proof.plan_digest != plan.digest:
+            raise ResourceTransferSuperseded(
+                "not-committed proof binds another Resource Transfer plan"
+            )
+        if proof.destination_world_id != plan.destination_world_id:
+            raise ResourceTransferSuperseded(
+                "not-committed proof belongs to another destination World"
+            )
+        if proof.payload_digest != plan.payload_digest:
+            raise ResourceTransferSuperseded("not-committed proof binds another Resource payload")
+        if proof.evidence.get("exactOriginalRetrySafe") is not True:
+            raise ResourceTransferError(
+                "not-committed evidence does not authorize exact original retry"
+            )

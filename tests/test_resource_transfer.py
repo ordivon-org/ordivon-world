@@ -12,6 +12,7 @@ from ordivon_world.resource_transfer import (
     PreparedResourceTransfer,
     ResourceTransferBundle,
     ResourceTransferError,
+    ResourceTransferNotCommitted,
     ResourceTransferOutcomeUnknown,
     ResourceTransferReceipt,
     ResourceTransferSuperseded,
@@ -95,6 +96,43 @@ class DurableDestination:
 
     def reconcile(self, plan: PreparedResourceTransfer) -> ResourceTransferReceipt | None:
         return self.receipts.get(plan.transfer_id)
+
+
+class ProvenNotCommittedDestination:
+    def __init__(self) -> None:
+        self.materializations = 0
+        self.proof_issued = False
+
+    def materialize(self, value: ResourceTransferBundle) -> ResourceTransferReceipt:
+        self.materializations += 1
+        if self.materializations == 1:
+            raise ResourceTransferOutcomeUnknown(
+                value.plan, RuntimeError("destination died before semantic commit")
+            )
+        return ResourceTransferReceipt(
+            transfer_id=value.plan.transfer_id,
+            plan_digest=value.plan.digest,
+            destination_world_id=value.plan.destination_world_id,
+            payload_digest=value.plan.payload_digest,
+            materialization_id="security-resource:retry-safe",
+            materialization_digest=sha256_digest(
+                {"payloadDigest": value.plan.payload_digest, "attempt": 2}
+            ),
+            destination_evidence={"authority": "test-destination"},
+        )
+
+    def reconcile(self, plan: PreparedResourceTransfer) -> ResourceTransferNotCommitted:
+        self.proof_issued = True
+        return ResourceTransferNotCommitted(
+            transfer_id=plan.transfer_id,
+            plan_digest=plan.digest,
+            destination_world_id=plan.destination_world_id,
+            payload_digest=plan.payload_digest,
+            evidence={
+                "authority": "test-destination",
+                "exactOriginalRetrySafe": True,
+            },
+        )
 
 
 class HostResourceTransferTests(unittest.TestCase):
@@ -252,6 +290,30 @@ class HostResourceTransferTests(unittest.TestCase):
                 storage.read_task_event(created.task_id).data["worldResourceTransferState"],
                 "unknown",
             )
+
+    def test_not_committed_proof_releases_unknown_for_exact_original_retry(self) -> None:
+        destination = ProvenNotCommittedDestination()
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage,
+                clock_ms=itertools.count(66_000).__next__,
+                owner_id="host:w2-not-committed",
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, bundle())
+            self.assertEqual(journal.deliver(created.task_id, destination).status, "unknown")
+            released = journal.reconcile(created.task_id, destination)
+            self.assertEqual(released.status, "prepared")
+            self.assertTrue(released.reconciled)
+            self.assertTrue(destination.proof_issued)
+            snapshot = storage.read_task_event(created.task_id)
+            self.assertEqual(snapshot.data["worldResourceTransferState"], "prepared")
+            self.assertIn("worldResourceTransferNotCommittedDigest", snapshot.data)
+            self.assertNotIn("worldResourceTransferUncertaintyObjectDigest", snapshot.data)
+            completed = journal.deliver(created.task_id, destination)
+            self.assertEqual(completed.status, "materialized")
+            self.assertEqual(destination.materializations, 2)
 
     def test_bundle_rejects_tampered_source_evidence_or_payload(self) -> None:
         valid = bundle()
