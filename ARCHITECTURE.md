@@ -2,12 +2,13 @@
 
 ## Purpose
 
-World is the boundary between Host-owned work semantics and independently authoritative environments. Two proven responsibility shapes now exist:
+World is the boundary between Host-owned work semantics and independently authoritative environments. The production package now contains one provider-adapter shape and three inter-World trajectory shapes:
 
 ```text
 external provider: Bind → Observe → Act → Reconcile
 inter-World Resource: Source Egress → Bind → Destination Ingress → Reconcile
 inter-World Message: Source Issuance → Bind → Destination Admission → Reconcile
+inter-World Entity: Source Departure → Bind Continuity → Destination Materialization → Reconcile
 ```
 
 It does not centralize all external systems into one World object. Each provider keeps its native request, operation, state and error model. World retains only the facts required to bind those provider facts to one Host Dispatch and continue the Task safely.
@@ -22,8 +23,9 @@ It does not centralize all external systems into one World object. Each provider
 | World provider adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
 | World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
 | World Message Delivery | cross-World Message identity, source-issuance/provenance/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination belief/knowledge/world-truth, global Message bus |
-| Source domain (Game first) | native source occurrence, egress policy and source-specific evidence | destination admission/materialization |
-| Destination domain (Security first) | ingress policy, transfer-specific admission, SampleVault materialization and `not_committed` proof | source-domain truth or cross-relay source authentication unless explicitly configured |
+| World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, global Presence database |
+| Source domain (Game first) | native source occurrence, egress/departure policy and source-specific evidence | portable cognition ownership, destination admission/materialization |
+| Destination domain (Security first) | ingress policy, Resource/Message admission, KVM Entity carrier materialization and native-substrate `not_committed` proof | source-domain truth, global Presence truth or cross-relay source authentication unless explicitly configured |
 | Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
 | Domain verifier | whether observed external facts satisfy the Task | provider transport or retry |
 
@@ -39,6 +41,8 @@ src/ordivon_world/
 ├── resource_wire.py    Resource destination wire mapping and failure classification
 ├── message_delivery.py Message issuance/delivery contracts and Host journal
 ├── message_wire.py     Message destination wire mapping and failure classification
+├── entity_migration.py Entity departure/migration contracts and Host journal
+├── entity_wire.py      Entity destination wire mapping and failure classification
 ├── schemas.py          local Draft 2020-12 Schema Registry
 ├── telemetry.py        W3C Trace Context validation and propagation
 ├── doctor.py           repository, installation and live health projection
@@ -111,6 +115,8 @@ worldDispatches[dispatchId]
 
 These maps are Host extension evidence/correlation storage, not an authority system. Host remains authoritative for Effect/Binding/Dispatch admission and Task-level work semantics. World therefore does not infer cross-trajectory concurrency policy from another trajectory being `unknown`.
 
+Entity Migration is also semantically identified by `migrationId`, but 0.4.0 deliberately retains one migration per Task. No real multi-migration Task failure has yet justified another map.
+
 Legacy flat Resource, Message and provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
 
 See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing.md).
@@ -119,7 +125,7 @@ See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing
 
 World has no database. Durable state is divided by authority:
 
-- Host CAS/Journal: prepared provider Dispatches plus Resource/Message plans, source authority receipts, payload/provenance, uncertainty / `not_committed` proofs and destination receipts;
+- Host CAS/Journal: prepared provider Dispatches plus Resource/Message/Entity plans, source authority receipts, payload/provenance/continuity, uncertainty / `not_committed` proofs and destination receipts;
 - R2: provider pending/committed request state, Receipt mirror and Artifact bytes;
 - Cloudflare control plane: Worker Version, Deployment, bindings and lifecycle;
 - local private storage: release, GC and acceptance receipts;
@@ -127,7 +133,7 @@ World has no database. Durable state is divided by authority:
 
 ## Contract boundary
 
-JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Resource Transfer and Message Delivery request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
+JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Resource Transfer, Message Delivery and Entity Migration request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
 
 See [`docs/contracts.md`](docs/contracts.md) and [`docs/compatibility.md`](docs/compatibility.md).
 

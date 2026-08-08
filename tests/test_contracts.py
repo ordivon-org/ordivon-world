@@ -5,6 +5,11 @@ import unittest
 from ordivon_world.canonical import sha256_digest
 from ordivon_world import (
     ContractError,
+    EntityDepartureAuthority,
+    EntityDepartureReceipt,
+    EntityMigrationBundle,
+    EntityMigrationNotCommitted,
+    EntityMigrationReceipt,
     MessageDeliveryBundle,
     MessageDeliveryNotCommitted,
     MessageDeliveryReceipt,
@@ -60,6 +65,27 @@ def resource_bundle(transfer_id: str) -> ResourceTransferBundle:
     return ResourceTransferBundle.create(source_egress=egress, payload=payload)
 
 
+def entity_bundle(migration_id: str) -> EntityMigrationBundle:
+    continuity = {"kind": "continuity", "entityId": "entity:w2:contract", "contextRef": "ctx:1"}
+    departure = EntityDepartureReceipt(
+        migration_id=migration_id,
+        entity_id="entity:w2:contract",
+        source_world_id="world:w2:A",
+        destination_world_id="security-world:w2:B",
+        source_occurrence_id=f"entity-departure:{migration_id}",
+        source_occurrence_digest=sha256_digest({"factId": f"fact:{migration_id}"}),
+        authority=EntityDepartureAuthority(
+            authority_id="source-authority:w2:A",
+            mechanism="contract-test-departure.v1",
+            evidence={"migrationId": migration_id},
+        ),
+    )
+    return EntityMigrationBundle.create_departed(
+        source_departure=departure,
+        continuity_payload=continuity,
+    )
+
+
 def message_bundle(message_id: str) -> MessageDeliveryBundle:
     provenance = {"kind": "message-provenance", "messageId": message_id}
     payload = {"kind": "message-payload", "value": message_id}
@@ -92,6 +118,12 @@ class ContractTests(unittest.TestCase):
             "browser-request",
             "edge-capabilities",
             "edge-receipt",
+            "entity-departure-receipt",
+            "entity-migration-destination-request",
+            "entity-migration-destination-response",
+            "entity-migration-not-committed",
+            "entity-migration-plan",
+            "entity-migration-receipt",
             "fetch-request",
             "message-delivery-destination-request",
             "message-delivery-destination-response",
@@ -138,6 +170,94 @@ class ContractTests(unittest.TestCase):
             evidence={"authority": "contract-test", "exactOriginalRetrySafe": True},
         )
         validate_contract("resource-transfer-not-committed", proof.to_dict())
+
+    def test_public_entity_models_validate_against_published_contracts(self) -> None:
+        bundle = entity_bundle("migration:w2:contract")
+        departure = EntityDepartureReceipt.from_dict(bundle.source_departure)
+        validate_contract("entity-departure-receipt", departure.to_dict())
+        validate_contract("entity-migration-plan", bundle.plan.to_dict())
+        receipt = EntityMigrationReceipt(
+            migration_id=bundle.plan.migration_id,
+            plan_digest=bundle.plan.digest,
+            entity_id=bundle.plan.entity_id,
+            destination_world_id=bundle.plan.destination_world_id,
+            source_departure_digest=bundle.plan.source_departure_digest,
+            materialization_id="entity-body:w2:contract",
+            materialization_digest="sha256:" + "6" * 64,
+            destination_evidence={
+                "authority": "security-kvm",
+                "continuityPayloadDigest": bundle.plan.continuity_payload_digest,
+            },
+        )
+        validate_contract("entity-migration-receipt", receipt.to_dict())
+        proof = EntityMigrationNotCommitted(
+            migration_id=bundle.plan.migration_id,
+            plan_digest=bundle.plan.digest,
+            entity_id=bundle.plan.entity_id,
+            destination_world_id=bundle.plan.destination_world_id,
+            source_departure_digest=bundle.plan.source_departure_digest,
+            continuity_payload_digest=bundle.plan.continuity_payload_digest,
+            evidence={
+                "authority": "security-kvm",
+                "exactOriginalRetrySafe": True,
+                "nativeSubstrateChecked": True,
+            },
+        )
+        validate_contract("entity-migration-not-committed", proof.to_dict())
+        validate_contract(
+            "entity-migration-destination-request",
+            {
+                "schemaVersion": 1,
+                "kind": "ordivon.world.entity-migration-destination-request",
+                "operation": "materialize",
+                "plan": bundle.plan.to_dict(),
+                "planDigest": bundle.plan.digest,
+                "sourceDeparture": bundle.source_departure,
+                "continuityPayload": bundle.continuity_payload,
+            },
+        )
+
+    def test_entity_reconcile_contract_forbids_departure_and_continuity_payload(self) -> None:
+        bundle = entity_bundle("migration:w2:reconcile")
+        for forbidden_field, value in (
+            ("sourceDeparture", bundle.source_departure),
+            ("continuityPayload", bundle.continuity_payload),
+        ):
+            with self.subTest(forbidden_field=forbidden_field), self.assertRaises(ContractError):
+                validate_contract(
+                    "entity-migration-destination-request",
+                    {
+                        "schemaVersion": 1,
+                        "kind": "ordivon.world.entity-migration-destination-request",
+                        "operation": "reconcile",
+                        "plan": bundle.plan.to_dict(),
+                        "planDigest": bundle.plan.digest,
+                        forbidden_field: value,
+                    },
+                )
+
+    def test_entity_not_committed_contract_requires_native_substrate_check(self) -> None:
+        bundle = entity_bundle("migration:w2:unsafe-proof")
+        with self.assertRaises(ContractError):
+            validate_contract(
+                "entity-migration-destination-response",
+                {
+                    "schemaVersion": 1,
+                    "kind": "ordivon.world.entity-migration-destination-response",
+                    "status": "not_committed",
+                    "migrationId": bundle.plan.migration_id,
+                    "planDigest": bundle.plan.digest,
+                    "entityId": bundle.plan.entity_id,
+                    "destinationWorldId": bundle.plan.destination_world_id,
+                    "sourceDepartureDigest": bundle.plan.source_departure_digest,
+                    "continuityPayloadDigest": bundle.plan.continuity_payload_digest,
+                    "evidence": {
+                        "authority": "unsafe-destination",
+                        "exactOriginalRetrySafe": True,
+                        "nativeSubstrateChecked": False,
+                    },
+                },
+            )
 
     def test_public_message_models_validate_against_published_contracts(self) -> None:
         bundle = message_bundle("message:w2:contract")

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/entity-departure-receipt.schema.json",
+  "title": "Ordivon World Entity Departure Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "migrationId",
+    "entityId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "sourceOccurrenceId",
+    "sourceOccurrenceDigest",
+    "authority"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.entity-departure-receipt"
+    },
+    "migrationId": {
+      "type": "string",
+      "pattern": "^migration:.+",
+      "maxLength": 512
+    },
+    "entityId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sourceWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sourceOccurrenceId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "sourceOccurrenceDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorityId",
+        "mechanism",
+        "evidence"
+      ],
+      "properties": {
+        "authorityId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "mechanism": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "evidence": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

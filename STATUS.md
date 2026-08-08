@@ -2,9 +2,9 @@
 
 ## Current release line
 
-Repository package version: `0.3.0`.
+Repository package version: `0.4.0`.
 
-The active source boundary consists of the Host-facing Cloudflare adapter, production Resource Transfer and Message Delivery contracts, Cloudflare Worker/provider operations, and private network condition tools. There is no independent World service.
+The active source boundary consists of the Host-facing Cloudflare adapter, production Resource Transfer, Message Delivery and Entity Migration contracts, Cloudflare Worker/provider operations, and private network condition tools. There is no independent World service.
 
 ## Capability status
 
@@ -16,13 +16,15 @@ The active source boundary consists of the Host-facing Cloudflare adapter, produ
 | private R2 Artifact reads | operational | provider and client digest, media-type, byte-count and download-contract tests |
 | deterministic Host Dispatch binding | verified | Python adapter, exact identity and Host integration tests |
 | response-loss fresh-Host recovery | verified | one provider POST, fresh Host Receipt lookup and preserved Task state |
-| W1 cross-World evidence program | completed | P0–P5 proved Resource/Entity/Message durability, UNKNOWN recovery, Link rebinding, federation composition, untrusted-relay provenance and independent concurrency; W2 promoted Resource and Message only after independent production integration |
+| W1 cross-World evidence program | completed | P0–P5 proved Resource/Entity/Message durability, UNKNOWN recovery, Link rebinding, federation composition, untrusted-relay provenance and independent concurrency; W2 promoted Resource, Message and Entity Migration only after independent production integration |
 | W2 Resource Transfer | production contract, cross-repository verified | Game retained/replayed source egress → World per-transfer durable Host journal/wire → Security transfer-specific ingress; crash-window `not_committed`, multi-transfer Task addressing and legacy flat-state recovery verified |
 | W2 Message Delivery | production contract, cross-repository verified | Game visible retained Fact issuance → World per-message Host journal/wire → Security management-classified durable inbox; both UNKNOWN branches, live-commit race, broadcast semantics and legacy flat-state recovery verified |
 | W2 Message endpoint/Link falsifier | first-class WorldLink not forced | pinned destination identity detected endpoint replacement; stable identity survived PID/socket rematerialization; signed discovery handled endpoint relocation without Link identity/lifecycle |
-| W2 Host trajectory addressing | verified across two production consumers | Resource uses `transferId`; provider extension uses Host `dispatchId`; partial UNKNOWN state is per trajectory; legacy flat Resource/provider state migrates on first mutation |
+| W2 Entity Migration | production contract, cross-repository and real-KVM verified | Game verified departure → World/Host exact continuity commitment → Security pre-body KVM fence and QMP-backed carrier; ACK-loss recovery, native `not_committed`, exact retry and historical-receipt/current-Presence separation verified |
+| W2 KVM migration recovery | provider substrate repaired and verified | unpersisted native launch evidence now fails closed; dead-controller Run state can be strictly loaded/claimed; live-owner takeover is rejected |
+| W2 Host trajectory addressing | evidence-driven, intentionally asymmetric | Resource/Message/provider use per-ID maps after reproduced multi-trajectory failures; Entity Migration retains one `migrationId` per Task because no multi-migration workload has forced a map |
 | live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
-| cross-language JSON Schema | verified | twenty packaged Draft 2020-12 Schemas; provider fixtures plus Game-produced Resource and Message authority documents validated across TypeScript/Python |
+| cross-language JSON Schema | verified | twenty-six packaged Draft 2020-12 Schemas; provider fixtures plus Game-produced Resource, Message and Entity departure authority documents validated across TypeScript/Python |
 | W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |
 | World doctor | operational | repository-only and live machine/provider modes; live aggregate status is `ok` |
 | Cloudflare GC source contract | operational | R2 List Objects uses `per_page` and cursor with focused tests |

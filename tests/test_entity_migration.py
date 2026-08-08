@@ -10,6 +10,7 @@ from ordivon_world.canonical import sha256_digest
 from ordivon_world.entity_migration import (
     EntityMigrationBundle,
     EntityMigrationError,
+    EntityMigrationNotCommitted,
     EntityMigrationOutcomeUnknown,
     EntityMigrationReceipt,
     EntityMigrationSuperseded,
@@ -225,6 +226,114 @@ class HostEntityMigrationTests(unittest.TestCase):
                 storage.read_task_event(created.task_id).data["worldEntityMigrationState"],
                 "unknown",
             )
+
+    def test_unknown_releases_only_after_native_checked_not_committed_proof(self) -> None:
+        value = bundle()
+
+        class Destination:
+            def __init__(self) -> None:
+                self.materializations = 0
+                self.reconciliations = 0
+
+            def materialize(self, current: EntityMigrationBundle) -> EntityMigrationReceipt:
+                self.materializations += 1
+                if self.materializations == 1:
+                    raise EntityMigrationOutcomeUnknown(
+                        current.plan,
+                        RuntimeError("ambiguous transport before destination native launch"),
+                    )
+                return EntityMigrationReceipt(
+                    migration_id=current.plan.migration_id,
+                    plan_digest=current.plan.digest,
+                    entity_id=current.plan.entity_id,
+                    destination_world_id=current.plan.destination_world_id,
+                    source_departure_digest=current.plan.source_departure_digest,
+                    materialization_id="entity-body:w2:not-committed",
+                    materialization_digest=sha256_digest(
+                        {"migrationId": current.plan.migration_id, "attempt": 2}
+                    ),
+                    destination_evidence={
+                        "authority": "security-kvm",
+                        "continuityPayloadDigest": current.plan.continuity_payload_digest,
+                    },
+                )
+
+            def reconcile(self, plan: PreparedEntityMigration):
+                self.reconciliations += 1
+                return EntityMigrationNotCommitted(
+                    migration_id=plan.migration_id,
+                    plan_digest=plan.digest,
+                    entity_id=plan.entity_id,
+                    destination_world_id=plan.destination_world_id,
+                    source_departure_digest=plan.source_departure_digest,
+                    continuity_payload_digest=plan.continuity_payload_digest,
+                    evidence={
+                        "authority": "security-kvm",
+                        "exactOriginalRetrySafe": True,
+                        "nativeSubstrateChecked": True,
+                        "nativeRunAbsent": True,
+                    },
+                )
+
+        destination = Destination()
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage,
+                clock_ms=itertools.count(56_000).__next__,
+                owner_id="host:w2-entity-not-committed",
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostEntityMigrationJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, value)
+            unknown = journal.materialize(created.task_id, destination)
+            self.assertEqual(unknown.status, "unknown")
+            released = journal.reconcile(created.task_id, destination)
+            self.assertEqual(released.status, "prepared")
+            self.assertTrue(released.reconciled)
+            snapshot = storage.read_task_event(created.task_id)
+            self.assertEqual(snapshot.data["worldEntityMigrationState"], "prepared")
+            self.assertIn("worldEntityMigrationNotCommittedDigest", snapshot.data)
+            self.assertIn("worldEntityMigrationNotCommittedObjectDigest", snapshot.data)
+            self.assertNotIn("worldEntityMigrationUncertaintyObjectDigest", snapshot.data)
+            completed = journal.materialize(created.task_id, destination)
+            self.assertEqual(completed.status, "materialized")
+            self.assertEqual(destination.materializations, 2)
+            self.assertEqual(destination.reconciliations, 1)
+
+    def test_not_committed_without_native_substrate_check_cannot_unlock_unknown(self) -> None:
+        value = bundle()
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage,
+                clock_ms=itertools.count(57_000).__next__,
+                owner_id="host:w2-entity-bad-proof",
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostEntityMigrationJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, value)
+            journal.record_unknown(created.task_id, value.plan, reason="ambiguous destination")
+            unsafe = EntityMigrationNotCommitted(
+                migration_id=value.plan.migration_id,
+                plan_digest=value.plan.digest,
+                entity_id=value.plan.entity_id,
+                destination_world_id=value.plan.destination_world_id,
+                source_departure_digest=value.plan.source_departure_digest,
+                continuity_payload_digest=value.plan.continuity_payload_digest,
+                evidence={
+                    "authority": "unsafe-destination",
+                    "exactOriginalRetrySafe": True,
+                    "nativeSubstrateChecked": False,
+                },
+            )
+            with self.assertRaisesRegex(
+                EntityMigrationError,
+                "did not check destination native materialization",
+            ):
+                journal.record_not_committed(created.task_id, value.plan, unsafe)
+            snapshot = storage.read_task_event(created.task_id)
+            self.assertEqual(snapshot.data["worldEntityMigrationState"], "unknown")
+            self.assertIn("worldEntityMigrationUncertaintyObjectDigest", snapshot.data)
+            self.assertNotIn("worldEntityMigrationNotCommittedDigest", snapshot.data)
 
     def test_bundle_tamper_fails_before_destination(self) -> None:
         valid = bundle()

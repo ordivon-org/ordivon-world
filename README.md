@@ -14,7 +14,7 @@ audience:
   - operator
   - agent
 updated: 2026-08-04
-summary: Recoverable external-provider adapters plus production cross-World Resource Transfer and Message Delivery contracts with explicit local authority and uncertainty recovery.
+summary: Recoverable external-provider adapters plus production cross-World Resource, Message and Entity Migration contracts with explicit local authority and uncertainty recovery.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -25,7 +25,7 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path and exposes two production inter-World trajectories: Resource Transfer and Message Delivery. Both preserve source/destination authority boundaries and durable uncertainty recovery without introducing a global World state owner.
+Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path and exposes three production inter-World trajectories: Resource Transfer, Message Delivery and Entity Migration. They preserve native source/destination authority and durable uncertainty recovery without introducing a global World or Presence state owner.
 
 ```text
 Host Task / Effect / Dispatch
@@ -74,6 +74,16 @@ A Host Task may retain multiple Message trajectories addressed by `messageId`. P
 
 The Message experiments did not force a first-class `WorldLink`: authenticated endpoint discovery and destination identity were sufficient across endpoint replacement, process/socket rematerialization and endpoint relocation.
 
+### Cross-World Entity Migration
+
+The Python package exposes `EntityDepartureReceipt`, `EntityMigrationBundle`, `HostEntityMigrationJournal`, `EntityMigrationWireDestination` and the packaged Entity Migration JSON contracts. The first production trajectory is Station Zero Game verified departure → Security Windows KVM continuity carrier.
+
+Game owns only source Presence departure; opaque continuity is retained by Host and delivered to the destination. Security durably binds the migration before native launch, stages continuity on an `ORDIVON_MIG` FAT volume, and uses KVM ledger/QMP evidence rather than Guest self-report as materialization authority.
+
+Migration `not_committed` is stronger than receipt absence: the destination must check native substrate state and explicitly prove `nativeSubstrateChecked=true` plus `exactOriginalRetrySafe=true`. Unresolved native launch evidence remains UNKNOWN and cannot authorize retry. A historical migration receipt does not claim current live Presence. See [`docs/w2-entity-migration-production.md`](docs/w2-entity-migration-production.md).
+
+Entity Migration remains one migration per Host Task in 0.4.0. No real workload has yet forced multi-migration Task addressing, Guest cognition activation, a global Presence database, or a first-class `WorldLink`.
+
 ### Host-facing Cloudflare adapter
 
 The Python package in `src/ordivon_world/` provides:
@@ -112,13 +122,13 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 
 ## Core rules
 
-1. **Native owners keep authority.** Source Worlds own egress facts, destination Worlds own ingress/materialization facts, and Host owns Task/uncertainty continuity.
+1. **Native owners keep authority.** Source Worlds own egress/departure facts, destination Worlds own ingress/materialization facts, and Host owns Task/uncertainty continuity.
 2. **Provider owns provider truth.** World maps exact provider identities and evidence; it does not reinterpret a successful provider response as Task completion.
 3. **Reconcile before redispatch.** A lost response creates UNKNOWN. Recovery queries the original provider request before another external action is considered.
 4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
 5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
 6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
-7. **Task identity is not trajectory identity.** Durable extension state is addressed by native semantic identity (`transferId` / `messageId` / `dispatchId`); addressing does not confer authority.
+7. **Task identity is not trajectory identity.** Trajectories retain native semantic identity (`transferId` / `messageId` / `migrationId` / `dispatchId`). Resource, Message and provider paths use per-ID maps after real multi-trajectory failures; Entity Migration remains one-per-Task until such a failure exists.
 8. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
 
 ## Development

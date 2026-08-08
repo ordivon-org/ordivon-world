@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/entity-migration-receipt.schema.json",
+  "title": "Ordivon World Entity Migration Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "migrationId",
+    "planDigest",
+    "entityId",
+    "destinationWorldId",
+    "sourceDepartureDigest",
+    "materializationId",
+    "materializationDigest",
+    "destinationEvidence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.entity-migration-receipt"
+    },
+    "migrationId": {
+      "type": "string",
+      "pattern": "^migration:.+",
+      "maxLength": 512
+    },
+    "planDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "entityId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sourceDepartureDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "materializationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "materializationDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "destinationEvidence": {
+      "type": "object"
+    }
+  }
+}

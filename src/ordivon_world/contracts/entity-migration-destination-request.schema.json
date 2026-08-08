@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/entity-migration-destination-request.schema.json",
+  "title": "Ordivon World Entity Migration Destination Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "operation",
+    "plan",
+    "planDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.entity-migration-destination-request"
+    },
+    "operation": {
+      "enum": [
+        "materialize",
+        "reconcile"
+      ]
+    },
+    "plan": {
+      "$ref": "https://ordivon.com/contracts/world/entity-migration-plan.schema.json"
+    },
+    "planDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sourceDeparture": {
+      "$ref": "https://ordivon.com/contracts/world/entity-departure-receipt.schema.json"
+    },
+    "continuityPayload": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "materialize"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "required": [
+          "sourceDeparture",
+          "continuityPayload"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "sourceDeparture"
+              ]
+            },
+            {
+              "required": [
+                "continuityPayload"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

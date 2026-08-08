@@ -16,6 +16,12 @@ Published schemas:
 | `world-prepared-dispatch` | durable Host-to-provider binding |
 | `world-observation` | provider Receipt mapped to Host evidence |
 | `network-observation` | future normalized read-only network condition evidence |
+| `entity-departure-receipt` | source-World authority for one exact local Presence departure |
+| `entity-migration-plan` | exact migration/entity/source/destination/departure/continuity identity |
+| `entity-migration-destination-request` | materialize/reconcile Entity destination request |
+| `entity-migration-destination-response` | materialized, not-committed, unknown or rejected response |
+| `entity-migration-receipt` | historical destination body-carrier materialization receipt |
+| `entity-migration-not-committed` | native-substrate proof that exact original migration retry is safe |
 | `message-issuance-receipt` | source-World issuance of one exact informational Message |
 | `message-delivery-plan` | exact source/destination/provenance/payload Message identity |
 | `message-delivery-destination-request` | deliver/reconcile destination wire request |
@@ -47,6 +53,18 @@ Contract validation proves structure and identity binding. It does **not** by it
 A Message `not_committed` proof is issued only under the exact destination message lock while no semantic admission record exists. World persists that proof before releasing UNKNOWN for an exact original retry.
 
 Contract validation proves structure and semantic binding. It does not authenticate source authority through an untrusted relay. The first production Security consumer declares a caller trust boundary; endpoint/source authentication remains deployment-specific until more real consumers force a shared mechanism.
+
+## Entity Migration contracts
+
+`EntityDepartureReceipt` is source-domain authority for one exact World-local Presence departure. The first Game producer binds a verified retained `extract` consequence and permits one migration identity per departure occurrence. The receipt does not claim ownership of portable cognition.
+
+`PreparedEntityMigration` binds the exact source departure digest and opaque continuity payload digest. Production materialization requires a typed departure receipt; reconciliation carries only the retained plan and never resends departure or continuity.
+
+`EntityMigrationNotCommitted` is stronger than semantic receipt absence. It must bind migration, plan, entity, destination, source departure and continuity payload, and explicitly require both `exactOriginalRetrySafe=true` and `nativeSubstrateChecked=true`. Unresolved native launch evidence therefore remains UNKNOWN.
+
+`EntityMigrationReceipt` records a historical destination materialization. It does not assert that the body or Presence is live at a later time.
+
+The first Security consumer uses a pre-body KVM ledger fence, an opaque `ORDIVON_MIG` continuity disk and QMP/native ledger evidence. Guest self-report is not migration authority. Structural source receipts still require independent authentication when crossing an untrusted relay.
 
 ## Deterministic identities
 

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/entity-migration-plan.schema.json",
+  "title": "Ordivon World Prepared Entity Migration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "migrationId",
+    "entityId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "sourceDepartureDigest",
+    "continuityPayloadDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.prepared-entity-migration"
+    },
+    "migrationId": {
+      "type": "string",
+      "pattern": "^migration:.+",
+      "maxLength": 512
+    },
+    "entityId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sourceWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sourceDepartureDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "continuityPayloadDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
