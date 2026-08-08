@@ -37,6 +37,7 @@ related:
 - [`operations.md`](operations.md) owns current commands and recovery procedures.
 - [`verification.md`](verification.md) owns evidence interpretation and gates.
 - [`w4-agency-authority-boundaries.md`](w4-agency-authority-boundaries.md) owns the cross-repository Agency/Authority decision: Presence is not authority, authority remains owner-scoped, source evidence does not become destination authority, and no global World capability/delegation service is justified by current evidence.
+- [`w5-agent-embodiment.md`](w5-agent-embodiment.md) owns the active W5-A research boundary: source Entity departure, continuity ownership, destination carrier materialization, active embodiment and current Presence remain distinct until experiments prove otherwise.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 
