@@ -472,7 +472,7 @@ def main() -> int:
     parser.add_argument("--security-root", type=Path, required=True)
     parser.add_argument("--base-manifest", type=Path, required=True)
     parser.add_argument("--security-state-root", type=Path, required=True)
-    parser.add_argument("--uv", type=Path, default=Path("/root/.local/bin/uv"))
+    parser.add_argument("--uv", type=Path, default=Path("/usr/bin/uv"))
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
