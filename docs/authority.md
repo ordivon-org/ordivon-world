@@ -36,6 +36,7 @@ related:
 - [`compatibility.md`](compatibility.md) owns supported revisions and migration expectations.
 - [`operations.md`](operations.md) owns current commands and recovery procedures.
 - [`verification.md`](verification.md) owns evidence interpretation and gates.
+- [`w4-agency-authority-boundaries.md`](w4-agency-authority-boundaries.md) owns the cross-repository Agency/Authority decision: Presence is not authority, authority remains owner-scoped, source evidence does not become destination authority, and no global World capability/delegation service is justified by current evidence.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 
