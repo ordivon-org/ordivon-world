@@ -55,6 +55,7 @@ class _HostTrajectoryJournal:
     terminal_state: ClassVar[str]
     terminal_fields: ClassVar[tuple[tuple[str, str], ...]]
     instances_field: ClassVar[str | None] = None
+    extra_instance_fields: ClassVar[tuple[str, ...]] = ()
 
     def __init__(self, port: HostExtensionPort) -> None:
         self.port = port
@@ -269,7 +270,9 @@ class _HostTrajectoryJournal:
             self.receipt_digest_field: digest,
             self.receipt_object_field: receipt_object.digest,
         }
-        entry_updates.update({field: getattr(receipt, attr) for field, attr in self.terminal_fields})
+        entry_updates.update(
+            {field: getattr(receipt, attr) for field, attr in self.terminal_fields}
+        )
         updates, remove_fields = self._mutation(
             current.data,
             plan,
@@ -361,7 +364,15 @@ class _HostTrajectoryJournal:
             raise self.error_type(f"{self.label} does not use multi-instance Host addressing")
         raw = data.get(self.instances_field)
         if raw is None:
-            return {}
+            legacy = self._legacy_entry(data)
+            if legacy is None:
+                return {}
+            identity = (
+                legacy.get(self.correlation_fields[0][0]) if self.correlation_fields else None
+            )
+            if not isinstance(identity, str) or not identity:
+                raise self.error_type(f"Legacy Host Task {self.label} identity is invalid")
+            return {identity: legacy}
         if not isinstance(raw, dict):
             raise self.error_type(f"Host Task {self.instances_field} must be an object")
         instances: dict[str, dict[str, Any]] = {}
@@ -370,6 +381,27 @@ class _HostTrajectoryJournal:
                 raise self.error_type(f"Host Task {self.instances_field} contains invalid entry")
             instances[identity] = dict(value)
         return instances
+
+    def _legacy_fields(self) -> tuple[str, ...]:
+        fields = [
+            self.state_field,
+            self.plan_digest_field,
+            self.plan_object_field,
+            self.receipt_digest_field,
+            self.receipt_object_field,
+            self.uncertainty_object_field,
+            *(field for field, _attr in self.correlation_fields),
+            *(slot.semantic_field for slot in self.slots),
+            *(slot.object_field for slot in self.slots),
+            *(field for field, _attr in self.terminal_fields),
+            *self.extra_instance_fields,
+        ]
+        return tuple(dict.fromkeys(fields))
+
+    def _legacy_entry(self, data: dict[str, Any]) -> dict[str, Any] | None:
+        if data.get(self.plan_digest_field) is None:
+            return None
+        return {field: data[field] for field in self._legacy_fields() if field in data}
 
     def _optional_entry(self, data: dict[str, Any], identity: str) -> dict[str, Any] | None:
         if self.instances_field is None:
@@ -434,7 +466,8 @@ class _HostTrajectoryJournal:
             entry.pop(field, None)
         entry.update(updates)
         instances[identity] = entry
-        return {self.instances_field: instances}, ()
+        legacy_remove = tuple(field for field in self._legacy_fields() if field in data)
+        return {self.instances_field: instances}, legacy_remove
 
     def _event_id(self, task_id: str, stage: str, revision: int) -> str:
         token = task_id.removeprefix("task:").replace(":", "-")

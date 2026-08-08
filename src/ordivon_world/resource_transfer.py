@@ -273,6 +273,10 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
 
     label = "World resource transfer"
     instances_field = "worldResourceTransfers"
+    extra_instance_fields = (
+        "worldResourceTransferNotCommittedDigest",
+        "worldResourceTransferNotCommittedObjectDigest",
+    )
     event_token = "world-resource"
     event_kind_prefix = "world.resource-transfer"
     state_field = "worldResourceTransferState"

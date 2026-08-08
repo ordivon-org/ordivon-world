@@ -198,3 +198,79 @@ class W2MultiResourceTaskTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class W2LegacyResourceUpgradeTests(unittest.TestCase):
+    def test_pre_p4_flat_resource_is_readable_and_first_new_transfer_migrates_atomically(
+        self,
+    ) -> None:
+        first = bundle(11)
+        second = bundle(12)
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage,
+                clock_ms=itertools.count(1_650_000).__next__,
+                owner_id="host:w2-p4-legacy",
+            )
+            created = kernel.create_task(
+                event_id="event:w2-p4-legacy:create",
+                kind=EventKind.TASK_CREATED,
+                task_id="task:w2-p4-legacy",
+                goal_id="goal:w2-p4-legacy",
+                payload={"scenario": "pre-p4-flat-resource"},
+                frontier=("node:w2-p4-legacy",),
+            ).projection
+            port = HostExtensionPort(storage, kernel)
+            source_object = port.put_object(
+                first.source_egress,
+                kind="world-resource-source-egress",
+            )
+            payload_object = port.put_object(
+                first.payload,
+                kind="world-resource-portable-payload",
+            )
+            plan_object = port.put_object(
+                first.plan.to_dict(),
+                kind="world-resource-transfer-plan",
+            )
+            port.append_preserving(
+                task_id=created.task_id,
+                expected_revision=created.revision,
+                event_id="event:w2-p4-legacy:flat",
+                kind=EventKind("world.resource-transfer-prepared"),
+                updates={
+                    "worldResourceTransferId": first.plan.transfer_id,
+                    "worldResourceTransferPlanDigest": first.plan.digest,
+                    "worldResourceTransferPlanObjectDigest": plan_object.digest,
+                    "worldResourceSourceEgressDigest": first.plan.source_egress_digest,
+                    "worldResourceSourceEgressObjectDigest": source_object.digest,
+                    "worldResourcePayloadDigest": first.plan.payload_digest,
+                    "worldResourcePayloadObjectDigest": payload_object.digest,
+                    "worldResourceTransferState": "prepared",
+                },
+                referenced_objects=(source_object, payload_object, plan_object),
+                label="World resource transfer",
+            )
+            journal = HostResourceTransferJournal(port)
+            self.assertEqual(journal.load_bundle(created.task_id), first)
+            self.assertEqual(journal.transfer_ids(created.task_id), (first.plan.transfer_id,))
+
+            # Preparing a distinct new transfer is the first mutation after upgrade.
+            # It must preserve the legacy trajectory while atomically removing flat fields.
+            journal.prepare(created.task_id, second)
+            snapshot = storage.read_task_event(created.task_id)
+            entries = snapshot.data["worldResourceTransfers"]
+            self.assertEqual(set(entries), {first.plan.transfer_id, second.plan.transfer_id})
+            self.assertEqual(
+                entries[first.plan.transfer_id]["worldResourceTransferPlanDigest"],
+                first.plan.digest,
+            )
+            self.assertEqual(
+                entries[second.plan.transfer_id]["worldResourceTransferPlanDigest"],
+                second.plan.digest,
+            )
+            self.assertNotIn("worldResourceTransferId", snapshot.data)
+            self.assertNotIn("worldResourceTransferPlanDigest", snapshot.data)
+            self.assertNotIn("worldResourcePayloadDigest", snapshot.data)
+            self.assertEqual(journal.load_bundle(created.task_id, first.plan.transfer_id), first)
+            self.assertEqual(journal.load_bundle(created.task_id, second.plan.transfer_id), second)
