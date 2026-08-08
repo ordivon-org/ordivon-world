@@ -272,6 +272,7 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
     """Durable resource transfer journal backed by Host's opaque extension port."""
 
     label = "World resource transfer"
+    instances_field = "worldResourceTransfers"
     event_token = "world-resource"
     event_kind_prefix = "world.resource-transfer"
     state_field = "worldResourceTransferState"
@@ -324,19 +325,40 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
         ("worldResourceMaterializationDigest", "materialization_digest"),
     )
 
+    def transfer_ids(self, task_id: str) -> tuple[str, ...]:
+        return self.identities(task_id)
+
+    def load_bundle(
+        self,
+        task_id: str,
+        transfer_id: str | None = None,
+    ) -> ResourceTransferBundle:
+        return super().load_bundle(task_id, transfer_id)
+
+    def load_receipt(
+        self,
+        task_id: str,
+        transfer_id: str | None = None,
+    ) -> ResourceTransferReceipt:
+        return super().load_receipt(task_id, transfer_id)
+
     def deliver(
         self,
         task_id: str,
         destination: ResourceTransferDestination,
+        *,
+        transfer_id: str | None = None,
     ) -> HostResourceTransferStep:
-        return self.execute(task_id, destination.materialize)
+        return self.execute(task_id, destination.materialize, transfer_id)
 
     def reconcile(
         self,
         task_id: str,
         destination: ResourceTransferDestination,
+        *,
+        transfer_id: str | None = None,
     ) -> HostResourceTransferStep:
-        bundle = self.load_bundle(task_id)
+        bundle = self.load_bundle(task_id, transfer_id)
         plan = bundle.plan
         current = self.port.load(task_id)
         retained = self._load_receipt_from_data(current.data, plan)
@@ -382,7 +404,8 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
                 retained,
                 True,
             )
-        if current.data.get(self.state_field) == "prepared":
+        entry = self._entry(current.data, plan)
+        if entry.get(self.state_field) == "prepared":
             return self._step(
                 task_id,
                 current.projection.revision,
@@ -391,24 +414,30 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
                 None,
                 True,
             )
-        if current.data.get(self.state_field) != "unknown":
+        if entry.get(self.state_field) != "unknown":
             raise ResourceTransferError(
                 "not-committed proof can only release an unknown Resource Transfer"
             )
         proof_value = proof.to_dict()
         proof_digest = sha256_digest(proof_value)
         proof_object = self.port.put_object(proof_value, kind=_NOT_COMMITTED_KIND)
-        committed = self.port.append_preserving(
-            task_id=task_id,
-            expected_revision=current.projection.revision,
-            event_id=self._event_id(task_id, "not-committed", current.projection.revision + 1),
-            kind=EventKind("world.resource-transfer-not-committed"),
-            updates={
+        updates, remove_fields = self._mutation(
+            current.data,
+            plan,
+            {
                 self.state_field: "prepared",
                 "worldResourceTransferNotCommittedDigest": proof_digest,
                 "worldResourceTransferNotCommittedObjectDigest": proof_object.digest,
             },
             remove_fields=(self.uncertainty_object_field,),
+        )
+        committed = self.port.append_preserving(
+            task_id=task_id,
+            expected_revision=current.projection.revision,
+            event_id=self._event_id(task_id, "not-committed", current.projection.revision + 1),
+            kind=EventKind("world.resource-transfer-not-committed"),
+            updates=updates,
+            remove_fields=remove_fields,
             referenced_objects=(*self._retained_objects(current.data, plan), proof_object),
             label=self.label,
         )

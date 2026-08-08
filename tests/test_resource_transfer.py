@@ -176,14 +176,28 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertEqual(snapshot.projection.ready_frontier, created.ready_frontier)
             self.assertEqual(snapshot.event_kind, EventKind("world.resource-transfer-prepared"))
             self.assertEqual(
-                snapshot.data["worldResourcePayloadDigest"], loaded.plan.payload_digest
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourcePayloadDigest"
+                ],
+                loaded.plan.payload_digest,
             )
             self.assertNotEqual(
-                snapshot.data["worldResourcePayloadObjectDigest"], loaded.plan.payload_digest
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourcePayloadObjectDigest"
+                ],
+                loaded.plan.payload_digest,
             )
-            self.assertEqual(snapshot.data["worldResourceTransferPlanDigest"], loaded.plan.digest)
+            self.assertEqual(
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourceTransferPlanDigest"
+                ],
+                loaded.plan.digest,
+            )
             self.assertNotEqual(
-                snapshot.data["worldResourceTransferPlanObjectDigest"], loaded.plan.digest
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourceTransferPlanObjectDigest"
+                ],
+                loaded.plan.digest,
             )
 
     def test_response_loss_reopens_host_and_reconciles_original_destination_commit(self) -> None:
@@ -208,7 +222,10 @@ class HostResourceTransferTests(unittest.TestCase):
                 self.assertEqual(destination.materializations, 1)
                 self.assertEqual(journal.load_receipt("task:w1-resource"), recovered.receipt)
                 snapshot = reopened.read_task_event("task:w1-resource")
-                self.assertNotIn("worldResourceTransferUncertaintyObjectDigest", snapshot.data)
+                self.assertNotIn(
+                    "worldResourceTransferUncertaintyObjectDigest",
+                    next(iter(snapshot.data["worldResourceTransfers"].values())),
+                )
 
     def test_known_receipt_prevents_second_destination_materialization(self) -> None:
         destination = DurableDestination()
@@ -225,16 +242,23 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertEqual(second.status, "materialized")
             self.assertEqual(destination.materializations, 1)
 
-    def test_same_task_cannot_silently_change_transfer_or_payload(self) -> None:
+    def test_distinct_transfer_identity_is_independent_but_same_identity_cannot_change_payload(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
             kernel = HostKernel(
                 storage, clock_ms=itertools.count(40_000).__next__, owner_id="host:w1"
             )
             created = self.create_task(storage, kernel)
             journal = HostResourceTransferJournal(HostExtensionPort(storage, kernel))
-            journal.prepare(created.task_id, bundle())
-            with self.assertRaises(ResourceTransferSuperseded):
-                journal.prepare(created.task_id, bundle(transfer_id="transfer:w1:other"))
+            first = bundle()
+            second = bundle(transfer_id="transfer:w1:other")
+            journal.prepare(created.task_id, first)
+            journal.prepare(created.task_id, second)
+            self.assertEqual(
+                journal.transfer_ids(created.task_id),
+                tuple(sorted((first.plan.transfer_id, second.plan.transfer_id))),
+            )
             changed = payload() | {"category": "changed"}
             with self.assertRaises(ResourceTransferSuperseded):
                 journal.prepare(created.task_id, bundle(body=changed))
@@ -261,8 +285,16 @@ class HostResourceTransferTests(unittest.TestCase):
             with self.assertRaises(ResourceTransferSuperseded):
                 journal.deliver(created.task_id, destination)
             snapshot = storage.read_task_event(created.task_id)
-            self.assertEqual(snapshot.data["worldResourceTransferState"], "prepared")
-            self.assertNotIn("worldResourceTransferReceiptDigest", snapshot.data)
+            self.assertEqual(
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourceTransferState"
+                ],
+                "prepared",
+            )
+            self.assertNotIn(
+                "worldResourceTransferReceiptDigest",
+                next(iter(snapshot.data["worldResourceTransfers"].values())),
+            )
 
     def test_reconcile_missing_never_materializes_or_redispatches(self) -> None:
         destination = DurableDestination()
@@ -297,7 +329,13 @@ class HostResourceTransferTests(unittest.TestCase):
                 journal.deliver(created.task_id, destination)
             self.assertEqual(destination.materializations, 1)
             self.assertEqual(
-                storage.read_task_event(created.task_id).data["worldResourceTransferState"],
+                next(
+                    iter(
+                        storage.read_task_event(created.task_id)
+                        .data["worldResourceTransfers"]
+                        .values()
+                    )
+                )["worldResourceTransferState"],
                 "unknown",
             )
 
@@ -318,9 +356,20 @@ class HostResourceTransferTests(unittest.TestCase):
             self.assertTrue(released.reconciled)
             self.assertTrue(destination.proof_issued)
             snapshot = storage.read_task_event(created.task_id)
-            self.assertEqual(snapshot.data["worldResourceTransferState"], "prepared")
-            self.assertIn("worldResourceTransferNotCommittedDigest", snapshot.data)
-            self.assertNotIn("worldResourceTransferUncertaintyObjectDigest", snapshot.data)
+            self.assertEqual(
+                next(iter(snapshot.data["worldResourceTransfers"].values()))[
+                    "worldResourceTransferState"
+                ],
+                "prepared",
+            )
+            self.assertIn(
+                "worldResourceTransferNotCommittedDigest",
+                next(iter(snapshot.data["worldResourceTransfers"].values())),
+            )
+            self.assertNotIn(
+                "worldResourceTransferUncertaintyObjectDigest",
+                next(iter(snapshot.data["worldResourceTransfers"].values())),
+            )
             completed = journal.deliver(created.task_id, destination)
             self.assertEqual(completed.status, "materialized")
             self.assertEqual(destination.materializations, 2)

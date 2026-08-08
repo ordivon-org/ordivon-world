@@ -246,9 +246,13 @@ class W1FailureSemanticsTests(unittest.TestCase):
                 journal.deliver("task:w1-p1-resource-rebind", old)
             self.assertEqual(backend.materializations, 0)
             self.assertEqual(
-                storage.read_task_event("task:w1-p1-resource-rebind").data[
-                    "worldResourceTransferState"
-                ],
+                next(
+                    iter(
+                        storage.read_task_event("task:w1-p1-resource-rebind")
+                        .data["worldResourceTransfers"]
+                        .values()
+                    )
+                )["worldResourceTransferState"],
                 "prepared",
             )
             delivered = journal.deliver(
