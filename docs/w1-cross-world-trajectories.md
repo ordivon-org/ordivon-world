@@ -410,6 +410,109 @@ Task B revision / execution / recovery
 
 No global World revision or coordinator is promoted.
 
+## W1 Promotion Review
+
+W1 is complete as an evidence program. Completion does not mean that every experimental type becomes public API.
+
+The original promotion gates were applied after P0–P5:
+
+1. at least two materially different real consumers require the semantics;
+2. deleting the candidate breaks a real trajectory or recreates a demonstrated failure;
+3. Host, Runtime, Harness or a native domain cannot own the responsibility more cleanly;
+4. the semantics hold across materially different semantic and physical materializations;
+5. failure injection changes the safe next action;
+6. extraction removes duplicated responsibility rather than adding imports;
+7. native Reality owners keep authority over their own facts and consequences.
+
+### Promoted as a retained internal mechanism
+
+`_HostTrajectoryJournal` passes the gates at the **internal implementation** level.
+
+Evidence:
+
+- Resource Transfer, Entity Migration and Message Delivery independently require the same prepare/CAS/uncertainty/original-operation-reconcile/receipt-retention mechanics;
+- the first extraction attempt was rejected because it increased production source size;
+- the compact extraction reduced the duplicated Resource+Entity implementation from 977 production lines to 890 lines including the helper, a net deletion of 87 lines;
+- Resource, Entity and Message modules retain zero direct `put_object`, `get_object`, `inspect_object`, `append_preserving` or `EventKind` Host mechanics;
+- P1 reproduced a real shared failure in which UNKNOWN could otherwise authorize a second destination execution, and the private helper is now the single fail-closed enforcement point;
+- the same mechanics survived Game→Security SampleVault, Game→Windows KVM, real netns/TCP Message, durable federation and multi-process concurrency tests;
+- the helper does not own native domain Reality, destination admission or trajectory-specific receipt semantics.
+
+The helper remains private because no external repository needs to program against this mechanism directly. Internal promotion means it is now a retained implementation boundary, not a disposable experiment.
+
+### Strong candidates that remain experimental and non-exported
+
+#### Resource Transfer
+
+Resource Transfer has the strongest end-to-end evidence:
+
+- real Station Zero extraction evidence;
+- Host restart and source-export deletion;
+- Security SampleVault materialization;
+- response-loss recovery;
+- Link rebinding;
+- native receipt reconstruction;
+- Reality drift after historical materialization.
+
+It remains non-exported because Game and Security currently import no W1 World contract. Public promotion would add an API without yet removing a production integration responsibility from another repository.
+
+#### Entity Migration
+
+Entity Migration has real Game departure evidence and real Windows KVM destination materialization, including source-departure admission and Guest/QMP/closure binding.
+
+It remains experimental because the destination integration is still an acceptance adapter rather than a production consumer, and W1 intentionally has not promoted a universal Presence model. Entity continuity is proven; a generic destination Presence contract is not.
+
+#### Message Delivery
+
+Message Delivery is the third materially different consumer of the internal durable mechanism. It has real netns/TCP delivery, response-loss recovery, Link rebinding, multi-hop composition and untrusted-relay provenance tests.
+
+It remains experimental because no production domain currently imports it and because delivery finality deliberately stops below destination-local Knowledge or Reality.
+
+### Promoted as stable W1 invariants, not shared datatypes
+
+The following rules are now strong enough to guide later World work even though no universal type is introduced:
+
+- semantic operation identity is distinct from Link binding / dispatch identity;
+- semantic/content digest is distinct from storage/CAS object identity;
+- UNKNOWN forbids blind execution and requires reconciliation of the original operation;
+- a retained terminal receipt proves historical consequence finality, not current Presence;
+- destination-specific native Reality determines whether a lost receipt can be reconstructed;
+- Entity continuity does not automatically transfer source-local position, lifecycle, inventory, capability or authority;
+- Message delivery does not imply claim verification, Knowledge promotion or Reality change;
+- hop authority is local and non-transitive;
+- end-to-end origin provenance across an untrusted relay must be independently verifiable when a consumer requires it;
+- multi-hop federation converges forward through independent hop receipts rather than a global rollback transaction;
+- independent trajectories use per-Task revisions and do not require a global World semantic head.
+
+### Not promoted
+
+W1 provides no evidence-based reason to add any of the following to the public product surface:
+
+- universal `World` / `WorldState`;
+- public `WorldLink` or global topology object;
+- public generic `Presence` datatype;
+- global World/federation revision or semantic head;
+- universal Resource identity;
+- automatic inventory, capability or authority transfer;
+- a distributed atomic migration/transfer transaction;
+- World-wide PKI or mandatory signature envelope;
+- a Federation coordinator or routing owner;
+- Security `ActorPresence` as generic Entity Presence;
+- Cloudflare `PreparedWorldDispatch` as a generic inter-World operation.
+
+### Release boundary after W1
+
+The current released/public World package remains the narrow Host↔external-provider adapter slice documented in `README.md` and `ARCHITECTURE.md`.
+
+W1 adds a **verified experimental inter-World trajectory slice** inside the repository. It is intentionally non-exported until a production integration in another repository depends on one of these contracts and extraction removes a real duplicated responsibility.
+
+This avoids two opposite errors:
+
+1. treating the old Cloudflare/provider slice as the final meaning of World;
+2. treating successful experiments as permission to publish a universal World framework prematurely.
+
+The next phase should therefore be production integration, not another abstraction pass.
+
 ## What W1 has not promoted
 
 W1-P0 does **not** establish any of the following as a public shared contract:
