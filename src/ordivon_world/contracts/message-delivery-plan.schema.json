@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/message-delivery-plan.schema.json",
+  "title": "Ordivon World Prepared Message Delivery",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "messageId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "messageKind",
+    "provenanceDigest",
+    "payloadDigest",
+    "sourceIssuance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.prepared-message-delivery"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^message:.+",
+      "maxLength": 512
+    },
+    "sourceWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "messageKind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "provenanceDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "payloadDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sourceIssuance": {
+      "$ref": "https://ordivon.com/contracts/world/message-issuance-receipt.schema.json"
+    }
+  }
+}

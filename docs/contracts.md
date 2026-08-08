@@ -16,6 +16,12 @@ Published schemas:
 | `world-prepared-dispatch` | durable Host-to-provider binding |
 | `world-observation` | provider Receipt mapped to Host evidence |
 | `network-observation` | future normalized read-only network condition evidence |
+| `message-issuance-receipt` | source-World issuance of one exact informational Message |
+| `message-delivery-plan` | exact source/destination/provenance/payload Message identity |
+| `message-delivery-destination-request` | deliver/reconcile destination wire request |
+| `message-delivery-destination-response` | delivered, not-committed, missing or rejected response |
+| `message-delivery-receipt` | historical destination Message admission receipt |
+| `message-delivery-not-committed` | destination proof that exact original Message retry is safe |
 | `resource-egress-receipt` | source-World admission of one exact Resource occurrence |
 | `resource-transfer-plan` | exact source/destination/payload transfer identity |
 | `resource-transfer-destination-request` | materialize/reconcile destination wire request |
@@ -31,6 +37,16 @@ Published schemas:
 A `not_committed` response is stronger than absence. It must bind the exact transfer/plan/destination/payload and explicitly state `exactOriginalRetrySafe=true`. World persists the proof before releasing UNKNOWN for the exact original retry.
 
 Contract validation proves structure and identity binding. It does **not** by itself authenticate a source authority across an untrusted relay. The first Security consumer declares a `caller-trust-boundary`; stronger deployments must independently verify source authority.
+
+## Message Delivery contracts
+
+`MessageIssuanceReceipt` is produced by the source domain and binds one immutable `messageId` to a source/destination pair, Message kind, provenance digest, payload digest and source occurrence. Unlike Resource custody, the source occurrence is not consumed: one retained Fact may authorize multiple independently identified Messages.
+
+`PreparedMessageDelivery` embeds the exact issuance receipt for production delivery. Security/destination admission is independent and management-classified; a delivery receipt proves Message-specific admission, not destination belief, knowledge or world-truth.
+
+A Message `not_committed` proof is issued only under the exact destination message lock while no semantic admission record exists. World persists that proof before releasing UNKNOWN for an exact original retry.
+
+Contract validation proves structure and semantic binding. It does not authenticate source authority through an untrusted relay. The first production Security consumer declares a caller trust boundary; endpoint/source authentication remains deployment-specific until more real consumers force a shared mechanism.
 
 ## Deterministic identities
 

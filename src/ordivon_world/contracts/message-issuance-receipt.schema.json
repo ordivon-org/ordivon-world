@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/message-issuance-receipt.schema.json",
+  "title": "Ordivon World Message Issuance Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "messageId",
+    "sourceWorldId",
+    "destinationWorldId",
+    "messageKind",
+    "provenanceDigest",
+    "payloadDigest",
+    "sourceOccurrenceId",
+    "sourceOccurrenceDigest",
+    "authority"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.message-issuance-receipt"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^message:.+",
+      "maxLength": 512
+    },
+    "sourceWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "messageKind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "provenanceDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "payloadDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sourceOccurrenceId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "sourceOccurrenceDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorityId",
+        "mechanism",
+        "evidence"
+      ],
+      "properties": {
+        "authorityId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "mechanism": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "evidence": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

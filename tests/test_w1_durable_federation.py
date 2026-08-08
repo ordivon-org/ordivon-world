@@ -171,11 +171,15 @@ class W1DurableFederationTests(unittest.TestCase):
             with self.assertRaises(ConnectionError):
                 bc.deliver("task:w1-p3-bc", c)
             self.assertEqual(
-                storage.read_task_event("task:w1-p3-ab").data["worldMessageDeliveryState"],
+                storage.read_task_event("task:w1-p3-ab").data["worldMessageDeliveries"][
+                    first_hop().plan.message_id
+                ]["worldMessageDeliveryState"],
                 "delivered",
             )
             self.assertEqual(
-                storage.read_task_event("task:w1-p3-bc").data["worldMessageDeliveryState"],
+                storage.read_task_event("task:w1-p3-bc").data["worldMessageDeliveries"][
+                    second_hop(up.receipt).plan.message_id
+                ]["worldMessageDeliveryState"],
                 "prepared",
             )
             self.assertEqual(b.deliveries, 1)

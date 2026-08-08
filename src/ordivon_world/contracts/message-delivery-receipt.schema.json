@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/message-delivery-receipt.schema.json",
+  "title": "Ordivon World Message Delivery Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "messageId",
+    "planDigest",
+    "destinationWorldId",
+    "payloadDigest",
+    "deliveryId",
+    "deliveryDigest",
+    "destinationEvidence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.message-delivery-receipt"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^message:.+",
+      "maxLength": 512
+    },
+    "planDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "destinationWorldId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "payloadDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "deliveryId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "deliveryDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "destinationEvidence": {
+      "type": "object"
+    }
+  }
+}

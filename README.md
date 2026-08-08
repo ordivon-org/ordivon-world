@@ -14,7 +14,7 @@ audience:
   - operator
   - agent
 updated: 2026-08-04
-summary: Recoverable external-provider adapters plus a production cross-World Resource Transfer contract with explicit source-egress and destination-ingress authority.
+summary: Recoverable external-provider adapters plus production cross-World Resource Transfer and Message Delivery contracts with explicit local authority and uncertainty recovery.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -25,7 +25,7 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path and now also exposes one production inter-World trajectory: Resource Transfer with source-egress authority, destination-ingress authority and durable uncertainty recovery.
+Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path and exposes two production inter-World trajectories: Resource Transfer and Message Delivery. Both preserve source/destination authority boundaries and durable uncertainty recovery without introducing a global World state owner.
 
 ```text
 Host Task / Effect / Dispatch
@@ -60,9 +60,19 @@ The Python package exposes `ResourceEgressReceipt`, `ResourceTransferBundle`, `H
 
 The source World must first issue an exact `ResourceEgressReceipt`; the destination then independently admits/materializes the transfer. A response loss remains UNKNOWN until the original destination operation is reconciled. A destination-authored, identity-bound `not_committed` proof may release UNKNOWN back to PREPARED for the exact original retry.
 
-The current Security CLI trusts its local caller to carry an authentic source-authority receipt. Untrusted-relay deployments require independent source-authority authentication; World 0.2 does not claim a universal PKI. See [`docs/w2-resource-transfer-production.md`](docs/w2-resource-transfer-production.md).
+The current Security CLI trusts its local caller to carry an authentic source-authority receipt. Untrusted-relay deployments require independent source-authority authentication; World does not claim a universal PKI. See [`docs/w2-resource-transfer-production.md`](docs/w2-resource-transfer-production.md).
 
 A Host Task may retain multiple Resource trajectories addressed by `transferId`. A Task with multiple trajectories requires explicit selection; implicit ambiguous lookup fails closed.
+
+### Cross-World Message Delivery
+
+The Python package exposes `MessageIssuanceReceipt`, `MessageDeliveryBundle`, `HostMessageDeliveryJournal`, `MessageDeliveryWireDestination` and the packaged Message JSON contracts. The first production trajectory is Station Zero Game → Security durable Message inbox.
+
+Game issues a Message only from a retained Fact visible to the issuing faction. Security independently admits the exact Message as management-classified information. Delivery does **not** promote the foreign claim into destination knowledge or world-truth. Response loss remains UNKNOWN until the original Message is reconciled; a destination-authored `not_committed` proof can release only that exact UNKNOWN Message for one exact original retry.
+
+A Host Task may retain multiple Message trajectories addressed by `messageId`. Pre-W2 flat Message state remains recoverable and migrates atomically on the first later mutation. See [`docs/w2-message-delivery-production.md`](docs/w2-message-delivery-production.md).
+
+The Message experiments did not force a first-class `WorldLink`: authenticated endpoint discovery and destination identity were sufficient across endpoint replacement, process/socket rematerialization and endpoint relocation.
 
 ### Host-facing Cloudflare adapter
 
@@ -108,7 +118,7 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
 5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
 6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
-7. **Task identity is not trajectory identity.** Durable extension state is addressed by native semantic identity (`transferId` / `dispatchId`); addressing does not confer authority.
+7. **Task identity is not trajectory identity.** Durable extension state is addressed by native semantic identity (`transferId` / `messageId` / `dispatchId`); addressing does not confer authority.
 8. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
 
 ## Development

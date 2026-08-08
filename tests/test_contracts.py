@@ -5,6 +5,11 @@ import unittest
 from ordivon_world.canonical import sha256_digest
 from ordivon_world import (
     ContractError,
+    MessageDeliveryBundle,
+    MessageDeliveryNotCommitted,
+    MessageDeliveryReceipt,
+    MessageIssuanceAuthority,
+    MessageIssuanceReceipt,
     ResourceEgressAuthority,
     ResourceEgressReceipt,
     ResourceTransferBundle,
@@ -55,6 +60,31 @@ def resource_bundle(transfer_id: str) -> ResourceTransferBundle:
     return ResourceTransferBundle.create(source_egress=egress, payload=payload)
 
 
+def message_bundle(message_id: str) -> MessageDeliveryBundle:
+    provenance = {"kind": "message-provenance", "messageId": message_id}
+    payload = {"kind": "message-payload", "value": message_id}
+    issuance = MessageIssuanceReceipt(
+        message_id=message_id,
+        source_world_id="world:w2:A",
+        destination_world_id="world:w2:B",
+        message_kind="contract-test-message",
+        provenance_digest=sha256_digest(provenance),
+        payload_digest=sha256_digest(payload),
+        source_occurrence_id=f"message-source:{message_id}",
+        source_occurrence_digest=sha256_digest({"factId": f"fact:{message_id}"}),
+        authority=MessageIssuanceAuthority(
+            authority_id="source-authority:w2:A",
+            mechanism="contract-test-message.v1",
+            evidence={"messageId": message_id},
+        ),
+    )
+    return MessageDeliveryBundle.create_issued(
+        source_issuance=issuance,
+        provenance=provenance,
+        payload=payload,
+    )
+
+
 class ContractTests(unittest.TestCase):
     def test_all_published_contracts_are_valid_draft_2020_12(self) -> None:
         names = (
@@ -63,6 +93,12 @@ class ContractTests(unittest.TestCase):
             "edge-capabilities",
             "edge-receipt",
             "fetch-request",
+            "message-delivery-destination-request",
+            "message-delivery-destination-response",
+            "message-delivery-not-committed",
+            "message-delivery-plan",
+            "message-delivery-receipt",
+            "message-issuance-receipt",
             "network-observation",
             "resource-egress-receipt",
             "resource-transfer-destination-request",
@@ -102,6 +138,57 @@ class ContractTests(unittest.TestCase):
             evidence={"authority": "contract-test", "exactOriginalRetrySafe": True},
         )
         validate_contract("resource-transfer-not-committed", proof.to_dict())
+
+    def test_public_message_models_validate_against_published_contracts(self) -> None:
+        bundle = message_bundle("message:w2:contract")
+        self.assertIsNotNone(bundle.plan.source_issuance)
+        validate_contract("message-issuance-receipt", bundle.plan.source_issuance.to_dict())
+        validate_contract("message-delivery-plan", bundle.plan.to_dict())
+        receipt = MessageDeliveryReceipt(
+            message_id=bundle.plan.message_id,
+            plan_digest=bundle.plan.digest,
+            destination_world_id=bundle.plan.destination_world_id,
+            payload_digest=bundle.plan.payload_digest,
+            delivery_id="message-admission:w2:contract",
+            delivery_digest="sha256:" + "4" * 64,
+            destination_evidence={"authority": "contract-test", "classification": "management"},
+        )
+        validate_contract("message-delivery-receipt", receipt.to_dict())
+        proof = MessageDeliveryNotCommitted(
+            message_id=bundle.plan.message_id,
+            plan_digest=bundle.plan.digest,
+            destination_world_id=bundle.plan.destination_world_id,
+            payload_digest=bundle.plan.payload_digest,
+            evidence={"authority": "contract-test", "exactOriginalRetrySafe": True},
+        )
+        validate_contract("message-delivery-not-committed", proof.to_dict())
+        validate_contract(
+            "message-delivery-destination-request",
+            {
+                "schemaVersion": 1,
+                "kind": "ordivon.world.message-delivery-destination-request",
+                "operation": "deliver",
+                "plan": bundle.plan.to_dict(),
+                "planDigest": bundle.plan.digest,
+                "provenance": bundle.provenance,
+                "payload": bundle.payload,
+            },
+        )
+
+    def test_message_reconcile_contract_forbids_delivery_payload_fields(self) -> None:
+        bundle = message_bundle("message:w2:reconcile")
+        with self.assertRaises(ContractError):
+            validate_contract(
+                "message-delivery-destination-request",
+                {
+                    "schemaVersion": 1,
+                    "kind": "ordivon.world.message-delivery-destination-request",
+                    "operation": "reconcile",
+                    "plan": bundle.plan.to_dict(),
+                    "planDigest": bundle.plan.digest,
+                    "payload": bundle.payload,
+                },
+            )
 
     def test_resource_reconcile_contract_forbids_materialize_payload_fields(self) -> None:
         bundle = resource_bundle("transfer:w2:reconcile")

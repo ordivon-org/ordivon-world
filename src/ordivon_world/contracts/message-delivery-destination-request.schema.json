@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/message-delivery-destination-request.schema.json",
+  "title": "Ordivon World Message Delivery Destination Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "operation",
+    "plan",
+    "planDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "ordivon.world.message-delivery-destination-request"
+    },
+    "operation": {
+      "enum": [
+        "deliver",
+        "reconcile"
+      ]
+    },
+    "plan": {
+      "$ref": "https://ordivon.com/contracts/world/message-delivery-plan.schema.json"
+    },
+    "planDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "provenance": {},
+    "payload": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "deliver"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "required": [
+          "provenance",
+          "payload"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "provenance"
+              ]
+            },
+            {
+              "required": [
+                "payload"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

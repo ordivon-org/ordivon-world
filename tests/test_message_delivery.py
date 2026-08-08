@@ -11,7 +11,10 @@ from ordivon_world.message_delivery import (
     HostMessageDeliveryJournal,
     MessageDeliveryBundle,
     MessageDeliveryError,
+    MessageDeliveryNotCommitted,
     MessageDeliveryOutcomeUnknown,
+    MessageIssuanceAuthority,
+    MessageIssuanceReceipt,
     MessageDeliveryReceipt,
     MessageDeliverySuperseded,
     PreparedMessageDelivery,
@@ -124,9 +127,10 @@ class HostMessageDeliveryTests(unittest.TestCase):
             snapshot = storage.read_task_event(created.task_id)
             self.assertEqual(snapshot.projection.state, created.state)
             self.assertEqual(snapshot.projection.ready_frontier, created.ready_frontier)
-            self.assertEqual(snapshot.data["worldMessageDeliveryState"], "prepared")
+            entry = snapshot.data["worldMessageDeliveries"][bundle().plan.message_id]
+            self.assertEqual(entry["worldMessageDeliveryState"], "prepared")
             self.assertNotEqual(
-                snapshot.data["worldMessagePayloadObjectDigest"], loaded.plan.payload_digest
+                entry["worldMessagePayloadObjectDigest"], loaded.plan.payload_digest
             )
 
     def test_response_loss_reopens_host_and_reconciles_delivery_without_second_send(self) -> None:
@@ -149,7 +153,8 @@ class HostMessageDeliveryTests(unittest.TestCase):
                 self.assertTrue(recovered.reconciled)
                 self.assertEqual(destination.deliveries, 1)
                 snapshot = reopened.read_task_event("task:w1-message")
-                self.assertEqual(snapshot.data["worldMessageDeliveryState"], "delivered")
+                entry = snapshot.data["worldMessageDeliveries"][bundle().plan.message_id]
+                self.assertEqual(entry["worldMessageDeliveryState"], "delivered")
                 self.assertEqual(snapshot.event_kind, EventKind("world.message-delivery-delivered"))
 
     def test_delivery_does_not_promote_foreign_claim_to_destination_knowledge(self) -> None:
@@ -214,10 +219,9 @@ class HostMessageDeliveryTests(unittest.TestCase):
             journal.prepare(created.task_id, good)
             with self.assertRaises(MessageDeliverySuperseded):
                 journal.deliver(created.task_id, destination)
-            self.assertEqual(
-                storage.read_task_event(created.task_id).data["worldMessageDeliveryState"],
-                "prepared",
-            )
+            snapshot = storage.read_task_event(created.task_id)
+            entry = snapshot.data["worldMessageDeliveries"][good.plan.message_id]
+            self.assertEqual(entry["worldMessageDeliveryState"], "prepared")
 
     def test_unknown_message_delivery_forbids_blind_redelivery_after_receipt_loss(self) -> None:
         destination = InboxDestination()
@@ -250,6 +254,190 @@ class HostMessageDeliveryTests(unittest.TestCase):
                 provenance=valid.provenance,
                 payload=payload() | {"claim": {"subject": "reactor", "state": "stable"}},
             )
+
+    def test_issued_bundle_derives_delivery_identity_from_source_authority(self) -> None:
+        provenance_value = provenance()
+        payload_value = payload()
+        issuance = MessageIssuanceReceipt(
+            message_id="message:w2:m5:issued",
+            source_world_id="world-instance:w2:m5:A",
+            destination_world_id="world-instance:w2:m5:B",
+            message_kind="test-issued-message",
+            provenance_digest=sha256_digest(provenance_value),
+            payload_digest=sha256_digest(payload_value),
+            source_occurrence_id="message-source:w2:m5:fact-1",
+            source_occurrence_digest=sha256_digest({"factId": "fact:w2:m5:1"}),
+            authority=MessageIssuanceAuthority(
+                authority_id="source-authority:w2:m5:A",
+                mechanism="retained-visible-fact.v1",
+                evidence={"factId": "fact:w2:m5:1", "verified": True},
+            ),
+        )
+        issued = MessageDeliveryBundle.create_issued(
+            source_issuance=issuance,
+            provenance=provenance_value,
+            payload=payload_value,
+        )
+        self.assertEqual(issued.plan.source_issuance, issuance)
+        self.assertEqual(issued.plan.message_id, issuance.message_id)
+        self.assertEqual(issued.plan.destination_world_id, issuance.destination_world_id)
+        self.assertEqual(issued.plan.to_dict()["sourceIssuance"], issuance.to_dict())
+        with self.assertRaises(ValueError):
+            MessageDeliveryBundle.create_issued(
+                source_issuance=issuance,
+                provenance=provenance_value,
+                payload=payload_value | {"sourceConfidence": "tampered"},
+            )
+
+    def test_one_task_can_retain_two_messages_and_ambiguous_lookup_fails_closed(self) -> None:
+        first = bundle(message_id="message:w2:m5:first")
+        second = bundle(message_id="message:w2:m5:second")
+        destination = InboxDestination()
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(87_000).__next__, owner_id="host:w2-m5"
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostMessageDeliveryJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, first)
+            journal.prepare(created.task_id, second)
+            self.assertEqual(
+                journal.message_ids(created.task_id),
+                tuple(sorted((first.plan.message_id, second.plan.message_id))),
+            )
+            with self.assertRaises(MessageDeliveryError):
+                journal.load_bundle(created.task_id)
+            with self.assertRaises(MessageDeliveryError):
+                journal.deliver(created.task_id, destination)
+            first_done = journal.deliver(
+                created.task_id, destination, message_id=first.plan.message_id
+            )
+            second_done = journal.deliver(
+                created.task_id, destination, message_id=second.plan.message_id
+            )
+            self.assertEqual(first_done.status, "delivered")
+            self.assertEqual(second_done.status, "delivered")
+            snapshot = storage.read_task_event(created.task_id)
+            entries = snapshot.data["worldMessageDeliveries"]
+            self.assertEqual(
+                entries[first.plan.message_id]["worldMessageDeliveryState"], "delivered"
+            )
+            self.assertEqual(
+                entries[second.plan.message_id]["worldMessageDeliveryState"], "delivered"
+            )
+
+    def test_unknown_message_can_be_released_only_by_exact_not_committed_proof(self) -> None:
+        value = bundle(message_id="message:w2:m5:not-committed")
+
+        class Destination:
+            def __init__(self) -> None:
+                self.deliveries = 0
+                self.proven_absent = False
+
+            def deliver(self, current: MessageDeliveryBundle) -> MessageDeliveryReceipt:
+                self.deliveries += 1
+                if self.deliveries == 1:
+                    raise MessageDeliveryOutcomeUnknown(
+                        current.plan,
+                        RuntimeError("ambiguous transport without destination commit"),
+                    )
+                return MessageDeliveryReceipt(
+                    message_id=current.plan.message_id,
+                    plan_digest=current.plan.digest,
+                    destination_world_id=current.plan.destination_world_id,
+                    payload_digest=current.plan.payload_digest,
+                    delivery_id="message-admission:w2:m5:not-committed",
+                    delivery_digest=sha256_digest({"delivery": current.plan.message_id}),
+                    destination_evidence={"authority": "test-destination"},
+                )
+
+            def reconcile(self, plan: PreparedMessageDelivery):
+                self.proven_absent = True
+                return MessageDeliveryNotCommitted(
+                    message_id=plan.message_id,
+                    plan_digest=plan.digest,
+                    destination_world_id=plan.destination_world_id,
+                    payload_digest=plan.payload_digest,
+                    evidence={
+                        "authority": "test-destination",
+                        "exactOriginalRetrySafe": True,
+                    },
+                )
+
+        destination = Destination()
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage,
+                clock_ms=itertools.count(86_500).__next__,
+                owner_id="host:w2-m5-not-committed",
+            )
+            created = self.create_task(storage, kernel)
+            journal = HostMessageDeliveryJournal(HostExtensionPort(storage, kernel))
+            journal.prepare(created.task_id, value)
+            self.assertEqual(
+                journal.deliver(created.task_id, destination).status,
+                "unknown",
+            )
+            released = journal.reconcile(created.task_id, destination)
+            self.assertEqual(released.status, "prepared")
+            self.assertTrue(released.reconciled)
+            entry = storage.read_task_event(created.task_id).data["worldMessageDeliveries"][
+                value.plan.message_id
+            ]
+            self.assertEqual(entry["worldMessageDeliveryState"], "prepared")
+            self.assertIn("worldMessageDeliveryNotCommittedDigest", entry)
+            self.assertNotIn("worldMessageDeliveryUncertaintyObjectDigest", entry)
+            completed = journal.deliver(created.task_id, destination)
+            self.assertEqual(completed.status, "delivered")
+            self.assertEqual(destination.deliveries, 2)
+            self.assertTrue(destination.proven_absent)
+
+    def test_pre_m5_flat_message_is_readable_and_first_new_message_migrates_atomically(
+        self,
+    ) -> None:
+        legacy = bundle(message_id="message:w2:m5:legacy")
+        current = bundle(message_id="message:w2:m5:new")
+        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
+            kernel = HostKernel(
+                storage, clock_ms=itertools.count(88_000).__next__, owner_id="host:w2-m5-legacy"
+            )
+            created = self.create_task(storage, kernel)
+            port = HostExtensionPort(storage, kernel)
+            provenance_object = port.put_object(
+                legacy.provenance, kind="world-message-source-provenance"
+            )
+            payload_object = port.put_object(legacy.payload, kind="world-message-payload")
+            plan_object = port.put_object(legacy.plan.to_dict(), kind="world-message-delivery-plan")
+            port.append_preserving(
+                task_id=created.task_id,
+                expected_revision=created.revision,
+                event_id="event:w2-m5:legacy-flat",
+                kind=EventKind("world.message-delivery-prepared"),
+                updates={
+                    "worldMessageId": legacy.plan.message_id,
+                    "worldMessageDeliveryPlanDigest": legacy.plan.digest,
+                    "worldMessageDeliveryPlanObjectDigest": plan_object.digest,
+                    "worldMessageProvenanceDigest": legacy.plan.provenance_digest,
+                    "worldMessageProvenanceObjectDigest": provenance_object.digest,
+                    "worldMessagePayloadDigest": legacy.plan.payload_digest,
+                    "worldMessagePayloadObjectDigest": payload_object.digest,
+                    "worldMessageDeliveryState": "prepared",
+                },
+                referenced_objects=(provenance_object, payload_object, plan_object),
+                label="World message delivery",
+            )
+            journal = HostMessageDeliveryJournal(port)
+            self.assertEqual(journal.load_bundle(created.task_id), legacy)
+            self.assertEqual(journal.message_ids(created.task_id), (legacy.plan.message_id,))
+            journal.prepare(created.task_id, current)
+            snapshot = storage.read_task_event(created.task_id)
+            entries = snapshot.data["worldMessageDeliveries"]
+            self.assertEqual(set(entries), {legacy.plan.message_id, current.plan.message_id})
+            self.assertNotIn("worldMessageId", snapshot.data)
+            self.assertNotIn("worldMessageDeliveryPlanDigest", snapshot.data)
+            self.assertNotIn("worldMessagePayloadDigest", snapshot.data)
+            self.assertEqual(journal.load_bundle(created.task_id, legacy.plan.message_id), legacy)
+            self.assertEqual(journal.load_bundle(created.task_id, current.plan.message_id), current)
 
 
 if __name__ == "__main__":

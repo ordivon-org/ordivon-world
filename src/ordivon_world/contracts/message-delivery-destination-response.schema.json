@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/message-delivery-destination-response.schema.json",
+  "title": "Ordivon World Message Delivery Destination Response",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "kind",
+        "status",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "ordivon.world.message-delivery-destination-response"
+        },
+        "status": {
+          "const": "delivered"
+        },
+        "receipt": {
+          "$ref": "https://ordivon.com/contracts/world/message-delivery-receipt.schema.json"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "kind",
+        "status",
+        "messageId",
+        "planDigest",
+        "destinationWorldId",
+        "payloadDigest",
+        "evidence"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "ordivon.world.message-delivery-destination-response"
+        },
+        "status": {
+          "const": "not_committed"
+        },
+        "messageId": {
+          "type": "string",
+          "pattern": "^message:.+",
+          "maxLength": 512
+        },
+        "planDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "destinationWorldId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "payloadDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "evidence": {
+          "type": "object",
+          "required": [
+            "authority",
+            "exactOriginalRetrySafe"
+          ],
+          "properties": {
+            "authority": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "exactOriginalRetrySafe": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "kind",
+        "status",
+        "messageId",
+        "planDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "ordivon.world.message-delivery-destination-response"
+        },
+        "status": {
+          "const": "missing"
+        },
+        "messageId": {
+          "type": "string",
+          "pattern": "^message:.+",
+          "maxLength": 512
+        },
+        "planDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "kind",
+        "status",
+        "code",
+        "reason"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "ordivon.world.message-delivery-destination-response"
+        },
+        "status": {
+          "const": "rejected"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ World is the boundary between Host-owned work semantics and independently author
 ```text
 external provider: Bind → Observe → Act → Reconcile
 inter-World Resource: Source Egress → Bind → Destination Ingress → Reconcile
+inter-World Message: Source Issuance → Bind → Destination Admission → Reconcile
 ```
 
 It does not centralize all external systems into one World object. Each provider keeps its native request, operation, state and error model. World retains only the facts required to bind those provider facts to one Host Dispatch and continue the Task safely.
@@ -20,6 +21,7 @@ It does not centralize all external systems into one World object. Each provider
 | Runtime | local Workspace, Job, process, cancellation and local Artifacts | remote provider success or domain truth |
 | World provider adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
 | World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
+| World Message Delivery | cross-World Message identity, source-issuance/provenance/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination belief/knowledge/world-truth, global Message bus |
 | Source domain (Game first) | native source occurrence, egress policy and source-specific evidence | destination admission/materialization |
 | Destination domain (Security first) | ingress policy, transfer-specific admission, SampleVault materialization and `not_committed` proof | source-domain truth or cross-relay source authentication unless explicitly configured |
 | Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
@@ -34,7 +36,9 @@ src/ordivon_world/
 ├── host.py             opaque Host extension persistence
 ├── resource_egress.py  source-World Resource Egress contract
 ├── resource_transfer.py durable Resource Transfer / Host journal
-├── resource_wire.py    destination wire mapping and failure classification
+├── resource_wire.py    Resource destination wire mapping and failure classification
+├── message_delivery.py Message issuance/delivery contracts and Host journal
+├── message_wire.py     Message destination wire mapping and failure classification
 ├── schemas.py          local Draft 2020-12 Schema Registry
 ├── telemetry.py        W3C Trace Context validation and propagation
 ├── doctor.py           repository, installation and live health projection
@@ -101,12 +105,13 @@ Host Task identity is not used as the semantic identity of a World extension tra
 
 ```text
 worldResourceTransfers[transferId]
+worldMessageDeliveries[messageId]
 worldDispatches[dispatchId]
 ```
 
 These maps are Host extension evidence/correlation storage, not an authority system. Host remains authoritative for Effect/Binding/Dispatch admission and Task-level work semantics. World therefore does not infer cross-trajectory concurrency policy from another trajectory being `unknown`.
 
-Pre-0.2.1 flat Resource/provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
+Legacy flat Resource, Message and provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
 
 See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing.md).
 
@@ -114,7 +119,7 @@ See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing
 
 World has no database. Durable state is divided by authority:
 
-- Host CAS/Journal: prepared Dispatches plus Resource plans, egress receipts, portable payloads, uncertainty / `not_committed` proofs and destination receipts;
+- Host CAS/Journal: prepared provider Dispatches plus Resource/Message plans, source authority receipts, payload/provenance, uncertainty / `not_committed` proofs and destination receipts;
 - R2: provider pending/committed request state, Receipt mirror and Artifact bytes;
 - Cloudflare control plane: Worker Version, Deployment, bindings and lifecycle;
 - local private storage: release, GC and acceptance receipts;
@@ -122,7 +127,7 @@ World has no database. Durable state is divided by authority:
 
 ## Contract boundary
 
-JSON Schema Draft 2020-12 is the machine-readable authority for public provider and Resource Transfer request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
+JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Resource Transfer and Message Delivery request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
 
 See [`docs/contracts.md`](docs/contracts.md) and [`docs/compatibility.md`](docs/compatibility.md).
 
