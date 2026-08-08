@@ -260,6 +260,65 @@ Message Delivery reuses the private `_HostTrajectoryJournal` without direct Host
 
 The third consumer did not force a public `WorldTrajectory` protocol. It forced only one internal correction: terminal vocabulary belongs to each trajectory, while prepare/uncertainty/original-operation reconciliation/receipt retention are shared mechanics.
 
+## P3 — Durable Multi-Hop Federation
+
+P3 tested whether A→B→C required a new federation owner. It did not.
+
+Two independent durable Message Delivery trajectories were sufficient:
+
+```text
+A → B
+  hop message identity AB
+  AB receipt
+        ↓ upstream receipt digest in provenance
+B → C
+  hop message identity BC
+  BC receipt
+```
+
+The same end-to-end message identity was carried as message content/provenance, but it did not replace either hop's semantic identity.
+
+### Partial failure and forward convergence
+
+A three-namespace physical acceptance established two distinct links, A↔B and B↔C, with no A→C route. A→B committed first. B→C was then made unavailable.
+
+The result was intentionally partial:
+
+```text
+A→B = delivered
+B→C = prepared / unavailable
+```
+
+The upstream delivery was not rolled back. After the B↔C endpoints were replaced, the downstream hop committed once and its response was dropped. Host was then reopened and B↔C was replaced again. Recovery reconciled the original C receipt with zero second C deliveries.
+
+A↔B retained the same native binding throughout both B↔C replacements. No global federation revision or global World head was needed.
+
+### Hop authority is not transitive
+
+The C receipt identified B as its native source World. A survived only as relay provenance:
+
+- `originWorldClaim=A`;
+- `upstreamReceiptDigest=<A→B receipt digest>`.
+
+Therefore durable federation preserves the W0 authority result:
+
+```text
+A ↔ B
+B ↔ C
+
+ does not imply
+
+A ↔ C authority
+```
+
+The upstream receipt digest correlates evidence across hops, but by itself does not make A's claimed origin authoritative at C. Strong end-to-end provenance is a separate problem.
+
+### No federation module promoted
+
+P3 added only reproducible composition tests. No `Federation`, `WorldGraph`, global routing table, global revision, or cross-hop coordinator was added to production code.
+
+The current evidence favors federation as composition of independently durable hop semantics until a later failure demonstrates a responsibility that no hop can own locally.
+
 ## What W1 has not promoted
 
 W1-P0 does **not** establish any of the following as a public shared contract:
@@ -295,10 +354,10 @@ A W1 mechanism becomes a stable public World contract only if later real consume
 
 Useful next falsifiers include:
 
-1. multi-hop federation where each hop has independent durable admission and receipt state;
-2. destination rematerialization where World continuity survives but native body identity changes;
-3. end-to-end provenance that must survive an untrusted or compromised relay;
-4. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
-5. a non-Security physical destination that independently forces the same boundary semantics.
+1. end-to-end provenance that must survive an untrusted or compromised relay;
+2. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
+3. destination rematerialization where World continuity survives but native body identity changes;
+4. a non-Security physical destination that independently forces the same boundary semantics;
+5. dynamic federation discovery where a responsibility cannot be owned by pairwise links alone.
 
 Until those tests force a broader contract, the W1 modules remain experimental and non-exported.
