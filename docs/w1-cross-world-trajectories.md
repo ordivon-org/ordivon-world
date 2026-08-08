@@ -373,6 +373,43 @@ Different deployments may obtain end-to-end evidence through signatures, shared 
 
 A common cryptographic contract should be promoted only after multiple real consumers force the same trust and key-lifecycle semantics.
 
+## P5 — Concurrent Independent Trajectories
+
+P5 tested whether independently durable cross-World trajectories require one global World revision, lock or semantic head.
+
+The permanent stress test creates 18 independent Host Tasks and runs six Resource Transfers, six Entity Migrations and six Message Deliveries through separate worker processes against the same Host persistence root. Destination effects use create-only files so duplicate consequences cannot be hidden by overwrite.
+
+The concurrent phase intentionally mixes direct terminal outcomes, response-loss UNKNOWN outcomes and local same-identity semantic conflicts.
+
+Observed results:
+
+- all 18 worker trajectories completed their concurrent prepare/execute phase without SQLite lock failures, CAS races or cross-Task revision conflicts;
+- six trajectories entered UNKNOWN after a destination commit and lost response;
+- twelve reached their trajectory-local terminal state directly;
+- every deliberately changed same-identity plan was rejected locally without changing another Task;
+- recovery converged all six UNKNOWN trajectories from retained destination receipts without creating another destination effect;
+- each direct terminal Task ended at Host revision 3 and each recovered UNKNOWN Task at revision 4;
+- the destination contained exactly 18 effect files and 18 receipts;
+- no Task acquired a `worldGlobalHead`, `worldGlobalRevision` or `worldFederationRevision` field.
+
+The same multi-process stress was repeated five consecutive times successfully.
+
+One test-harness mistake also clarified a Host boundary: a recovery process initially used a clock lower than prior workers, so Host correctly treated existing transition leases as not yet expired. Recovery succeeded once the replacement process preserved monotonic time. This is a Host lease/time invariant, not evidence for a World-global semantic head.
+
+P5 therefore distinguishes mechanical serialization from semantic centralization:
+
+```text
+shared SQLite one-writer mechanics may serialize writes
+
+but
+
+Task A revision / UNKNOWN / conflict
+  does not fence
+Task B revision / execution / recovery
+```
+
+No global World revision or coordinator is promoted.
+
 ## What W1 has not promoted
 
 W1-P0 does **not** establish any of the following as a public shared contract:
@@ -408,10 +445,10 @@ A W1 mechanism becomes a stable public World contract only if later real consume
 
 Useful next falsifiers include:
 
-1. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
-2. destination rematerialization where World continuity survives but native body identity changes;
-3. a non-Security physical destination that independently forces the same boundary semantics;
-4. dynamic federation discovery where a responsibility cannot be owned by pairwise links alone;
-5. a second real consumer that forces common end-to-end trust and key-lifecycle semantics.
+1. destination rematerialization where World continuity survives but native body identity changes;
+2. a non-Security physical destination that independently forces the same boundary semantics;
+3. dynamic federation discovery where a responsibility cannot be owned by pairwise links alone;
+4. a second real consumer that forces common end-to-end trust and key-lifecycle semantics;
+5. a production integration that makes another repository depend on the candidate contract rather than only acceptance adapters.
 
 Until those tests force a broader contract, the W1 modules remain experimental and non-exported.
