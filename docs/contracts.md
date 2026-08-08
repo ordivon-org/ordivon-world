@@ -60,11 +60,11 @@ Contract validation proves structure and semantic binding. It does not authentic
 
 `PreparedEntityMigration` binds the exact source departure digest and opaque continuity payload digest. Production materialization requires a typed departure receipt; reconciliation carries only the retained plan and never resends departure or continuity.
 
-`EntityMigrationNotCommitted` is stronger than semantic receipt absence. It must bind migration, plan, entity, destination, source departure and continuity payload, and explicitly require both `exactOriginalRetrySafe=true` and `nativeSubstrateChecked=true`. Unresolved native launch evidence therefore remains UNKNOWN.
+`EntityMigrationNotCommitted` is stronger than semantic receipt absence. It must bind migration, plan, entity, destination, source departure and continuity payload, and explicitly require both `exactOriginalRetrySafe=true` and `nativeSubstrateChecked=true`. The first Security consumer may issue that proof after a dead, provably body-free staged or TPM-only preparation is compensated to zero residuals. Ambiguous QEMU launch evidence remains UNKNOWN even when no QEMU PID was durably published.
 
-`EntityMigrationReceipt` records a historical destination materialization. It does not assert that the body or Presence is live at a later time.
+`EntityMigrationReceipt` records a historical destination materialization. It does not assert that the body or Presence is live at a later time. Current recovery may repair publication after independent physical re-observation, but it does not rewrite predecessor ownership or replay an Entity body merely because a durable ledger exists.
 
-The first Security consumer uses a pre-body KVM ledger fence, an opaque `ORDIVON_MIG` continuity disk and QMP/native ledger evidence. Guest self-report is not migration authority. Structural source receipts still require independent authentication when crossing an untrusted relay.
+The first Security consumer uses a pre-body KVM ledger fence, an opaque `ORDIVON_MIG` continuity disk and QMP/native evidence. Guest self-report is not migration authority. The first accepted production profile is a trusted local owner-originated caller: Game proves departure from retained native state and can re-read the same receipt in a fresh process, while Security still declares `sourceAuthorityAuthentication=caller-trust-boundary`. Structural source receipts do not authenticate themselves through an untrusted relay, and World does not translate them into destination authority.
 
 ## Deterministic identities
 

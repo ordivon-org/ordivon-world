@@ -23,9 +23,9 @@ It does not centralize all external systems into one World object. Each provider
 | World provider adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
 | World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
 | World Message Delivery | cross-World Message identity, source-issuance/provenance/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination belief/knowledge/world-truth, global Message bus |
-| World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, global Presence database |
+| World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, source-authority translation, global Presence database |
 | Source domain (Game first) | native source occurrence, egress/departure policy and source-specific evidence | portable cognition ownership, destination admission/materialization |
-| Destination domain (Security first) | ingress policy, Resource/Message admission, KVM Entity carrier materialization and native-substrate `not_committed` proof | source-domain truth, global Presence truth or cross-relay source authentication unless explicitly configured |
+| Destination domain (Security first) | ingress policy, Resource/Message admission, KVM Entity carrier materialization, physical re-observation/compensation and native-substrate `not_committed` proof | source-domain truth, global Presence truth or cross-relay source authentication unless explicitly configured |
 | Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
 | Domain verifier | whether observed external facts satisfy the Task | provider transport or retry |
 
