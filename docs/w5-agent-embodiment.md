@@ -113,6 +113,33 @@ A1 does **not** prove active embodiment. The current Security destination delibe
 
 A1 also does not prove current Presence. Historical materialization remains historical evidence.
 
+## A2 falsifier: active controller attribution is not embodiment
+
+Game supplies the complementary failure mode to Security. Station Zero Actors can be `controllerKind = "agent"`, and each `StationZeroV3AgentDecision` retains the `providerId` that produced the decision. This is real active agency through a domain-owned Actor, but it still does not establish a durable continuity subject.
+
+A bounded two-turn probe reopened one Station Zero run with two different provider identities. Five Actors remained active across both planning generations. In generation one all five decisions were attributed to `provider:w5a:alpha`; in generation two all five were attributed to `provider:w5a:mallory`. Game accepted the second planning generation without any durable continuity-subject admission because the current product contract never claims that `providerId` is Agent identity.
+
+Therefore:
+
+```text
+active Actor
++ controllerKind = agent
++ provider attribution
+!=
+continuity-subject embodiment
+```
+
+This is not a Game defect. Provider identity answers which implementation produced a bounded decision. Treating it as persistent Agent identity would create the exact identity conflation W5-A is trying to avoid.
+
+Together, Security and Game now expose opposite halves of the missing relation:
+
+```text
+Security: destination carrier exists, continuity subject is not activated
+Game:     active Agent-controlled body exists, continuity subject is not identified/admitted
+```
+
+A production Embodiment abstraction is justified only if a destination domain needs to close this relation in its actual action-admission path.
+
 ## Current W5-A decomposition
 
 The experiments currently force five distinct concepts:
@@ -145,6 +172,10 @@ The ownership hypothesis is:
 Do not add a production `AgentIdentity`, `EmbodimentBinding` or Presence registry yet.
 
 A production contract is justified only if a real active destination requires the same owner-separated binding and the experiment proves that it prevents an otherwise reproduced identity/continuity confusion. A second materially different domain should consume the same semantics before World turns the candidate into a shared abstraction.
+
+## Evidence
+
+[`../evidence/acceptance/w5a-embodiment-binding-d322947.json`](../evidence/acceptance/w5a-embodiment-binding-d322947.json) is the commit-bound A0/A1 receipt. It uses Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5` and World research revision `d322947b891cf67749e879ca0c94663b8e067ce2`. The receipt records the conflicting-payload baseline, three rejected substitutions and the explicit decision not to promote a production contract.
 
 ## Next experiment
 
