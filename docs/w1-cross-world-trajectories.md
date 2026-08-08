@@ -319,6 +319,60 @@ P3 added only reproducible composition tests. No `Federation`, `WorldGraph`, glo
 
 The current evidence favors federation as composition of independently durable hop semantics until a later failure demonstrates a responsibility that no hop can own locally.
 
+## P4 — Untrusted Relay and End-to-End Provenance
+
+P3 deliberately left one question unresolved: C can authenticate B as its native hop source, but `originWorldClaim=A` is still only data supplied by B.
+
+P4 treated B as a relay that may rewrite provenance.
+
+### Hop authority and end-to-end origin are different coordinates
+
+A test-only authenticated origin statement bound:
+
+- end-to-end message identity;
+- origin World identity;
+- payload content;
+- source-evidence digest.
+
+B then relayed that evidence to C while remaining the native B→C hop source.
+
+The results were:
+
+```text
+C native hop source       = B
+B unsigned origin claim   = mutable / may lie
+verified origin statement = A
+```
+
+Changing B's unsigned `originWorldClaim` did not change the independently verified origin. Changing the authenticated origin statement or payload invalidated verification.
+
+The repository test uses standard-library HMAC only as a dependency-free verifier model. A separate physical-tool acceptance used OpenSSL 3.6.3 Ed25519 with a fresh ephemeral keypair. The valid 64-byte Ed25519 signature verified; changing the signed payload caused verification failure.
+
+No private key or generated key material was retained.
+
+### Verification still is not destination truth
+
+End-to-end origin verification establishes integrity/authenticity of a statement relative to a trust rule. It does not establish that the statement is true in C's native Reality and does not automatically promote it into C-local Knowledge.
+
+Therefore:
+
+```text
+hop admission
+  ≠ end-to-end origin verification
+  ≠ claim verification against destination Reality
+  ≠ destination Knowledge promotion
+```
+
+### No World PKI promoted
+
+P4 does not introduce a World-wide PKI, signature envelope, trust graph or mandatory cryptographic identity system.
+
+Different deployments may obtain end-to-end evidence through signatures, shared trust material, independently reachable evidence stores, hardware identity, provider receipts, or other mechanisms. The invariant forced by P4 is narrower:
+
+> If a consumer requires end-to-end provenance across an untrusted relay, the origin claim must be independently verifiable; hop identity and relay-supplied origin metadata are insufficient.
+
+A common cryptographic contract should be promoted only after multiple real consumers force the same trust and key-lifecycle semantics.
+
 ## What W1 has not promoted
 
 W1-P0 does **not** establish any of the following as a public shared contract:
@@ -354,10 +408,10 @@ A W1 mechanism becomes a stable public World contract only if later real consume
 
 Useful next falsifiers include:
 
-1. end-to-end provenance that must survive an untrusted or compromised relay;
-2. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
-3. destination rematerialization where World continuity survives but native body identity changes;
-4. a non-Security physical destination that independently forces the same boundary semantics;
-5. dynamic federation discovery where a responsibility cannot be owned by pairwise links alone.
+1. concurrent independent trajectories whose receipts and recovery paths must not accidentally serialize through one global World head;
+2. destination rematerialization where World continuity survives but native body identity changes;
+3. a non-Security physical destination that independently forces the same boundary semantics;
+4. dynamic federation discovery where a responsibility cannot be owned by pairwise links alone;
+5. a second real consumer that forces common end-to-end trust and key-lifecycle semantics.
 
 Until those tests force a broader contract, the W1 modules remain experimental and non-exported.

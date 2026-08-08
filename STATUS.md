@@ -16,7 +16,7 @@ The active source boundary consists of one Host-facing Cloudflare adapter, the C
 | private R2 Artifact reads | operational | provider and client digest, media-type, byte-count and download-contract tests |
 | deterministic Host Dispatch binding | verified | Python adapter, exact identity and Host integration tests |
 | response-loss fresh-Host recovery | verified | one provider POST, fresh Host Receipt lookup and preserved Task state |
-| W1 durable cross-World Resource Transfer, Entity Migration, Message Delivery and multi-hop composition | experimental, locally verified through P3 | real Game evidence, Host restart, UNKNOWN no-redispatch, Link rebinding, Security SampleVault/KVM materialization, Message delivery without knowledge promotion, and A→B→C forward convergence without a global federation head; modules remain non-exported |
+| W1 durable cross-World Resource Transfer, Entity Migration, Message Delivery and federation composition | experimental, locally verified through P4 | includes Host restart/UNKNOWN recovery, Link rebinding, Security SampleVault/KVM materialization, Message delivery without knowledge promotion, A→B→C forward convergence, and independently verifiable provenance across an untrusted relay; modules remain non-exported |
 | live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
 | cross-language JSON Schema | verified | eight packaged Draft 2020-12 Schemas and six TypeScript-produced fixtures validated by the Python Registry |
 | W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |
