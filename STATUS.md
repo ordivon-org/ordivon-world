@@ -17,7 +17,8 @@ The active source boundary consists of one Host-facing Cloudflare adapter, the C
 | deterministic Host Dispatch binding | verified | Python adapter, exact identity and Host integration tests |
 | response-loss fresh-Host recovery | verified | one provider POST, fresh Host Receipt lookup and preserved Task state |
 | W1 cross-World evidence program | completed | P0–P5 proved Resource/Entity/Message durability, UNKNOWN recovery, Link rebinding, federation composition, untrusted-relay provenance and independent concurrency; W2 promoted only Resource after production integration |
-| W2 Resource Transfer | production contract, locally cross-repository verified | Game retained/replayed source egress → World durable Host journal/wire → Security transfer-specific ingress; crash-window `not_committed` recovery and caller-trust-boundary documented |
+| W2 Resource Transfer | production contract, cross-repository verified | Game retained/replayed source egress → World per-transfer durable Host journal/wire → Security transfer-specific ingress; crash-window `not_committed`, multi-transfer Task addressing and legacy flat-state recovery verified |
+| W2 Host trajectory addressing | verified across two production consumers | Resource uses `transferId`; provider extension uses Host `dispatchId`; partial UNKNOWN state is per trajectory; legacy flat Resource/provider state migrates on first mutation |
 | live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
 | cross-language JSON Schema | verified | fourteen packaged Draft 2020-12 Schemas; provider fixtures plus Game-produced Resource Egress documents validated across TypeScript/Python |
 | W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |

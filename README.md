@@ -62,6 +62,8 @@ The source World must first issue an exact `ResourceEgressReceipt`; the destinat
 
 The current Security CLI trusts its local caller to carry an authentic source-authority receipt. Untrusted-relay deployments require independent source-authority authentication; World 0.2 does not claim a universal PKI. See [`docs/w2-resource-transfer-production.md`](docs/w2-resource-transfer-production.md).
 
+A Host Task may retain multiple Resource trajectories addressed by `transferId`. A Task with multiple trajectories requires explicit selection; implicit ambiguous lookup fails closed.
+
 ### Host-facing Cloudflare adapter
 
 The Python package in `src/ordivon_world/` provides:
@@ -74,6 +76,8 @@ The Python package in `src/ordivon_world/` provides:
 - Cloudflare Receipt and R2 Artifact mapping into Host `ObservationEnvelope` and `ArtifactRef` values;
 - Browser screenshot, rendered HTML and Manifest bundle verification across Receipt, Host evidence and downloaded bytes;
 - Host CAS/Journal persistence through `HostWorldExtension`;
+- multiple provider trajectories per Host Task, addressed by Host `dispatchId`;
+- backward recovery/migration for pre-0.2.1 flat provider extension state;
 - W3C Trace Context propagation as non-authoritative telemetry.
 
 The public package depends on exact remote-reachable Host and Protocol revisions. It does not copy Host Task semantics into World.
@@ -104,7 +108,8 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
 5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
 6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
-7. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
+7. **Task identity is not trajectory identity.** Durable extension state is addressed by native semantic identity (`transferId` / `dispatchId`); addressing does not confer authority.
+8. **No universal abstraction without proof.** A second provider or workload may share a small contract only after a real duplicated failure demonstrates the need.
 
 ## Development
 

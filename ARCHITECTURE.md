@@ -95,6 +95,21 @@ World maps provider Artifacts to Host `ArtifactRef` values and the complete prov
 
 A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
 
+## Host extension trajectory addressing
+
+Host Task identity is not used as the semantic identity of a World extension trajectory. The two production consumers retain independent maps:
+
+```text
+worldResourceTransfers[transferId]
+worldDispatches[dispatchId]
+```
+
+These maps are Host extension evidence/correlation storage, not an authority system. Host remains authoritative for Effect/Binding/Dispatch admission and Task-level work semantics. World therefore does not infer cross-trajectory concurrency policy from another trajectory being `unknown`.
+
+Pre-0.2.1 flat Resource/provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
+
+See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing.md).
+
 ## Persistence model
 
 World has no database. Durable state is divided by authority:
