@@ -261,6 +261,77 @@ Subject
 
 A successful native effect proves one **bounded active embodiment occurrence**. It does not prove that the subject remains currently Present in that body after the occurrence.
 
+## A4-P0: Presence is current relation evidence, not durable history
+
+A4 tested whether current Presence can be inferred from the durable facts A3 already creates. Two materially different destination domains falsified that shortcut.
+
+### Game: current Body does not make an old subject binding current
+
+A3 was replayed through the `medic-reyes` Actor and produced the accepted movement to Command Deck. After the Turn completed:
+
+```text
+historical A3 subject/cognition admission = retained
+Harness cognition Run                    = terminal
+Game Actor lifeState                     = active
+Game Actor position                      = command-deck
+```
+
+A fresh next Planning opened at World revision 1. The old revision-0 subject/cognition binding was rejected, and strict destination admission refused to commit the next Agent-controlled Intent without a fresh current binding.
+
+Therefore:
+
+```text
+Body current = true
+historical embodiment occurrence = true
+current Subject Presence = UNKNOWN
+```
+
+The durable A3 occurrence remains valid history, but it cannot authorize or prove the next relation merely because the same Actor body survived.
+
+### Security: historical materialization can survive physical Body absence
+
+A4 then used current Security revision `d532014dc4ff1d3fc9e825b5c087f1d2f1bac4ee` to physically materialize a real Windows KVM Entity carrier. Before destruction, QEMU was alive and the exact ledger/run path existed. The materialization receipt explicitly carried `historicalMaterializationReceipt = true` and still had `guestClaimAuthority = not-used`.
+
+The native carrier was then cleanly destroyed. QEMU was no longer the recorded process, the ledger and run path were absent, and the retained migration receipt remained. Calling the current Entity `reconcile` path after destruction still returned `status = materialized` with the exact same retained receipt, because `materialized` is migration terminal history rather than a liveness claim.
+
+Therefore:
+
+```text
+historical materialization receipt = true
+reconcile migration status         = materialized
+current Body Presence              = false
+```
+
+and, because Guest subject activation was never proven, Subject Presence was already unknown even before the carrier was destroyed.
+
+### A4-P0 presence matrix
+
+The current evidence supports an asymmetric, relation-scoped model rather than a global boolean:
+
+| Native Body current? | Current subject/body binding? | Honest result |
+|---|---|---|
+| yes | yes, for one exact action scope | `present-within-scope` |
+| yes | stale, missing or unproven | `unknown` |
+| owner-proven absent | irrelevant for that Body | `absent-through-this-body` |
+
+`absent-through-this-body` is not global Agent absence. A future Agent may have another Body elsewhere. Likewise, a durable `present-within-scope` observation becomes historical evidence when its Planning, World revision, body generation or other currentness fence changes.
+
+The candidate law is:
+
+> **Presence is an owner-observed, scope-bound current relation. Durable evidence of Presence may survive after its currentness expires, but the historical evidence itself does not remain current.**
+
+This yields several narrower laws:
+
+```text
+Historical Embodiment Occurrence != Current Presence
+Historical Materialization Receipt != Current Body Presence
+Body Currentness != Subject Presence
+Owner-proven Body Absence => Subject absent through that exact Body
+Body current + no current Subject binding => UNKNOWN
+```
+
+A4-P0 does not justify `PresenceRegistry`, `AgentLocationTable` or a global Presence epoch. The next hypothesis should first test whether an Agent needs a bounded owner-authored **current relation observation** before its next body-bound action, and whether that observation can stay query-shaped rather than becoming new durable global state.
+
 ## Current W5-A decomposition
 
 The experiments now force the following concepts apart:
@@ -293,7 +364,7 @@ The ownership hypothesis is:
 | subject/cognition → Body action admission | destination domain, using bounded external binding evidence |
 | cross-owner subject/cognition binding | World research boundary; not an authority translation |
 | bounded embodiment occurrence | proved jointly by exact cognition evidence, destination admission and native effect receipt/fact |
-| current Presence | current native observation; never inferred from historical admission/effect evidence |
+| current Presence | destination owner current observation of the subject/body relation; World may bind bounded evidence but must not infer it from historical admission/effect/materialization state |
 
 ## Promotion rule
 
@@ -307,20 +378,30 @@ A3 proves that one real active destination can require owner-separated, action-s
 
 [`../evidence/acceptance/w5a-game-active-controller-df396e5.json`](../evidence/acceptance/w5a-game-active-controller-df396e5.json) is the commit-bound A2 receipt. The same Game revision retained five active Agent-controlled Actors across two planning generations while provider attribution changed from `provider:w5a:alpha` to `provider:w5a:mallory`; no durable continuity-subject admission existed or was inferred.
 
-[`../evidence/acceptance/w5a-a3-real-embodiment-083d619.json`](../evidence/acceptance/w5a-a3-real-embodiment-083d619.json) is the A3 commit-bound acceptance receipt, SHA-256 `cc119343e920dabe4623619de1833b04b26f527d0b71427706ebe6221ce1c448`. It binds World research revision `083d6195eb79e511ebb4abfe63ca5cc7a9d11644`, current Harness revision `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, canonical Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5`, and detached Game admission candidate `cf4a011adb64fac8a3eb274eb266cfe707eec8f9`. The receipt records two live DeepSeek cognition instances for the same continuity subject, two non-interchangeable World bindings, two destination admissions, two verified `actor_moved` effects, digest-laundering rejection, cross-cognition rejection and fresh Harness/Game recovery.
+[`../evidence/acceptance/w5a-a3-real-embodiment-083d619.json`](../evidence/acceptance/w5a-a3-real-embodiment-083d619.json) is the A3 commit-bound acceptance receipt, SHA-256 `cc119343e920dabe4623619de1833b04b26f527d0b71427706ebe6221ce1c448`. It binds World research revision `083d6195eb79e511ebb4abfe63ca5cc7a9d11644`, current Harness revision `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, canonical Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5`, and non-main Game admission candidate `cf4a011adb64fac8a3eb274eb266cfe707eec8f9`. The receipt records two live DeepSeek cognition instances for the same continuity subject, two non-interchangeable World bindings, two destination admissions, two verified `actor_moved` effects, digest-laundering rejection, cross-cognition rejection and fresh Harness/Game recovery.
+
+[`../evidence/acceptance/w5a-a4-presence-888ca4e.json`](../evidence/acceptance/w5a-a4-presence-888ca4e.json) is the A4-P0 Presence falsifier receipt, SHA-256 `450023b63b13d05f6937e1a90925650906904810ccd854a8cc8794df539743c9`. It binds World base `888ca4efd10cb063e6603025c991e5a3a797ff49`, current Harness `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, Game canonical plus the non-main A3 admission candidate, and current Security `d532014dc4ff1d3fc9e825b5c087f1d2f1bac4ee`. Game proved that an active surviving Body plus a historical A3 occurrence leaves current Subject Presence unknown at the next Planning; Security physically proved that a retained historical materialization receipt can survive after QEMU, ledger and run path are gone while `reconcile` still returns migration status `materialized`.
 
 ## Next experiment
 
-A4 should target **current Presence**, not add more admission metadata.
+A4-P1 should test **current relation observation without a Presence registry**.
 
-A3 now has historical proof that one subject/cognition/body/action relation produced a real native effect. A4 must ask what remains true after that occurrence ends. In particular, it should independently test:
+The next falsifier should give a fresh Agent a bounded owner-authored answer to a concrete question such as “can this subject currently act through this body?” and compare at least Game and Security. The view should be derived from current native observation and current binding/admission coordinates rather than copied from historical receipts.
 
-1. Body liveness/currentness after the cognition Run has already terminated;
-2. whether a new cognition instance for the same subject may reuse the same Body only after fresh destination admission;
-3. whether body loss makes current Presence false or unknown without rewriting the historical A3 occurrence;
-4. whether Game Actor liveness and Security KVM carrier liveness share any honest cross-domain Presence invariant;
-5. whether any current-Presence projection is actually needed by an Agent before its next body-bound action.
+The experiment should determine whether the minimum useful projection is closer to:
 
-Do not create a global Presence database. A4 should first compare native owner observations and retain the earlier law that historical evidence never proves current state.
+```text
+subjectRef
+bodyRef
+scope / generation
+bodyCurrentness
+bindingCurrentness
+relationState = present-within-scope | absent-through-body | unknown
+evidence digests
+```
 
-Production Entity Migration remains unchanged, and the A3 Game admission implementation remains a detached research candidate until another materially different destination reproduces the same need.
+without freezing those fields into a production schema yet. It must also test stale observation replay, body generation replacement, another cognition instance for the same subject, and—if practical—one subject with two bodies so `absent-through-body-A` cannot be mistaken for global Agent absence.
+
+Do not create a global Presence database, liveness daemon or location table. If query-shaped owner observations plus fresh action admission are sufficient, World should keep Presence as evidence/currentness semantics rather than become the owner of live Agent location.
+
+Production Entity Migration remains unchanged, and the A3 Game admission implementation remains a non-main research candidate until another materially different destination reproduces the same embodiment-admission need.
