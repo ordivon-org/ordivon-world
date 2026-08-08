@@ -307,6 +307,8 @@ A3 proves that one real active destination can require owner-separated, action-s
 
 [`../evidence/acceptance/w5a-game-active-controller-df396e5.json`](../evidence/acceptance/w5a-game-active-controller-df396e5.json) is the commit-bound A2 receipt. The same Game revision retained five active Agent-controlled Actors across two planning generations while provider attribution changed from `provider:w5a:alpha` to `provider:w5a:mallory`; no durable continuity-subject admission existed or was inferred.
 
+[`../evidence/acceptance/w5a-a3-real-embodiment-083d619.json`](../evidence/acceptance/w5a-a3-real-embodiment-083d619.json) is the A3 commit-bound acceptance receipt, SHA-256 `cc119343e920dabe4623619de1833b04b26f527d0b71427706ebe6221ce1c448`. It binds World research revision `083d6195eb79e511ebb4abfe63ca5cc7a9d11644`, current Harness revision `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, canonical Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5`, and detached Game admission candidate `cf4a011adb64fac8a3eb274eb266cfe707eec8f9`. The receipt records two live DeepSeek cognition instances for the same continuity subject, two non-interchangeable World bindings, two destination admissions, two verified `actor_moved` effects, digest-laundering rejection, cross-cognition rejection and fresh Harness/Game recovery.
+
 ## Next experiment
 
 A4 should target **current Presence**, not add more admission metadata.
