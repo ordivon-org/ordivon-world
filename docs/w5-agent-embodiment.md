@@ -177,9 +177,11 @@ A production contract is justified only if a real active destination requires th
 
 [`../evidence/acceptance/w5a-embodiment-binding-d322947.json`](../evidence/acceptance/w5a-embodiment-binding-d322947.json) is the commit-bound A0/A1 receipt. It uses Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5` and World research revision `d322947b891cf67749e879ca0c94663b8e067ce2`. The receipt records the conflicting-payload baseline, three rejected substitutions and the explicit decision not to promote a production contract.
 
+[`../evidence/acceptance/w5a-game-active-controller-df396e5.json`](../evidence/acceptance/w5a-game-active-controller-df396e5.json) is the commit-bound A2 receipt. The same Game revision retained five active Agent-controlled Actors across two planning generations while provider attribution changed from `provider:w5a:alpha` to `provider:w5a:mallory`; no durable continuity-subject admission existed or was inferred.
+
 ## Next experiment
 
-A2 must target **activation**, not more migration metadata.
+A3 must target **destination subject activation**, not more migration or provider metadata.
 
 The falsifier should place a continuity subject into a destination that can actually consume a bounded subject binding and then demonstrate all of the following independently:
 
@@ -189,4 +191,4 @@ The falsifier should place a continuity subject into a destination that can actu
 4. a conflicting subject cannot claim the same activation occurrence;
 5. later liveness loss makes current Presence false/unknown without rewriting historical embodiment evidence.
 
-Until such a workload exists, W5-A stops at an experimental two-owner binding and keeps production Entity Migration unchanged.
+Until such a workload exists, W5-A stops at the experimental two-owner binding plus the Game active-controller falsifier and keeps production Entity Migration unchanged.
