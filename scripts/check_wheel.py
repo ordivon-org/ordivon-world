@@ -9,13 +9,19 @@ import subprocess
 import tempfile
 import zipfile
 
-EXPECTED_VERSION = "0.3.0"
+EXPECTED_VERSION = "0.4.0"
 HOST_REVISION = "428a6f2f90b4050535507c9be078c450552177e5"
 EXPECTED_SCHEMA_NAMES = (
     "browser-manifest",
     "browser-request",
     "edge-capabilities",
     "edge-receipt",
+    "entity-departure-receipt",
+    "entity-migration-destination-request",
+    "entity-migration-destination-response",
+    "entity-migration-not-committed",
+    "entity-migration-plan",
+    "entity-migration-receipt",
     "fetch-request",
     "message-delivery-destination-request",
     "message-delivery-destination-response",
@@ -115,16 +121,16 @@ def install_and_import(wheel: Path) -> None:
         command(["uv", "pip", "install", "--python", str(python), str(wheel)])
         program = (
             "import json; "
-            "from ordivon_world import (MessageDeliveryBundle, ResourceTransferBundle, load_schema); "
+            "from ordivon_world import (EntityMigrationBundle, MessageDeliveryBundle, ResourceTransferBundle, load_schema); "
             f"names={EXPECTED_SCHEMA_NAMES!r}; "
             "[load_schema(name) for name in names]; "
-            "print(json.dumps({'api':['MessageDeliveryBundle','ResourceTransferBundle'],"
+            "print(json.dumps({'api':['EntityMigrationBundle','MessageDeliveryBundle','ResourceTransferBundle'],"
             "'schemas':len(names)}))"
         )
         output = command([str(python), "-I", "-c", program], cwd=root)
         value = json.loads(output)
         if value != {
-            "api": ["MessageDeliveryBundle", "ResourceTransferBundle"],
+            "api": ["EntityMigrationBundle", "MessageDeliveryBundle", "ResourceTransferBundle"],
             "schemas": len(EXPECTED_SCHEMA_NAMES),
         }:
             raise WheelError("isolated wheel import returned an unexpected result")
