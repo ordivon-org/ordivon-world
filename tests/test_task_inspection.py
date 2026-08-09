@@ -383,6 +383,8 @@ class WorldTaskInspectionTests(unittest.TestCase):
             "extra_instance_fields",
             "._instances(",
             "._legacy_entry(",
+            "port.storage",
+            "read_task_extension_state",
         ):
             self.assertNotIn(forbidden, source)
 

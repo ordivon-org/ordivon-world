@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ordivon_host import HostExtensionPort
+from ordivon_host import HostExtensionPort, TaskRevisionMismatch
 
 from .entity_migration import HostEntityMigrationJournal
 from .host import HostWorldExtension
@@ -38,15 +38,19 @@ class WorldTaskInspector:
         self.port = port
 
     def inspect_task(self, task_id: str, *, expected_revision: int) -> dict[str, Any]:
-        current = self.port.load_namespace(task_id, "world")
-        if current.projection.revision != expected_revision:
+        try:
+            current = self.port.load_namespace_snapshot(
+                task_id,
+                "world",
+                expected_revision=expected_revision,
+            )
+        except TaskRevisionMismatch as error:
             raise WorldTaskInspectionSuperseded(
                 "World Task inspection revision differs from current Host Task revision"
-            )
+            ) from error
 
-        retained = self.port.storage.read_task_extension_state(task_id, "world")
-        if retained is None:
-            legacy = False
+        legacy = current.legacy
+        if not current.retained:
             world_state: dict[str, Any] = {
                 "eventKind": None,
                 "revision": None,
@@ -54,12 +58,13 @@ class WorldTaskInspector:
                 "legacy": False,
             }
         else:
-            pointer, _data = retained
-            legacy = pointer.legacy
+            assert current.owner_event_kind is not None
+            assert current.owner_state_digest is not None
+            assert current.owner_revision is not None
             world_state = {
-                "eventKind": pointer.event_kind.value,
-                "revision": pointer.revision,
-                "stateDigest": pointer.state_digest,
+                "eventKind": current.owner_event_kind.value,
+                "revision": current.owner_revision,
+                "stateDigest": current.owner_state_digest,
                 "legacy": legacy,
             }
 
