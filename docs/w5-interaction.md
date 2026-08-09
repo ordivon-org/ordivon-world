@@ -201,16 +201,142 @@ Resource|Message|Entity tagged-union replacement
 
 Keep `_HostTrajectoryJournal` private and mechanical. Keep public contracts typed by the semantic consequence they actually promise.
 
-## D1 next falsifier: composition without semantic promotion
+## D1: mixed-family composition converges forward
 
-The next question is not whether to rename the families. It is whether successful interactions compose safely:
+D1 moved from static classification to one current durable workflow. A single Host Task retained both a Message Delivery and a Resource Transfer under one objective.
 
-> When one Agent workflow performs several different interaction families in sequence, which facts may flow forward, and which must be re-admitted by the next owner?
+The first controller produced:
 
-A useful D1 should compose at least two materially different interactions under one durable Host objective and deliberately create partial completion. It should test whether:
+```text
+Message A
+  → delivered
+  → retained receipt
+  → destination delivery count = 1
 
-- Message delivery can inform a later Resource/Effect decision without minting its authority;
-- a completed first interaction remains historically committed if the second fails;
-- the Agent can recover the partial causal chain after replacement without global rollback or a generic transaction manager.
+Resource B
+  → first materialization attempt
+  → destination dies before semantic commit
+  → Host Resource state = UNKNOWN
+```
 
-Existing W1/W2 partial-federation evidence is a good source of hypotheses, but D1 should use a current Agent-facing workflow rather than merely restating those older tests.
+The Message remained committed while the Resource became uncertain. Host Task meaning itself remained `ready`; the two World extensions recorded their own independent causal state.
+
+### Fresh Agent recovery
+
+A fresh Host process reopened the same durable Task and constructed a bounded owner-authored view from retained state rather than trusting the first controller's memory:
+
+```text
+Message
+  status = delivered
+  retained receipt = present
+
+Resource
+  status = unknown
+  retained receipt = absent
+  nextAction = reconcile-original-transfer
+```
+
+A current Harness fresh Agent received four candidate actions:
+
+```text
+reconcile-resource
+retry-resource
+resend-message
+rollback-message
+```
+
+and selected `reconcile-resource`. The Run used current Harness `487e0ac8eb945256842347b5371cbbdd70bfce55`, one Provider call, zero Tool calls, and produced durable receipt `sha256:b704230a3c4b14c4e0cf741b10db428dd1ef52ff8252255537276dc14fd55e2e`.
+
+This is important because the earlier Message receipt was informative history, not Resource retry authority.
+
+### Reconcile before retry
+
+A second fresh Host controller executed only the Agent-selected Resource reconciliation. The destination returned an exact `ResourceTransferNotCommitted` proof with `exactOriginalRetrySafe=true`.
+
+The transition was:
+
+```text
+Resource UNKNOWN
+  ↓ exact NOT_COMMITTED proof
+Resource PREPARED
+```
+
+No second materialization occurred during reconciliation:
+
+```text
+materialization attempts = 1
+reconcile calls          = 1
+```
+
+The Message receipt digest and destination delivery count remained unchanged.
+
+Only after that proof did a third fresh Host controller perform the exact original Resource retry. The destination committed on materialization attempt 2. A fourth fresh Host process then independently reopened the final durable state and observed:
+
+```text
+Message A   delivered
+  destination deliveries = 1
+  same retained receipt
+
+Resource B  materialized
+  materialization attempts = 2
+  reconcile calls          = 1
+  retained materialization receipt
+```
+
+The Host Task contained no global rollback, transaction, federation head or generic interaction state.
+
+## What D1 proves
+
+The current composition law is forward-only and typed:
+
+```text
+Interaction A committed
+        │
+        ├── remains historical fact
+        │
+Interaction B UNKNOWN
+        ↓
+reconcile B under B's own identity/owner evidence
+        ↓
+exact retry only if B proves retry-safe
+        ↓
+continue forward
+```
+
+Therefore:
+
+```text
+Interaction A success != Interaction B success
+
+Downstream UNKNOWN
+!= rollback authorization for upstream commit
+
+Upstream receipt
+!= downstream authority
+
+Partial causal chain
+→ forward reconciliation
+!= distributed rollback
+```
+
+The Resource retry remained grounded in its own retained source egress plus its own exact `NOT_COMMITTED` proof. The Message's source issuance and delivery receipt never became Resource authority.
+
+[`../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json`](../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json) is the D1 acceptance receipt. It binds the four fresh Host phases, current Harness Agent decision, exact Message and Resource receipt identities, destination counters and absence of global interaction transaction state.
+
+## W5-D stopping condition
+
+D0 shows that Interaction consists of typed semantic families over a smaller shared causal/recovery skeleton. D1 shows that different families already compose safely under one durable Host objective and recover forward after partial completion without semantic promotion, global rollback or a generic manager.
+
+That is enough to stop the current Interaction line. Do not add:
+
+```text
+GenericInteraction
+InteractionManager
+UniversalWorldTrajectory
+GlobalInteractionTransaction
+CrossFamilyRollbackProtocol
+```
+
+A future materially different interaction should first attempt to reuse the current causal skeleton and retain its owner-native semantics. Only reproduced mechanical friction should widen the private shared layer.
+
+D1 also exposes the next unresolved problem cleanly: the fresh Agent succeeded only because the experiment supplied a bounded current interaction view. Host `task.resume` still must not learn World schemas, while the Agent still needs a way to discover outstanding external commitments after controller replacement. That belongs to **W5-E External Commitment Continuity**, not to Interaction semantics.
