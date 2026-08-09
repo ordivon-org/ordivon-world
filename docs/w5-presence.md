@@ -47,12 +47,19 @@ The historical-only input contained:
 - a real Security Entity materialization history whose terminal migration state was `materialized`;
 - no current relation observation for either Body.
 
-The fresh input retained the same history and added only the W5-A A4-P1 owner-authored current relation projections:
+The final commit-bound rerun retained the same history and added two freshly reconstructed owner relations:
 
 ```text
-Game Actor Body    → present-within-scope
-Security KVM Body A → absent-through-body
+Game Actor Body
+  → fresh r0 destination admission
+  → present-within-scope
+
+Security B1 KVM Body
+  → exact Host clean closure
+  → absent-through-body
 ```
+
+The Game relation used the non-main W5-A admission candidate; the Security relation used the exact B1 materialization Body after `qemuClosed`, ledger removal, run-directory removal and zero residual objects.
 
 A fresh live DeepSeek Harness Run received each input independently under a structured completion contract with only three possible decisions:
 
@@ -121,28 +128,103 @@ World does not choose the Body for the Agent and the Presence projection does no
 
 B0 does not justify automatic prefetch of Presence for every Body, a subscription bus, heartbeat daemon, global location map or persistent online/offline flag. It also does not prove that every Agent decision needs Presence. The requirement is currently **decision-scoped**: query current relation only when a concrete next action depends on it.
 
-B0 also uses Game as the only destination where a subject/cognition/body action relation has been positively admitted. Security can currently prove native carrier currentness/absence but still cannot prove Guest-side subject activation. W5-B therefore still needs a second materially different active destination before any shared production Presence contract is credible.
+[`../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json`](../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json) is the B0 commit-bound rerun receipt, SHA-256 `ec475b179f274595c78002e99d9760afe3dd25dff4048a4621ecefe6050e14a9`. It binds current Harness revision `98d295582dd9a5034413d87cc488089a1c75b138`, Game canonical plus the non-main W5-A destination-admission candidate, and the exact Security B1 closure. The historical-only Agent returned `insufficient-current-evidence`; the fresh-relation Agent selected `game-body`; both Runs were recovered from durable Harness receipts.
 
-## B1 next falsifier: second active destination
+## B1: Security as a second bounded subject-active destination
 
-The preferred next candidate is Security because it already owns a real KVM Body and strong native recovery evidence. B1 should first audit whether the existing Guest/host channel can prove a bounded subject activation without granting Guest self-report authority over native liveness.
-
-The target chain is:
+B1 audited the current Security Windows KVM substrate rather than inventing a Presence daemon. Two existing physical channels were initially separate:
 
 ```text
-external continuity subject claim
-        ↓
-Security-owned KVM carrier
-        ↓
-Guest consumes exact bounded subject binding
-        ↓
-Guest performs a bounded observable domain action
-        ↓
-Security independently observes the native effect/current carrier
-        ↓
-owner-authored current subject/body observation
+Entity Migration
+  ORDIVON_MIG
+  continuityPayloadDigest
+  real KVM Body
+  guestClaimAuthority = not-used
+
+Evaluation / Guest Runner
+  ORDIVON_RUN
+  bounded Guest action
+  Host-readable result
 ```
 
-A Guest claim alone is insufficient. Security must retain native ownership of Body/liveness truth and must distinguish “Guest says I am subject X” from “Security admitted subject X for this bounded carrier/action scope.”
+A P1 Evaluation VM could not prove Entity activation because it is a different Body. B1 therefore required the same Entity KVM Body to carry both independently bound media.
 
-If the current Security architecture lacks a trustworthy activation cut point, B1 should report that structural gap rather than add a generic World Presence API.
+### Physical acceptance
+
+The accepted research path keeps materialization and activation evidence separate while co-launching them in one exact KVM Body:
+
+```text
+continuity subject claim
+        ↓
+Security stages ORDIVON_MIG
+        │
+        ├──── same materializationId + generation ────┐
+        │                                             │
+Security validates activation binding                │
+  subjectRef                                          │
+  migrationId                                        │
+  entityId                                           │
+  continuityPayloadDigest                            │
+  materializationId                                  │
+  generation                                         │
+        ↓                                             │
+Security stages ORDIVON_RUN                          │
+        ↓                                             │
+sealed Guest Runner                                  │
+        ↓                                             │
+fixed benign activation fixture                      │
+        ↓                                             │
+Guest reads ORDIVON_RUN + ORDIVON_MIG ───────────────┘
+        ↓
+Host verifies exact result + native Body currentness
+```
+
+The Security materialization receipt remained explicitly `guestClaimAuthority = not-used`; Guest output never became the authority for native Body liveness. Host QMP independently observed the exact Body running with no network device before the Guest action.
+
+The fixed research fixture verified the exact `subjectRef`, `migrationId`, `entityId`, `continuityPayloadDigest`, `materializationId`, `generation` and one activation identity from inside the Guest. Host then verified the returned bounded result against the same activation coordinates.
+
+Subject, migration, continuity digest, Body identity and generation substitution were rejected before activation. A historical result could not satisfy a fresh activation identity.
+
+The accepted Guest action completed in 392 ms once the Runner invoked the fixture. The exact Body was still natively current when Host observed the completed result. Host then performed clean closure with QEMU closed, swtpm closed, ledger removed, run directory removed and zero residual objects.
+
+### Corrected shutdown finding
+
+Several exploratory runs originally treated QEMU shutdown as the success signal. A diagnostic later found a complete Guest result and `fixture-completed` log while QEMU was still running. Therefore:
+
+```text
+Guest bounded action completion
+!=
+Body shutdown completion
+```
+
+The earlier hot-plug experiments are consequently **inconclusive**, not a proof that post-materialization reactivation is impossible. B1 acceptance proves only bounded co-launch subject activation.
+
+### What B1 proves
+
+Security is now a second materially different **subject-active destination** for research purposes: destination admission, exact Body generation, Guest consumption and Host native observation can jointly prove one bounded Subject/Body occurrence.
+
+This is deliberately weaker than saying Security is a second live-cognition destination. Game A3 binds a real Harness cognition instance to an Actor action; Security B1 binds a fixed destination activation fixture to a KVM Body. Cognition therefore cannot yet be promoted into the cross-domain minimum merely because Game needs it.
+
+[`../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json`](../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json) is the World B1 acceptance receipt, SHA-256 `e5416f7097a51abfe9d3f52d736d70ad669461eb3d857afb09d7cb99c1d3a6d6`. It binds Security experiment revision `072ef473cea7e51c2347ef387b20fbd12b39f23d`, detached Security research candidate `22c94ff64182a018029c3cc2f94cd453e0266520`, a successful current production-control KVM run, the exact physical activation result and clean closure.
+
+## B2 next falsifier: cross-domain minimum
+
+B2 should compare Game A3 and Security B1 without taking the union of their fields. The question is:
+
+> Which relation coordinates are genuinely unavoidable in both domains, and which are only owner-native semantics?
+
+The candidate common core is deliberately small:
+
+```text
+subject reference
+body owner + body identity
+owner-native scope/currentness fence
+destination admission evidence
+bounded occurrence/result evidence
+```
+
+Game-specific cognition Run identity, Planning/Intent coordinates, and Security-specific migration/generation coordinates should remain owner-native unless a falsifier proves they belong in the shared core.
+
+B2 must try to break this candidate from both directions. If removing a field permits subject/body/action substitution in either domain, the field may be invariant. If a field cannot be interpreted honestly by the other domain without importing foreign semantics, it must stay domain-owned.
+
+Do not create a production `EmbodimentBinding` merely because two domains now have positive evidence. First prove a minimal intersection that both can consume without authority translation or schema laundering.
