@@ -56,6 +56,9 @@ class _HostTrajectoryJournal:
     terminal_fields: ClassVar[tuple[tuple[str, str], ...]]
     instances_field: ClassVar[str | None] = None
     extra_instance_fields: ClassVar[tuple[str, ...]] = ()
+    owner_family: ClassVar[str]
+    owner_initial_operation: ClassVar[str]
+    owner_retry_operation: ClassVar[str]
 
     def __init__(self, port: HostExtensionPort) -> None:
         self.port = port
@@ -68,6 +71,114 @@ class _HostTrajectoryJournal:
             return ()
         value = current.data.get(self.correlation_fields[0][0])
         return (value,) if isinstance(value, str) else ()
+
+    def project_owner_commitments(
+        self,
+        task_id: str,
+        data: dict[str, Any],
+        *,
+        legacy: bool,
+    ) -> list[dict[str, Any]]:
+        """Project bounded owner facts without loading payload/provenance bodies."""
+        if self.instances_field is not None:
+            entries = self._instances(data)
+        elif data.get(self.plan_digest_field) is None:
+            entries = {}
+        else:
+            if not self.correlation_fields:
+                raise self.error_type(f"{self.label} has no semantic identity")
+            identity = data.get(self.correlation_fields[0][0])
+            if not isinstance(identity, str) or not identity:
+                raise self.error_type(f"{self.label} identity is invalid")
+            entries = {identity: data}
+
+        result: list[dict[str, Any]] = []
+        for identity, entry in sorted(entries.items()):
+            plan = self._owner_projection_plan(entry, identity)
+            state = entry.get(self.state_field, "prepared")
+            if not isinstance(state, str) or not state:
+                raise self.error_type(f"{self.label} state is invalid")
+            evidence: dict[str, str] = {"planDigest": plan.digest}
+            receipt_digest = entry.get(self.receipt_digest_field)
+            if isinstance(receipt_digest, str):
+                evidence["receiptDigest"] = receipt_digest
+            uncertainty_digest = entry.get(self.uncertainty_object_field)
+            if isinstance(uncertainty_digest, str):
+                evidence["uncertaintyObjectDigest"] = uncertainty_digest
+            not_committed_digest = self._owner_not_committed_digest(entry)
+            if not_committed_digest is not None:
+                evidence["notCommittedDigest"] = not_committed_digest
+            for field, _attr in self.terminal_fields:
+                if field.lower().endswith("digest"):
+                    consequence_digest = entry.get(field)
+                    if isinstance(consequence_digest, str):
+                        evidence["consequenceDigest"] = consequence_digest
+
+            value: dict[str, Any] = {
+                "family": self.owner_family,
+                "identity": identity,
+                "state": state,
+                "commitmentClass": (
+                    "historical-terminal" if state == self.terminal_state else "outstanding"
+                ),
+                "evidence": evidence,
+                "nextOwnerOperation": self._owner_next_operation(
+                    state,
+                    legacy=legacy,
+                    has_not_committed=not_committed_digest is not None,
+                ),
+                "authority": "not-granted-by-inspection",
+                "externalCurrentness": "not-claimed",
+            }
+            destination = getattr(plan, "destination_world_id", None)
+            if isinstance(destination, str) and destination:
+                value["destinationWorldId"] = destination
+            entity_id = getattr(plan, "entity_id", None)
+            if isinstance(entity_id, str) and entity_id:
+                value["entityId"] = entity_id
+            result.append(value)
+        return result
+
+    def _owner_projection_plan(self, entry: dict[str, Any], identity: str) -> Any:
+        plan_digest = entry.get(self.plan_digest_field)
+        object_digest = entry.get(self.plan_object_field)
+        if not isinstance(plan_digest, str) or not isinstance(object_digest, str):
+            raise self.error_type(f"{self.label} plan evidence is incomplete")
+        value = self.port.get_object(object_digest, expected_kind=self.plan_kind)
+        if not isinstance(value, dict):
+            raise self.error_type(f"{self.label} plan object is not an object")
+        try:
+            plan = self.plan_type.from_dict(value)
+        except (KeyError, TypeError, ValueError) as error:
+            raise self.error_type(f"{self.label} plan object is invalid") from error
+        self._verify_plan(plan)
+        if self._plan_identity(plan) != identity or plan.digest != plan_digest:
+            raise self.error_type(f"{self.label} plan identity drifted")
+        return plan
+
+    def _owner_not_committed_digest(self, entry: dict[str, Any]) -> str | None:
+        for field in self.extra_instance_fields:
+            if field.endswith("NotCommittedDigest"):
+                value = entry.get(field)
+                return value if isinstance(value, str) else None
+        return None
+
+    def _owner_next_operation(
+        self,
+        state: str,
+        *,
+        legacy: bool,
+        has_not_committed: bool,
+    ) -> str | None:
+        if legacy:
+            return "recover-legacy-world-state"
+        if state == self.terminal_state:
+            return None
+        if state == "unknown":
+            return self.uncertainty_next_action
+        if state == "prepared":
+            return self.owner_retry_operation if has_not_committed else self.owner_initial_operation
+        return "inspect-owner-state"
 
     def prepare(self, task_id: str, bundle: Any) -> Any:
         plan = bundle.plan

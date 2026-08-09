@@ -67,6 +67,76 @@ class HostWorldExtension:
         current = self.port.load_namespace(task_id, "world")
         return tuple(sorted(self._instances(current.data)))
 
+    def project_owner_commitments(
+        self,
+        task_id: str,
+        data: dict[str, Any],
+        *,
+        legacy: bool,
+    ) -> list[dict[str, Any]]:
+        """Project bounded Provider commitment facts from World-owned state."""
+        result: list[dict[str, Any]] = []
+        for dispatch_id, entry in sorted(self._instances(data).items()):
+            digest = entry.get("worldPreparedDispatchDigest")
+            if not isinstance(digest, str):
+                raise HostWorldError(
+                    f"Host Task has no prepared World Dispatch for {dispatch_id}"
+                )
+            value = self.port.get_object(digest, expected_kind=_PREPARED_KIND)
+            if not isinstance(value, dict):
+                raise HostWorldError("prepared World Dispatch CAS value is not an object")
+            try:
+                prepared = PreparedWorldDispatch.from_dict(value)
+            except (KeyError, TypeError, ValueError) as error:
+                raise HostWorldError("prepared World Dispatch CAS value is invalid") from error
+            if prepared.dispatch.dispatch_id != dispatch_id:
+                raise HostWorldError(
+                    "prepared World Dispatch identity drifted from Host addressing"
+                )
+            self._require_current(data, prepared)
+
+            state = entry.get("worldOutcomeState", "prepared")
+            if not isinstance(state, str) or not state:
+                raise HostWorldError("World provider dispatch state is invalid")
+            evidence: dict[str, str] = {
+                "providerRequestDigest": prepared.provider_request_digest,
+            }
+            observation_digest = entry.get("worldObservationDigest")
+            if isinstance(observation_digest, str):
+                evidence["observationDigest"] = observation_digest
+            uncertainty_digest = entry.get("worldUncertaintyDigest")
+            if isinstance(uncertainty_digest, str):
+                evidence["uncertaintyObjectDigest"] = uncertainty_digest
+
+            if legacy:
+                next_operation: str | None = "recover-legacy-world-state"
+            elif state == "prepared":
+                next_operation = "deliver-prepared-dispatch"
+            elif state in {"unknown", "pending"}:
+                next_operation = "reconcile-original-request"
+            else:
+                next_operation = None
+
+            result.append(
+                {
+                    "family": "provider-dispatch",
+                    "identity": dispatch_id,
+                    "effectId": prepared.dispatch.effect_id,
+                    "providerRequestId": prepared.provider_request_id,
+                    "state": state,
+                    "commitmentClass": (
+                        "outstanding"
+                        if state in {"prepared", "unknown", "pending"}
+                        else "historical-terminal"
+                    ),
+                    "evidence": evidence,
+                    "nextOwnerOperation": next_operation,
+                    "authority": "not-granted-by-inspection",
+                    "externalCurrentness": "not-claimed",
+                }
+            )
+        return result
+
     def prepare(
         self,
         task_id: str,

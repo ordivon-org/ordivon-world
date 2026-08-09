@@ -56,6 +56,8 @@ world.dispatch-observed
 
 `PreparedWorldDispatch` and `WorldObservation` are World-owned CAS schemas embedded in Host storage. Host owns their admission order and revision fence. A World object cannot alter Task meaning merely because it is stored by Host.
 
+`WorldTaskInspector` is informational projection authority only for World-owned retained commitments. Each World family interprets its own state; the aggregator revision-fences and combines those bounded projections. An inspected `nextOwnerOperation` is a recovery hint, not an Effect admission, capability grant, current external observation, or proof that an owner is reachable. Missing or stale owner evidence remains unresolved. This World-local interface does not establish a generic Owner registry or inspection contract for Security, Game, Harness or other domains.
+
 ## Cloudflare facts
 
 The following are authoritative for current provider reality:

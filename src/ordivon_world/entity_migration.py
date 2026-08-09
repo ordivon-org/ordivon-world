@@ -383,6 +383,9 @@ class HostEntityMigrationJournal(_HostTrajectoryJournal):
     """Durable entity migration journal backed by Host's opaque extension port."""
 
     label = "World entity migration"
+    owner_family = "entity-migration"
+    owner_initial_operation = "materialize-prepared-migration"
+    owner_retry_operation = "retry-exact-original-migration"
     extra_instance_fields = (
         "worldEntityMigrationNotCommittedDigest",
         "worldEntityMigrationNotCommittedObjectDigest",

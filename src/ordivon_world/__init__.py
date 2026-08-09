@@ -88,6 +88,11 @@ from .resource_wire import (
     ResourceTransferWireTransport,
 )
 from .schemas import ContractError, load_schema, validate_contract
+from .task_inspection import (
+    WorldTaskInspectionError,
+    WorldTaskInspectionSuperseded,
+    WorldTaskInspector,
+)
 from .telemetry import TraceContext
 from .version import __version__
 
@@ -170,6 +175,9 @@ __all__ = [
     "WorldObservation",
     "WorldOutcomeUnknown",
     "WorldProviderError",
+    "WorldTaskInspectionError",
+    "WorldTaskInspectionSuperseded",
+    "WorldTaskInspector",
     "__version__",
     "load_schema",
     "validate_contract",

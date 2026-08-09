@@ -18,6 +18,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - clean-commit live Host→Cloudflare W1 acceptance scenario;
 - Browser Manifest machine contract and three-Artifact bundle reader;
 - Browser response-loss and fresh-Host continuity tests;
+- bounded `WorldTaskInspector` owner projection: Provider/Resource/Message/Entity families interpret their own retained state and expose only commitment identity, state, bounded evidence digests and next owner operation; no payload/provenance/continuity body, authority grant or global Owner registry is introduced;
 - Fetch/Browser dual-mode clean-revision acceptance runner;
 - pinned GitHub CI, CodeQL, secret scanning and dependency automation.
 

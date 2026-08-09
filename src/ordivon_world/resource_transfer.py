@@ -272,6 +272,9 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
     """Durable resource transfer journal backed by Host's opaque extension port."""
 
     label = "World resource transfer"
+    owner_family = "resource-transfer"
+    owner_initial_operation = "materialize-prepared-transfer"
+    owner_retry_operation = "retry-exact-original-transfer"
     instances_field = "worldResourceTransfers"
     extra_instance_fields = (
         "worldResourceTransferNotCommittedDigest",

@@ -404,6 +404,9 @@ class HostMessageDeliveryJournal(_HostTrajectoryJournal):
     """Durable informational delivery journal backed by Host's opaque extension port."""
 
     label = "World message delivery"
+    owner_family = "message-delivery"
+    owner_initial_operation = "deliver-prepared-message"
+    owner_retry_operation = "retry-exact-original-message"
     instances_field = "worldMessageDeliveries"
     extra_instance_fields = (
         "worldMessageDeliveryNotCommittedDigest",
