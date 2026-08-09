@@ -364,7 +364,7 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
     ) -> HostResourceTransferStep:
         bundle = self.load_bundle(task_id, transfer_id)
         plan = bundle.plan
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         retained = self._load_receipt_from_data(current.data, plan)
         if retained is not None:
             return self._step(
@@ -396,7 +396,7 @@ class HostResourceTransferJournal(_HostTrajectoryJournal):
         proof: ResourceTransferNotCommitted,
     ) -> HostResourceTransferStep:
         self._validate_not_committed(plan, proof)
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, plan)
         retained = self._load_receipt_from_data(current.data, plan)
         if retained is not None:

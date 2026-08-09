@@ -131,6 +131,8 @@ World has no database. Durable state is divided by authority:
 - local private storage: release, GC and acceptance receipts;
 - systemd and the operating system: installed controller and timer state.
 
+World's Host-backed journals read only the schema-v5 Host extension namespace `world`. A later Host core Event such as `task.context-checkpointed` may become the current Task head without shadowing an outstanding World Provider/Resource/Message/Entity commitment; a fresh World controller reloads the exact `world` namespace together with the current Host `TaskProjection`. This durability boundary does not promote World state into Task meaning or authority. A namespace migrated from Host schema v4 remains legacy/read-only until its owner explicitly recovers the exact legacy digest into native v5 state; World does not claim that Host migration can reconstruct owner state that was already lost before v5.
+
 ## Contract boundary
 
 JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Resource Transfer, Message Delivery and Entity Migration request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.

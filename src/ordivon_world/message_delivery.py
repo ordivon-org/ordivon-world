@@ -496,7 +496,7 @@ class HostMessageDeliveryJournal(_HostTrajectoryJournal):
     ) -> HostMessageDeliveryStep:
         bundle = self.load_bundle(task_id, message_id)
         plan = bundle.plan
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         retained = self._load_receipt_from_data(current.data, plan)
         if retained is not None:
             return self._step(
@@ -528,7 +528,7 @@ class HostMessageDeliveryJournal(_HostTrajectoryJournal):
         proof: MessageDeliveryNotCommitted,
     ) -> HostMessageDeliveryStep:
         self._validate_not_committed(plan, proof)
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, plan)
         retained = self._load_receipt_from_data(current.data, plan)
         if retained is not None:

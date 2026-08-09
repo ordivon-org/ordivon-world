@@ -5,7 +5,14 @@ import json
 import tempfile
 import unittest
 
-from ordivon_host import EventKind, HostExtensionPort, HostKernel, HostStorage
+from ordivon_host import (
+    EventKind,
+    ExternalContinuityHost,
+    HostExtensionPort,
+    HostKernel,
+    HostStorage,
+    WorkingCheckpoint,
+)
 
 from ordivon_world import (
     CapabilitySnapshot,
@@ -231,6 +238,114 @@ class HostWorldExtensionTests(unittest.TestCase):
                     snapshot.projection.ready_frontier,
                     created.ready_frontier,
                 )
+
+    def test_provider_unknown_survives_later_host_core_checkpoint(self) -> None:
+        capability = CapabilitySnapshot.from_document(
+            capability_document(),
+            "2026-08-09T00:00:00Z",
+        )
+        backend = ProviderBackend()
+        first_transport = ProviderTransport(backend)
+        first_adapter = CloudflareWorldAdapter(first_transport)
+        prepared = first_adapter.prepare_fetch(
+            dispatch_id="dispatch:world:e0-core-checkpoint",
+            effect_id="effect:world:e0-core-checkpoint",
+            url="https://example.invalid/e0-core-checkpoint",
+            capability=capability,
+        )
+        first_transport.prepared = prepared
+
+        with tempfile.TemporaryDirectory() as directory:
+            clock = itertools.count(15_000).__next__
+            checkpoint = WorkingCheckpoint(
+                task_id="task:world:e0-core-checkpoint",
+                objective="Preserve World owner state across Host semantic checkpoints.",
+                frontier="Reconcile the exact unknown Provider request.",
+                established=(),
+                unresolved=("Provider outcome is not yet known.",),
+                rejected=(),
+                constraints=("Do not redispatch the Provider request.",),
+                next_actions=("Reconcile the original Provider request.",),
+                runtime=None,
+            )
+            with HostStorage(directory) as storage:
+                host = ExternalContinuityHost(
+                    storage,
+                    clock_ms=clock,
+                    owner_id="host:world-e0:first",
+                )
+                adopted = host.adopt(
+                    task_id=checkpoint.task_id,
+                    goal_id="goal:world:e0-core-checkpoint",
+                    initial_checkpoint=checkpoint,
+                )
+                extension = HostWorldExtension(
+                    HostExtensionPort(
+                        storage,
+                        HostKernel(
+                            storage,
+                            clock_ms=clock,
+                            owner_id="world:e0:first",
+                        ),
+                    )
+                )
+                extension.prepare(checkpoint.task_id, prepared)
+                unknown = extension.deliver(
+                    checkpoint.task_id,
+                    first_adapter,
+                    check_conditions=False,
+                )
+                self.assertEqual(unknown.status, "unknown")
+                self.assertEqual(backend.posts, 1)
+                later = WorkingCheckpoint(
+                    task_id=checkpoint.task_id,
+                    objective=checkpoint.objective,
+                    frontier="Fresh controller must recover World owner state.",
+                    established=("Host semantic work advanced after World UNKNOWN.",),
+                    unresolved=("World owner reconciliation remains outstanding.",),
+                    rejected=(),
+                    constraints=checkpoint.constraints,
+                    next_actions=checkpoint.next_actions,
+                    runtime=None,
+                )
+                core = host.checkpoint(
+                    task_id=checkpoint.task_id,
+                    expected_revision=unknown.task_revision,
+                    checkpoint=later,
+                    disposition="continue",
+                )
+                self.assertGreater(core.projection.revision, adopted.projection.revision)
+                current = storage.read_task_event(checkpoint.task_id)
+                self.assertEqual(current.event_kind, EventKind.TASK_CONTEXT_CHECKPOINTED)
+                self.assertNotIn("worldDispatches", current.data)
+
+            fresh_transport = ProviderTransport(backend)
+            with HostStorage(directory) as reopened:
+                fresh_extension = HostWorldExtension(
+                    HostExtensionPort(
+                        reopened,
+                        HostKernel(
+                            reopened,
+                            clock_ms=clock,
+                            owner_id="world:e0:fresh",
+                        ),
+                    )
+                )
+                restored = fresh_extension.load_prepared(checkpoint.task_id)
+                self.assertEqual(restored, prepared)
+                fresh_transport.prepared = restored
+                recovered = fresh_extension.reconcile(
+                    checkpoint.task_id,
+                    CloudflareWorldAdapter(fresh_transport),
+                )
+                self.assertEqual(recovered.status, "succeeded")
+                self.assertTrue(recovered.reconciled)
+                self.assertEqual(backend.posts, 1)
+                world = fresh_extension.port.load_namespace(checkpoint.task_id, "world")
+                entry = world.data["worldDispatches"][prepared.dispatch.dispatch_id]
+                self.assertEqual(entry["worldOutcomeState"], "succeeded")
+                self.assertNotIn("worldUncertaintyDigest", entry)
+                self.assertEqual(world.projection.revision, recovered.task_revision)
 
     def test_one_task_supports_sequential_provider_dispatches_and_requires_identity_when_ambiguous(
         self,

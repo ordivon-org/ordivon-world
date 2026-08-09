@@ -64,7 +64,7 @@ class HostWorldExtension:
         self.port = port
 
     def dispatch_ids(self, task_id: str) -> tuple[str, ...]:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         return tuple(sorted(self._instances(current.data)))
 
     def prepare(
@@ -72,7 +72,7 @@ class HostWorldExtension:
         task_id: str,
         prepared: PreparedWorldDispatch,
     ) -> HostWorldStep:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         prepared_object = self.port.put_object(
             prepared.to_dict(),
             kind=_PREPARED_KIND,
@@ -129,7 +129,7 @@ class HostWorldExtension:
         task_id: str,
         dispatch_id: str | None = None,
     ) -> PreparedWorldDispatch:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         selected = self._select_dispatch(current.data, dispatch_id)
         entry = self._entry_by_id(current.data, selected)
         digest = entry.get("worldPreparedDispatchDigest")
@@ -187,7 +187,7 @@ class HostWorldExtension:
         *,
         reason: str,
     ) -> HostWorldStep:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, prepared)
         entry = self._entry(current.data, prepared)
         if entry.get("worldOutcomeState") == "unknown":
@@ -250,7 +250,7 @@ class HostWorldExtension:
         result: ReconciliationResult,
     ) -> HostWorldStep:
         if not result.found:
-            current = self.port.load(task_id)
+            current = self.port.load_namespace(task_id, "world")
             self._require_current(current.data, prepared)
             return self._step(
                 task_id,
@@ -262,7 +262,7 @@ class HostWorldExtension:
         if result.observation is None:
             raise HostWorldError("found reconciliation result omitted its Observation")
         if result.pending:
-            current = self.port.load(task_id)
+            current = self.port.load_namespace(task_id, "world")
             self._require_current(current.data, prepared)
             return self._step(
                 task_id,
@@ -284,7 +284,7 @@ class HostWorldExtension:
         prepared: PreparedWorldDispatch,
         observation: WorldObservation,
     ) -> HostWorldStep:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, prepared)
         entry = self._entry(current.data, prepared)
         if observation.envelope.dispatch_id != prepared.dispatch.dispatch_id:

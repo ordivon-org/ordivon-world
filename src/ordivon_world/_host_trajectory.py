@@ -61,7 +61,7 @@ class _HostTrajectoryJournal:
         self.port = port
 
     def identities(self, task_id: str) -> tuple[str, ...]:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         if self.instances_field is not None:
             return tuple(sorted(self._instances(current.data)))
         if not self.correlation_fields:
@@ -74,7 +74,7 @@ class _HostTrajectoryJournal:
         self._verify_plan(plan)
         for slot in self.slots:
             self._verify_slot(slot, plan, getattr(bundle, slot.bundle_attr))
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         identity = self._plan_identity(plan)
         existing_entry = self._optional_entry(current.data, identity)
         if existing_entry is not None:
@@ -123,7 +123,7 @@ class _HostTrajectoryJournal:
         return self._step(task_id, committed.projection.revision, plan, "prepared", None, False)
 
     def load_bundle(self, task_id: str, identity: str | None = None) -> Any:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         selected = self._select_identity(current.data, identity)
         entry = self._entry_by_identity(current.data, selected)
         digest = entry.get(self.plan_digest_field)
@@ -159,7 +159,7 @@ class _HostTrajectoryJournal:
     def execute(self, task_id: str, materialize: Any, identity: str | None = None) -> Any:
         bundle = self.load_bundle(task_id, identity)
         plan = bundle.plan
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         entry = self._entry(current.data, plan)
         receipt = self._load_receipt_from_data(current.data, plan)
         if receipt is not None:
@@ -183,7 +183,7 @@ class _HostTrajectoryJournal:
     def reconcile(self, task_id: str, observe: Any, identity: str | None = None) -> Any:
         bundle = self.load_bundle(task_id, identity)
         plan = bundle.plan
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         receipt = self._load_receipt_from_data(current.data, plan)
         if receipt is not None:
             return self._step(
@@ -195,7 +195,7 @@ class _HostTrajectoryJournal:
         return self.record_receipt(task_id, plan, receipt, reconciled=True)
 
     def record_unknown(self, task_id: str, plan: Any, *, reason: str) -> Any:
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, plan)
         entry = self._entry(current.data, plan)
         receipt = self._load_receipt_from_data(current.data, plan)
@@ -244,7 +244,7 @@ class _HostTrajectoryJournal:
         reconciled: bool = False,
     ) -> Any:
         self._validate_receipt(plan, receipt)
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         self._require_current(current.data, plan)
         entry = self._entry(current.data, plan)
         value = receipt.to_dict()
@@ -295,7 +295,7 @@ class _HostTrajectoryJournal:
 
     def load_receipt(self, task_id: str, identity: str | None = None) -> Any:
         bundle = self.load_bundle(task_id, identity)
-        current = self.port.load(task_id)
+        current = self.port.load_namespace(task_id, "world")
         receipt = self._load_receipt_from_data(current.data, bundle.plan)
         if receipt is None:
             raise self.error_type(f"Host Task has no retained {self.label} receipt")

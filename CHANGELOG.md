@@ -23,6 +23,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 ### Fixed
 
+- Host core Events no longer shadow outstanding World owner state: Provider, Resource, Message and Entity journals now read the schema-v5 Host `world` extension namespace, so fresh controllers can reconcile exact commitments after later Task checkpoints without redispatch;
 - Cloudflare R2 cleanup enumeration now uses the current `per_page` List Objects parameter instead of the unsupported `limit` parameter;
 - GC pagination tests now verify `prefix`, `per_page` and `cursor` behavior;
 - the installed GC controller now completes successfully and remains scheduled by the active timer;
