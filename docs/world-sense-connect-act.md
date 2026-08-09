@@ -345,3 +345,119 @@ UniversalConnectionStateMachine
 ```
 
 The next Connector experiment should target a borrowed transport that reaches a bounded **usable-service** condition under current Route A/B constraints. Only then should an Effector experiment claim that a useful external action traversed the newly acquired Connector.
+
+
+## Connector P1 and Effector P0: usable service is a separate proof boundary
+
+Connector P0 proved that a real external relation may exist below service usability. Connector P1 therefore stopped asking whether a transport was merely connected and instead required a bounded service to carry one observable Agent action.
+
+### Public volunteer transports remained below stable service usability
+
+Two fresh Snowflake runs preserved the P0 relation proof but did not reach a usable SOCKS service. Workstation Direct Route A reacquired volunteer peers and reached 30% Tor bootstrap; Route B reached only 10%. The failures moved with the volunteer/broker relation rather than reducing to one route profile.
+
+VPN Gate produced a different set of staged results. OpenVPN on the only currently reachable candidate completed TCP, certificate verification, TLS 1.3 and peer initiation, but did not receive `PUSH_REPLY`. A portable, signature-verified SSTP/PPP stack then reached further on the same public service without installing host packages.
+
+SSTP exposed a useful distinction inside the protocol session itself:
+
+```text
+SSTP + MSCHAPv2
+  → transport connected
+  → authentication succeeded
+  → no local IPv4 assignment
+
+SSTP + PAP inside the same verified TLS session
+  → transport connected
+  → authentication succeeded
+  → IPCP completed once
+  → local IPv4 10.240.138.203
+  → peer 1.0.0.1
+```
+
+The assigned PPP interface was real, but a fixed HTTPS action did not complete through it, and the same relay did not reproduce IPv4 assignment reliably in a later direct-path session. Therefore:
+
+```text
+protocol relation established
+!= service usable
+
+network interface/address assigned
+!= forwarding verified
+```
+
+The public relay population itself also changed materially during the experiment. One expanded observation reported 98 current rows and returned 96 candidates; 90 `(host, IP)` pairs differed from an earlier 64-candidate snapshot. Fresh direct-path first-contact trials against previously unprobed JP and KR relays both became unreachable at TCP/443 and were confirmed unreachable by post-attempt probes. Discovery and reachability must therefore retain `observedAt` and cannot be promoted into durable capability grants.
+
+### Request-scoped positive control completed the World loop
+
+The public volunteer result does not imply that the Sense/Connect/Act model is unable to close. A separate positive control used an account-authorized temporary Cloudflare Worker as a **request-scoped external Connector**. The Worker accepted one fixed `/act` request and could fetch only `https://example.com/`; it was not a generic proxy.
+
+The local Agent reached the Worker through `native-a`. The remote Connector then completed the fixed external GET and returned:
+
+```text
+upstream status = 200
+body bytes      = 559
+body sha256     = ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d
+```
+
+This proves one bounded closure:
+
+```text
+Agent
+  ↓
+Connector: account-authorized Cloudflare HTTPS relation
+  ↓
+Effector: fixed remote Fetch
+  ↓
+Observation: status + byte count + digest
+```
+
+The experiment deliberately does **not** relabel this as public-volunteer or host-wide Internet egress. It proves a narrower but more useful principle:
+
+> An Agent may acquire exactly the external relationship required by the goal instead of first acquiring ownership of a complete network path.
+
+### Workstation failure-domain discovery
+
+Connector P1 also exposed a lower shared failure domain outside World ownership. During the experiment Surfshark WireGuard entered a half-dead state: its control structures and `/1` capture routes remained present while its handshake/data plane failed. Production and canary Cloudflare tunnels disappeared within roughly the same second because they still depended on the same lower Workstation/network substrate.
+
+Stopping only the WireGuard child service or recycling the Surfshark main service recreated the captured structure without proving restored data flow. An explicit emergency direct window—stopping the Surfshark application and services—restored Windows direct reachability and destination-specific WSL paths. After the experiment, Surfshark was restored through its own UI `Connect` control; the WireGuard service, split routes and Windows/WSL ambient HTTPS were re-observed as usable.
+
+This yields a cross-project requirement rather than new World route authority:
+
+```text
+multiple Connector identities
+!= independent redundancy
+
+if they share the same captured lower egress substrate
+```
+
+Workstation should own detection/recovery of that physical half-dead state. World should retain the resulting path-bound capability observations and let the Agent replan.
+
+## Connector P1 / Effector P0 retained model
+
+The strongest current model is now:
+
+```text
+Discover
+  ↓
+Acquire implementation
+  ↓
+Acquire relation
+  ↓
+Verify service usability
+  ↓
+Act
+  ↓
+Observe effect
+  ↓
+Reconcile
+```
+
+A lower-stage success must not be silently promoted to a higher stage. In particular:
+
+```text
+advertised != reachable
+reachable != transport
+transport != protocol relation
+protocol relation != usable service
+usable service != effect proven
+```
+
+Connector P1 still does not justify a global Connector manager, automatic relay selection or route mutation. The next experiments should prefer materially different real workloads over repeated relay enumeration. The request-scoped positive control is evidence that capability-granular external relationships are viable; repeated domain consumers are still required before extracting a shared production contract.

@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.connector-p1-effector-p0-acceptance",
+  "status": "passed",
+  "statusMeaning": "research boundary passed: public volunteer connectors remained below stable service usability, while an account-authorized request-scoped connector completed a bounded external Fetch effect; full borrowed Internet egress remains unproven",
+  "revisions": {
+    "world": "c173b8aea2daad1fb899dd2348a46f059de966f1",
+    "nativeAProfileDigest": "sha256:1ac39a9ea6d0ad82c9837de86646361e8e768cd917db2f51175c74af0e92bb22",
+    "nativeBProfileDigest": "sha256:b59d65b6dd4a88a7635cd2e22845fb4fe1bf694819f93e45709c92a487c7a71a"
+  },
+  "publicVolunteer": {
+    "fullBorrowedInternetEgress": false,
+    "stableUsableService": false,
+    "snowflake": {
+      "routeAJob": "job-019fe6ab-7e79-7743-9c60-ff15a678a40a",
+      "routeAHighestBootstrapPercent": 30,
+      "routeATerminalEvidenceDigest": "sha256:29999c1f5ee2869872d572dc9085b0af258d9f825b2ff144ec7b86683083efbd",
+      "routeBJob": "job-019fe6c9-79c4-7ae0-9903-4a788588fd0c",
+      "routeBHighestBootstrapPercent": 10,
+      "routeBTerminalEvidenceDigest": "sha256:69a79c7f91bd9518b1dae3c4a7c189987a756fe574e7b7f49b352e2d4e4dcaf7",
+      "observedRelation": true,
+      "serviceUsable": false
+    },
+    "openvpn": {
+      "selectedRelay": "public-vpn-145",
+      "selectedAddress": "219.100.37.118:443",
+      "job": "job-019fe6d7-f209-7c42-accd-42ae6a9fd024",
+      "terminalEvidenceDigest": "sha256:5708e1f72ab6870e84c9e016414f134deb00afa636906acc598db7fe2ed3c5c1",
+      "provenStages": [
+        "tcp-established",
+        "certificate-verified",
+        "tls-1.3-established",
+        "peer-connection-initiated"
+      ],
+      "missingStage": "push-reply",
+      "serviceUsable": false
+    },
+    "sstp": {
+      "portableImplementation": {
+        "sstpClientVersion": "1.0.20",
+        "pppdVersion": "2.5.3",
+        "hostInstalled": false,
+        "sstpPackageSha256": "sha256:7162de06fb1d3562bf6953096bcdbe7c615a6129df3c57078f85b3e77b76f67d",
+        "pppPackageSha256": "sha256:5242269e48fa213cd0020e397624be63bf8eebdf25b65fe0f5d93d6048b708dd",
+        "archSignaturesVerified": true
+      },
+      "relay145": {
+        "host": "public-vpn-145.opengw.net",
+        "address": "219.100.37.118:443",
+        "mschapV2": {
+          "sstpConnected": true,
+          "authenticationSucceeded": true,
+          "ipv4Assigned": false
+        },
+        "pap": {
+          "sstpConnected": true,
+          "authenticationSucceeded": true,
+          "ipv4AssignedOnce": true,
+          "assignedLocalIPv4": "10.240.138.203",
+          "peerIPv4": "1.0.0.1",
+          "stableReproduction": false,
+          "boundedHttpsEffectSucceeded": false
+        }
+      },
+      "freshDirectFirstContact": [
+        {
+          "host": "public-vpn-240.opengw.net",
+          "address": "219.100.37.216:443",
+          "surfsharkSplitRoutesAbsentBeforeFirstSocket": true,
+          "outerRoute": "eth0-direct",
+          "sstpConnectSucceeded": false,
+          "postAttemptTcpProbeSucceeded": false,
+          "job": "job-019fe705-9416-76b1-912f-8a336fabaf87"
+        },
+        {
+          "host": "vpn305489668.opengw.net",
+          "address": "211.205.56.227:443",
+          "country": "KR",
+          "surfsharkSplitRoutesAbsentBeforeFirstSocket": true,
+          "outerRoute": "eth0-direct",
+          "sstpConnectSucceeded": false,
+          "postAttemptTcpProbeSucceeded": false,
+          "job": "job-019fe706-e135-7073-a893-d7f7cb3a207e"
+        }
+      ]
+    },
+    "dynamicDiscovery": {
+      "earlierReturnedCandidates": 64,
+      "expandedCatalogRows": 98,
+      "expandedReturnedCandidates": 96,
+      "novelHostIpPairsComparedWithEarlierSnapshot": 90,
+      "expandedSnapshotSha256": "sha256:2f6c7bfe25dda4dcb4813dd0f439ea7a841549755b5eb9031faf177981f9ace3",
+      "meaning": "relay populations and endpoint reachability are high-churn observations, not durable capability grants"
+    }
+  },
+  "requestScopedPositiveControl": {
+    "ownership": "account-authorized-leased",
+    "connector": "cloudflare-worker-https",
+    "transportProfile": "native-a",
+    "fixedUpstream": "https://example.com/",
+    "job": "job-019fe709-9b10-79f1-84d8-87eee88dd133",
+    "terminalEvidenceDigest": "sha256:efdc4f4e44d25736e6bcf65641667c2fa0727e73300c7ed0c6c55270af79167e",
+    "upstreamStatus": 200,
+    "bodyBytes": 559,
+    "bodySha256": "sha256:ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+    "resultArtifactSha256": "sha256:186d65cbdd0a2d3bac46af342a6c149abb6a7e9f1b107c230c3a54fd18e14fe3",
+    "boundedFetchEffectSucceeded": true,
+    "claim": "a request-scoped external Connector can be service-usable and carry a bounded Fetch effect without a host-wide tunnel"
+  },
+  "workstationIncident": {
+    "surfsharkHalfDeadObserved": true,
+    "symptoms": [
+      "preshared-key-expired",
+      "wireguard-pqs-handshake-timeout",
+      "vpn-control-structures-present-while-data-plane-unavailable",
+      "physical-source-bound-sockets-denied-or-unreachable",
+      "production-and-canary-cloudflare-tunnels-lost-together"
+    ],
+    "recoveryFinding": "stopping Surfshark opened a direct physical path for Windows and destination-specific WSL traffic; child-service or main-service recycle alone recreated the stale VPN structure",
+    "userStateRestored": {
+      "method": "Surfshark UI Automation connect_button InvokePattern",
+      "surfsharkServiceRunning": true,
+      "wireguardServiceRunning": true,
+      "wireguardSplitRoutesRestored": true,
+      "windowsAmbientHttps": true,
+      "wslAmbientHttps": true,
+      "nativeAStillUsable": true
+    },
+    "crossProjectRequirement": "Workstation continuity must detect VPN half-dead capture as a lower shared failure domain; multiple Cloudflare tunnel identities are not independent redundancy when the same egress substrate is captured"
+  },
+  "laws": [
+    "Protocol relation != stable service usability",
+    "Assigned network interface/address != verified forwarding service",
+    "Current public relay discovery is time-bound and high-churn",
+    "A failed destination observation must not be generalized to Internet=false",
+    "Connector implementation acquisition is itself a path-bound capability",
+    "Request-scoped external capability may satisfy an Agent goal without host-wide network ownership",
+    "Redundant connector identities do not imply independent lower failure domains",
+    "Effect proof requires observing the intended external result, not merely creating a transport interface"
+  ],
+  "productDecision": {
+    "addConnectorManager": false,
+    "addAutomaticRelaySelection": false,
+    "addAutomaticRouteMutation": false,
+    "addGlobalConnectionRegistry": false,
+    "promoteRequestScopedConnectorPrimitive": false,
+    "reason": "P1 proves useful staged distinctions and one request-scoped positive closure, but public volunteer transports remain unstable and one positive control is insufficient to force a shared production abstraction"
+  },
+  "cleanup": {
+    "p1eSensor": {"worker": 404, "dns": 404, "route": 404},
+    "positiveControl": {"worker": 404, "dns": 404, "route": 404},
+    "pppTunInterfacesAbsent": true,
+    "temporaryPolicyRulesAbsent": true,
+    "connectorProcessesAbsent": true,
+    "temporaryRunStagesAbsent": true,
+    "pacmanLockAbsent": true,
+    "openvpnHostPackageAbsent": true,
+    "sstpClientHostPackageAbsent": true,
+    "pppHostPackageAbsent": true
+  }
+}
