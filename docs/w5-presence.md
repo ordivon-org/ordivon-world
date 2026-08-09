@@ -207,24 +207,85 @@ This is deliberately weaker than saying Security is a second live-cognition dest
 
 [`../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json`](../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json) is the World B1 acceptance receipt, SHA-256 `e5416f7097a51abfe9d3f52d736d70ad669461eb3d857afb09d7cb99c1d3a6d6`. It binds Security experiment revision `072ef473cea7e51c2347ef387b20fbd12b39f23d`, detached Security research candidate `22c94ff64182a018029c3cc2f94cd453e0266520`, a successful current production-control KVM run, the exact physical activation result and clean closure.
 
-## B2 next falsifier: cross-domain minimum
+## B2: the cross-domain minimum is a proof interface
 
-B2 should compare Game A3 and Security B1 without taking the union of their fields. The question is:
-
-> Which relation coordinates are genuinely unavoidable in both domains, and which are only owner-native semantics?
-
-The candidate common core is deliberately small:
+B2 compared Game A3 and Security B1 by intersection rather than union. The two domains have different native vocabularies:
 
 ```text
-subject reference
-body owner + body identity
-owner-native scope/currentness fence
-destination admission evidence
-bounded occurrence/result evidence
+Game-only
+  cognitionRunId
+  planningId
+  intentDigest
+
+Security-only
+  migrationId
+  generation
+  activationId
 ```
 
-Game-specific cognition Run identity, Planning/Intent coordinates, and Security-specific migration/generation coordinates should remain owner-native unless a falsifier proves they belong in the shared core.
+Requiring the union as one shared schema rejects both domains for fields they do not own. Cognition remains real and mandatory inside the Game admission path, but Security B1 proves a bounded Subject/Body occurrence without a Harness cognition Run. Migration/generation are mandatory Security coordinates but meaningless to Game. Planning/Intent are mandatory Game coordinates but meaningless to Security.
 
-B2 must try to break this candidate from both directions. If removing a field permits subject/body/action substitution in either domain, the field may be invariant. If a field cannot be interpreted honestly by the other domain without importing foreign semantics, it must stay domain-owned.
+The smallest research intersection that survived the falsifiers is therefore six proof roles:
 
-Do not create a production `EmbodimentBinding` merely because two domains now have positive evidence. First prove a minimal intersection that both can consume without authority translation or schema laundering.
+```text
+subjectRef
+ownerId
+bodyRef
+scopeDigest
+admissionDigest
+occurrenceDigest
+```
+
+These names do **not** define shared domain semantics. `scopeDigest` means “the owning domain's exact currentness/action scope evidence”; `admissionDigest` means “the owning domain's exact destination admission evidence”; `occurrenceDigest` means “the owning domain's bounded result/effect evidence.” World can bind these proof roles without understanding Game Planning or Security KVM generation.
+
+### Owner-native falsifiers
+
+Game rejected a Medic subject binding when it was presented for the `security-chen` Actor Body, and rejected the same r0 binding when replayed into r1 Planning. Security B1 independently rejected substitution of subject, migration, continuity digest, materialization Body and generation.
+
+The generic omission falsifier then removed each of the six proof roles in turn. In both domain projections, omitting the corresponding role allowed exactly that coordinate to be substituted while the reduced comparison still matched. Keeping all six rejected each substitution. This is research evidence of necessity for the current two-domain intersection, not proof that no future representation can encode the same information differently.
+
+`ownerId` is especially important because current Body, scope, admission and occurrence references are owner-native. Removing it would force World either to guess which system interprets a reference or to create the global Body/evidence namespace that W5 has repeatedly failed to justify.
+
+`admissionDigest` and `occurrenceDigest` remain separate because an admitted action is not the same fact as an action that actually occurred. Game has missing-admission and native-effect evidence; Security has an exact activation binding and an independently observed Guest result.
+
+### B2 result
+
+> **Shared World invariant is a proof interface, not a universal domain model.**
+
+The current W5-B cross-domain shape is therefore:
+
+```text
+             WORLD research proof role
+
+subjectRef ────────────────────────────────┐
+ownerId                                   │
+bodyRef                                   │
+scopeDigest          owner-authored       │
+admissionDigest      evidence roles       │
+occurrenceDigest                          │
+                                           ▼
+                         bounded Subject/Body occurrence
+
+Game owner-native internals:      Harness Run / Planning / Intent / Actor / Fact
+Security owner-native internals:  Migration / generation / activation / KVM / Guest result
+```
+
+No authority translation occurs. The common layer never turns a Game cognition into Security authority or a Security migration into Game semantics.
+
+[`../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json`](../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json) is the mechanical cross-domain falsifier receipt, SHA-256 `7f9cdeb0f32a50954d06ec5d3083b386ac337b1c18f72b9229f5d26abb06dacb`. [`../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json`](../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json) is the owner-native supported B2 acceptance receipt, SHA-256 `3254a947dc98aaf757f5b63b7d834717d505b655df84722180825bf79ba1d62a`.
+
+## W5-B stopping condition
+
+B0 proved that fresh current relation evidence changes an Agent decision. B1 proved a second materially different bounded subject-active destination. B2 found a small cross-domain proof intersection without importing either domain's semantics. That is enough to close the current Presence research line **without** a production Presence service.
+
+W5-B therefore stops here with three negative product decisions:
+
+```text
+no PresenceRegistry
+no EmbodimentManager
+no shared production occurrence schema yet
+```
+
+The six-coordinate proof interface remains research vocabulary until a third materially different consumer reproduces the same need. A future browser session, remote A2A Agent or physical device is a better next falsifier than another Game/Security refinement.
+
+The next W5 line should move to **Discovery & Connection**: how an Agent discovers another body/entity/Agent, determines reachability, and establishes a relationship without letting discovery or reachability mint authority.
