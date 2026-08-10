@@ -12,7 +12,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - response-loss reconciliation through the original Cloudflare Receipt without redispatch;
 - packaged Draft 2020-12 contracts and a local Schema Registry;
 - cross-language TypeScript Capability and multi-state Receipt fixture validation;
-- W3C Trace Context propagation as non-authoritative telemetry;
+- legacy W3C Trace Context validation/round-trip support for retained pre-HP5 dispatches;
 - repository and live-system `ordivon-world-doctor`;
 - wheel, dependency, documentation and local acceptance gates;
 - clean-commit live Host→Cloudflare W1 acceptance scenario;
@@ -22,7 +22,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - Fetch/Browser dual-mode clean-revision acceptance runner;
 - pinned GitHub CI, CodeQL, secret scanning and dependency automation;
 - HP0–HP4 destructive survival evidence covering public-surface contraction, direct-Host consequence kill tests, rejected wire genericization and fresh-Agent projection A/B;
-- HP5 provider/verification court evidence for Browser integrity, exact provider binding, Trace Context deletion, owner-native doctor projections and provider repository separation.
+- HP5 provider/verification court evidence for Browser integrity, exact provider binding, Trace Context deletion, owner-native doctor projections and provider repository separation;
+- HP6–HP8 survival evidence for research-knowledge GC, 96-invocation mixed chaos, and the Minimal World tournament.
 
 ### Fixed
 
@@ -46,7 +47,9 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - default Python facade contracted from 90 to 17 names in HP0–HP4 and then 17 to 14 in HP5; Browser bundle/config/legacy Trace helpers remain explicit module APIs rather than default exports;
 - five inactive W5-A/W5-B falsifier scripts moved out of the active source surface while their evidence/docs/Git history remain;
 - new provider dispatches omit/stop propagating W3C Trace Context; retained legacy trace values remain structurally readable;
-- World doctor now consumes provider-owned capability and read-only lifecycle projections instead of duplicating Cloudflare control-plane logic.
+- World doctor now consumes provider-owned capability and read-only lifecycle projections instead of duplicating Cloudflare control-plane logic;
+- closed W4/W5/Sense-Connect-Act narratives moved to historical research with one compact current closeout authority;
+- research-only Foreign Egress Capability / Effect Path Query Python modules and three packaged contracts were deleted after failing fresh-Agent decision-value and independent-consumer tests; packaged schemas contract from 28 to 25 and the product Python suite from 139 to 121 tests.
 
 ### Verified
 
@@ -54,4 +57,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - live doctor reports current installation, Worker inputs, R2 lifecycle, GC and network prerequisites as healthy;
 - live W1 proves one external POST, injected response loss, Host UNKNOWN, fresh-Host reconciliation by the original request ID, digest-verified Artifact recovery, independent Verification and no Task completion claim;
 - live P2 proves one first-execution Browser POST, committed-response loss, Host UNKNOWN, fresh-Host reconciliation, screenshot/HTML/Manifest integrity, three independent Verification items, preserved Task state and no completion claim;
-- HP5 standalone-provider full CI passes outside the World Git root, while 139 World Python tests and wheel validation pass with the provider subtree absent.
+- HP5 standalone-provider full CI passes outside the World Git root, while 139 World Python tests and wheel validation pass with the provider subtree absent;
+- HP6 compact current knowledge retrieval answers 9/9 tested laws from ~75.9 KB versus 7/9 from ~191 KB of active historical prose;
+- HP7 runs 96 shuffled mixed-failure invocations with zero failures; HP8 repeats the same 96 on Minimal World with zero failures;
+- Minimal World passes 121 Python product/compatibility tests, 29 Provider TypeScript tests and the complete portable gate with exactly 25 packaged Schemas.

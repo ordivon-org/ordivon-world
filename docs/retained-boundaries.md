@@ -119,6 +119,12 @@ Release admission is based on the facts that changed:
 - effect/recovery changes require a clean commit-bound live W1 receipt;
 - CI proves portable source behavior but cannot prove live provider or machine health.
 
+## HP8 minimal-product contraction
+
+HP8 removes the research-only `ForeignEgressCapability` / `EffectPathQuery` Python modules and their three packaged contracts after HP4 failed to prove fresh-Agent decision value, HP6 preserved their unique laws/evidence in the research archive, and the Minimal World candidate passed the full portable gate plus the same 96 mixed-chaos invocations. Historical Computing research references do not reactivate the product surface.
+
+The same tournament deliberately retains legacy Trace decoding, the co-located provider implementation, and the current World network operator module for explicit compatibility/owner-handoff reasons. Minimality does not pre-empt an unfinished owner transfer.
+
 ## Reactivation rule
 
 Another deleted component may return only when a named current workload demonstrates all of the following:

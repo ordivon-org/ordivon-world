@@ -21,11 +21,13 @@ applies_to:
 ---
 # High-Pressure Survival HP0–HP4
 
+> **Subsequent product-surface update:** this document records the HP0–HP4 decision at its closeout. HP8 later removed the executable `ForeignEgressCapability` / `EffectPathQuery` modules and their three packaged contracts after no independent product consumer or fresh-Agent decision advantage emerged. Current authority is [`high-pressure-survival-hp6-hp8.md`](high-pressure-survival-hp6-hp8.md).
+
 This round treated every existing World surface as removable. A completed P-stage, a unit test, or a document reference was not accepted as proof of current necessity. The allowed verdicts were retain, privatize, move owner, demote to research, archive, delete, or need more evidence.
 
 ## HP0 — Surface Court
 
-The default Python facade contracted from 90 exported names to 17. Explicit pre-1.0 attributes remain importable for compatibility, but wildcard/default surface now emphasizes the live provider seam, three production trajectories, bounded Task inspection, temporal observation, contracts and telemetry. `EffectPathQuery`, `EffectPathCandidate` and `ForeignEgressCapability` remain packaged explicit research/informational APIs rather than default facade members.
+The default Python facade contracted from 90 exported names to 17. Explicit pre-1.0 attributes remain importable for compatibility, but wildcard/default surface now emphasizes the live provider seam, three production trajectories, bounded Task inspection, temporal observation, contracts and telemetry. At the HP4 closeout, `EffectPathQuery`, `EffectPathCandidate` and `ForeignEgressCapability` were still packaged as explicit research/informational APIs rather than default facade members; HP8 later removed them from the product package.
 
 The unused reserved `network-observation` Schema was deleted. No current producer plus independent consumer existed; owner-local network reports remain operational evidence. Five W5-A/W5-B falsifier scripts with no active caller were also removed; their accepted evidence, canonical research documents and Git history remain.
 
@@ -61,7 +63,7 @@ The retained law is: **structural similarity is not sufficient evidence for abst
 
 Thirty fresh independent DeepSeek v4 flash evaluation Runs were executed through the owner-native Ordivon Harness, plus one Provider smoke. Raw versus projected evidence was tested for path choice, controller recovery and temporal availability.
 
-Path projection did not earn production promotion. Neither raw evidence nor the first `EffectPathQuery` presentation reliably produced the prespecified Cloudflare-owner-revalidation choice, and the projected form produced inconsistent interpretations including one direct-ACT choice despite absent action authority. The implementation remains useful research evidence, but it no longer belongs to the default Python facade until a real consumer proves decision advantage.
+Path projection did not earn production promotion. Neither raw evidence nor the first `EffectPathQuery` presentation reliably produced the prespecified Cloudflare-owner-revalidation choice, and the projected form produced inconsistent interpretations including one direct-ACT choice despite absent action authority. At that stage the implementation was retained as research evidence outside the default facade. HP8 later preserved the evidence but removed the executable implementation after no real consumer appeared.
 
 Recovery produced a useful defect. Raw evidence already yielded the correct reconcile choice, while the first Inspector wording could make `reconcile-original-transfer` sound like re-issuing the request. World narrowed the projection to `actionAuthority=not-granted-by-inspection` and `reconcile-original-...-without-redispatch`. After that change, three of three fresh Runs completed with `RECONCILE_RESOURCE_ONLY` and explicitly described reconciliation as lookup/inspection rather than redispatch.
 

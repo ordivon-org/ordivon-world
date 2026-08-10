@@ -25,7 +25,7 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned work to independently authoritative environments. The released production boundary centers on the direct external-provider seam, three language-neutral inter-World trajectories (Resource Transfer, Message Delivery and Entity Migration), bounded owner inspection and narrow temporal provenance. Foreign-egress capability and effect-path projections remain explicit research/informational surfaces after HP4 failed to prove a fresh-Agent decision advantage; they are no longer part of the default Python facade.
+Ordivon World connects Host-owned work to independently authoritative environments. The released production boundary centers on the direct external-provider seam, three language-neutral inter-World trajectories (Resource Transfer, Message Delivery and Entity Migration), bounded owner inspection and narrow temporal provenance. W-X1/W-X3 foreign-egress/effect-path laws remain historical research evidence, but HP8 removes their executable Python APIs and packaged contracts after HP4 failed to prove a fresh-Agent decision advantage.
 
 ```text
 Host Task / Effect / Dispatch
@@ -39,7 +39,7 @@ Receipt / Artifact / condition observation
 Host Observation / independent Verification
 ```
 
-World is a repository and adapter boundary. It is **not** a World daemon, workflow engine, provider broker, general connector platform, network control plane, Sandbox service, Task database, or completion authority.
+World is a repository and adapter boundary. It is **not** a World daemon, workflow engine, provider broker, general connector platform, network control plane, Sandbox service, Task database, or completion authority. HP0–HP8 are now closed for the current evidence; there is no numbered next foundation stage. New World work starts from a reproduced workload/failure.
 
 ## Start here
 
@@ -49,23 +49,23 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 - [`docs/contracts.md`](docs/contracts.md) — JSON Schema, deterministic identities and Host mapping.
 - [`docs/verification.md`](docs/verification.md) — deterministic, provider and live-system gates.
 - [`docs/high-pressure-provider-verification-hp5.md`](docs/high-pressure-provider-verification-hp5.md) — HP5 provider/verification ownership and deletion court.
+- [`docs/high-pressure-survival-hp6-hp8.md`](docs/high-pressure-survival-hp6-hp8.md) — final knowledge-GC, chaos and Minimal World tournament closeout.
+- [`docs/research-closeouts.md`](docs/research-closeouts.md) — compact laws/evidence index for closed W4/W5/Sense-Connect-Act research.
 - [`SECURITY.md`](SECURITY.md) and [`docs/data-and-privacy.md`](docs/data-and-privacy.md) — trust and data boundaries.
 - [`docs/authority.md`](docs/authority.md) — which source owns each fact.
 - [`docs/retained-boundaries.md`](docs/retained-boundaries.md) — why the active scope remains narrow.
 
 ## Active capabilities
 
-### Research/informational relationship and effect-path projection
+### Closed relationship/effect-path research
 
-`ForeignEgressCapability` and `EffectPathQuery` retain the W-X1/W-X3 evidence that capability is path/time/owner scoped and that provider-native observations should be compared without transferring physical authority. They remain explicit module APIs and packaged contracts.
-
-HP4 then tested their actual Agent decision value with fresh DeepSeek Runs. The projected form did not outperform raw owner evidence on the prespecified path-choice falsifier and produced inconsistent authority interpretations, including one direct-ACT choice. They therefore no longer belong to the default `ordivon_world.__all__` facade. A future real consumer may promote them again only after reproducing a decision failure that the projection fixes. See [`docs/high-pressure-survival-hp0-hp4.md`](docs/high-pressure-survival-hp0-hp4.md).
+W-X1/W-X3 established that capability/path evidence is owner-, path- and time-scoped, but HP4 failed to show fresh-Agent decision advantage from the executable `ForeignEgressCapability` / `EffectPathQuery` projection layer. HP8 therefore removes those research-only Python APIs and packaged contracts from the product package. The accepted laws, counterexamples and immutable evidence remain in [`docs/research-closeouts.md`](docs/research-closeouts.md) and `evidence/acceptance/`. Reopening requires a new real consumer failure.
 
 ### External commitment continuity
 
 W5-E tested whether Agent path choice itself needs another durable World journal. A historical Surfpath reference remained structurally intact after expiry, but the Workstation owner rejected it before the child effect. Fresh rediscovery of the same logical `jp-tok / openvpn-udp` intent produced new observation, path and capability identities; an exact new reference was then revalidated and reached OpenAI with HTTP 401.
 
-The retained law is that pre-admission observation/query/selection is recomputable planning state. World durability begins when an owner admits an exact consequence-capable operation whose outcome may later be Receipt or UNKNOWN. Those durable boundaries already exist in the typed Provider, Resource, Message and Entity journals and are discoverable through `WorldTaskInspector`; no `CapabilityManager`, selection journal or generic commitment registry is required. See [`docs/w5-external-commitment-continuity.md`](docs/w5-external-commitment-continuity.md).
+The retained law is that pre-admission observation/query/selection is recomputable planning state. World durability begins when an owner admits an exact consequence-capable operation whose outcome may later be Receipt or UNKNOWN. Those durable boundaries already exist in the typed Provider, Resource, Message and Entity journals and are discoverable through `WorldTaskInspector`; no `CapabilityManager`, selection journal or generic commitment registry is required. See [`docs/research-closeouts.md`](docs/research-closeouts.md#external-commitment-continuity); the full experiment is historical under `docs/archive/research/`.
 
 ### Execution mobility
 
@@ -73,7 +73,7 @@ W-X4 moved one Host-correlated objective across Runtime `local_linux` and `windo
 
 The post-admission half then split one Cloudflare Effect across fresh Runtime controller workspaces: the source controller freshly observed provider capability, emitted one POST, lost the committed response and durably entered UNKNOWN; the destination controller restored the original prepared dispatch and reconciled the exact provider request with zero recovery POSTs. A fresh execution context did not become authority to repeat an old consequence.
 
-One physical gap remains outside World: current Runtime `windows_native` cannot use the `workspace.execBound` immutable external-input path because that path requires `contained_local` while Windows-native currently supports `trusted_local`. World deliberately does not implement a byte-copy compatibility layer. See [`docs/w5-execution-mobility.md`](docs/w5-execution-mobility.md).
+One physical gap remains outside World: current Runtime `windows_native` cannot use the `workspace.execBound` immutable external-input path because that path requires `contained_local` while Windows-native currently supports `trusted_local`. World deliberately does not implement a byte-copy compatibility layer. See [`docs/research-closeouts.md`](docs/research-closeouts.md#execution-mobility); the full experiment is historical under `docs/archive/research/`.
 
 ### Temporal provider observations
 

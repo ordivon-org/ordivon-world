@@ -4,8 +4,8 @@ id: world.w5.presence
 title: W5-B Agent Presence Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -128,7 +128,7 @@ World does not choose the Body for the Agent and the Presence projection does no
 
 B0 does not justify automatic prefetch of Presence for every Body, a subscription bus, heartbeat daemon, global location map or persistent online/offline flag. It also does not prove that every Agent decision needs Presence. The requirement is currently **decision-scoped**: query current relation only when a concrete next action depends on it.
 
-[`../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json`](../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json) is the B0 commit-bound rerun receipt, SHA-256 `ec475b179f274595c78002e99d9760afe3dd25dff4048a4621ecefe6050e14a9`. It binds current Harness revision `98d295582dd9a5034413d87cc488089a1c75b138`, Game canonical plus the non-main W5-A destination-admission candidate, and the exact Security B1 closure. The historical-only Agent returned `insufficient-current-evidence`; the fresh-relation Agent selected `game-body`; both Runs were recovered from durable Harness receipts.
+[`../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json`](../../../evidence/acceptance/w5b-b0-agent-current-relation-e40842d.json) is the B0 commit-bound rerun receipt, SHA-256 `ec475b179f274595c78002e99d9760afe3dd25dff4048a4621ecefe6050e14a9`. It binds current Harness revision `98d295582dd9a5034413d87cc488089a1c75b138`, Game canonical plus the non-main W5-A destination-admission candidate, and the exact Security B1 closure. The historical-only Agent returned `insufficient-current-evidence`; the fresh-relation Agent selected `game-body`; both Runs were recovered from durable Harness receipts.
 
 ## B1: Security as a second bounded subject-active destination
 
@@ -205,7 +205,7 @@ Security is now a second materially different **subject-active destination** for
 
 This is deliberately weaker than saying Security is a second live-cognition destination. Game A3 binds a real Harness cognition instance to an Actor action; Security B1 binds a fixed destination activation fixture to a KVM Body. Cognition therefore cannot yet be promoted into the cross-domain minimum merely because Game needs it.
 
-[`../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json`](../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json) is the World B1 acceptance receipt, SHA-256 `e5416f7097a51abfe9d3f52d736d70ad669461eb3d857afb09d7cb99c1d3a6d6`. It binds Security experiment revision `072ef473cea7e51c2347ef387b20fbd12b39f23d`, detached Security research candidate `22c94ff64182a018029c3cc2f94cd453e0266520`, a successful current production-control KVM run, the exact physical activation result and clean closure.
+[`../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json`](../../../evidence/acceptance/w5b-b1-security-active-destination-e40842d.json) is the World B1 acceptance receipt, SHA-256 `e5416f7097a51abfe9d3f52d736d70ad669461eb3d857afb09d7cb99c1d3a6d6`. It binds Security experiment revision `072ef473cea7e51c2347ef387b20fbd12b39f23d`, detached Security research candidate `22c94ff64182a018029c3cc2f94cd453e0266520`, a successful current production-control KVM run, the exact physical activation result and clean closure.
 
 ## B2: the cross-domain minimum is a proof interface
 
@@ -272,7 +272,7 @@ Security owner-native internals:  Migration / generation / activation / KVM / Gu
 
 No authority translation occurs. The common layer never turns a Game cognition into Security authority or a Security migration into Game semantics.
 
-[`../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json`](../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json) is the mechanical cross-domain falsifier receipt, SHA-256 `7f9cdeb0f32a50954d06ec5d3083b386ac337b1c18f72b9229f5d26abb06dacb`. [`../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json`](../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json) is the owner-native supported B2 acceptance receipt, SHA-256 `3254a947dc98aaf757f5b63b7d834717d505b655df84722180825bf79ba1d62a`.
+[`../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json`](../../../evidence/acceptance/w5b-b2-cross-domain-minimum-5f5a253.json) is the mechanical cross-domain falsifier receipt, SHA-256 `7f9cdeb0f32a50954d06ec5d3083b386ac337b1c18f72b9229f5d26abb06dacb`. [`../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json`](../../../evidence/acceptance/w5b-b2-cross-domain-minimum-acceptance-5f5a253.json) is the owner-native supported B2 acceptance receipt, SHA-256 `3254a947dc98aaf757f5b63b7d834717d505b655df84722180825bf79ba1d62a`.
 
 ## W5-B stopping condition
 

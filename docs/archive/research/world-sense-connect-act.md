@@ -4,8 +4,8 @@ id: world.research.sense-connect-act
 title: Sense, Connect and Act Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world

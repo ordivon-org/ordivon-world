@@ -1,0 +1,169 @@
+{
+  "externalOwnerTasks": [
+    {
+      "revision": 4,
+      "state": "ready",
+      "taskId": "task:workstation:surfshark-path-provider-p0-20260810"
+    },
+    {
+      "revision": 2,
+      "state": "ready",
+      "taskId": "task:host:world-core-dependency-surface-20260810"
+    },
+    {
+      "revision": 2,
+      "state": "ready",
+      "taskId": "task:harness:no-tool-conclusion-correction-20260810"
+    },
+    {
+      "revision": 2,
+      "state": "ready",
+      "taskId": "task:runtime:windows-immutable-input-portability-20260810"
+    }
+  ],
+  "finalPrecommitAcceptance": {
+    "jobId": "job-019febc5-c3dc-7a30-887c-3defc3c221fd",
+    "pythonTests": 121,
+    "schemas": 25,
+    "status": "passed",
+    "terminalEvidenceDigest": "sha256:2b1d489299873e507e4c7c0f9d3f475fa85d469fb0bbfd5643f367a73c31541c"
+  },
+  "hp6": {
+    "activeResearchAfterGc": 0,
+    "archivedResearchBytes": 129597,
+    "archivedResearchEntries": 9,
+    "currentAuthority": "docs/research-closeouts.md",
+    "historicalStudiesMoved": 8,
+    "providerStructuredAB": {
+      "attempts": 2,
+      "counted": false,
+      "reason": "provider content truncated before parseable structured result"
+    },
+    "retrievalAB": {
+      "fullResearch": {
+        "bytes": 190984,
+        "chunks": 814,
+        "passed": 7
+      },
+      "minimalCurrent": {
+        "bytes": 75900,
+        "chunks": 163,
+        "passed": 9
+      },
+      "questions": 9
+    },
+    "runtimeEvidence": [
+      {
+        "jobId": "job-019febb2-f7c8-7171-8b57-ec0367a5b0cc",
+        "role": "knowledge-inventory",
+        "terminalEvidenceDigest": "sha256:e07b8203096aeb9408a09aeb9ec8e9cfebc6d6874df2800d9927802cef837bdf"
+      },
+      {
+        "jobId": "job-019febb7-d904-7430-b221-fb8efdfbb5a8",
+        "role": "retrieval-ab",
+        "terminalEvidenceDigest": "sha256:3a335a30f09c134ff8ef9ab3bc4058fec4a6eed4c9dce39734c66cc315e63984"
+      },
+      {
+        "jobId": "job-019febb9-8451-73f0-abc9-434992d4d681",
+        "role": "current-surface-proof",
+        "terminalEvidenceDigest": "sha256:042ff708e51e043988af8b54d6fb9843c90bd96884d37c277df6b8fe4dacfafa"
+      }
+    ],
+    "verdict": "ARCHIVE-HISTORICAL-COLLAPSE-CURRENT-AUTHORITY"
+  },
+  "hp7": {
+    "covered": [
+      "18-way-concurrent-trajectories",
+      "same-task-four-family-inspection",
+      "second-provider-unknown-recovery",
+      "browser-fresh-host-recovery",
+      "resource-not-committed",
+      "message-not-committed",
+      "entity-native-not-committed",
+      "provider-condition-drift"
+    ],
+    "failures": 0,
+    "rounds": 12,
+    "runtimeEvidence": [
+      {
+        "jobId": "job-019febba-d12a-7d12-ae89-72f921a0398e",
+        "role": "mixed-chaos-stress",
+        "terminalEvidenceDigest": "sha256:c16023073c4aa8ec808113ba2750fe9d799ebab98c75d306d7d3859d1a6862fa"
+      }
+    ],
+    "testsPerRound": 8,
+    "totalInvocations": 96,
+    "verdict": "NO-NEW-GLOBAL-COORDINATION-LAYER"
+  },
+  "hp8": {
+    "after": {
+      "pythonTests": 121,
+      "rootFacade": 14,
+      "schemas": 25,
+      "sourceLoc": 5112,
+      "sourcePyFiles": 18,
+      "testFiles": 20
+    },
+    "before": {
+      "pythonTests": 139,
+      "rootFacade": 14,
+      "schemas": 28,
+      "sourceLoc": 5891,
+      "sourcePyFiles": 20,
+      "testFiles": 22
+    },
+    "deletedContracts": [
+      "foreign-egress-capability",
+      "foreign-egress-capability-reference",
+      "effect-path-query"
+    ],
+    "deletedProductModules": [
+      "src/ordivon_world/foreign_egress.py",
+      "src/ordivon_world/effect_paths.py"
+    ],
+    "deletedTests": [
+      "tests/test_foreign_egress.py",
+      "tests/test_effect_paths.py"
+    ],
+    "historicalComputingReferenceIsProductionConsumer": false,
+    "minimalChaosReplay": {
+      "failures": 0,
+      "jobId": "job-019febc0-cfd5-7cf3-856b-de80213228b3",
+      "rounds": 12,
+      "terminalEvidenceDigest": "sha256:8b53e611f2ca6df7a56b377aa67be7aa3943e1c66f1a951cb9d2b581856f2c98",
+      "testsPerRound": 8,
+      "totalInvocations": 96
+    },
+    "portableAcceptance": {
+      "jobId": "job-019febbe-4c6b-7192-99f0-7a081204b23b",
+      "status": "passed",
+      "terminalEvidenceDigest": "sha256:51377e1530539f156f107e2bf48be92bbdc4f6f5c3822aa761bc81774b608bb7"
+    },
+    "pythonProductSuite": {
+      "jobId": "job-019febc1-fbd9-73b0-b421-bdbbaba31478",
+      "terminalEvidenceDigest": "sha256:d55c61c8f89a4cd92ef518a6a9b86a765ac79fe6ed2dc913cd069c3c01c389b0",
+      "tests": 121
+    },
+    "verdict": "LAND-MINIMAL-WORLD-CONTRACTION"
+  },
+  "kind": "ordivon.world.hp6-hp8-survival-acceptance",
+  "laws": [
+    "Historical research is evidence, not current authority.",
+    "A smaller current knowledge surface can be safer than a larger archive when stale lifecycle labels compete with truth.",
+    "Mixed chaos that converges under typed owner journals does not justify global coordination state.",
+    "Research-only executable surfaces that fail consumer and decision-value tests should leave the product package.",
+    "Minimality counts owner correctness and maintenance burden, not only file count.",
+    "HP0-HP8 close the current survival epoch; future growth is demand-triggered rather than stage-number-triggered."
+  ],
+  "retainedByExplicitReason": {
+    "TraceContext": "legacy retained-state decode/round-trip only",
+    "harnessNoToolCorrection": "Harness-owned open requirement",
+    "hostPin": "Host packaging task still open; no accidental 9-to-34 dependency expansion",
+    "modules/network-observation": "Workstation substitution task still open; no premature deletion",
+    "providers/cloudflare": "provider-owned, extractable, co-located until an operational split is forced",
+    "windowsImmutableInput": "Runtime-owned open requirement"
+  },
+  "schemaVersion": 1,
+  "sourceBaseRevision": "eb4ec52fdf774671a2bdec2f3a72f3e27dc4baed",
+  "status": "passed-precommit"
+}

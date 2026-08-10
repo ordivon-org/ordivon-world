@@ -36,13 +36,8 @@ related:
 - [`compatibility.md`](compatibility.md) owns supported revisions and migration expectations.
 - [`operations.md`](operations.md) owns current commands and recovery procedures.
 - [`verification.md`](verification.md) owns evidence interpretation and gates.
-- [`w4-agency-authority-boundaries.md`](w4-agency-authority-boundaries.md) owns the cross-repository Agency/Authority decision: Presence is not authority, authority remains owner-scoped, source evidence does not become destination authority, and no global World capability/delegation service is justified by current evidence.
-- [`w5-agent-embodiment.md`](w5-agent-embodiment.md) owns the active W5-A research boundary: source Entity departure, continuity ownership, destination carrier materialization, active embodiment and current Presence remain distinct until experiments prove otherwise.
-- [`w5-presence.md`](w5-presence.md) owns the active W5-B research boundary: Agent-facing current subject/body relation evidence is query-scoped informational truth, not a global Presence registry or action authority.
-- [`w5-discovery-connection.md`](w5-discovery-connection.md) owns the active W5-C research boundary: discovery, reachability, protocol-native relationship/session state and authority are separate dimensions; none may be promoted into another without owner-native evidence.
-- [`w5-interaction.md`](w5-interaction.md) owns the W5-D interaction research closeout: typed interaction families share private causal/recovery mechanics and compose forward under partial completion, while source authority, destination consequence and receipt meaning remain owner-native semantics.
-- [`w5-external-commitment-continuity.md`](w5-external-commitment-continuity.md) owns the W5-E continuity closeout: capability/reference history is not current applicability, pre-admission Agent selection is recomputable planning, and durable continuity begins at the first owner-admitted consequence boundary already retained by typed World journals.
-- [`w5-execution-mobility.md`](w5-execution-mobility.md) owns the W-X4/P4 execution-mobility closeout: Runtime retains execution/input/Artifact lineage, World re-observes pre-admission external capability, and already-admitted World effects preserve exact identity/UNKNOWN/reconciliation across controller replacement without a World migration manager.
+- [`research-closeouts.md`](research-closeouts.md) is the current authority for **closed** W4/W5/Sense-Connect-Act laws, evidence locators and reopening conditions. The full studies live under [`archive/research/`](archive/research/) as historical research and cannot compete with current product truth.
+- [`high-pressure-survival-hp6-hp8.md`](high-pressure-survival-hp6-hp8.md) owns the final HP-series contraction decision: knowledge GC, mixed-chaos result, removal of the research-only Foreign Egress / Effect Path executable surfaces, and the demand-triggered reopening rule.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 
@@ -99,7 +94,7 @@ CI cannot claim live health. Repository-only doctor output marks these checks as
 
 ## Historical facts
 
-[`archive/world-negative-experiments.md`](archive/world-negative-experiments.md) is historical reproduction authority for removed World, Edge, Link, WCP, WXP and network experiments. It cannot reactivate a deleted component. Reactivation requires a named current workload and a new failure proof under [`retained-boundaries.md`](retained-boundaries.md).
+[`archive/world-negative-experiments.md`](archive/world-negative-experiments.md) and [`archive/research/`](archive/research/) are historical reproduction/explanation authorities for removed World, Edge, Link, WCP, WXP and network experiments. It cannot reactivate a deleted component. Reactivation requires a named current workload and a new failure proof under [`retained-boundaries.md`](retained-boundaries.md).
 
 ## Precedence
 

@@ -4,8 +4,8 @@ id: world.w5.agent-embodiment
 title: W5-A Agent Embodiment Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -507,13 +507,13 @@ A3 proves that one real active destination can require owner-separated, action-s
 
 ## Evidence
 
-[`../evidence/acceptance/w5a-embodiment-binding-d322947.json`](../evidence/acceptance/w5a-embodiment-binding-d322947.json) is the commit-bound A0/A1 receipt. It uses Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5` and World research revision `d322947b891cf67749e879ca0c94663b8e067ce2`. The receipt records the conflicting-payload baseline, three rejected substitutions and the explicit decision not to promote a production contract.
+[`../evidence/acceptance/w5a-embodiment-binding-d322947.json`](../../../evidence/acceptance/w5a-embodiment-binding-d322947.json) is the commit-bound A0/A1 receipt. It uses Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5` and World research revision `d322947b891cf67749e879ca0c94663b8e067ce2`. The receipt records the conflicting-payload baseline, three rejected substitutions and the explicit decision not to promote a production contract.
 
-[`../evidence/acceptance/w5a-game-active-controller-df396e5.json`](../evidence/acceptance/w5a-game-active-controller-df396e5.json) is the commit-bound A2 receipt. The same Game revision retained five active Agent-controlled Actors across two planning generations while provider attribution changed from `provider:w5a:alpha` to `provider:w5a:mallory`; no durable continuity-subject admission existed or was inferred.
+[`../evidence/acceptance/w5a-game-active-controller-df396e5.json`](../../../evidence/acceptance/w5a-game-active-controller-df396e5.json) is the commit-bound A2 receipt. The same Game revision retained five active Agent-controlled Actors across two planning generations while provider attribution changed from `provider:w5a:alpha` to `provider:w5a:mallory`; no durable continuity-subject admission existed or was inferred.
 
-[`../evidence/acceptance/w5a-a3-real-embodiment-083d619.json`](../evidence/acceptance/w5a-a3-real-embodiment-083d619.json) is the A3 commit-bound acceptance receipt, SHA-256 `cc119343e920dabe4623619de1833b04b26f527d0b71427706ebe6221ce1c448`. It binds World research revision `083d6195eb79e511ebb4abfe63ca5cc7a9d11644`, current Harness revision `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, canonical Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5`, and non-main Game admission candidate `cf4a011adb64fac8a3eb274eb266cfe707eec8f9`. The receipt records two live DeepSeek cognition instances for the same continuity subject, two non-interchangeable World bindings, two destination admissions, two verified `actor_moved` effects, digest-laundering rejection, cross-cognition rejection and fresh Harness/Game recovery.
+[`../evidence/acceptance/w5a-a3-real-embodiment-083d619.json`](../../../evidence/acceptance/w5a-a3-real-embodiment-083d619.json) is the A3 commit-bound acceptance receipt, SHA-256 `cc119343e920dabe4623619de1833b04b26f527d0b71427706ebe6221ce1c448`. It binds World research revision `083d6195eb79e511ebb4abfe63ca5cc7a9d11644`, current Harness revision `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, canonical Game revision `8d89410e24ba486173ae6f3474962bb26433a6f5`, and non-main Game admission candidate `cf4a011adb64fac8a3eb274eb266cfe707eec8f9`. The receipt records two live DeepSeek cognition instances for the same continuity subject, two non-interchangeable World bindings, two destination admissions, two verified `actor_moved` effects, digest-laundering rejection, cross-cognition rejection and fresh Harness/Game recovery.
 
-[`../evidence/acceptance/w5a-a4-presence-888ca4e.json`](../evidence/acceptance/w5a-a4-presence-888ca4e.json) is the A4-P0 Presence falsifier receipt, SHA-256 `450023b63b13d05f6937e1a90925650906904810ccd854a8cc8794df539743c9`. It binds World base `888ca4efd10cb063e6603025c991e5a3a797ff49`, current Harness `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, Game canonical plus the non-main A3 admission candidate, and current Security `d532014dc4ff1d3fc9e825b5c087f1d2f1bac4ee`. Game proved that an active surviving Body plus a historical A3 occurrence leaves current Subject Presence unknown at the next Planning; Security physically proved that a retained historical materialization receipt can survive after QEMU, ledger and run path are gone while `reconcile` still returns migration status `materialized`.
+[`../evidence/acceptance/w5a-a4-presence-888ca4e.json`](../../../evidence/acceptance/w5a-a4-presence-888ca4e.json) is the A4-P0 Presence falsifier receipt, SHA-256 `450023b63b13d05f6937e1a90925650906904810ccd854a8cc8794df539743c9`. It binds World base `888ca4efd10cb063e6603025c991e5a3a797ff49`, current Harness `9d9eb929beeb1c0372c7c163692e664bb9cb1682`, Game canonical plus the non-main A3 admission candidate, and current Security `d532014dc4ff1d3fc9e825b5c087f1d2f1bac4ee`. Game proved that an active surviving Body plus a historical A3 occurrence leaves current Subject Presence unknown at the next Planning; Security physically proved that a retained historical materialization receipt can survive after QEMU, ledger and run path are gone while `reconcile` still returns migration status `materialized`.
 
 ## W5-A closeout
 

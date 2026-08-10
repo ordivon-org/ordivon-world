@@ -4,8 +4,8 @@ id: world.w5.discovery-connection
 title: W5-C Discovery & Connection Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -116,7 +116,7 @@ World may bind owner-authored evidence when an Agent needs it, but must not crea
 
 ## C0 evidence
 
-[`../evidence/acceptance/w5c-c0-discovery-connection-d1a65a4.json`](../evidence/acceptance/w5c-c0-discovery-connection-d1a65a4.json) is the current C0 acceptance receipt. It combines a current Game discovery/affordance falsifier, a current Security reachability/authority falsifier, and the current 19-test Message Delivery/Wire production suite. The older W2 endpoint-discovery conclusion is referenced only as retained historical research, not as the current acceptance source.
+[`../evidence/acceptance/w5c-c0-discovery-connection-d1a65a4.json`](../../../evidence/acceptance/w5c-c0-discovery-connection-d1a65a4.json) is the current C0 acceptance receipt. It combines a current Game discovery/affordance falsifier, a current Security reachability/authority falsifier, and the current 19-test Message Delivery/Wire production suite. The older W2 endpoint-discovery conclusion is referenced only as retained historical research, not as the current acceptance source.
 
 ## Product decision
 
@@ -218,7 +218,7 @@ Caller process failure after external effect != effect absence.
 
 Current discovery/reachability evidence should therefore be obtained when an Agent decision needs it. Mirroring all known endpoints and reachability state into a World-global registry would create stale duplicated truth without adding authority.
 
-[`../evidence/acceptance/w5c-c1-agent-contact-decision-c393f19.json`](../evidence/acceptance/w5c-c1-agent-contact-decision-c393f19.json) is the C1 acceptance receipt, SHA-256 `299d43e1cadc1c8066391f2ec9663da042f52f9464998815692e04cb42d63951`. It binds current World `c393f192cbd5ba1c1c3cce1ae216fe0146bc9bb7`, Harness `487e0ac8eb945256842347b5371cbbdd70bfce55`, all three durable Agent decisions, the live endpoint generation, exact Message plan/source issuance identities, endpoint owner POST count and the no-authority pre-transport rejection.
+[`../evidence/acceptance/w5c-c1-agent-contact-decision-c393f19.json`](../../../evidence/acceptance/w5c-c1-agent-contact-decision-c393f19.json) is the C1 acceptance receipt, SHA-256 `299d43e1cadc1c8066391f2ec9663da042f52f9464998815692e04cb42d63951`. It binds current World `c393f192cbd5ba1c1c3cce1ae216fe0146bc9bb7`, Harness `487e0ac8eb945256842347b5371cbbdd70bfce55`, all three durable Agent decisions, the live endpoint generation, exact Message plan/source issuance identities, endpoint owner POST count and the no-authority pre-transport rejection.
 
 ## W5-C stopping condition
 

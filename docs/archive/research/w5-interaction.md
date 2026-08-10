@@ -4,8 +4,8 @@ id: world.w5.interaction
 title: W5-D Interaction Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -171,7 +171,7 @@ The useful common mechanics are already shared privately. No public abstraction 
 
 ## D0 evidence
 
-[`../evidence/acceptance/w5d-d0-interaction-families-e165cfe.json`](../evidence/acceptance/w5d-d0-interaction-families-e165cfe.json) is the D0 acceptance receipt. It binds current World, Game and Security revisions; 9/9 Game Resource/Message source-semantic tests; 30/30 Security Resource/Message/Entity destination tests; 7/7 Cloudflare adapter tests; and a compact current-code projection showing all three cross-World journals already inherit `_HostTrajectoryJournal` while Cloudflare direct effects do not fit a source→destination transfer plan.
+[`../evidence/acceptance/w5d-d0-interaction-families-e165cfe.json`](../../../evidence/acceptance/w5d-d0-interaction-families-e165cfe.json) is the D0 acceptance receipt. It binds current World, Game and Security revisions; 9/9 Game Resource/Message source-semantic tests; 30/30 Security Resource/Message/Entity destination tests; 7/7 Cloudflare adapter tests; and a compact current-code projection showing all three cross-World journals already inherit `_HostTrajectoryJournal` while Cloudflare direct effects do not fit a source→destination transfer plan.
 
 ## Retained laws
 
@@ -321,7 +321,7 @@ Partial causal chain
 
 The Resource retry remained grounded in its own retained source egress plus its own exact `NOT_COMMITTED` proof. The Message's source issuance and delivery receipt never became Resource authority.
 
-[`../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json`](../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json) is the D1 acceptance receipt. It binds the four fresh Host phases, current Harness Agent decision, exact Message and Resource receipt identities, destination counters and absence of global interaction transaction state.
+[`../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json`](../../../evidence/acceptance/w5d-d1-mixed-composition-3ce688d.json) is the D1 acceptance receipt. It binds the four fresh Host phases, current Harness Agent decision, exact Message and Resource receipt identities, destination counters and absence of global interaction transaction state.
 
 ## W5-D stopping condition
 

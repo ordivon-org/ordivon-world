@@ -4,8 +4,8 @@ id: world.w5.external-commitment-continuity
 title: W5-E External Commitment Continuity Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -170,7 +170,7 @@ automatic path resurrection
 
 Keep `ForeignEgressCapability` and `EffectPathQuery` informational and reference-based. Keep actual durable consequence state in the owner-native Provider/Resource/Message/Entity trajectories already discoverable through `WorldTaskInspector`.
 
-[`../evidence/acceptance/w5e-external-commitment-continuity-20260810.json`](../evidence/acceptance/w5e-external-commitment-continuity-20260810.json) records the live owner evidence.
+[`../evidence/acceptance/w5e-external-commitment-continuity-20260810.json`](../../../evidence/acceptance/w5e-external-commitment-continuity-20260810.json) records the live owner evidence.
 
 ## W5-E stopping condition
 

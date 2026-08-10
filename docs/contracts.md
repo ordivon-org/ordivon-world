@@ -15,9 +15,6 @@ Published schemas:
 | `edge-receipt` | pending or final provider Receipt |
 | `world-prepared-dispatch` | durable Host-to-provider binding |
 | `world-observation` | provider Receipt mapped to Host evidence plus optional backward-compatible World availability time |
-| `foreign-egress-capability` | World projection of one owner-observed, destination-qualified foreign-egress relationship |
-| `foreign-egress-capability-reference` | digest-only handoff reference that requires activation-owner revalidation |
-| `effect-path-query` | informational Agent-facing comparison of provider-native effect-path candidates; no ranking, selection or action authority |
 | `entity-departure-receipt` | source-World authority for one exact local Presence departure |
 | `entity-migration-plan` | exact migration/entity/source/destination/departure/continuity identity |
 | `entity-migration-destination-request` | materialize/reconcile Entity destination request |
@@ -107,13 +104,11 @@ It excludes observation time. `observation_digest` includes `capturedAt` and ide
 
 ## Effect Path Query
 
-`EffectPathQuery` is a read-only Agent-choice projection across provider-native candidate evidence. It is not a generic Capability contract and does not translate owner-specific mechanics into one authority model. Each `EffectPathCandidate` retains the complete provider-native `sourceProjection` while exposing only the comparison coordinates forced by W-X3: effect/target, owner and activation authority, request-control mode, owner observation identity/time, optional owner-native validity horizon and successful usability evidence.
-
-`ownerObservation.validUntil` is nullable by design. Surfpath owns an explicit freshness horizon and therefore projects `freshUntil`; the request-scoped Cloudflare experiment proved only point-in-time resource currentness and no owner-native TTL, so World does not invent one. Historical success evidence remains historical even when the owner resources still exist, and resource existence alone does not prove a usable destination relation.
+W-X1/W-X3 relationship/effect-path contracts were research-only and are no longer packaged after HP8. Their retained law is historical: owner/path/time evidence may inform Agent choice, but does not grant current action authority; the physical owner revalidates before effect. See [`research-closeouts.md`](research-closeouts.md).
 
 Every candidate serializes `currentActionAuthority=false` and `requiresOwnerRevalidation=true`. The query serializes `selectionAuthority=agent`, contains no rank/recommendation field and requires one exact `candidateDigest` for selection. Stable candidate ordering is canonicalization only, never policy.
 
-W5-E additionally fixes the lifetime of this surface: `ForeignEgressCapability`, `EffectPathQuery`, Agent selection and the digest-only handoff reference are not themselves durable external commitments. An expired reference remains valid historical evidence but is not effect authority; owner re-observation creates a new capability/reference identity rather than mutating the old one. Durable World recovery begins only after an owner admits an exact consequence-capable provider/transfer operation, where the existing typed Host-backed journal owns Receipt/UNKNOWN/reconciliation continuity.
+W5-E fixes the lifetime of pre-admission planning evidence: Agent selection is not itself a durable external commitment. Owner re-observation creates new applicability evidence rather than rewriting history. Durable World recovery begins only after an owner admits an exact consequence-capable provider/transfer operation, where the existing typed Host-backed journal owns Receipt/UNKNOWN/reconciliation continuity.
 
 ## Provider observation availability
 
@@ -129,7 +124,7 @@ Repeated observation of the same provider Receipt must not rewrite temporal hist
 
 Provider success is not converted to a Host `VerificationReceipt`. Verification remains a separate domain or product action.
 
-Execution mobility adds no World JSON contract. Runtime Workspace/Job/Attempt/source/input/Artifact identities and `foreignReferences` remain Runtime-owned physical evidence; World does not copy them into a generic execution-migration object. Pre-admission `ForeignEgressCapability` / `EffectPathQuery` evidence may be re-observed and re-selected after an execution-context change. Once `PreparedWorldDispatch` exists, its exact provider request identity and capability condition remain the World recovery anchor across controller replacement, and UNKNOWN must reconcile that original identity before any new dispatch. A Runtime digest reference is not proof that destination input bytes were materialized; W-X4 therefore treats current Windows-native `workspace.execBound` incompatibility as a Runtime substrate gap rather than weakening World contracts.
+Execution mobility adds no World JSON contract. Runtime Workspace/Job/Attempt/source/input/Artifact identities and `foreignReferences` remain Runtime-owned physical evidence; World does not copy them into a generic execution-migration object. Pre-admission owner evidence is re-observed/reselected after an execution-context change. Once `PreparedWorldDispatch` exists, its exact provider request identity and capability condition remain the World recovery anchor across controller replacement, and UNKNOWN must reconcile that original identity before any new dispatch. A Runtime digest reference is not proof that destination input bytes were materialized; W-X4 therefore treats current Windows-native `workspace.execBound` incompatibility as a Runtime substrate gap rather than weakening World contracts.
 
 ## Browser bundle contract
 

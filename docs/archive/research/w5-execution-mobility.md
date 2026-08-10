@@ -4,8 +4,8 @@ id: world.w5.execution-mobility
 title: W-X4 Execution Mobility Research Boundary
 type: research
 profile: engineering
-lifecycle: active
-source_role: current-research
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -177,7 +177,7 @@ The one concrete missing substrate capability is outside World: exact `workspace
 - Cloudflare was the post-admission effect family used for migration. Resource/Message/Entity families already share the same typed UNKNOWN/reconciliation skeleton but were not all repeated across Runtime targets.
 - No shared failure-domain projection was forced by `cmd.exe` versus PowerShell or by Linux versus Windows provider mechanics.
 
-[`../evidence/acceptance/wx4-execution-mobility-20260810.json`](../evidence/acceptance/wx4-execution-mobility-20260810.json) records the physical evidence.
+[`../evidence/acceptance/wx4-execution-mobility-20260810.json`](../../../evidence/acceptance/wx4-execution-mobility-20260810.json) records the physical evidence.
 
 ## W-X4 stopping condition
 

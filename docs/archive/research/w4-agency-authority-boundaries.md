@@ -4,8 +4,8 @@ id: world.w4-agency-authority
 title: W4 Agency and Authority Boundaries
 type: decision
 profile: engineering
-lifecycle: active
-source_role: supporting
+lifecycle: historical
+source_role: historical-research
 visibility: public
 owners:
   - ordivon-world
@@ -14,7 +14,7 @@ audience:
   - builder
   - agent
 evidence_status: cross-repository-verified
-readiness: READY
+readiness: ARCHIVED
 applies_to:
   - ordivon-world
 related:
@@ -289,7 +289,7 @@ ambiguous QEMU launch evidence
 
 This evolution strengthens rather than weakens the W4 authority boundary: current physical recovery state does not mint domain action authority, and durable provenance is not silently rewritten into current ownership.
 
-The accepted production trajectory is documented in [`w2-entity-migration-production.md`](w2-entity-migration-production.md) and its World receipt is:
+The accepted production trajectory is documented in [`w2-entity-migration-production.md`](../../w2-entity-migration-production.md) and its World receipt is:
 
 ```text
 evidence/acceptance/world-entity-production-0c91b25.json

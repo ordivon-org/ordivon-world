@@ -2,14 +2,13 @@
 
 ## Purpose
 
-World is the boundary between Host-owned work semantics and independently authoritative environments. The production package contains one provider-adapter shape, three inter-World trajectory shapes, one owner-observed foreign-egress projection and one narrow Agent-facing effect-path comparison shape:
+World is the boundary between Host-owned work semantics and independently authoritative environments. The production package contains one provider-adapter shape and three inter-World trajectory shapes:
 
 ```text
 external provider: Bind → Observe → Act → Reconcile
 inter-World Resource: Source Egress → Bind → Destination Ingress → Reconcile
 inter-World Message: Source Issuance → Bind → Destination Admission → Reconcile
 inter-World Entity: Source Departure → Bind Continuity → Destination Materialization → Reconcile
-Agent effect-path choice: Owner Observation → Provider-native Evidence → Query → Agent Selection → Owner Revalidation → Act → Reconcile
 ```
 
 It does not centralize all external systems into one World object. Each owner/provider keeps its native request, operation, currentness, state and error model. World may project a small shared comparison view when two materially different real paths force it, but that projection does not rank candidates, grant action authority or erase provider-native evidence.
@@ -22,7 +21,6 @@ It does not centralize all external systems into one World object. Each owner/pr
 | Harness | model loop, Tool proposal, Provider Call, Tool Step and Run evidence | provider infrastructure truth |
 | Runtime | local Workspace, Job, process, cancellation and local Artifacts | remote provider success or domain truth |
 | World provider adapter | provider request binding, current capability condition, provider reconciliation, local observation availability and evidence mapping | provider occurrence time, Host admission time, Task strategy, truth, workflow or completion |
-| World relationship/capability projection | owner-preserving semantic relationship evidence plus bounded Agent-facing effect-path comparison | physical route/provider control, ranking, implicit selection, current action authority or a global capability registry |
 | World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
 | World Message Delivery | cross-World Message identity, source-issuance/provenance/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination belief/knowledge/world-truth, global Message bus |
 | World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, source-authority translation, global Presence database |
@@ -37,8 +35,6 @@ It does not centralize all external systems into one World object. Each owner/pr
 src/ordivon_world/
 ├── cloudflare.py       exact provider binding/reconciliation plus private signed transport
 ├── browser.py          Browser Receipt/Manifest/Artifact bundle verification
-├── foreign_egress.py   Workstation-owned foreign-egress capability projection
-├── effect_paths.py     informational Agent-facing effect-path comparison
 ├── host.py             opaque Host extension persistence
 ├── resource_egress.py  source-World Resource Egress contract
 ├── resource_transfer.py durable Resource Transfer / Host journal
@@ -113,27 +109,9 @@ These timestamps are not interchangeable. `availableAt` does not mean source occ
 
 A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. HP5 physically removed this bundle interpretation and verified each Artifact digest independently; that thinner path incorrectly accepted Manifest semantic drift, Receipt byte-count drift and Receipt↔Manifest page-fact drift while every individual digest remained valid. The bundle therefore survives as an explicit production module. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
 
-## Agent-facing Effect Path Query
+## Closed relationship/effect-path research
 
-W-X3 reproduced the same exact HTTP GET through two materially different owner domains: a Workstation-owned Surfpath foreign-egress relationship and an account-authorized, fixed-target Cloudflare connector. The shared production surface is intentionally a **query projection**, not a generic Capability owner.
-
-```text
-provider-native owner observation
-        +
-provider-native usability evidence
-        ↓
-EffectPathCandidate
-        ↓
-EffectPathQuery
-        ↓
-Agent selects exact candidateDigest
-        ↓
-activation owner revalidates current state
-```
-
-The query preserves `ownerAuthority`, `activationAuthority`, request-control mode, owner observation identity/time, an owner-native validity horizon when one exists, usability evidence and the complete provider-native source projection. `ownerObservation.validUntil` is nullable: Surfpath owns a 180-second freshness law, while the Cloudflare experiment proved only point-in-time control-plane resource state and therefore receives no invented TTL. Every candidate states `currentActionAuthority=false` and `requiresOwnerRevalidation=true`.
-
-A historical successful effect cannot be promoted to current capability. In W-X3, the earlier Cloudflare connector later had no DNS record, Worker route or Worker; a new connector had all three resources present yet initially returned HTTP 522, then the exact same connector completed the OpenAI GET with HTTP 401. Thus owner resource existence, relation usability, historical success and current action authority remain separate coordinates. Deterministic candidate ordering exists only for stable serialization; there is no rank, recommendation or automatic provider routing.
+W-X1/W-X3 proved useful laws about owner-native path evidence, currentness, usability and Agent selection, but HP4 failed to prove that the executable World projection improved fresh-Agent decisions. HP8 removes the research-only Python modules and three packaged contracts. The law remains: owner-native observations may inform Agent choice, but the physical owner revalidates before effect and historical success never becomes current authority. See [`docs/research-closeouts.md`](docs/research-closeouts.md).
 
 ## Host extension trajectory addressing
 
@@ -167,7 +145,7 @@ World's Host-backed journals read only the schema-v5 Host extension namespace `w
 
 `WorldTaskInspector` is the bounded read-only projection over that owner state. It is deliberately an aggregator, not a second state model: Provider dispatches project their own bounded request/observation evidence, and the private typed trajectory journal projects Resource, Message and Entity plan/receipt/uncertainty evidence. For retained Provider observations it also projects `temporalEvidence` with provider `started_at` / `completed_at` and World `availableAt`, identifying their separate time sources. The aggregator consumes one revision-coherent `HostExtensionPort.load_namespace_snapshot(..., expected_revision=...)` plus the four owner-local projector interfaces; it never reaches through the Port into `HostStorage`, never decodes trajectory storage fields, and never returns payload, provenance or continuity bodies. Temporal projection does not grant currentness: every result still carries `actionAuthority=not-granted-by-inspection` and `externalCurrentness=not-claimed`. There is no OwnerRegistry, universal Observation ontology or shared cross-domain inspection schema.
 
-W5-E fixes the durability fence on the consequence boundary rather than on every Agent decision. `ForeignEgressCapability`, `EffectPathQuery`, one selected `candidateDigest` and the digest-only handoff reference remain informational/planning objects until the activation owner admits an exact effect. If the controller disappears before that admission, current owner reality is re-observed and the Agent may re-query/re-select. Persisting the old selection would be unsafe because owner freshness may expire and physical path identity may change. Once a typed provider/transfer operation is prepared or dispatched, its retained World journal becomes durable because an external consequence may already exist and UNKNOWN must be reconciled before retry.
+W5-E fixes the durability fence on the consequence boundary rather than on every Agent decision. Pre-admission owner observations and Agent path selection remain recomputable planning state. If the controller disappears before owner admission, current owner reality is re-observed and the Agent may re-select. Once a typed provider/transfer operation is prepared or dispatched, its retained World journal becomes durable because an external consequence may already exist and UNKNOWN must be reconciled before retry.
 
 ```text
 Observe → Query → Select     recomputable planning
