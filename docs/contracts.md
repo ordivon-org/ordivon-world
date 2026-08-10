@@ -18,6 +18,7 @@ Published schemas:
 | `network-observation` | future normalized read-only network condition evidence |
 | `foreign-egress-capability` | World projection of one owner-observed, destination-qualified foreign-egress relationship |
 | `foreign-egress-capability-reference` | digest-only handoff reference that requires activation-owner revalidation |
+| `effect-path-query` | informational Agent-facing comparison of provider-native effect-path candidates; no ranking, selection or action authority |
 | `entity-departure-receipt` | source-World authority for one exact local Presence departure |
 | `entity-migration-plan` | exact migration/entity/source/destination/departure/continuity identity |
 | `entity-migration-destination-request` | materialize/reconcile Entity destination request |
@@ -104,6 +105,14 @@ Both identities are verified when a Receipt is mapped into a Host Observation.
 - deployment source and Worker-input digest.
 
 It excludes observation time. `observation_digest` includes `capturedAt` and identifies the specific observation event.
+
+## Effect Path Query
+
+`EffectPathQuery` is a read-only Agent-choice projection across provider-native candidate evidence. It is not a generic Capability contract and does not translate owner-specific mechanics into one authority model. Each `EffectPathCandidate` retains the complete provider-native `sourceProjection` while exposing only the comparison coordinates forced by W-X3: effect/target, owner and activation authority, request-control mode, owner observation identity/time, optional owner-native validity horizon and successful usability evidence.
+
+`ownerObservation.validUntil` is nullable by design. Surfpath owns an explicit freshness horizon and therefore projects `freshUntil`; the request-scoped Cloudflare experiment proved only point-in-time resource currentness and no owner-native TTL, so World does not invent one. Historical success evidence remains historical even when the owner resources still exist, and resource existence alone does not prove a usable destination relation.
+
+Every candidate serializes `currentActionAuthority=false` and `requiresOwnerRevalidation=true`. The query serializes `selectionAuthority=agent`, contains no rank/recommendation field and requires one exact `candidateDigest` for selection. Stable candidate ordering is canonicalization only, never policy.
 
 ## Host mapping
 

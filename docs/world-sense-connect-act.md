@@ -508,3 +508,52 @@ requires owner revalidation of current relationship and destination gate
 ```
 
 W-X1/W-X2 justify the narrow `foreign-egress-capability` and `foreign-egress-capability-reference` contracts for this proven consumer. They still do **not** justify a generic Transfer framework, global capability router, automatic provider selection or persistent World-owned network session.
+
+
+## W-X3 / P1: multi-provider effect-path semantics
+
+W-X3 tested whether the already-proven Surfpath path and a materially different Cloudflare path justified one generic World capability object. The experiment instead forced a smaller shared view.
+
+The prior Cloudflare fixed-target connector had successfully reached `https://api.openai.com/v1/models`, but a later current-state probe could not resolve its hostname. Cloudflare's owner API then reported the exact DNS record, Worker route and Worker as absent (`404`). Historical effect evidence therefore did not survive as current capability authority.
+
+A fresh fixed-target connector was created. Before any effect, a point-in-time Cloudflare owner observation proved all three exact resources present and bound the route to the observed Worker/host. That still did not prove destination capability: the first exact `/act` returned HTTP `522 connection_timeout`. A retry through the **same resource identity** then completed the fixed OpenAI GET and observed upstream HTTP `401`; the edge observation was `LHR` with ingress country `GB`. Cleanup deleted the route, DNS record and Worker and re-observed absence.
+
+Together with W-X1/W-X2, the cross-provider evidence is:
+
+```text
+historical successful effect
+!= current capability
+
+owner resource exists
+!= usable relation
+
+usable relation
+!= current action authority
+
+owner-native currentness laws may differ
+
+shared Agent view
+!= shared capability ownership
+```
+
+Surfpath owns an explicit 180-second freshness horizon. The Cloudflare control-plane experiment proved point-in-time resource existence but no equivalent TTL; World therefore must not fabricate a common `freshUntil` law. Conversely, both paths require current owner revalidation before a new effect even when historical usability evidence exists.
+
+The retained production abstraction is `EffectPathQuery` rather than a generic Capability registry. Each candidate preserves its provider-native source projection and exposes only the coordinates needed by the Agent to compare paths: exact effect/target, owner and activation authority, request-control mode, owner observation identity/time, optional owner-native validity horizon and successful usability evidence. The query is deterministic for hashing but has no ranking or recommendation. `selectionAuthority=agent`; every candidate states `currentActionAuthority=false` and `requiresOwnerRevalidation=true`; action begins only after the Agent selects one exact `candidateDigest` and the activation owner revalidates it.
+
+This is the current Agent-first composition rule:
+
+```text
+owner observation / provider-native evidence
+        ↓
+EffectPathQuery
+        ↓
+Agent exact selection
+        ↓
+owner revalidation
+        ↓
+Act
+        ↓
+Observe / Reconcile
+```
+
+W-X3 therefore supports **shared query semantics across heterogeneous Worlds**, but rejects, for now, a global capability database, automatic provider router, universal freshness law or hidden ranking policy.

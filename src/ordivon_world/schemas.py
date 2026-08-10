@@ -14,6 +14,7 @@ _CONTRACT_NAMES = (
     "browser-request",
     "edge-capabilities",
     "edge-receipt",
+    "effect-path-query",
     "entity-departure-receipt",
     "entity-migration-destination-request",
     "entity-migration-destination-response",

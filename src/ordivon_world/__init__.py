@@ -41,6 +41,7 @@ from .foreign_egress import (
     ForeignEgressCapabilityStale,
     ForeignEgressProjectionError,
 )
+from .effect_paths import EffectPathCandidate, EffectPathProjectionError, EffectPathQuery
 from .host import (
     HostWorldError,
     HostWorldExtension,
@@ -124,6 +125,9 @@ __all__ = [
     "EntityMigrationWireDestination",
     "EntityMigrationWireError",
     "EntityMigrationWireTransport",
+    "EffectPathCandidate",
+    "EffectPathProjectionError",
+    "EffectPathQuery",
     "ForeignEgressCapability",
     "ForeignEgressCapabilityStale",
     "ForeignEgressProjectionError",

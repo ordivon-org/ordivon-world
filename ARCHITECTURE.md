@@ -2,16 +2,17 @@
 
 ## Purpose
 
-World is the boundary between Host-owned work semantics and independently authoritative environments. The production package now contains one provider-adapter shape and three inter-World trajectory shapes:
+World is the boundary between Host-owned work semantics and independently authoritative environments. The production package contains one provider-adapter shape, three inter-World trajectory shapes, one owner-observed foreign-egress projection and one narrow Agent-facing effect-path comparison shape:
 
 ```text
 external provider: Bind → Observe → Act → Reconcile
 inter-World Resource: Source Egress → Bind → Destination Ingress → Reconcile
 inter-World Message: Source Issuance → Bind → Destination Admission → Reconcile
 inter-World Entity: Source Departure → Bind Continuity → Destination Materialization → Reconcile
+Agent effect-path choice: Owner Observation → Provider-native Evidence → Query → Agent Selection → Owner Revalidation → Act → Reconcile
 ```
 
-It does not centralize all external systems into one World object. Each provider keeps its native request, operation, state and error model. World retains only the facts required to bind those provider facts to one Host Dispatch and continue the Task safely.
+It does not centralize all external systems into one World object. Each owner/provider keeps its native request, operation, currentness, state and error model. World may project a small shared comparison view when two materially different real paths force it, but that projection does not rank candidates, grant action authority or erase provider-native evidence.
 
 ## Ownership
 
@@ -21,6 +22,7 @@ It does not centralize all external systems into one World object. Each provider
 | Harness | model loop, Tool proposal, Provider Call, Tool Step and Run evidence | provider infrastructure truth |
 | Runtime | local Workspace, Job, process, cancellation and local Artifacts | remote provider success or domain truth |
 | World provider adapter | provider request binding, current capability condition, provider reconciliation and evidence mapping | Task strategy, workflow or completion |
+| World relationship/capability projection | owner-preserving semantic relationship evidence plus bounded Agent-facing effect-path comparison | physical route/provider control, ranking, implicit selection, current action authority or a global capability registry |
 | World Resource Transfer | cross-World transfer identity, source-egress/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination materialization truth, global resource ownership database |
 | World Message Delivery | cross-World Message identity, source-issuance/provenance/payload binding, Host-retained uncertainty and destination receipt correlation | source World truth, destination belief/knowledge/world-truth, global Message bus |
 | World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, source-authority translation, global Presence database |
@@ -35,6 +37,8 @@ It does not centralize all external systems into one World object. Each provider
 src/ordivon_world/
 ├── cloudflare.py       signed provider transport and adapter
 ├── browser.py          Browser Receipt/Manifest/Artifact bundle verification
+├── foreign_egress.py   Workstation-owned foreign-egress capability projection
+├── effect_paths.py     informational Agent-facing effect-path comparison
 ├── host.py             opaque Host extension persistence
 ├── resource_egress.py  source-World Resource Egress contract
 ├── resource_transfer.py durable Resource Transfer / Host journal
@@ -103,6 +107,28 @@ World maps provider Artifacts to Host `ArtifactRef` values and the complete prov
 
 A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
 
+## Agent-facing Effect Path Query
+
+W-X3 reproduced the same exact HTTP GET through two materially different owner domains: a Workstation-owned Surfpath foreign-egress relationship and an account-authorized, fixed-target Cloudflare connector. The shared production surface is intentionally a **query projection**, not a generic Capability owner.
+
+```text
+provider-native owner observation
+        +
+provider-native usability evidence
+        ↓
+EffectPathCandidate
+        ↓
+EffectPathQuery
+        ↓
+Agent selects exact candidateDigest
+        ↓
+activation owner revalidates current state
+```
+
+The query preserves `ownerAuthority`, `activationAuthority`, request-control mode, owner observation identity/time, an owner-native validity horizon when one exists, usability evidence and the complete provider-native source projection. `ownerObservation.validUntil` is nullable: Surfpath owns a 180-second freshness law, while the Cloudflare experiment proved only point-in-time control-plane resource state and therefore receives no invented TTL. Every candidate states `currentActionAuthority=false` and `requiresOwnerRevalidation=true`.
+
+A historical successful effect cannot be promoted to current capability. In W-X3, the earlier Cloudflare connector later had no DNS record, Worker route or Worker; a new connector had all three resources present yet initially returned HTTP 522, then the exact same connector completed the OpenAI GET with HTTP 401. Thus owner resource existence, relation usability, historical success and current action authority remain separate coordinates. Deterministic candidate ordering exists only for stable serialization; there is no rank, recommendation or automatic provider routing.
+
 ## Host extension trajectory addressing
 
 Host Task identity is not used as the semantic identity of a World extension trajectory. The two production consumers retain independent maps:
@@ -137,7 +163,7 @@ World's Host-backed journals read only the schema-v5 Host extension namespace `w
 
 ## Contract boundary
 
-JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Resource Transfer, Message Delivery and Entity Migration request/response surfaces. TypeScript emits real fixture documents; Python validates them using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
+JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Effect Path Query, Resource Transfer, Message Delivery and Entity Migration surfaces. The Effect Path Query schema standardizes only the informational comparison wrapper; provider-native evidence remains embedded rather than translated into one generic capability ontology. TypeScript emits real provider fixture documents; Python validates contracts using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.
 
 See [`docs/contracts.md`](docs/contracts.md) and [`docs/compatibility.md`](docs/compatibility.md).
 
@@ -148,6 +174,7 @@ World does not currently contain:
 - a daemon or database;
 - a universal `WorldInteraction` record;
 - automatic provider or network routing;
+- a global capability registry, generic Capability owner or automatic candidate ranker;
 - callbacks, queues or fan-out/join orchestration;
 - a general MCP, RAG or connector platform;
 - a Sandbox or code-execution runtime;

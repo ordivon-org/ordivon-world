@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ordivon.com/contracts/world/effect-path-query.schema.json",
+  "title": "Ordivon World Effect Path Query Projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kind", "truthRole", "effect", "selectionAuthority", "candidates", "constraints", "queryDigest"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "kind": {"const": "ordivon.world.effect-path-query"},
+    "truthRole": {"const": "informational-agent-choice-projection"},
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target"],
+      "properties": {
+        "kind": {"const": "http.get"},
+        "target": {"type": "string", "format": "uri"}
+      }
+    },
+    "selectionAuthority": {"const": "agent"},
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceKind", "effect", "ownerAuthority", "activationAuthority", "requestControl", "ownerObservation", "usabilityEvidence", "currentActionAuthority", "requiresOwnerRevalidation", "sourceProjection", "candidateDigest"],
+        "properties": {
+          "sourceKind": {"type": "string", "minLength": 1},
+          "effect": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "target"],
+            "properties": {
+              "kind": {"const": "http.get"},
+              "target": {"type": "string", "format": "uri"}
+            }
+          },
+          "ownerAuthority": {"type": "string", "minLength": 1},
+          "activationAuthority": {"type": "string", "minLength": 1},
+          "requestControl": {"type": "string", "minLength": 1},
+          "ownerObservation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["digest", "observedAt", "validUntil"],
+            "properties": {
+              "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+              "observedAt": {"type": "string", "format": "date-time"},
+              "validUntil": {"type": ["string", "null"], "format": "date-time"}
+            }
+          },
+          "usabilityEvidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["digest", "observedAt", "result"],
+            "properties": {
+              "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+              "observedAt": {"type": "string", "format": "date-time"},
+              "result": {"const": "succeeded"}
+            }
+          },
+          "currentActionAuthority": {"const": false},
+          "requiresOwnerRevalidation": {"const": true},
+          "sourceProjection": {"type": "object"},
+          "candidateDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "queryDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}
