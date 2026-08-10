@@ -185,6 +185,30 @@ Observe → Query → Select     recomputable planning
 
 This is why World has no separate capability-selection or generic commitment journal. Fresh-Agent recovery projects the existing typed owner journals instead of copying planning state into another database.
 
+W-X4 extends the same ownership rule across physical execution mobility. Runtime may execute one semantic objective through different target/provider contracts while retaining exact Workspace/Job/Attempt/source/Artifact lineage and opaque foreign references. World does not translate those physical facts into a shared execution model. Before a new consequence is admitted in the destination execution context, current external capability is observed again. If an external consequence crossed its owner-admission fence before migration, the destination controller restores the exact World prepared identity and reconciles it before any new dispatch.
+
+```text
+Host Task
+   │ semantic continuity
+   ├──────────────┐
+   ▼              ▼
+Runtime A       Runtime B
+physical       physical
+lineage        lineage
+   │              │
+   └──────┬───────┘
+          ▼
+     World planning       recompute before admission
+          │
+     owner admission
+          │
+     Receipt | UNKNOWN    durable exact effect identity
+          │
+       Reconcile
+```
+
+Runtime `foreignReferences` are identity/correlation commitments, not Artifact transport. Likewise, a shared canonical Git revision is not evidence that an external immutable input was materialized for every target. W-X4 physically found that current Windows-native Runtime admission cannot consume `workspace.execBound`; that is a Runtime substrate requirement rather than justification for a World filesystem, byte-transfer or execution-migration manager.
+
 ## Contract boundary
 
 JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Effect Path Query, Resource Transfer, Message Delivery and Entity Migration surfaces. The Effect Path Query schema standardizes only the informational comparison wrapper; provider-native evidence remains embedded rather than translated into one generic capability ontology. TypeScript emits real provider fixture documents; Python validates contracts using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.

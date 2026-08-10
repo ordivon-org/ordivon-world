@@ -68,6 +68,14 @@ W5-E tested whether Agent path choice itself needs another durable World journal
 
 The retained law is that pre-admission observation/query/selection is recomputable planning state. World durability begins when an owner admits an exact consequence-capable operation whose outcome may later be Receipt or UNKNOWN. Those durable boundaries already exist in the typed Provider, Resource, Message and Entity journals and are discoverable through `WorldTaskInspector`; no `CapabilityManager`, selection journal or generic commitment registry is required. See [`docs/w5-external-commitment-continuity.md`](docs/w5-external-commitment-continuity.md).
 
+### Execution mobility
+
+W-X4 moved one Host-correlated objective across Runtime `local_linux` and `windows_native` Jobs. Runtime terminal evidence kept target/provider/Job/Artifact lineage exact while both targets independently verified the same canonical source bytes. World did not gain process, filesystem or execution-target ownership.
+
+The post-admission half then split one Cloudflare Effect across fresh Runtime controller workspaces: the source controller freshly observed provider capability, emitted one POST, lost the committed response and durably entered UNKNOWN; the destination controller restored the original prepared dispatch and reconciled the exact provider request with zero recovery POSTs. A fresh execution context did not become authority to repeat an old consequence.
+
+One physical gap remains outside World: current Runtime `windows_native` cannot use the `workspace.execBound` immutable external-input path because that path requires `contained_local` while Windows-native currently supports `trusted_local`. World deliberately does not implement a byte-copy compatibility layer. See [`docs/w5-execution-mobility.md`](docs/w5-execution-mobility.md).
+
 ### Temporal provider observations
 
 Cloudflare provider Receipts retain provider-native `started_at` / `completed_at`. World `WorldObservation` separately records `availableAt`: when the complete provider observation first becomes available to the World controller. `WorldTaskInspector` projects both time sources without treating either as current external truth or action authority.
@@ -154,6 +162,7 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 8. **Share views before sharing ownership.** W-X3 forced one narrow `EffectPathQuery` across Surfpath and Cloudflare, but did not justify a generic Capability object, registry or router. Shared projections preserve provider-native evidence and Agent choice; physical owners still revalidate before effect.
 9. **Keep time sources separate.** Provider occurrence/completion time, World observation availability and Host admission time are different owner-native facts. Availability is not truth, currentness, authority or completion.
 10. **Persist consequences, not every choice.** Owner observations, effect-path queries and pre-admission Agent selections may be recomputed from current reality. Durable World continuity begins at owner admission of an exact consequence-capable operation; after that fence, Receipt/UNKNOWN/reconciliation must survive controller replacement.
+11. **Move lineage by owner, not by abstraction.** Host semantic Task identity, Runtime execution/input/Artifact lineage and World external-effect state remain separate through execution migration. A new execution target re-observes pre-admission World reality; already-admitted consequences retain exact identity and reconcile before retry.
 
 ## Development
 

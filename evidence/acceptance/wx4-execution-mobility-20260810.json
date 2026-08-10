@@ -1,0 +1,119 @@
+{
+  "hostContinuityTask": "task:world:wx4-execution-migration-20260810",
+  "immutableInputNegativeControl": {
+    "code": "INVALID_REQUEST",
+    "commitState": "not_committed",
+    "executionTarget": "windows_native",
+    "field": "execution.executionProfile",
+    "interpretation": "Runtime exact external-input portability gap; no World workaround authorized",
+    "message": "windows_native currently supports trusted_local only",
+    "runtimeRequirementTask": "task:runtime:windows-immutable-input-portability-20260810",
+    "tool": "workspace.execBound"
+  },
+  "kind": "ordivon.world.wx4-execution-mobility-acceptance",
+  "limitations": [
+    "Linux/Windows target migration was same-machine WSL/Windows, not remote multi-node execution.",
+    "Windows-native canonical source-byte verification is not equivalent to workspace.execBound external immutable-input portability.",
+    "Cloudflare consequence migration used a durable local Host state root with production Host/World libraries across fresh Runtime workspaces; the effect journal was not written into the separately deployed Host MCP service.",
+    "Resource, Message and Entity effect families were not each repeated across Runtime targets in W-X4."
+  ],
+  "nextBoundary": "Re-run exact external-input cross-target mobility only after Runtime owns a destination-target immutable input substrate; a later remote/multi-node experiment requires another physical execution authority before World adds any abstraction.",
+  "phaseA": {
+    "attemptId": "attempt-019feaff-5e67-77a0-8f46-366f70e2ea53",
+    "executionProviderContract": "local_linux_runner_v1",
+    "executionTarget": "local_linux",
+    "jobId": "job-019feaff-5e67-77a0-8f46-3650c2278c57",
+    "readmeBytes": 14825,
+    "readmeDigest": "sha256:bf25bdefef6750b81d7fb8619f291ed29a0fa469a268e198feeb2389dd09ec71",
+    "sourceRevision": "e5e63116d4a2959588d0674b022dd1127ca25471",
+    "stdoutDigest": "sha256:5395da7c19fd08ab0e680af7e6789c29c98eda9df85055dacbcbb2bba59eeb02",
+    "terminalEvidenceDigest": "sha256:23d242a4f963b7aaa428dcfff3519cfe444b9999bf4f6c3757daa475c8ec7103"
+  },
+  "phaseB": {
+    "attemptId": "attempt-019feaff-9386-75b1-bcd3-a1760502e894",
+    "executionProviderContract": "windows_native_launcher_v1",
+    "executionTarget": "windows_native",
+    "inputMatches": true,
+    "jobId": "job-019feaff-9386-75b1-bcd3-a16367de8b3a",
+    "readmeDigest": "sha256:bf25bdefef6750b81d7fb8619f291ed29a0fa469a268e198feeb2389dd09ec71",
+    "stdoutDigest": "sha256:6001d31e5af7a44bd59ae0b557d4831c589a56437da05be23817b8b82993f1de",
+    "terminalEvidenceDigest": "sha256:06f2d5f30d77402393e5ad1a95eb983e643611f1ac9637ef3d99126cb1c36054",
+    "upstreamArtifactDigest": "sha256:5395da7c19fd08ab0e680af7e6789c29c98eda9df85055dacbcbb2bba59eeb02",
+    "upstreamJobId": "job-019feaff-5e67-77a0-8f46-3650c2278c57",
+    "windowsAuthority": "limited",
+    "windowsStartDigest": "sha256:1865ff88a73dab36c5dffa8b665597c5dbc884022b12606fc4823a27b031aaa8",
+    "wslDistribution": "archlinux"
+  },
+  "phaseC": {
+    "attemptId": "attempt-019feb02-889b-7e30-a2bd-ceeffc72909e",
+    "capabilityConditionDigest": "sha256:fbb7aba00eda37385e386e97832d3a941b037292c34bbafa2273633d246d261f",
+    "dispatchId": "dispatch:world-wx4:1786354240743-e5e63116:r1",
+    "executionTarget": "local_linux",
+    "jobId": "job-019feb02-889b-7e30-a2bd-ced274c7d569",
+    "postCount": 1,
+    "providerPolicyVersion": "p1.6.67ddc65bf21dd90f",
+    "providerRequestId": "world_69eff304e46190c5ef9a0f52051f24051dec38bd0183a563187b7c7614",
+    "responseDroppedAfterCommit": true,
+    "stdoutDigest": "sha256:7f50422c268d42bf46878748d768079f9e01229a05a50226a2c3fa4611aefd4d",
+    "terminalEvidenceDigest": "sha256:5da20d1a1e7ef01a98edacc246dc5b3b78aae52d0c5dbcce3834956812abf034",
+    "unknownRevision": 3,
+    "worldOutcome": "unknown"
+  },
+  "phaseD": {
+    "attemptId": "attempt-019feb02-e387-7740-9577-3fbeb7ca36b8",
+    "blindRetry": false,
+    "executionTarget": "local_linux-fresh-controller",
+    "getCount": 2,
+    "jobId": "job-019feb02-e387-7740-9577-3fac5e6d4d89",
+    "postCount": 0,
+    "providerRequestId": "world_69eff304e46190c5ef9a0f52051f24051dec38bd0183a563187b7c7614",
+    "readyFrontierPreserved": true,
+    "reconciled": true,
+    "reconciledReceiptId": "world_69eff304e46190c5ef9a0f52051f24051dec38bd0183a563187b7c7614",
+    "status": "succeeded",
+    "stdoutDigest": "sha256:b73128bfa90d56f4f1a5fb214c882c263345b88c7962f63798df991563fa9d46",
+    "taskStatePreserved": true,
+    "terminalEvidenceDigest": "sha256:14c6342deaf0627add5b9c572cded8d756036e4979b6635c72403395f735858d"
+  },
+  "portableAcceptance": {
+    "attemptId": "attempt-019feb07-7de5-7fa3-993b-2400fa53cdde",
+    "jobId": "job-019feb07-7de5-7fa3-993b-23f581f0c037",
+    "liveOwnerGate": "P4 physical evidence supplied by Runtime Windows-native terminal evidence plus live Cloudflare UNKNOWN-to-reconcile migration",
+    "result": "portable_acceptance=passed",
+    "schemas": 29,
+    "stdoutDigest": "sha256:d0c2fc3484ab498575aecc3bfc1724a9c89a58e6d4218d2b237f647152ec3527",
+    "terminalEvidenceDigest": "sha256:c665644af5f69d5dd3561248385d6ec628cd6a7e3953dd5fc11c268969793467",
+    "typeScriptTests": 29
+  },
+  "productDecision": {
+    "createExecutionMigrationManager": false,
+    "createExecutionWorldRegistry": false,
+    "createFailureDomainOntology": false,
+    "createWorldArtifactTransport": false,
+    "createWorldFilesystemAbstraction": false,
+    "runtimeRequirement": "windows_native exact immutable-input portability remains owner-side work"
+  },
+  "proven": {
+    "alreadyAdmittedEffectSurvivesFreshControllerMigration": true,
+    "canonicalSourceBytesCanBeVerifiedAcrossLinuxAndWindowsNative": true,
+    "foreignReferencesCarryIdentityNotBytes": true,
+    "freshControllerDoesNotBlindlyRedispatch": true,
+    "hostTaskMeaningSurvivesEffectReconciliation": true,
+    "oneHostSemanticTaskCanCorrelateMultipleRuntimeTargets": true,
+    "preAdmissionWorldCapabilityIsReobserved": true,
+    "runtimePhysicalLineageRemainsTargetSpecificAndExact": true,
+    "unknownIsReconciledByOriginalProviderRequest": true,
+    "worldExecutionMigrationManagerRequired": false
+  },
+  "runtimeSourceSnapshotRevision": "44d5ebc01ad38a5fffbbc9ab8958bf0192d6345f",
+  "schemaVersion": 1,
+  "sourceRevisionUnderTest": "e5e63116d4a2959588d0674b022dd1127ca25471",
+  "status": "passed-with-runtime-substrate-gap",
+  "uncPathControl": {
+    "executable": "cmd.exe",
+    "executionTarget": "windows_native",
+    "jobId": "job-019feafd-ea57-7953-b2d9-7f420974b837",
+    "result": "process exit nonzero because cmd.exe does not support UNC current directories; PowerShell succeeded on the same workspace",
+    "worldInterpretation": "provider/tool path semantics, not a World filesystem abstraction requirement"
+  }
+}

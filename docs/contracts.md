@@ -130,6 +130,8 @@ Repeated observation of the same provider Receipt must not rewrite temporal hist
 
 Provider success is not converted to a Host `VerificationReceipt`. Verification remains a separate domain or product action.
 
+Execution mobility adds no World JSON contract. Runtime Workspace/Job/Attempt/source/input/Artifact identities and `foreignReferences` remain Runtime-owned physical evidence; World does not copy them into a generic execution-migration object. Pre-admission `ForeignEgressCapability` / `EffectPathQuery` evidence may be re-observed and re-selected after an execution-context change. Once `PreparedWorldDispatch` exists, its exact provider request identity and capability condition remain the World recovery anchor across controller replacement, and UNKNOWN must reconcile that original identity before any new dispatch. A Runtime digest reference is not proof that destination input bytes were materialized; W-X4 therefore treats current Windows-native `workspace.execBound` incompatibility as a Runtime substrate gap rather than weakening World contracts.
+
 ## Browser bundle contract
 
 A succeeded `browser.run` Receipt must carry exactly three generation-scoped Artifacts in this order:
