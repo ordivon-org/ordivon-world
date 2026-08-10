@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 from pathlib import Path
@@ -69,6 +70,17 @@ class LiveAcceptanceTransportTests(unittest.TestCase):
         self.assertFalse(transport.dropped)
         self.assertIsNone(transport.committed_response_replayed)
         self.assertEqual(transport.post_count, 1)
+
+    def test_live_acceptance_never_bypasses_world_owner_boundary(self) -> None:
+        tree = ast.parse(_SCRIPT.read_text(encoding="utf-8"))
+        direct_host_appends = [
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "append_preserving"
+        ]
+        self.assertEqual(direct_host_appends, [])
 
 
 if __name__ == "__main__":

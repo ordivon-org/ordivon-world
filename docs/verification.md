@@ -71,7 +71,7 @@ This is the current machine/provider health projection. CI cannot substitute for
 - no redispatch occurred;
 - Receipt request digest and capability version matched;
 - Artifact bytes and digest were verified;
-- independent Host Verification accepted the evidence;
+- acceptance-local VerificationReceipt accepted the evidence without being written as a Host core Event;
 - Task state and Ready Frontier were preserved;
 - no completion claim was made.
 
@@ -86,3 +86,5 @@ Passing tests prove the exercised failure trajectories. They do not prove every 
 ```bash
 scripts/local-acceptance
 ```
+
+This portable gate is necessary but not sufficient for a release/integration claim. Current Host ownership compatibility and live provider recovery remain separate owner-native gates exercised by the live W1/P2 scenarios above.

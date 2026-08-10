@@ -184,8 +184,17 @@ class ForeignEgressCapabilityTests(unittest.TestCase):
         self.assertEqual(restored, capability)
         tampered = capability.to_dict()
         tampered["relationship"]["node"] = "sg-sin"
+        self.assertNotEqual(capability.relationship["node"], "sg-sin")
         with self.assertRaisesRegex(ForeignEgressProjectionError, "digest does not match"):
             ForeignEgressCapability.from_dict(tampered)
+
+    def test_nested_semantic_mutation_fails_closed_before_emission_or_handoff(self) -> None:
+        capability = self.project()
+        capability.relationship["node"] = "tampered-node"
+        with self.assertRaisesRegex(ForeignEgressProjectionError, "digest does not match"):
+            capability.to_dict()
+        with self.assertRaisesRegex(ForeignEgressProjectionError, "digest does not match"):
+            capability.handoff_reference()
 
 
 if __name__ == "__main__":

@@ -37,3 +37,4 @@ mkdir -p target/local-acceptance-wheel
 "$UV" run python scripts/check_wheel.py target/local-acceptance-wheel
 
 git diff --check
+printf '%s\n' 'portable_acceptance=passed' 'live_owner_acceptance=separate_required_gate'

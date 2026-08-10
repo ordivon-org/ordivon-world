@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass
 import datetime as dt
 from typing import Any
@@ -244,27 +245,11 @@ class ForeignEgressCapability:
             observed_at=str(value["observedAt"]),
             fresh_until=str(value["freshUntil"]),
             freshness_window_seconds=int(owner["freshnessWindowSeconds"]),
-            relationship=dict(value["relationship"]),
+            relationship=copy.deepcopy(value["relationship"]),
             required_targets=tuple(str(item) for item in value["requiredTargets"]),
             capability_digest=str(value["capabilityDigest"]),
         )
-        expected = sha256_digest(
-            cls._document(
-                observation_digest=instance.observation_digest,
-                path_digest=instance.path_digest,
-                catalog_digest=instance.catalog_digest,
-                observed_at=instance.observed_at,
-                fresh_until=instance.fresh_until,
-                freshness_window_seconds=instance.freshness_window_seconds,
-                relationship=instance.relationship,
-                required_targets=instance.required_targets,
-                capability_digest=None,
-            )
-        )
-        if instance.capability_digest != expected:
-            raise ForeignEgressProjectionError(
-                "foreign egress capability digest does not match its projection"
-            )
+        instance._require_digest_current()
         return instance
 
     @staticmethod
@@ -295,7 +280,7 @@ class ForeignEgressCapability:
             },
             "observedAt": observed_at,
             "freshUntil": fresh_until,
-            "relationship": relationship,
+            "relationship": copy.deepcopy(relationship),
             "requiredTargets": list(required_targets),
             "activationAuthority": _WORKSTATION_AUTHORITY,
             "requiresOwnerRevalidation": True,
@@ -304,7 +289,27 @@ class ForeignEgressCapability:
             value["capabilityDigest"] = capability_digest
         return value
 
+    def _require_digest_current(self) -> None:
+        expected = sha256_digest(
+            self._document(
+                observation_digest=self.observation_digest,
+                path_digest=self.path_digest,
+                catalog_digest=self.catalog_digest,
+                observed_at=self.observed_at,
+                fresh_until=self.fresh_until,
+                freshness_window_seconds=self.freshness_window_seconds,
+                relationship=self.relationship,
+                required_targets=self.required_targets,
+                capability_digest=None,
+            )
+        )
+        if self.capability_digest != expected:
+            raise ForeignEgressProjectionError(
+                "foreign egress capability digest does not match its projection"
+            )
+
     def to_dict(self) -> dict[str, Any]:
+        self._require_digest_current()
         value = self._document(
             observation_digest=self.observation_digest,
             path_digest=self.path_digest,
@@ -332,6 +337,7 @@ class ForeignEgressCapability:
             )
 
     def handoff_reference(self) -> dict[str, Any]:
+        self._require_digest_current()
         value = {
             "schemaVersion": 1,
             "kind": "ordivon.world.foreign-egress-capability-reference",

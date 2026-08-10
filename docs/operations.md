@@ -68,7 +68,7 @@ A successful oneshot service normally returns to `inactive` with `Result=success
 
 ## Live W1 acceptance
 
-The live scenario performs one bounded allowlisted Fetch, deliberately discards the successful POST response, replaces the Host process, queries the original Receipt, reads and verifies the Artifact, and records an independent Host VerificationReceipt without completing the Task.
+The live scenario performs one bounded allowlisted Fetch, deliberately discards the successful POST response, replaces the Host process, queries the original Receipt, and reads and verifies the Artifact. It constructs an acceptance-local `VerificationReceipt` for evidence checking but does not write a Host core verification Event or complete the Task; World durable state remains limited to World-owned observation/reconciliation evidence.
 
 It requires a clean source commit:
 
@@ -95,7 +95,7 @@ uv run python scripts/live_host_cloudflare_w1.py \
   --output "/root/projects/ordivon-world/target/acceptance/world-p2-browser-${revision:0:7}.json"
 ```
 
-The scenario verifies one Browser POST, Host UNKNOWN, fresh-Host Receipt reconciliation, screenshot/HTML/Manifest download integrity, exact request generation and independent three-item Verification. A successful bundle still does not complete the Task or assert page truth.
+The scenario verifies one Browser POST, Host UNKNOWN, fresh-Host Receipt reconciliation, screenshot/HTML/Manifest download integrity, exact request generation and an acceptance-local three-item VerificationReceipt. The receipt is evidence-checking data, not a Host core verification Event. A successful bundle still does not complete the Task or assert page truth.
 
 ## Recovery rules
 

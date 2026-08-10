@@ -395,30 +395,7 @@ def run_acceptance(
                     dispatch_id=dispatch_id,
                 )
             )
-            verification_object = port.put_object(
-                verification.to_dict(),
-                kind="verification-receipt",
-            )
-            current = port.load(task_id)
-            dispatch_entry = current.data["worldDispatches"][dispatch_id]
-            observed_object = port.inspect_object(
-                str(dispatch_entry["worldObservationDigest"])
-            )
-            verified = port.append_preserving(
-                task_id=task_id,
-                expected_revision=current.projection.revision,
-                event_id=(
-                    f"event:world-{stage}:{suffix}:verified:"
-                    f"r{current.projection.revision + 1}"
-                ),
-                kind=EventKind.VERIFICATION_RECORDED,
-                updates={
-                    "worldVerificationDigest": verification_object.digest,
-                    "worldVerificationAccepted": True,
-                },
-                referenced_objects=(observed_object, verification_object),
-                label=f"World {stage} verifier",
-            )
+            verification_digest = sha256_digest(verification.to_dict())
             final_snapshot = reopened.read_task_event(task_id)
 
     checks = {
@@ -484,7 +461,7 @@ def run_acceptance(
             "initialRevision": created.revision,
             "preparedRevision": prepared_step.task_revision,
             "unknownRevision": unknown_step.task_revision,
-            "verifiedRevision": verified.projection.revision,
+            "observationRevision": recovered.task_revision,
             "finalState": final_snapshot.projection.state.value,
             "readyFrontier": list(final_snapshot.projection.ready_frontier),
         },
@@ -510,7 +487,7 @@ def run_acceptance(
         },
         "artifacts": [artifact_summary(item) for item in artifacts],
         "verification": {
-            "objectDigest": verification_object.digest,
+            "digest": verification_digest,
             "method": verification.method,
             "accepted": verification.accepted,
             "observationDigest": verification.observation_digest,
