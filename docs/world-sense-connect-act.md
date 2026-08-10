@@ -557,3 +557,43 @@ Observe / Reconcile
 ```
 
 W-X3 therefore supports **shared query semantics across heterogeneous Worlds**, but rejects, for now, a global capability database, automatic provider router, universal freshness law or hidden ranking policy.
+
+
+## P2: provider occurrence versus World observation availability
+
+P2 tested whether existing provider/Host evidence was already sufficient for an Agent to distinguish when an external effect occurred from when its observation became usable inside World. The experiment used the existing Cloudflare Fetch response-loss path rather than inventing a generic observation model.
+
+Before the change, a real committed Fetch Receipt reported provider completion at `2026-08-10T06:56:19.348Z`. The caller lost the committed response, Host retained UNKNOWN, the experiment deliberately delayed reconciliation by four seconds, and Host finally admitted the recovered observation about 10.8 seconds after provider completion. Raw Host revision timing could reconstruct the later admission boundary, but `WorldObservation` retained no local availability coordinate and `WorldTaskInspector` exposed neither provider timing nor availability to the Agent. Thus the information was physically present across owners but not available as one bounded World projection.
+
+The narrow repair added optional `WorldObservation.availableAt`, defined as the time when a validated complete provider observation first becomes available to the World controller. It did **not** add generic `observedAt`, `receivedAt`, `admittedAt`, `effectiveAt` or a universal Sensor/Observation type. Provider `started_at` / `completed_at` remain Cloudflare-owned; Host Event `recordedAt` remains Host-owned.
+
+A fresh, non-replayed acceptance then used a new provider request identity. Cloudflare started the Fetch at `2026-08-10T07:04:37.367Z` and completed it at `07:04:39.956Z`. After committed-response loss and the bounded delay, the recovered observation first became available to World at `07:04:51.422995Z`; Host admitted it milliseconds later at approximately `07:04:51.455Z`. Reconciliation still performed no second POST.
+
+The retained temporal laws are:
+
+```text
+provider execution time
+!= World observation availability
+!= Host admission time
+!= Agent read time
+
+availability
+!= truth
+!= freshness
+!= current external state
+!= action authority
+!= Task completion
+
+historical observation without availableAt
+= unknown World availability time
+not provider completion time
+
+re-reading the same Receipt
+!= a new availability occurrence
+```
+
+`WorldTaskInspector` therefore projects a bounded `temporalEvidence` view for retained provider observations: provider start/completion, World availability and the separate time sources that own those facts. It still reports `authority=not-granted-by-inspection` and `externalCurrentness=not-claimed`.
+
+Repeated reconciliation exposed another subtle invariant. Because `availableAt` is local and dynamic, naively rebuilding the same provider observation later would change its CAS digest. World now treats the first retained equivalent provider observation as canonical: if a later reconcile returns the same Receipt and ObservationEnvelope, World returns the retained observation and original `availableAt` without advancing the Task revision; semantic drift still fails closed.
+
+P2 therefore supports **temporal provenance as an owner-separated coordinate**, not a global time ontology. The next consumer should use these facts only when a real decision depends on evidence age or delayed availability; further time fields require another falsified gap.

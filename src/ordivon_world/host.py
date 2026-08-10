@@ -101,9 +101,27 @@ class HostWorldExtension:
             evidence: dict[str, str] = {
                 "providerRequestDigest": prepared.provider_request_digest,
             }
+            temporal_evidence: dict[str, Any] | None = None
             observation_digest = entry.get("worldObservationDigest")
             if isinstance(observation_digest, str):
                 evidence["observationDigest"] = observation_digest
+                observation_value = self.port.get_object(
+                    observation_digest,
+                    expected_kind=_OBSERVATION_KIND,
+                )
+                if not isinstance(observation_value, dict):
+                    raise HostWorldError("World Observation CAS value is not an object")
+                try:
+                    stored_observation = WorldObservation.from_dict(observation_value)
+                except (KeyError, TypeError, ValueError) as error:
+                    raise HostWorldError("World Observation CAS value is invalid") from error
+                temporal_evidence = {
+                    "providerStartedAt": stored_observation.receipt["started_at"],
+                    "providerCompletedAt": stored_observation.receipt.get("completed_at"),
+                    "availableAt": stored_observation.available_at,
+                    "providerTimeSource": "cloudflare-receipt",
+                    "availabilityTimeSource": "world.cloudflare",
+                }
             uncertainty_digest = entry.get("worldUncertaintyDigest")
             if isinstance(uncertainty_digest, str):
                 evidence["uncertaintyObjectDigest"] = uncertainty_digest
@@ -117,24 +135,25 @@ class HostWorldExtension:
             else:
                 next_operation = None
 
-            result.append(
-                {
-                    "family": "provider-dispatch",
-                    "identity": dispatch_id,
-                    "effectId": prepared.dispatch.effect_id,
-                    "providerRequestId": prepared.provider_request_id,
-                    "state": state,
-                    "commitmentClass": (
-                        "outstanding"
-                        if state in {"prepared", "unknown", "pending"}
-                        else "historical-terminal"
-                    ),
-                    "evidence": evidence,
-                    "nextOwnerOperation": next_operation,
-                    "authority": "not-granted-by-inspection",
-                    "externalCurrentness": "not-claimed",
-                }
-            )
+            commitment: dict[str, Any] = {
+                "family": "provider-dispatch",
+                "identity": dispatch_id,
+                "effectId": prepared.dispatch.effect_id,
+                "providerRequestId": prepared.provider_request_id,
+                "state": state,
+                "commitmentClass": (
+                    "outstanding"
+                    if state in {"prepared", "unknown", "pending"}
+                    else "historical-terminal"
+                ),
+                "evidence": evidence,
+                "nextOwnerOperation": next_operation,
+                "authority": "not-granted-by-inspection",
+                "externalCurrentness": "not-claimed",
+            }
+            if temporal_evidence is not None:
+                commitment["temporalEvidence"] = temporal_evidence
+            result.append(commitment)
         return result
 
     def prepare(
@@ -359,13 +378,23 @@ class HostWorldExtension:
         entry = self._entry(current.data, prepared)
         if observation.envelope.dispatch_id != prepared.dispatch.dispatch_id:
             raise HostWorldSuperseded("World Observation belongs to another Host Dispatch")
-        observation_object = self.port.put_object(
-            observation.to_dict(),
-            kind=_OBSERVATION_KIND,
-        )
+        observation_document = observation.to_dict()
         existing = entry.get("worldObservationDigest")
         if existing is not None:
-            if existing != observation_object.digest:
+            existing_value = self.port.get_object(
+                str(existing),
+                expected_kind=_OBSERVATION_KIND,
+            )
+            if not isinstance(existing_value, dict):
+                raise HostWorldError("retained World Observation CAS value is not an object")
+            try:
+                retained_observation = WorldObservation.from_dict(existing_value)
+            except (KeyError, TypeError, ValueError) as error:
+                raise HostWorldError("retained World Observation CAS value is invalid") from error
+            if (
+                retained_observation.envelope != observation.envelope
+                or retained_observation.receipt != observation.receipt
+            ):
                 raise HostWorldSuperseded(
                     f"World Dispatch {prepared.dispatch.dispatch_id} already retains a different Observation"
                 )
@@ -373,10 +402,14 @@ class HostWorldExtension:
                 task_id,
                 current.projection.revision,
                 prepared,
-                status=observation.envelope.status,
-                observation=observation,
-                reconciled=observation.reconciled,
+                status=retained_observation.envelope.status,
+                observation=retained_observation,
+                reconciled=retained_observation.reconciled,
             )
+        observation_object = self.port.put_object(
+            observation_document,
+            kind=_OBSERVATION_KIND,
+        )
         prepared_object = self.port.inspect_object(str(entry["worldPreparedDispatchDigest"]))
         updates, remove_fields = self._mutation(
             current.data,

@@ -14,7 +14,7 @@ Published schemas:
 | `edge-capabilities` | current provider capability and deployment condition |
 | `edge-receipt` | pending or final provider Receipt |
 | `world-prepared-dispatch` | durable Host-to-provider binding |
-| `world-observation` | provider Receipt mapped to Host evidence |
+| `world-observation` | provider Receipt mapped to Host evidence plus optional backward-compatible World availability time |
 | `network-observation` | future normalized read-only network condition evidence |
 | `foreign-egress-capability` | World projection of one owner-observed, destination-qualified foreign-egress relationship |
 | `foreign-egress-capability-reference` | digest-only handoff reference that requires activation-owner revalidation |
@@ -114,9 +114,17 @@ It excludes observation time. `observation_digest` includes `capturedAt` and ide
 
 Every candidate serializes `currentActionAuthority=false` and `requiresOwnerRevalidation=true`. The query serializes `selectionAuthority=agent`, contains no rank/recommendation field and requires one exact `candidateDigest` for selection. Stable candidate ordering is canonicalization only, never policy.
 
+## Provider observation availability
+
+Cloudflare Receipt `started_at` and `completed_at` are provider-native timestamps. `WorldObservation.availableAt` is separately recorded by World when a validated complete Receipt first becomes locally available to the World controller. The field is optional in the schema so previously retained `world-observation` objects remain structurally valid; newly produced Cloudflare observations always emit it.
+
+`availableAt` is deliberately not named `observedAt` or `admittedAt`: it does not rewrite provider occurrence/completion time and it does not duplicate Host event admission time. It is also not Agent read time, truth time, freshness, currentness or authority. `WorldTaskInspector` may project the provider timestamps and `availableAt` together as informational `temporalEvidence`, while continuing to report `authority=not-granted-by-inspection` and `externalCurrentness=not-claimed`.
+
+Repeated observation of the same provider Receipt must not rewrite temporal history. When a Host dispatch already retains an equivalent Receipt/ObservationEnvelope, later reconciliation returns the first retained World observation and its original `availableAt`. A different provider Receipt or envelope still fails closed as superseded evidence.
+
 ## Host mapping
 
-`PreparedWorldDispatch` embeds a native Host `DispatchEnvelope` and records the capability condition as a required `StateRef`. `WorldObservation` embeds a native Host `ObservationEnvelope`; each provider Artifact becomes a Host `ArtifactRef` with provider key, media type and SHA-256 digest.
+`PreparedWorldDispatch` embeds a native Host `DispatchEnvelope` and records the capability condition as a required `StateRef`. `WorldObservation` embeds a native Host `ObservationEnvelope`, the complete provider Receipt and optional World `availableAt`; each provider Artifact becomes a Host `ArtifactRef` with provider key, media type and SHA-256 digest. The Host event timestamp remains Host-owned and is not copied into this object.
 
 Provider success is not converted to a Host `VerificationReceipt`. Verification remains a separate domain or product action.
 

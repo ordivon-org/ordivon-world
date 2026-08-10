@@ -70,6 +70,7 @@ This is the current machine/provider health projection. CI cannot substitute for
 - reconciliation queried the original provider request ID;
 - no redispatch occurred;
 - Receipt request digest and capability version matched;
+- provider `started_at` / `completed_at` remained intact and the recovered World observation recorded a non-empty `availableAt` from the World time source;
 - Artifact bytes and digest were verified;
 - acceptance-local VerificationReceipt accepted the evidence without being written as a Host core Event;
 - Task state and Ready Frontier were preserved;

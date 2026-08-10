@@ -14,7 +14,7 @@ audience:
   - operator
   - agent
 updated: 2026-08-10
-summary: Owner-preserving external relationships, recoverable provider effects and cross-World transfers, with Agent-facing capability choice that never becomes action authority.
+summary: Owner-preserving external relationships, temporally explicit provider observations, recoverable effects and cross-World transfers, with Agent-facing choice that never becomes action authority.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -61,6 +61,14 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 `EffectPathQuery` is the first shared Agent-facing projection forced by two materially different real paths to the same target. It can compare a Surfpath foreign-egress candidate with a request-scoped Cloudflare fixed-target connector while preserving their differences: owner/activation authority, request-control mode, owner observation time, optional owner-native validity horizon, usability evidence and the complete provider-native source projection. Every candidate states `currentActionAuthority=false` and `requiresOwnerRevalidation=true`.
 
 The query is deterministic but deliberately has no ranking, recommendation or implicit selection. `selectionAuthority=agent`, and subsequent action requires one exact `candidateDigest`. A real W-X3 experiment showed why this split matters: a historical Cloudflare effect later had no DNS/route/Worker resources; a fresh deployment had all three owner resources present but initially returned HTTP 522; the exact same fixed connector then completed the OpenAI GET with HTTP 401; cleanup returned all resources to absent. Resource existence, prior success and current action authority are therefore separate facts. See [`docs/world-sense-connect-act.md`](docs/world-sense-connect-act.md).
+
+### Temporal provider observations
+
+Cloudflare provider Receipts retain provider-native `started_at` / `completed_at`. World `WorldObservation` separately records `availableAt`: when the complete provider observation first becomes available to the World controller. `WorldTaskInspector` projects both time sources without treating either as current external truth or action authority.
+
+P2 was forced by a real response-loss experiment: one fresh Cloudflare Fetch completed at `07:04:39.956Z`, while the reconciled observation first became available to World at `07:04:51.422995Z` after a deliberate delay; Host admitted the evidence milliseconds later. Raw Host revision history could recover admission time, but the prior World observation and Agent-facing projection could not. World therefore added one availability coordinate rather than a generic temporal ontology. Provider time, World availability time and Host event time remain owned by their respective layers.
+
+`availableAt` is not truth time, source-occurrence time, Host admission time or Agent read time. Historical observations lacking it remain structurally readable; new Cloudflare observations emit it, and repeated reconciliation preserves the first retained availability rather than rewriting history.
 
 ### Cross-World Resource Transfer
 
@@ -138,6 +146,7 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
 7. **Task identity is not trajectory identity.** Trajectories retain native semantic identity (`transferId` / `messageId` / `migrationId` / `dispatchId`). Resource, Message and provider paths use per-ID maps after real multi-trajectory failures; Entity Migration remains one-per-Task until such a failure exists.
 8. **Share views before sharing ownership.** W-X3 forced one narrow `EffectPathQuery` across Surfpath and Cloudflare, but did not justify a generic Capability object, registry or router. Shared projections preserve provider-native evidence and Agent choice; physical owners still revalidate before effect.
+9. **Keep time sources separate.** Provider occurrence/completion time, World observation availability and Host admission time are different owner-native facts. Availability is not truth, currentness, authority or completion.
 
 ## Development
 

@@ -21,6 +21,7 @@
       ]
     },
     "receipt": {"$ref": "edge-receipt.schema.json"},
+    "availableAt": {"type": "string", "format": "date-time"},
     "reconciled": {"type": "boolean"},
     "replayed": {"type": "boolean"}
   }

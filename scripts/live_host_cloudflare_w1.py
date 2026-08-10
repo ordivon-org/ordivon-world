@@ -420,6 +420,13 @@ def run_acceptance(
         "freshHostQueriedOriginalRequest": (
             observation.receipt["receipt_id"] == prepared.provider_request_id
         ),
+        "worldObservationAvailabilityRecorded": (
+            isinstance(observation.available_at, str) and bool(observation.available_at)
+        ),
+        "providerCompletionTimeRetained": (
+            isinstance(observation.receipt.get("completed_at"), str)
+            and bool(observation.receipt.get("completed_at"))
+        ),
         "receiptDigestMatchesRequest": (
             observation.receipt["request_digest"]
             == prepared.provider_request_digest
@@ -484,6 +491,9 @@ def run_acceptance(
             "postCount": dropping_transport.post_count,
             "receiptStatus": observation.receipt["status"],
             "receiptPayloadDigest": observation.envelope.payload_digest,
+            "startedAt": observation.receipt["started_at"],
+            "completedAt": observation.receipt.get("completed_at"),
+            "worldObservationAvailableAt": observation.available_at,
         },
         "artifacts": [artifact_summary(item) for item in artifacts],
         "verification": {

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 from dataclasses import dataclass
+import datetime as dt
 import hashlib
 import hmac
 import http.client
@@ -323,6 +324,7 @@ class WorldObservation:
     receipt: dict[str, Any]
     reconciled: bool
     replayed: bool
+    available_at: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         value = {
@@ -333,8 +335,25 @@ class WorldObservation:
             "reconciled": self.reconciled,
             "replayed": self.replayed,
         }
+        if self.available_at is not None:
+            value["availableAt"] = self.available_at
         validate_contract("world-observation", value)
         return value
+
+    @classmethod
+    def from_dict(cls, value: dict[str, Any]) -> WorldObservation:
+        validate_contract("world-observation", value)
+        return cls(
+            envelope=ObservationEnvelope.from_dict(value["envelope"]),
+            receipt=value["receipt"],
+            reconciled=bool(value["reconciled"]),
+            replayed=bool(value["replayed"]),
+            available_at=(
+                str(value["availableAt"])
+                if value.get("availableAt") is not None
+                else None
+            ),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -686,6 +705,7 @@ class CloudflareWorldAdapter:
             receipt=receipt,
             reconciled=reconciled,
             replayed=replayed,
+            available_at=dt.datetime.now(dt.UTC).isoformat().replace("+00:00", "Z"),
         )
 
     @staticmethod
