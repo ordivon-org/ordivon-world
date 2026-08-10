@@ -400,8 +400,9 @@ def run_acceptance(
                 kind="verification-receipt",
             )
             current = port.load(task_id)
+            dispatch_entry = current.data["worldDispatches"][dispatch_id]
             observed_object = port.inspect_object(
-                str(current.data["worldObservationDigest"])
+                str(dispatch_entry["worldObservationDigest"])
             )
             verified = port.append_preserving(
                 task_id=task_id,
@@ -431,7 +432,10 @@ def run_acceptance(
             dropping_transport.committed_response_replayed is False
         ),
         "unknownPersisted": (
-            unknown_snapshot.data.get("worldOutcomeState") == "unknown"
+            unknown_snapshot.data["worldDispatches"][dispatch_id].get(
+                "worldOutcomeState"
+            )
+            == "unknown"
         ),
         "freshHostRecoveredPreparedDispatch": (
             restored.provider_request_id == prepared.provider_request_id
