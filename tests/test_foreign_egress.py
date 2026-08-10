@@ -178,6 +178,41 @@ class ForeignEgressCapabilityTests(unittest.TestCase):
         self.assertNotIn("relationship", reference)
         self.assertNotIn("providerEvidenceDigest", json.dumps(reference, sort_keys=True))
 
+    def test_reobservation_creates_new_applicability_without_rewriting_history(self) -> None:
+        historical = self.project()
+        historical_reference = historical.handoff_reference()
+
+        replacement_observation = surfpath_observation()
+        replacement_observation["observedAt"] = "2026-08-10T04:05:00Z"
+        replacement_candidate = replacement_observation["candidates"][0]
+        replacement_candidate["path"]["pathDigest"] = OTHER_PATH_DIGEST
+        replacement_candidate["path"]["endpointIp"] = "154.47.23.99"
+        replacement_observation["rankedPaths"] = [OTHER_PATH_DIGEST]
+        replacement_observation["recommendedPathDigest"] = OTHER_PATH_DIGEST
+        replacement_observation.pop("observationDigest", None)
+        replacement_observation["observationDigest"] = sha256_digest(replacement_observation)
+        replacement_status = surfpath_status(replacement_observation)
+
+        replacement = ForeignEgressCapability.from_surfpath(
+            observation=replacement_observation,
+            status=replacement_status,
+            path_digest=OTHER_PATH_DIGEST,
+        )
+        replacement_reference = replacement.handoff_reference()
+
+        self.assertEqual(historical.handoff_reference(), historical_reference)
+        self.assertNotEqual(replacement.capability_digest, historical.capability_digest)
+        self.assertNotEqual(replacement.observation_digest, historical.observation_digest)
+        self.assertNotEqual(replacement.path_digest, historical.path_digest)
+        self.assertNotEqual(replacement_reference, historical_reference)
+        with self.assertRaises(ForeignEgressCapabilityStale):
+            historical.require_reference_fresh(
+                dt.datetime(2026, 8, 10, 4, 5, 0, tzinfo=dt.timezone.utc)
+            )
+        replacement.require_reference_fresh(
+            dt.datetime(2026, 8, 10, 4, 5, 1, tzinfo=dt.timezone.utc)
+        )
+
     def test_round_trip_revalidates_projection_digest(self) -> None:
         capability = self.project()
         restored = ForeignEgressCapability.from_dict(capability.to_dict())

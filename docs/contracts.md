@@ -114,6 +114,8 @@ It excludes observation time. `observation_digest` includes `capturedAt` and ide
 
 Every candidate serializes `currentActionAuthority=false` and `requiresOwnerRevalidation=true`. The query serializes `selectionAuthority=agent`, contains no rank/recommendation field and requires one exact `candidateDigest` for selection. Stable candidate ordering is canonicalization only, never policy.
 
+W5-E additionally fixes the lifetime of this surface: `ForeignEgressCapability`, `EffectPathQuery`, Agent selection and the digest-only handoff reference are not themselves durable external commitments. An expired reference remains valid historical evidence but is not effect authority; owner re-observation creates a new capability/reference identity rather than mutating the old one. Durable World recovery begins only after an owner admits an exact consequence-capable provider/transfer operation, where the existing typed Host-backed journal owns Receipt/UNKNOWN/reconciliation continuity.
+
 ## Provider observation availability
 
 Cloudflare Receipt `started_at` and `completed_at` are provider-native timestamps. `WorldObservation.availableAt` is separately recorded by World when a validated complete Receipt first becomes locally available to the World controller. The field is optional in the schema so previously retained `world-observation` objects remain structurally valid; newly produced Cloudflare observations always emit it.

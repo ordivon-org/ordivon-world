@@ -41,6 +41,7 @@ related:
 - [`w5-presence.md`](w5-presence.md) owns the active W5-B research boundary: Agent-facing current subject/body relation evidence is query-scoped informational truth, not a global Presence registry or action authority.
 - [`w5-discovery-connection.md`](w5-discovery-connection.md) owns the active W5-C research boundary: discovery, reachability, protocol-native relationship/session state and authority are separate dimensions; none may be promoted into another without owner-native evidence.
 - [`w5-interaction.md`](w5-interaction.md) owns the W5-D interaction research closeout: typed interaction families share private causal/recovery mechanics and compose forward under partial completion, while source authority, destination consequence and receipt meaning remain owner-native semantics.
+- [`w5-external-commitment-continuity.md`](w5-external-commitment-continuity.md) owns the W5-E continuity closeout: capability/reference history is not current applicability, pre-admission Agent selection is recomputable planning, and durable continuity begins at the first owner-admitted consequence boundary already retained by typed World journals.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
 

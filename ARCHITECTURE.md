@@ -165,6 +165,26 @@ World's Host-backed journals read only the schema-v5 Host extension namespace `w
 
 `WorldTaskInspector` is the bounded read-only projection over that owner state. It is deliberately an aggregator, not a second state model: Provider dispatches project their own bounded request/observation evidence, and the private typed trajectory journal projects Resource, Message and Entity plan/receipt/uncertainty evidence. For retained Provider observations it also projects `temporalEvidence` with provider `started_at` / `completed_at` and World `availableAt`, identifying their separate time sources. The aggregator consumes one revision-coherent `HostExtensionPort.load_namespace_snapshot(..., expected_revision=...)` plus the four owner-local projector interfaces; it never reaches through the Port into `HostStorage`, never decodes trajectory storage fields, and never returns payload, provenance or continuity bodies. Temporal projection does not grant currentness: every result still carries `authority=not-granted-by-inspection` and `externalCurrentness=not-claimed`. There is no OwnerRegistry, universal Observation ontology or shared cross-domain inspection schema.
 
+W5-E fixes the durability fence on the consequence boundary rather than on every Agent decision. `ForeignEgressCapability`, `EffectPathQuery`, one selected `candidateDigest` and the digest-only handoff reference remain informational/planning objects until the activation owner admits an exact effect. If the controller disappears before that admission, current owner reality is re-observed and the Agent may re-query/re-select. Persisting the old selection would be unsafe because owner freshness may expire and physical path identity may change. Once a typed provider/transfer operation is prepared or dispatched, its retained World journal becomes durable because an external consequence may already exist and UNKNOWN must be reconciled before retry.
+
+```text
+Observe → Query → Select     recomputable planning
+                 │
+                 ▼
+        owner admits exact consequence
+                 │
+          durability fence
+                 │
+                 ▼
+       Prepared / Dispatched / Bound
+                 │
+          Receipt | UNKNOWN
+                 │
+              Reconcile
+```
+
+This is why World has no separate capability-selection or generic commitment journal. Fresh-Agent recovery projects the existing typed owner journals instead of copying planning state into another database.
+
 ## Contract boundary
 
 JSON Schema Draft 2020-12 is the machine-readable authority for public provider, Effect Path Query, Resource Transfer, Message Delivery and Entity Migration surfaces. The Effect Path Query schema standardizes only the informational comparison wrapper; provider-native evidence remains embedded rather than translated into one generic capability ontology. TypeScript emits real provider fixture documents; Python validates contracts using a local packaged Registry, so offline recovery never retrieves a remote Schema URL.

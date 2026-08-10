@@ -62,6 +62,12 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 
 The query is deterministic but deliberately has no ranking, recommendation or implicit selection. `selectionAuthority=agent`, and subsequent action requires one exact `candidateDigest`. A real W-X3 experiment showed why this split matters: a historical Cloudflare effect later had no DNS/route/Worker resources; a fresh deployment had all three owner resources present but initially returned HTTP 522; the exact same fixed connector then completed the OpenAI GET with HTTP 401; cleanup returned all resources to absent. Resource existence, prior success and current action authority are therefore separate facts. See [`docs/world-sense-connect-act.md`](docs/world-sense-connect-act.md).
 
+### External commitment continuity
+
+W5-E tested whether Agent path choice itself needs another durable World journal. A historical Surfpath reference remained structurally intact after expiry, but the Workstation owner rejected it before the child effect. Fresh rediscovery of the same logical `jp-tok / openvpn-udp` intent produced new observation, path and capability identities; an exact new reference was then revalidated and reached OpenAI with HTTP 401.
+
+The retained law is that pre-admission observation/query/selection is recomputable planning state. World durability begins when an owner admits an exact consequence-capable operation whose outcome may later be Receipt or UNKNOWN. Those durable boundaries already exist in the typed Provider, Resource, Message and Entity journals and are discoverable through `WorldTaskInspector`; no `CapabilityManager`, selection journal or generic commitment registry is required. See [`docs/w5-external-commitment-continuity.md`](docs/w5-external-commitment-continuity.md).
+
 ### Temporal provider observations
 
 Cloudflare provider Receipts retain provider-native `started_at` / `completed_at`. World `WorldObservation` separately records `availableAt`: when the complete provider observation first becomes available to the World controller. `WorldTaskInspector` projects both time sources without treating either as current external truth or action authority.
@@ -147,6 +153,7 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 7. **Task identity is not trajectory identity.** Trajectories retain native semantic identity (`transferId` / `messageId` / `migrationId` / `dispatchId`). Resource, Message and provider paths use per-ID maps after real multi-trajectory failures; Entity Migration remains one-per-Task until such a failure exists.
 8. **Share views before sharing ownership.** W-X3 forced one narrow `EffectPathQuery` across Surfpath and Cloudflare, but did not justify a generic Capability object, registry or router. Shared projections preserve provider-native evidence and Agent choice; physical owners still revalidate before effect.
 9. **Keep time sources separate.** Provider occurrence/completion time, World observation availability and Host admission time are different owner-native facts. Availability is not truth, currentness, authority or completion.
+10. **Persist consequences, not every choice.** Owner observations, effect-path queries and pre-admission Agent selections may be recomputed from current reality. Durable World continuity begins at owner admission of an exact consequence-capable operation; after that fence, Receipt/UNKNOWN/reconciliation must survive controller replacement.
 
 ## Development
 

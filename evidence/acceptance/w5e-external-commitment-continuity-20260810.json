@@ -1,0 +1,93 @@
+{
+  "agentSelection": {
+    "reason": "Both current paths were qualified; the Agent selected the lower observed effective-latency path. Workstation recommendation remained advisory.",
+    "selectedPathDigest": "sha256:7b5b389043f18ed76661332a167cccbd8c6f4eda83e8feea74cd97258b1acaf5",
+    "selectionAuthority": "agent"
+  },
+  "freshReference": {
+    "activationAuthority": "ordivon.workstation.surfpath",
+    "capabilityDigest": "sha256:31602e5d485b3fc2529f3f611f46f5dc92c896c43fd0901dc04e568767b9da5a",
+    "freshUntil": "2026-08-10T08:36:11.176427Z",
+    "observationDigest": "sha256:5fb097c35f0e3766dcad956eea622ae2ca6978d01451d9f3cf56f64f32317797",
+    "pathDigest": "sha256:7b5b389043f18ed76661332a167cccbd8c6f4eda83e8feea74cd97258b1acaf5",
+    "projectionJobId": "job-019feacf-4c83-7162-a8fb-691a8eb12d64",
+    "requiresOwnerRevalidation": true,
+    "terminalEvidenceDigest": "sha256:b42bae0092240a1bb5ec5dc49d676f291adffb450a8d88f94c12d9237420ccae"
+  },
+  "historicalReference": {
+    "activationAuthority": "ordivon.workstation.surfpath",
+    "capabilityDigest": "sha256:4c070368181602b2cf88d39ca18c48f23ca5a7b6fa8571fbb625f20506e998f8",
+    "freshUntil": "2026-08-10T04:40:13.650844Z",
+    "observationDigest": "sha256:327472b0046df888da2e573c6a59e9c8334d72212298f38885313e28dee77e4d",
+    "pathDigest": "sha256:ad19ae221df2a3028e8a16b554cf152194c6f383ab7a9a3f8c45d82adee6f5eb"
+  },
+  "kind": "ordivon.world.w5e-external-commitment-continuity-acceptance",
+  "limitations": [
+    "The live continuity path uses a bounded keyless HTTP GET whose expected service response is 401; it does not test a non-idempotent business effect through Surfpath.",
+    "The transient Runtime MCP control-path interruption during P3 is not classified as a Runtime failure mode and is not part of the World proof.",
+    "Cloudflare fixed-target resources are not repeated in W5-E because P1 already proved their owner-resource disappearance/re-establishment semantics.",
+    "A future owner with non-idempotent response-loss-sensitive activation must provide its own durable admission/reconciliation boundary; P3 does not universalize Surfpath mechanics."
+  ],
+  "nextResearchBoundary": "W-X4 execution migration: preserve one Host Task and Runtime-owned exact input/artifact lineage across execution-world movement while World revalidates external capabilities and reconciles effects.",
+  "portableAcceptance": {
+    "attemptId": "attempt-019fead6-609d-7e11-a8b7-dad748da2d32",
+    "jobId": "job-019fead6-609d-7e11-a8b7-dac4f3bff1cc",
+    "liveOwnerGate": "separate_required_gate",
+    "pythonTests": 138,
+    "result": "portable_acceptance=passed",
+    "schemas": 29,
+    "stdoutDigest": "sha256:5f13c83de17cb32b15198ace315cb1b8e990ac172cb78cf5d3cb11237106109c",
+    "typeScriptTests": 29
+  },
+  "productDecision": {
+    "createCapabilityManager": false,
+    "createCapabilityRegistry": false,
+    "createEffectPathSelectionJournal": false,
+    "createExternalCommitmentManager": false,
+    "createGlobalCommitmentRegistry": false,
+    "reason": "Pre-admission path choice is safely recomputable from current owner evidence; durable state is required only after an owner admits an exact consequence-capable operation, which existing typed World journals already retain and WorldTaskInspector already projects."
+  },
+  "proven": {
+    "agentSelectionNeedNotBecomeDurableWorldCommitment": true,
+    "existingTypedWorldJournalsRemainDurableConsequenceBoundary": true,
+    "expiredReferenceRejectedBeforeChildEffect": true,
+    "freshOwnerObservationCreatesNewObservationIdentity": true,
+    "freshPhysicalPathIdentityDiffersFromHistoricalPath": true,
+    "freshReferenceCanBeReactivatedWhileOwnerFresh": true,
+    "freshReferenceRequiresOwnerRevalidation": true,
+    "freshWorldCapabilityIdentityDiffersFromHistoricalCapability": true,
+    "historicalReferenceSurvivesAsEvidenceAfterExpiry": true
+  },
+  "reactivation": {
+    "httpStatus": 401,
+    "jobId": "job-019feacf-995e-7353-9196-905315ce6aa4",
+    "ownerExecutableNowAfterEffect": true,
+    "ownerFreshAfterEffect": true,
+    "ownerObservationAgeSecondsAfterEffect": 117.5,
+    "target": "https://api.openai.com/v1/models",
+    "terminalEvidenceDigest": "sha256:f441b96bc4b65f34a2dd2bb8d2a33f0433c725790c305eb050f8a244fccb45f2"
+  },
+  "reobservation": {
+    "historicalPathReappeared": false,
+    "jobId": "job-019feacd-56cf-7e22-a41a-d52ccb3692a0",
+    "observationDigest": "sha256:5fb097c35f0e3766dcad956eea622ae2ca6978d01451d9f3cf56f64f32317797",
+    "observedAt": "2026-08-10T08:33:11.176427Z",
+    "qualificationHttpStatus": 401,
+    "qualificationTarget": "https://api.openai.com/v1/models",
+    "qualifiedPathDigests": [
+      "sha256:7b5b389043f18ed76661332a167cccbd8c6f4eda83e8feea74cd97258b1acaf5",
+      "sha256:985186898715f66e2487fa9cba9f9f158c1adbe149553a697cb4f89e6caa8951"
+    ],
+    "terminalEvidenceDigest": "sha256:b4d91f807aa693bb40fc83f8b82c663ecf9575e2e99edadd21976b8e1a95ddaa"
+  },
+  "schemaVersion": 1,
+  "sourceRevisionUnderTest": "1d62ba48e2184e0b5e08636c31bdb0e96e519f36",
+  "staleNegativeControl": {
+    "childExecuted": false,
+    "jobId": "job-019feacd-1e85-74b3-8e27-952dae1f9874",
+    "ownerError": "Surfshark path observation is stale: age=14105.8s max=180s",
+    "ownerExitCode": 2,
+    "terminalEvidenceDigest": "sha256:e7a8df044b545fa78f43a79a26a844e5f1e5cf54a63e790950d41a3ba3d1eae3"
+  },
+  "status": "passed"
+}
