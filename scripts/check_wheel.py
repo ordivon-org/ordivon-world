@@ -32,7 +32,6 @@ EXPECTED_SCHEMA_NAMES = (
     "message-delivery-plan",
     "message-delivery-receipt",
     "message-issuance-receipt",
-    "network-observation",
     "resource-egress-receipt",
     "resource-transfer-destination-request",
     "resource-transfer-destination-response",
@@ -124,16 +123,16 @@ def install_and_import(wheel: Path) -> None:
         command(["uv", "pip", "install", "--python", str(python), str(wheel)])
         program = (
             "import json; "
-            "from ordivon_world import (EffectPathQuery, EntityMigrationBundle, MessageDeliveryBundle, ResourceTransferBundle, load_schema); "
+            "from ordivon_world import (EntityMigrationBundle, MessageDeliveryBundle, ResourceTransferBundle, load_schema); "
             f"names={EXPECTED_SCHEMA_NAMES!r}; "
             "[load_schema(name) for name in names]; "
-            "print(json.dumps({'api':['EffectPathQuery','EntityMigrationBundle','MessageDeliveryBundle','ResourceTransferBundle'],"
+            "print(json.dumps({'api':['EntityMigrationBundle','MessageDeliveryBundle','ResourceTransferBundle'],"
             "'schemas':len(names)}))"
         )
         output = command([str(python), "-I", "-c", program], cwd=root)
         value = json.loads(output)
         if value != {
-            "api": ["EffectPathQuery", "EntityMigrationBundle", "MessageDeliveryBundle", "ResourceTransferBundle"],
+            "api": ["EntityMigrationBundle", "MessageDeliveryBundle", "ResourceTransferBundle"],
             "schemas": len(EXPECTED_SCHEMA_NAMES),
         }:
             raise WheelError("isolated wheel import returned an unexpected result")

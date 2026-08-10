@@ -1,5 +1,18 @@
 from __future__ import annotations
 
+from ordivon_world.cloudflare import (
+    CapabilitySnapshot,
+    CloudflareWorldAdapter,
+)
+from ordivon_world.entity_migration import HostEntityMigrationJournal
+from ordivon_world.host import HostWorldExtension
+from ordivon_world.message_delivery import HostMessageDeliveryJournal
+from ordivon_world.resource_transfer import HostResourceTransferJournal
+from ordivon_world.task_inspection import (
+    WorldTaskInspectionSuperseded,
+    WorldTaskInspector,
+)
+
 import itertools
 import json
 import tempfile
@@ -14,16 +27,7 @@ from ordivon_host import (
     WorkingCheckpoint,
 )
 
-from ordivon_world import (
-    CapabilitySnapshot,
-    CloudflareWorldAdapter,
-    HostEntityMigrationJournal,
-    HostMessageDeliveryJournal,
-    HostResourceTransferJournal,
-    HostWorldExtension,
-    WorldTaskInspectionSuperseded,
-    WorldTaskInspector,
-)
+
 from tests.test_entity_migration import DurableDestination as EntityDestination
 from tests.test_entity_migration import bundle as entity_bundle
 from tests.test_host_world import ProviderBackend, ProviderTransport, capability_document
@@ -170,7 +174,7 @@ class WorldTaskInspectionTests(unittest.TestCase):
                 self.assertEqual(provider["state"], "unknown")
                 self.assertEqual(provider["commitmentClass"], "outstanding")
                 self.assertEqual(
-                    provider["nextOwnerOperation"], "reconcile-original-request"
+                    provider["nextOwnerOperation"], "reconcile-original-request-without-redispatch"
                 )
                 self.assertEqual(
                     provider["providerRequestId"], prepared.provider_request_id
@@ -226,7 +230,7 @@ class WorldTaskInspectionTests(unittest.TestCase):
                     self.assertNotIn(forbidden, encoded)
                 for value in inspection["commitments"]:
                     self.assertEqual(
-                        value["authority"], "not-granted-by-inspection"
+                        value["actionAuthority"], "not-granted-by-inspection"
                     )
                     self.assertEqual(value["externalCurrentness"], "not-claimed")
 
@@ -298,7 +302,7 @@ class WorldTaskInspectionTests(unittest.TestCase):
                 )
                 self.assertIn("notCommittedDigest", projection["evidence"])
                 self.assertEqual(
-                    projection["authority"], "not-granted-by-inspection"
+                    projection["actionAuthority"], "not-granted-by-inspection"
                 )
 
     def test_provider_pending_remains_outstanding_reconciliation_work(self) -> None:
@@ -362,7 +366,7 @@ class WorldTaskInspectionTests(unittest.TestCase):
                 self.assertEqual(projection["state"], "pending")
                 self.assertEqual(projection["commitmentClass"], "outstanding")
                 self.assertEqual(
-                    projection["nextOwnerOperation"], "reconcile-original-request"
+                    projection["nextOwnerOperation"], "reconcile-original-request-without-redispatch"
                 )
 
     def test_aggregator_does_not_decode_trajectory_storage_fields(self) -> None:

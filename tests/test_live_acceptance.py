@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from ordivon_world.cloudflare import TransportError
+
 import ast
 import importlib.util
 import json
 from pathlib import Path
 import unittest
 
-from ordivon_world import TransportError
 from ordivon_world.cloudflare import HttpResponse
 
 _SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "live_host_cloudflare_w1.py"

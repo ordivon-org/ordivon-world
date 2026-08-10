@@ -1,0 +1,261 @@
+{
+  "kind": "ordivon.world.hp0-hp4-survival-acceptance",
+  "laws": [
+    "Past evidence does not grant permanent production status.",
+    "Consequence continuity survives HP2; generic interaction taxonomy is not required.",
+    "Similarity is a prompt to falsify abstraction, not evidence to create it.",
+    "Agent-facing authority labels must name the authority being denied.",
+    "A projection that does not improve Agent decisions should not be a default product surface."
+  ],
+  "ownerHandoffs": {
+    "harness": "no-Tool structured conclusion correction must not attempt to bind Tool observation/call identities",
+    "host": "split/express a core-consumer packaging surface before World advances Host pin if the full MCP dependency graph remains mandatory",
+    "workstation": "prove whether surfpath can absorb the remaining isolated WireGuard namespace/key-profile invariants before World moves/deletes network tooling"
+  },
+  "portableAcceptance": {
+    "jobId": "job-019feb5b-d34e-70c1-b1af-6c29b513ef5f",
+    "packagedSchemas": 28,
+    "providerTypeScriptTests": 29,
+    "pythonTests": 138,
+    "status": "passed",
+    "terminalEvidenceDigest": "sha256:063d8f8a90de17ad9c0cbfc9671c522cd8605df4cd14254679fc8f84ebea64ba",
+    "wheelCleanBuildRequired": true
+  },
+  "runtimeEvidence": [
+    {
+      "jobId": "job-019feb34-4adc-7840-9fa2-f926a21bec28",
+      "role": "baseline-portable-acceptance",
+      "terminalEvidenceDigest": "sha256:dc7646d55859020f9648e937bf3f67bd90efdb2f73415f703304dcb69b9397f1"
+    },
+    {
+      "jobId": "job-019feb38-05dc-76f1-9787-de8036630289",
+      "role": "current-host-44-test-substitution",
+      "terminalEvidenceDigest": "sha256:c312abad2c87ddcd5e4b4cb3b7e81064c3818076d401e9149af7701f9f23a460"
+    },
+    {
+      "jobId": "job-019feb3a-df55-7bd0-98f4-457379710053",
+      "role": "direct-host-relay-kill-test",
+      "terminalEvidenceDigest": "sha256:20222d8146aab6fddadaf509b62168b055ab511f65dd84ba4a0c0ab728d994fa"
+    },
+    {
+      "jobId": "job-019feb3c-59fb-7d42-b428-d5129ef36a7d",
+      "role": "wire-genericization-shadow-gate",
+      "terminalEvidenceDigest": "sha256:448d723e869b613fc4e2c91bb2dc51d5e068c31d3e925bbcbfdaf7eda190cd35"
+    },
+    {
+      "jobId": "job-019feb47-4052-7f91-90ed-ea9ccc98ebb3",
+      "role": "owner-native-deepseek-harness-smoke",
+      "terminalEvidenceDigest": "sha256:bfe2c0df112af75e307205cd7c42d3fc5bdf19b7fe85c9aa38c9117a394a6b27"
+    },
+    {
+      "jobId": "job-019feb48-70b3-7e32-aa65-eb899d137b5e",
+      "role": "hp4-18-run-batch-partial-control-path-failure",
+      "terminalEvidenceDigest": "sha256:29679399a1e16e47e5c5f50c40fc30015c29b30445d49fff862946667e54b25f"
+    },
+    {
+      "jobId": "job-019feb4a-9725-7cd1-bde7-1d1f4bf62e3b",
+      "role": "hp4-missing-case-recovery",
+      "terminalEvidenceDigest": "sha256:b1f850651367d54cbe63566590d163205a353b3d5436a017aca9e25b29df63b2"
+    },
+    {
+      "jobId": "job-019feb4e-4116-74e3-b28b-0563e708b098",
+      "role": "inspector-clarity-focused-gate",
+      "terminalEvidenceDigest": "sha256:d17f20a4e53f7fa1241f3c11e28251b8f1185cf911cc773b035b92ff4db0bff1"
+    },
+    {
+      "jobId": "job-019feb4e-fd26-77e0-b936-8cec907af65d",
+      "role": "hp4-recovery-time-clarity-6-runs",
+      "terminalEvidenceDigest": "sha256:987115c6419c7282898126171156e4844392a1510439126d57993514e9aa7efb"
+    },
+    {
+      "jobId": "job-019feb50-7384-7c83-bcd7-7a6356f018af",
+      "role": "hp4-time-choice-only-6-runs",
+      "terminalEvidenceDigest": "sha256:bd7cdf340545481a073aa5a458268502265b136103561abcfce98471d1f83c66"
+    },
+    {
+      "jobId": "job-019feb5b-9736-7161-bbde-c63f9233494d",
+      "role": "clean-wheel-deleted-package-data-regression",
+      "terminalEvidenceDigest": "sha256:be7630fde2f6938525f5e6e6ca40e465e95cac723208a6ddb43b803a2e34acec"
+    },
+    {
+      "jobId": "job-019feb5b-d34e-70c1-b1af-6c29b513ef5f",
+      "role": "final-precommit-full-portable-acceptance",
+      "terminalEvidenceDigest": "sha256:063d8f8a90de17ad9c0cbfc9671c522cd8605df4cd14254679fc8f84ebea64ba"
+    }
+  ],
+  "schemaVersion": 1,
+  "sourceBaseRevision": "c0483e93b9b7386cc14df5e4860625136250c4ce",
+  "stages": {
+    "HP0": {
+      "deletedResearchScripts": 5,
+      "deletedUnconsumedSchema": "network-observation",
+      "packagedSchemas": {
+        "after": 28,
+        "before": 29
+      },
+      "pathProjectionFacadeDisposition": "DEMOTE-RESEARCH-EXPLICIT-IMPORT",
+      "pythonFacadeNames": {
+        "after": 17,
+        "before": 90
+      },
+      "staleBuildResurrectionFalsifier": {
+        "cleanWheelSchemas": 28,
+        "fix": "local acceptance deletes build before wheel construction",
+        "reproduced": true,
+        "symptom": "deleted network-observation schema re-entered wheel from stale build/lib"
+      },
+      "verdict": "CONTRACT"
+    },
+    "HP1": {
+      "hostPin": {
+        "candidateLockPackagesAfter": 34,
+        "candidateLockPackagesBefore": 9,
+        "candidateUpgradeLanded": false,
+        "coreRecoveryTestsPassed": 44,
+        "reason": "semantic compatibility passed but monolithic Host package dependency expansion had no World benefit",
+        "retained": "95cd5479e71281baed5a1d1c34cbfaadffe2a22f",
+        "testedCurrent": "6495822162c69179e8ad4f8a0d79cc42902ff599"
+      },
+      "networkOwnership": {
+        "verdict": "MOVE-OWNER-PENDING-SUBSTITUTION",
+        "workstationSurfpathLive": true,
+        "worldOrdivonVpnLive": true
+      },
+      "verdict": "OWNER-DRIFT-PARTIAL"
+    },
+    "HP2": {
+      "families": [
+        "resource",
+        "message",
+        "entity"
+      ],
+      "hardenedDirectRelayDuplicateFamilies": 0,
+      "naiveDirectRelayDuplicateFamilies": 3,
+      "requiredSkeleton": [
+        "prepared",
+        "unknown",
+        "reconcile-exact-original-identity-before-retry"
+      ],
+      "verdict": "RETAIN-CONSEQUENCE-CONTINUITY"
+    },
+    "HP3": {
+      "baseResourceMessageWireLines": 364,
+      "candidateLanded": false,
+      "genericCandidateLines": 377,
+      "law": "structural similarity is not sufficient evidence for abstraction",
+      "shadowTestsPassed": 15,
+      "verdict": "REJECT-GENERIC-WIRE-ABSTRACTION"
+    },
+    "HP4": {
+      "availableAtDecision": "retain narrowly: it is the only owner-native World availability coordinate; HP4 showed generic action-authority wording was the primary ambiguity, not the timestamp itself",
+      "changesForced": [
+        "Inspector authority field renamed to actionAuthority",
+        "UNKNOWN owner hint explicitly says without-redispatch"
+      ],
+      "clarityRerun": {
+        "recovery": {
+          "candidateCompleted": 3,
+          "passed": 3,
+          "runs": 3,
+          "safeRationale": 0
+        },
+        "time": {
+          "candidateCompleted": 3,
+          "passed": 1,
+          "runs": 3,
+          "safeRationale": 3
+        }
+      },
+      "firstPass": {
+        "path|projection": {
+          "avgTokens": 1271.0,
+          "candidateCompleted": 3,
+          "choiceCorrect": 0,
+          "choices": {
+            "ACT_CLOUDFLARE_NOW": 1,
+            "DEFER_NO_SAFE_PATH": 1,
+            "SELECT_SURFPATH_REVALIDATE": 1
+          },
+          "correctAndCompleted": 0,
+          "runs": 3,
+          "tokens": 3813
+        },
+        "path|raw": {
+          "avgTokens": 1224.7,
+          "candidateCompleted": 3,
+          "choiceCorrect": 0,
+          "choices": {
+            "DEFER_NO_SAFE_PATH": 3
+          },
+          "correctAndCompleted": 0,
+          "runs": 3,
+          "tokens": 3674
+        },
+        "recovery|projection": {
+          "avgTokens": 1161.7,
+          "candidateCompleted": 1,
+          "choiceCorrect": 3,
+          "choices": {
+            "RECONCILE_RESOURCE_ONLY": 3
+          },
+          "correctAndCompleted": 1,
+          "runs": 3,
+          "tokens": 3485
+        },
+        "recovery|raw": {
+          "avgTokens": 1171.3,
+          "candidateCompleted": 3,
+          "choiceCorrect": 3,
+          "choices": {
+            "RECONCILE_RESOURCE_ONLY": 3
+          },
+          "correctAndCompleted": 3,
+          "runs": 3,
+          "tokens": 3514
+        },
+        "time|projection": {
+          "avgTokens": 1350.3,
+          "candidateCompleted": 3,
+          "choiceCorrect": 0,
+          "choices": {
+            "REJECT_AS_TOO_OLD": 3
+          },
+          "correctAndCompleted": 0,
+          "runs": 3,
+          "tokens": 4051
+        },
+        "time|raw": {
+          "avgTokens": 1317.7,
+          "candidateCompleted": 2,
+          "choiceCorrect": 1,
+          "choices": {
+            "CANNOT_PROVE_WORLD_AVAILABILITY": 1,
+            "REJECT_AS_TOO_OLD": 1,
+            "USE_FOR_LATENCY_ONLY": 1
+          },
+          "correctAndCompleted": 0,
+          "runs": 3,
+          "tokens": 3953
+        }
+      },
+      "freshEvaluationRuns": 30,
+      "pathProjectionDecision": "EffectPathQuery and ForeignEgressCapability did not demonstrate a fresh-Agent choice advantage and are removed from the default __all__ facade while implementations/contracts remain explicit research/informational surfaces",
+      "provider": "DeepSeek v4 flash through owner-native Ordivon Harness",
+      "smokeRuns": 1,
+      "timeChoiceOnly": {
+        "projection": {
+          "candidateCompleted": 2,
+          "passed": 2,
+          "runs": 3
+        },
+        "raw": {
+          "candidateCompleted": 1,
+          "passed": 2,
+          "runs": 3
+        }
+      },
+      "verdict": "RETAIN-INSPECTOR-AND-TEMPORAL-PROVENANCE;DEMOTE-PATH-PROJECTIONS"
+    }
+  },
+  "status": "passed-with-contractions-and-owner-handoffs"
+}

@@ -30,7 +30,6 @@ _CONTRACT_NAMES = (
     "message-delivery-plan",
     "message-delivery-receipt",
     "message-issuance-receipt",
-    "network-observation",
     "resource-egress-receipt",
     "resource-transfer-destination-request",
     "resource-transfer-destination-response",

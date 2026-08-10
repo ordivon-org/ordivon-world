@@ -131,7 +131,7 @@ class HostWorldExtension:
             elif state == "prepared":
                 next_operation = "deliver-prepared-dispatch"
             elif state in {"unknown", "pending"}:
-                next_operation = "reconcile-original-request"
+                next_operation = "reconcile-original-request-without-redispatch"
             else:
                 next_operation = None
 
@@ -148,7 +148,7 @@ class HostWorldExtension:
                 ),
                 "evidence": evidence,
                 "nextOwnerOperation": next_operation,
-                "authority": "not-granted-by-inspection",
+                "actionAuthority": "not-granted-by-inspection",
                 "externalCurrentness": "not-claimed",
             }
             if temporal_evidence is not None:

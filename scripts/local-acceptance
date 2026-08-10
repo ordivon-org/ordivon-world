@@ -31,7 +31,7 @@ UVX=${UVX:-$(command -v uvx)}
 
 "$UVX" pip-audit -r requirements-audit.txt
 
-rm -rf target/local-acceptance-wheel
+rm -rf build target/local-acceptance-wheel
 mkdir -p target/local-acceptance-wheel
 "$UV" build --wheel --out-dir target/local-acceptance-wheel
 "$UV" run python scripts/check_wheel.py target/local-acceptance-wheel

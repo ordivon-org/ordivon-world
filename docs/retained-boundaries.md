@@ -93,7 +93,7 @@ Cloudflare remains authoritative for provider state. World maps those facts but 
 - profile validation, discovery and bounded ranking;
 - focused secret, key, namespace and scheduler tests.
 
-Network mutation remains operator-only. The published `network-observation` Schema reserves a future read-only evidence shape; it does not grant automatic path selection. Local VPN or route observations are not required state for remote Cloudflare Fetch or Browser execution because no measured failure shows that local path identity changes the semantics of the already-bound remote operation.
+Network mutation remains operator-only. HP0 removed the previously reserved `network-observation` public Schema because no current producer or independent consumer used it; owner-local `ordivon-vpn`/Surfshark reports remain operational evidence rather than a speculative shared contract. Local VPN or route observations are not required state for remote Cloudflare Fetch or Browser execution because no measured failure shows that local path identity changes the semantics of the already-bound remote operation.
 
 ## Still removed
 

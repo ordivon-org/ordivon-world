@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-import datetime as dt
-import json
-import unittest
-
-from ordivon_world import (
+from ordivon_world.foreign_egress import (
     ForeignEgressCapability,
     ForeignEgressCapabilityStale,
     ForeignEgressProjectionError,
 )
+
+import datetime as dt
+import json
+import unittest
+
+
 from ordivon_world.canonical import sha256_digest
 
 

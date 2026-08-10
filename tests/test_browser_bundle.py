@@ -1,5 +1,15 @@
 from __future__ import annotations
 
+from ordivon_world.browser import BrowserBundleError
+from ordivon_world.cloudflare import (
+    CapabilitySnapshot,
+    CloudflareWorldAdapter,
+    PreparedWorldDispatch,
+    TransportError,
+    WorldProviderError,
+)
+from ordivon_world.host import HostWorldExtension
+
 import itertools
 import json
 import tempfile
@@ -7,15 +17,7 @@ import unittest
 
 from ordivon_host import EventKind, HostExtensionPort, HostKernel, HostStorage
 
-from ordivon_world import (
-    BrowserBundleError,
-    CapabilitySnapshot,
-    CloudflareWorldAdapter,
-    HostWorldExtension,
-    PreparedWorldDispatch,
-    TransportError,
-    WorldProviderError,
-)
+
 from ordivon_world.canonical import sha256_hex
 from ordivon_world.cloudflare import HttpResponse
 

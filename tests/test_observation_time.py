@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+from ordivon_world.cloudflare import (
+    CapabilitySnapshot,
+    CloudflareWorldAdapter,
+    WorldObservation,
+)
+from ordivon_world.host import HostWorldExtension
+from ordivon_world.task_inspection import WorldTaskInspector
+
 import itertools
 import tempfile
 import time
@@ -7,13 +15,7 @@ import unittest
 
 from ordivon_host import EventKind, HostExtensionPort, HostKernel, HostStorage
 
-from ordivon_world import (
-    CapabilitySnapshot,
-    CloudflareWorldAdapter,
-    HostWorldExtension,
-    WorldObservation,
-    WorldTaskInspector,
-)
+
 from tests.test_cloudflare_adapter import (
     FakeCloudflareTransport,
     capability_document,
@@ -93,7 +95,7 @@ class ObservationAvailabilityTests(unittest.TestCase):
             self.assertEqual(temporal["availableAt"], recovered.observation.available_at)
             self.assertEqual(temporal["providerTimeSource"], "cloudflare-receipt")
             self.assertEqual(temporal["availabilityTimeSource"], "world.cloudflare")
-            self.assertEqual(provider["authority"], "not-granted-by-inspection")
+            self.assertEqual(provider["actionAuthority"], "not-granted-by-inspection")
             self.assertEqual(provider["externalCurrentness"], "not-claimed")
 
     def test_repeated_reconciliation_preserves_first_availability_and_revision(self) -> None:

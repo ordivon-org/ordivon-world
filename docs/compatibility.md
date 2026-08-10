@@ -14,6 +14,8 @@
 
 `uv.lock` and `pnpm-lock.yaml` are required release inputs. Compatibility claims apply only to the locked graph.
 
+HP1 survival testing also ran 44 core World recovery/trajectory tests against current Host `6495822162c69179e8ad4f8a0d79cc42902ff599`; all passed. The older supported pin is therefore not retained because of a known semantic incompatibility. The candidate lock refresh expanded the World Python graph from 9 to 34 packages because the Host distribution carries MCP/server dependencies, so the pin advance was deliberately deferred until the Host owner can test a narrower core-consumer packaging surface.
+
 ## Pre-1.0 policy
 
 The package is experimental. Public Python names exported from `ordivon_world` are the recommended facade, but breaking changes may occur before 1.0 when accompanied by:

@@ -20,7 +20,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - Browser response-loss and fresh-Host continuity tests;
 - bounded `WorldTaskInspector` owner projection: Provider/Resource/Message/Entity families interpret their own retained state and expose only commitment identity, state, bounded evidence digests and next owner operation; no payload/provenance/continuity body, authority grant or global Owner registry is introduced;
 - Fetch/Browser dual-mode clean-revision acceptance runner;
-- pinned GitHub CI, CodeQL, secret scanning and dependency automation.
+- pinned GitHub CI, CodeQL, secret scanning and dependency automation;
+- HP0–HP4 destructive survival evidence covering public-surface contraction, direct-Host consequence kill tests, rejected wire genericization and fresh-Agent projection A/B.
 
 ### Fixed
 
@@ -33,13 +34,16 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - Browser non-PNG output now fails before Artifact commit;
 - Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes;
 - zero-traffic Worker admission no longer treats one transient version-override hit as stable routing; read-only checks retry and every external smoke POST is guarded by three consecutive version-bound health observations;
-- World doctor includes the Browser Manifest and reports all eight published Schemas.
+- World doctor includes the Browser Manifest and reports the current seven provider/Host-facing schema subset; the unused reserved `network-observation` public Schema was removed by HP0.
+- `WorldTaskInspector` now names its denial as `actionAuthority` and marks UNKNOWN reconciliation hints `without-redispatch`, after fresh-Agent HP4 runs reproduced ambiguity in the older generic wording.
 
 ### Changed
 
 - World is now described as a recoverable external capability adapter and condition-observation boundary rather than only a repository containing provider and workstation tools;
 - the reactivated Host-facing seam remains an absorbed direct integration, not an independent World runtime or universal interaction layer;
-- Worker source provenance and test-only TypeScript compilation scopes are kept separate.
+- Worker source provenance and test-only TypeScript compilation scopes are kept separate;
+- default Python facade contracted from 90 to 17 names; path/capability projections remain explicit research APIs rather than default exports;
+- five inactive W5-A/W5-B falsifier scripts moved out of the active source surface while their evidence/docs/Git history remain.
 
 ### Verified
 

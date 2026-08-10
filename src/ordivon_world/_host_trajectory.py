@@ -127,7 +127,7 @@ class _HostTrajectoryJournal:
                     legacy=legacy,
                     has_not_committed=not_committed_digest is not None,
                 ),
-                "authority": "not-granted-by-inspection",
+                "actionAuthority": "not-granted-by-inspection",
                 "externalCurrentness": "not-claimed",
             }
             destination = getattr(plan, "destination_world_id", None)
@@ -175,7 +175,7 @@ class _HostTrajectoryJournal:
         if state == self.terminal_state:
             return None
         if state == "unknown":
-            return self.uncertainty_next_action
+            return self.uncertainty_next_action + "-without-redispatch"
         if state == "prepared":
             return self.owner_retry_operation if has_not_committed else self.owner_initial_operation
         return "inspect-owner-state"

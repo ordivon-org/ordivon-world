@@ -25,7 +25,7 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned work to independently authoritative environments. The released package retains the direct external-provider adapter path, three production inter-World trajectories (Resource Transfer, Message Delivery and Entity Migration), owner-observed foreign-egress capability projection and a narrow Agent-facing Effect Path Query. The query compares provider-native evidence without ranking candidates, moving physical authority into World or introducing a global World, Presence or capability state owner.
+Ordivon World connects Host-owned work to independently authoritative environments. The released production boundary centers on the direct external-provider seam, three language-neutral inter-World trajectories (Resource Transfer, Message Delivery and Entity Migration), bounded owner inspection and narrow temporal provenance. Foreign-egress capability and effect-path projections remain explicit research/informational surfaces after HP4 failed to prove a fresh-Agent decision advantage; they are no longer part of the default Python facade.
 
 ```text
 Host Task / Effect / Dispatch
@@ -54,13 +54,11 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 
 ## Active capabilities
 
-### Agent-facing relationship and effect-path choice
+### Research/informational relationship and effect-path projection
 
-`ForeignEgressCapability` projects one Workstation-owned, destination-qualified Surfpath relationship into World without transferring VPN credentials or physical route authority. Its handoff reference carries only capability/observation/path digests, a freshness bound and the activation owner; the Workstation owner must revalidate the exact relationship before effect.
+`ForeignEgressCapability` and `EffectPathQuery` retain the W-X1/W-X3 evidence that capability is path/time/owner scoped and that provider-native observations should be compared without transferring physical authority. They remain explicit module APIs and packaged contracts.
 
-`EffectPathQuery` is the first shared Agent-facing projection forced by two materially different real paths to the same target. It can compare a Surfpath foreign-egress candidate with a request-scoped Cloudflare fixed-target connector while preserving their differences: owner/activation authority, request-control mode, owner observation time, optional owner-native validity horizon, usability evidence and the complete provider-native source projection. Every candidate states `currentActionAuthority=false` and `requiresOwnerRevalidation=true`.
-
-The query is deterministic but deliberately has no ranking, recommendation or implicit selection. `selectionAuthority=agent`, and subsequent action requires one exact `candidateDigest`. A real W-X3 experiment showed why this split matters: a historical Cloudflare effect later had no DNS/route/Worker resources; a fresh deployment had all three owner resources present but initially returned HTTP 522; the exact same fixed connector then completed the OpenAI GET with HTTP 401; cleanup returned all resources to absent. Resource existence, prior success and current action authority are therefore separate facts. See [`docs/world-sense-connect-act.md`](docs/world-sense-connect-act.md).
+HP4 then tested their actual Agent decision value with fresh DeepSeek Runs. The projected form did not outperform raw owner evidence on the prespecified path-choice falsifier and produced inconsistent authority interpretations, including one direct-ACT choice. They therefore no longer belong to the default `ordivon_world.__all__` facade. A future real consumer may promote them again only after reproducing a decision failure that the projection fixes. See [`docs/high-pressure-survival-hp0-hp4.md`](docs/high-pressure-survival-hp0-hp4.md).
 
 ### External commitment continuity
 
@@ -159,7 +157,7 @@ Cloudflare remains authoritative for Worker execution, R2 state, provider versio
 5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
 6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
 7. **Task identity is not trajectory identity.** Trajectories retain native semantic identity (`transferId` / `messageId` / `migrationId` / `dispatchId`). Resource, Message and provider paths use per-ID maps after real multi-trajectory failures; Entity Migration remains one-per-Task until such a failure exists.
-8. **Share views before sharing ownership.** W-X3 forced one narrow `EffectPathQuery` across Surfpath and Cloudflare, but did not justify a generic Capability object, registry or router. Shared projections preserve provider-native evidence and Agent choice; physical owners still revalidate before effect.
+8. **Share views before sharing ownership.** W-X3 proved that a narrow shared projection can preserve provider-native evidence without transferring ownership; HP4 then showed that such a projection still has to prove Agent decision value before becoming a default product surface. Physical owners revalidate before effect.
 9. **Keep time sources separate.** Provider occurrence/completion time, World observation availability and Host admission time are different owner-native facts. Availability is not truth, currentness, authority or completion.
 10. **Persist consequences, not every choice.** Owner observations, effect-path queries and pre-admission Agent selections may be recomputed from current reality. Durable World continuity begins at owner admission of an exact consequence-capable operation; after that fence, Receipt/UNKNOWN/reconciliation must survive controller replacement.
 11. **Move lineage by owner, not by abstraction.** Host semantic Task identity, Runtime execution/input/Artifact lineage and World external-effect state remain separate through execution migration. A new execution target re-observes pre-admission World reality; already-admitted consequences retain exact identity and reconcile before retry.

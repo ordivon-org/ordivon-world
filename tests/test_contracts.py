@@ -1,28 +1,38 @@
 from __future__ import annotations
 
-import unittest
-
-from ordivon_world.canonical import sha256_digest
-from ordivon_world import (
-    ContractError,
+from ordivon_world.entity_migration import (
     EntityDepartureAuthority,
     EntityDepartureReceipt,
     EntityMigrationBundle,
     EntityMigrationNotCommitted,
     EntityMigrationReceipt,
+)
+from ordivon_world.message_delivery import (
     MessageDeliveryBundle,
     MessageDeliveryNotCommitted,
     MessageDeliveryReceipt,
     MessageIssuanceAuthority,
     MessageIssuanceReceipt,
+)
+from ordivon_world.resource_egress import (
     ResourceEgressAuthority,
     ResourceEgressReceipt,
+)
+from ordivon_world.resource_transfer import (
     ResourceTransferBundle,
     ResourceTransferNotCommitted,
     ResourceTransferReceipt,
+)
+from ordivon_world.schemas import (
+    ContractError,
     load_schema,
     validate_contract,
 )
+
+import unittest
+
+from ordivon_world.canonical import sha256_digest
+
 
 
 def execution(capability: str) -> dict[str, object]:
@@ -131,7 +141,6 @@ class ContractTests(unittest.TestCase):
             "message-delivery-plan",
             "message-delivery-receipt",
             "message-issuance-receipt",
-            "network-observation",
             "resource-egress-receipt",
             "resource-transfer-destination-request",
             "resource-transfer-destination-response",

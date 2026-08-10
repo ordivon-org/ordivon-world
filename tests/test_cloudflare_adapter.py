@@ -1,18 +1,20 @@
 from __future__ import annotations
 
-import json
-import unittest
-
-from ordivon_world import (
+from ordivon_world.cloudflare import (
     CapabilitySnapshot,
     CloudflareWorldAdapter,
     PreparedWorldDispatch,
-    TraceContext,
     TransportError,
     WorldBindingStale,
     WorldOutcomeUnknown,
     WorldProviderError,
 )
+from ordivon_world.telemetry import TraceContext
+
+import json
+import unittest
+
+
 from ordivon_world.canonical import sha256_hex
 from ordivon_world.cloudflare import HttpResponse
 

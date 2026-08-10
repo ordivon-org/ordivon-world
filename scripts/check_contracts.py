@@ -19,7 +19,6 @@ CONTRACTS = (
     "edge-capabilities",
     "edge-receipt",
     "fetch-request",
-    "network-observation",
     "world-observation",
     "world-prepared-dispatch",
 )

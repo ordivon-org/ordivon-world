@@ -51,7 +51,7 @@ Current Sensor-like mechanisms include:
 
 - `CloudflareWorldAdapter.capabilities()` and `CapabilitySnapshot`;
 - provider `WorldObservation` and Browser Artifact verification;
-- `network-observation.schema.json` plus operator network-condition tooling;
+- owner-local operator network-condition tooling (the unconsumed reserved `network-observation` public Schema was removed by HP0);
 - `surfshark-profile-scan`, which already uses the word discovery for a bounded configured profile population;
 - W5-C owner-native discovery/reachability evidence.
 
@@ -592,7 +592,7 @@ re-reading the same Receipt
 != a new availability occurrence
 ```
 
-`WorldTaskInspector` therefore projects a bounded `temporalEvidence` view for retained provider observations: provider start/completion, World availability and the separate time sources that own those facts. It still reports `authority=not-granted-by-inspection` and `externalCurrentness=not-claimed`.
+`WorldTaskInspector` therefore projects a bounded `temporalEvidence` view for retained provider observations: provider start/completion, World availability and the separate time sources that own those facts. It still reports `actionAuthority=not-granted-by-inspection` and `externalCurrentness=not-claimed`.
 
 Repeated reconciliation exposed another subtle invariant. Because `availableAt` is local and dynamic, naively rebuilding the same provider observation later would change its CAS digest. World now treats the first retained equivalent provider observation as canonical: if a later reconcile returns the same Receipt and ObservationEnvelope, World returns the retained observation and original `availableAt` without advancing the Task revision; semantic drift still fails closed.
 

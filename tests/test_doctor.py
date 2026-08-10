@@ -18,7 +18,7 @@ class DoctorTests(unittest.TestCase):
     def test_contract_check_covers_all_published_schemas(self) -> None:
         result = contract_check()
         self.assertEqual(result["status"], "ok")
-        self.assertEqual(result["count"], 8)
+        self.assertEqual(result["count"], 7)
         self.assertEqual(result["draft"], "2020-12")
 
     def test_overall_status_surfaces_attention(self) -> None:

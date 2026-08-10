@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-import copy
-import unittest
-
-from ordivon_world import (
+from ordivon_world.effect_paths import (
     EffectPathCandidate,
     EffectPathProjectionError,
     EffectPathQuery,
-    ForeignEgressCapability,
 )
+from ordivon_world.foreign_egress import ForeignEgressCapability
+
+import copy
+import unittest
+
+
 from ordivon_world.canonical import sha256_digest
 
 TARGET = "https://api.openai.com/v1/models"

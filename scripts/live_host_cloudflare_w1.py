@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from ordivon_world.browser import RetrievedArtifact
+from ordivon_world.cloudflare import (
+    CloudflareConfig,
+    CloudflareWorldAdapter,
+    SignedHttpTransport,
+    TransportError,
+)
+from ordivon_world.host import HostWorldExtension
+
 import argparse
 import itertools
 import json
@@ -20,14 +29,7 @@ from ordivon_host import (
     VerificationResultItem,
 )
 
-from ordivon_world import (
-    CloudflareConfig,
-    CloudflareWorldAdapter,
-    HostWorldExtension,
-    RetrievedArtifact,
-    SignedHttpTransport,
-    TransportError,
-)
+
 from ordivon_world.canonical import sha256_digest, sha256_hex
 from ordivon_world.cloudflare import CloudflareTransport, HttpResponse, WorldObservation
 
