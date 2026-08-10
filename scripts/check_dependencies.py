@@ -8,7 +8,7 @@ import tomllib
 ROOT = Path(__file__).resolve().parent.parent
 PYPROJECT = ROOT / "pyproject.toml"
 LOCK = ROOT / "uv.lock"
-HOST_REVISION = "428a6f2f90b4050535507c9be078c450552177e5"
+HOST_REVISION = "95cd5479e71281baed5a1d1c34cbfaadffe2a22f"
 PROTOCOL_REVISION = "420dc356cb664d75db0f34f356156baebe5843db"
 HOST_URL = "https://github.com/zycxfyh/ordivon-host.git"
 PROTOCOL_URL = "https://github.com/zycxfyh/ordivon-computing.git"
