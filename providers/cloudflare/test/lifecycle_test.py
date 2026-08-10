@@ -83,8 +83,36 @@ class LifecycleTests(unittest.TestCase):
             ),
             mock.patch.object(lifecycle, "api_request", side_effect=api),
         ):
-            self.assertEqual(lifecycle.main(), 0)
+            self.assertEqual(lifecycle.main([]), 0)
         self.assertEqual([call[0] for call in calls], ["GET", "PUT", "GET"])
+
+    def test_check_is_read_only_and_reports_policy_drift(self) -> None:
+        retention = {
+            "request_state": 90,
+            "receipt_mirror": 90,
+            "artifacts": 91,
+            "cleanup_tasks": 90,
+        }
+        expected = lifecycle.managed_rules(retention)
+        calls = []
+
+        def api(method, path, token, body=None):
+            calls.append((method, path, body))
+            return {"rules": expected}
+
+        with (
+            mock.patch.object(
+                lifecycle,
+                "load_json",
+                side_effect=[
+                    {"api_token": "token", "account_id": "account"},
+                    {"retention_days": retention},
+                ],
+            ),
+            mock.patch.object(lifecycle, "api_request", side_effect=api),
+        ):
+            self.assertEqual(lifecycle.main(["--check"]), 0)
+        self.assertEqual([call[0] for call in calls], ["GET"])
 
 
 if __name__ == "__main__":

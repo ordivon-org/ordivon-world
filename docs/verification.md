@@ -76,7 +76,7 @@ This is the current machine/provider health projection. CI cannot substitute for
 - Task state and Ready Frontier were preserved;
 - no completion claim was made.
 
-Browser P2 additionally requires exactly three Artifacts, Receipt-primary Manifest identity, one lease generation, PNG signature, UTF-8 HTML, Manifest equality with Receipt execution/page facts, and a Verification result item for every Artifact. It does not assert that the rendered page is semantically correct.
+Browser P2 additionally requires exactly three Artifacts, Receipt-primary Manifest identity, one lease generation, PNG signature, UTF-8 HTML, Manifest equality with Receipt execution/page facts, and a Verification result item for every Artifact. It does not assert that the rendered page is semantically correct. HP5 separated the owners behind this gate: the Provider rejects invalid native Browser output before Artifact commit; `BrowserArtifactBundle` later verifies cross-owner Receipt/Host-reference/downloaded-byte/Manifest integrity; only the subsequent domain/product `VerificationReceipt` decides acceptance under a verification method. Individual Artifact digest verification alone was proven insufficient.
 
 ## Evidence interpretation
 

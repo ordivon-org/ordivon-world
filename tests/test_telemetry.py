@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from ordivon_world import TraceContext
+from ordivon_world.telemetry import TraceContext
 
 
 class TraceContextTests(unittest.TestCase):

@@ -21,7 +21,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - bounded `WorldTaskInspector` owner projection: Provider/Resource/Message/Entity families interpret their own retained state and expose only commitment identity, state, bounded evidence digests and next owner operation; no payload/provenance/continuity body, authority grant or global Owner registry is introduced;
 - Fetch/Browser dual-mode clean-revision acceptance runner;
 - pinned GitHub CI, CodeQL, secret scanning and dependency automation;
-- HP0–HP4 destructive survival evidence covering public-surface contraction, direct-Host consequence kill tests, rejected wire genericization and fresh-Agent projection A/B.
+- HP0–HP4 destructive survival evidence covering public-surface contraction, direct-Host consequence kill tests, rejected wire genericization and fresh-Agent projection A/B;
+- HP5 provider/verification court evidence for Browser integrity, exact provider binding, Trace Context deletion, owner-native doctor projections and provider repository separation.
 
 ### Fixed
 
@@ -42,12 +43,15 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - World is now described as a recoverable external capability adapter and condition-observation boundary rather than only a repository containing provider and workstation tools;
 - the reactivated Host-facing seam remains an absorbed direct integration, not an independent World runtime or universal interaction layer;
 - Worker source provenance and test-only TypeScript compilation scopes are kept separate;
-- default Python facade contracted from 90 to 17 names; path/capability projections remain explicit research APIs rather than default exports;
-- five inactive W5-A/W5-B falsifier scripts moved out of the active source surface while their evidence/docs/Git history remain.
+- default Python facade contracted from 90 to 17 names in HP0–HP4 and then 17 to 14 in HP5; Browser bundle/config/legacy Trace helpers remain explicit module APIs rather than default exports;
+- five inactive W5-A/W5-B falsifier scripts moved out of the active source surface while their evidence/docs/Git history remain;
+- new provider dispatches omit/stop propagating W3C Trace Context; retained legacy trace values remain structurally readable;
+- World doctor now consumes provider-owned capability and read-only lifecycle projections instead of duplicating Cloudflare control-plane logic.
 
 ### Verified
 
 - the portable P0–P1 matrix covers Python, Worker, provider-controller, network, dependency audit, contract, documentation and isolated wheel installation gates;
 - live doctor reports current installation, Worker inputs, R2 lifecycle, GC and network prerequisites as healthy;
 - live W1 proves one external POST, injected response loss, Host UNKNOWN, fresh-Host reconciliation by the original request ID, digest-verified Artifact recovery, independent Verification and no Task completion claim;
-- live P2 proves one first-execution Browser POST, committed-response loss, Host UNKNOWN, fresh-Host reconciliation, screenshot/HTML/Manifest integrity, three independent Verification items, preserved Task state and no completion claim.
+- live P2 proves one first-execution Browser POST, committed-response loss, Host UNKNOWN, fresh-Host reconciliation, screenshot/HTML/Manifest integrity, three independent Verification items, preserved Task state and no completion claim;
+- HP5 standalone-provider full CI passes outside the World Git root, while 139 World Python tests and wheel validation pass with the provider subtree absent.

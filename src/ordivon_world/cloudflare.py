@@ -284,19 +284,16 @@ class PreparedWorldDispatch:
             "capabilityConditionDigest": self.capability_condition_digest,
             "capabilityVersion": self.capability_version,
             "dispatch": self.dispatch.to_dict(),
-            "traceContext": (
-                None
-                if self.trace_context is None
-                else self.trace_context.to_dict()
-            ),
         }
+        if self.trace_context is not None:
+            value["traceContext"] = self.trace_context.to_dict()
         validate_contract("world-prepared-dispatch", value)
         return value
 
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> PreparedWorldDispatch:
         validate_contract("world-prepared-dispatch", value)
-        trace = value["traceContext"]
+        trace = value.get("traceContext")
         context = (
             None
             if trace is None
@@ -419,7 +416,6 @@ class CloudflareWorldAdapter:
         timeout_ms: int = 15_000,
         accept: str = "*/*",
         required_state_refs: tuple[StateRef, ...] = (),
-        trace_context: TraceContext | None = None,
     ) -> PreparedWorldDispatch:
         request = {
             "accept": accept,
@@ -436,7 +432,6 @@ class CloudflareWorldAdapter:
             request=request,
             capability=capability,
             required_state_refs=required_state_refs,
-            trace_context=trace_context,
         )
 
     def prepare_browser(
@@ -453,7 +448,6 @@ class CloudflareWorldAdapter:
         timeout_ms: int = 15_000,
         wait_after_ms: int = 0,
         required_state_refs: tuple[StateRef, ...] = (),
-        trace_context: TraceContext | None = None,
     ) -> PreparedWorldDispatch:
         request = {
             "full_page": full_page,
@@ -473,7 +467,6 @@ class CloudflareWorldAdapter:
             request=request,
             capability=capability,
             required_state_refs=required_state_refs,
-            trace_context=trace_context,
         )
 
     def _prepare(
@@ -486,7 +479,6 @@ class CloudflareWorldAdapter:
         request: dict[str, Any],
         capability: CapabilitySnapshot,
         required_state_refs: tuple[StateRef, ...],
-        trace_context: TraceContext | None,
     ) -> PreparedWorldDispatch:
         body = canonical_bytes(request)
         request_digest = sha256_digest(body)
@@ -529,7 +521,7 @@ class CloudflareWorldAdapter:
             capability_condition_digest=capability.condition_digest,
             capability_version=capability_version,
             dispatch=dispatch,
-            trace_context=trace_context,
+            trace_context=None,
         )
 
     def deliver(
@@ -544,10 +536,7 @@ class CloudflareWorldAdapter:
                 raise WorldBindingStale(
                     "Cloudflare capability condition changed before dispatch"
                 )
-        headers = (
-            {} if prepared.trace_context is None else prepared.trace_context.headers()
-        )
-        headers["x-ordivon-dispatch-id"] = prepared.dispatch.dispatch_id
+        headers = {"x-ordivon-dispatch-id": prepared.dispatch.dispatch_id}
         try:
             response = self.transport.request(
                 "POST",
@@ -583,11 +572,7 @@ class CloudflareWorldAdapter:
             "GET",
             f"/v1/receipts/{prepared.provider_request_id}",
             request_id="observe_" + uuid.uuid4().hex[:40],
-            extra_headers=(
-                {}
-                if prepared.trace_context is None
-                else prepared.trace_context.headers()
-            ),
+            extra_headers={},
         )
         if response.status == 404:
             return ReconciliationResult(

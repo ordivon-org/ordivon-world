@@ -4,12 +4,13 @@
 
 Repository package version: `0.4.0`.
 
-The active production boundary consists of the Host-facing Cloudflare adapter, temporally explicit provider observations, production Resource Transfer, Message Delivery and Entity Migration contracts, bounded owner inspection, Cloudflare Worker/provider operations, and private network condition tools. Foreign-egress capability and Effect Path Query remain explicit research/informational surfaces after HP4; there is no independent World service, global Observation ontology, capability registry or provider router.
+The active production boundary consists of the Host-facing Cloudflare exact-binding/recovery adapter, temporally explicit provider observations, explicit Browser bundle integrity, production Resource Transfer, Message Delivery and Entity Migration contracts, and bounded owner inspection. The co-located Cloudflare Worker/operations subtree is provider-owned and independently extractable; World doctor consumes owner-native provider projections. Foreign-egress capability and Effect Path Query remain explicit research/informational surfaces after HP4; there is no independent World service, global Observation ontology, capability registry or provider router.
 
 ## Capability status
 
 | Capability | State | Evidence |
 |---|---|---|
+| HP5 Provider / Verification Court | closed candidate; owner boundary contracted | Browser bundle deletion accepted 3 digest-valid semantic corruptions and was retained as an explicit module; exact adapter binding rejected schema-valid wrong-request Receipts; trace-on/off recovery was identical so new Trace Context authoring/propagation was removed; Doctor now consumes provider-native capability/lifecycle projections; standalone Provider full CI and World-without-provider 139-test/wheel gates both passed; root facade 17→14 |
 | HP0–HP4 high-pressure survival | closed candidate; contraction + targeted clarity fixes | default Python facade 90→17; packaged schemas 29→28; five inactive W5 falsifier scripts removed; direct-Host kill test reproduced duplicate consequences without UNKNOWN/reconcile; Resource/Message wire genericization passed tests but grew 364→377 lines and was reverted; 30 fresh Harness/DeepSeek evaluation Runs demoted path projections and forced `actionAuthority` plus explicit no-redispatch recovery hints |
 | Cloudflare Fetch provider | operational | provider tests, deployed health and Receipt replay |
 | Cloudflare Browser Snapshot provider | operational | Worker `ba64a576-1986-4967-96d6-3d2390f7afc6`, release-controller dual smoke and deployed capability output |
@@ -42,7 +43,7 @@ The active production boundary consists of the Host-facing Cloudflare adapter, t
 | live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
 | cross-language JSON Schema | verified | twenty-eight packaged Draft 2020-12 Schemas, including the narrow `effect-path-query`; provider fixtures plus Game-produced Resource, Message and Entity departure authority documents validated across TypeScript/Python |
 | W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |
-| World doctor | operational | repository-only and live machine/provider modes; live aggregate status is `ok` |
+| World doctor | operational owner-native aggregator | repository-only and live machine/provider modes; capability/lifecycle truth comes from installed provider projections rather than World-owned Cloudflare control logic |
 | Cloudflare GC source contract | operational | R2 List Objects uses `per_page` and cursor with focused tests |
 | installed GC controller | operational | source/installed digests match; oneshot exits with `Result=success` and status 0 |
 | Network condition tools | operational, operator-only | static, key-pair, namespace, scheduler and live doctor checks |
@@ -80,7 +81,7 @@ Provider capability negotiation and Effect rebinding remain conditional because 
 
 - The production remote-provider adapter set contains only Cloudflare. `EffectPathQuery` remains an explicit research/informational projection rather than a default facade, provider broker, generic Capability owner or automatic router; HP4 did not prove a fresh-Agent path-choice advantage.
 - Missing provider Receipt state remains UNKNOWN; automatic redispatch is forbidden.
-- Trace Context and Dispatch headers are operational correlation only. Cloudflare Receipt and Host CAS remain authoritative.
+- New World dispatches no longer author or propagate Trace Context. Exact dispatch/provider request identities remain current correlation and recovery anchors; optional legacy `traceContext` is readable only for retained-state compatibility.
 - Browser capability is a bounded snapshot, not arbitrary Computer Use.
 - Network tools do not grant Agents route, VPN or key-management authority.
 - World does not yet implement RAG, SaaS, database, webhook, MQTT, OPC UA or Sandbox adapters.

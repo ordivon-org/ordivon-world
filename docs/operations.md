@@ -16,7 +16,7 @@ The portable gate does not require production Secrets or a live Cloudflare deplo
 uv run ordivon-world-doctor --repo . --offline
 ```
 
-This checks Git state and packaged contracts. Machine, Secret, provider, lifecycle, GC and network checks are explicitly marked `skipped`; they are never inferred from CI.
+This checks Git state and packaged contracts. Machine, effect-client Secret, provider, lifecycle, GC and network checks are explicitly marked `skipped`; they are never inferred from CI.
 
 ## Live doctor
 
@@ -32,11 +32,14 @@ The live report checks:
 - private configuration presence and `0600` modes;
 - Worker health and source-input relation;
 - live capabilities and condition digest;
-- R2 lifecycle rules against policy;
+- R2 lifecycle rules against policy through the provider-owned read-only `ordivon-edge-lifecycle --check` projection;
 - GC timer and latest service result;
 - private network tool prerequisites and key/profile consistency.
 
 Any unresolved item produces `status: attention` and exit code 1.
+
+
+Provider lifecycle ownership is explicit. The provider install materializes its policy to `/usr/local/lib/ordivon-world/edge-policy.json`, and World doctor checks that source/installed policy bytes match before consuming `ordivon-edge-lifecycle --check`. `ordivon-edge-lifecycle --check` performs one read-only provider control-plane observation and compares it with provider-owned policy; the World doctor consumes its JSON and does not read the Cloudflare control credential or call the R2 API itself. The same provider tool without `--check` remains the explicit mutation/apply path.
 
 ## Cloudflare garbage collection
 

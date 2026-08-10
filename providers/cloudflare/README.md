@@ -8,7 +8,6 @@ lifecycle: active
 source_role: canonical
 visibility: public
 owners:
-  - ordivon-world
   - ordivon-cloudflare-provider
 audience:
   - builder
@@ -39,7 +38,7 @@ The supported surface is `fetch.v2`, `browser.snapshot.v2`, `receipt.v2`, authen
 
 ## Authority boundary
 
-Cloudflare owns Worker versions, Deployments, Browser and Fetch execution, R2 request state, lease generations, Receipts, and Artifact objects. The adapter owns signed Request ID and input binding plus client verification. Host retains Task, Effect, uncertainty, Verification, and completion authority.
+Cloudflare Provider owns Worker versions, Deployments, Browser and Fetch execution, R2 request state, lease generations, Receipts, Artifact objects, lifecycle/GC and its physical client/control surfaces. World owns the cross-owner prepared-dispatch ↔ provider identity binding and maps provider evidence into Host semantics. Host retains Task, Effect, uncertainty, Verification, and completion authority.
 
 ## Limitations
 
@@ -70,9 +69,10 @@ ordivon-edge artifact-get <key> --output ./artifact.bin --sha256 <digest>
 sudo ordivon-edge-release release
 sudo ordivon-edge-release rollback
 sudo ordivon-edge-gc run
+ordivon-edge-lifecycle --check
 ```
 
-Installed operations resolve `/root/projects/ordivon-world/providers/cloudflare` by default. Override with `ORDIVON_WORLD_REPO` when necessary. Release and GC receipts are private under `/root/backups/ordivon-world/`.
+Installed operations currently resolve `/root/projects/ordivon-world/providers/cloudflare` by default for the co-located checkout. HP5 proved the provider passes its full CI as an independent Git root; set the legacy `ORDIVON_WORLD_REPO` source-root override to that provider root when extracted. Repository location is not provider authority. Release and GC receipts remain private under `/root/backups/ordivon-world/`.
 
 ## Release behavior
 

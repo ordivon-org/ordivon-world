@@ -8,18 +8,11 @@ from pathlib import Path
 import stat
 import subprocess
 from typing import Any, Callable
-import urllib.error
-import urllib.request
-
-from .cloudflare import CloudflareWorldAdapter, WorldAdapterError
-from .schemas import load_schema
+from .schemas import load_schema, validate_contract
 from .version import __version__
 
 DEFAULT_REPOSITORY = Path("/root/projects/ordivon-world")
-CLOUDFLARE_CONFIG = Path("/root/.config/ordivon/secrets/cloudflare.json")
 EDGE_CLIENT_CONFIG = Path("/root/.config/ordivon/secrets/edge-client.json")
-MANAGED_LIFECYCLE_PREFIX = "edge-v2-"
-SECONDS_PER_DAY = 86_400
 
 
 @dataclass(frozen=True, slots=True)
@@ -125,6 +118,10 @@ def private_config_check(path: Path, name: str) -> dict[str, Any]:
 def installed_tools_check(repository: Path) -> dict[str, Any]:
     paths = (
         (
+            repository / "providers/cloudflare/config/edge-policy.json",
+            Path("/usr/local/lib/ordivon-world/edge-policy.json"),
+        ),
+        (
             repository / "providers/cloudflare/scripts/ordivon_edge_client.py",
             Path("/usr/local/bin/ordivon-edge"),
         ),
@@ -135,6 +132,10 @@ def installed_tools_check(repository: Path) -> dict[str, Any]:
         (
             repository / "providers/cloudflare/scripts/ordivon_edge_gc.py",
             Path("/usr/local/sbin/ordivon-edge-gc"),
+        ),
+        (
+            repository / "providers/cloudflare/scripts/configure_r2_lifecycle.py",
+            Path("/usr/local/sbin/ordivon-edge-lifecycle"),
         ),
         (
             repository / "modules/network-observation/scripts/ordivon-vpn",
@@ -197,21 +198,28 @@ def edge_status_check(repository: Path, runner: CommandRunner) -> dict[str, Any]
         return check("cloudflare-edge", "attention", error=str(error))
 
 
-def capability_check() -> dict[str, Any]:
+def capability_check(runner: CommandRunner) -> dict[str, Any]:
+    result = runner(["/usr/local/bin/ordivon-edge", "capabilities"])
     try:
-        snapshot = CloudflareWorldAdapter.from_config().capabilities()
-    except WorldAdapterError as error:
-        return check("cloudflare-capabilities", "attention", error=str(error))
+        value = json.loads(result.stdout)
+        if not isinstance(value, dict):
+            raise ValueError("provider capability projection is not an object")
+        validate_contract("edge-capabilities", value)
+    except (ValueError, json.JSONDecodeError) as error:
+        return check(
+            "cloudflare-capabilities",
+            "attention",
+            exitCode=result.returncode,
+            error=str(error),
+            stderr=result.stderr.strip() or None,
+        )
+    healthy = result.returncode == 0
     return check(
         "cloudflare-capabilities",
-        "ok",
-        provider=snapshot.provider,
-        capturedAt=snapshot.captured_at,
-        conditionDigest=snapshot.condition_digest,
-        observationDigest=snapshot.observation_digest,
-        policyVersion=snapshot.raw["policy_version"],
-        capabilities=snapshot.raw["capabilities"],
-        workerVersion=snapshot.raw["worker_version"],
+        "ok" if healthy else "attention",
+        exitCode=result.returncode,
+        report=value,
+        stderr=result.stderr.strip() or None,
     )
 
 
@@ -262,81 +270,28 @@ def gc_check(runner: CommandRunner) -> dict[str, Any]:
     )
 
 
-def expected_lifecycle_rules(retention: dict[str, Any]) -> list[dict[str, Any]]:
-    definitions = (
-        ("request-state", "requests/v2/", retention["request_state"]),
-        ("receipt-mirror", "receipts/v2/", retention["receipt_mirror"]),
-        ("fetch-artifacts", "fetch/v2/", retention["artifacts"]),
-        ("browser-artifacts", "browser/v2/", retention["artifacts"]),
-        ("cleanup-tasks", "cleanup/v2/", retention["cleanup_tasks"]),
-    )
-    return [
-        {
-            "id": f"{MANAGED_LIFECYCLE_PREFIX}{name}-{days}d",
-            "enabled": True,
-            "conditions": {"prefix": prefix},
-            "deleteObjectsTransition": {
-                "condition": {
-                    "type": "Age",
-                    "maxAge": int(days) * SECONDS_PER_DAY,
-                }
-            },
-        }
-        for name, prefix, days in definitions
-    ]
-
-
-def lifecycle_check(repository: Path) -> dict[str, Any]:
+def lifecycle_check(runner: CommandRunner) -> dict[str, Any]:
+    result = runner(["/usr/local/sbin/ordivon-edge-lifecycle", "--check"])
     try:
-        cloudflare = load_json(CLOUDFLARE_CONFIG)
-        policy = load_json(
-            repository / "providers/cloudflare/config/edge-policy.json"
-        )
-        token = cloudflare["api_token"]
-        account_id = cloudflare["account_id"]
-        retention = policy["retention_days"]
-        if not isinstance(token, str) or not isinstance(account_id, str):
-            raise ValueError("Cloudflare credentials are incomplete")
-        if not isinstance(retention, dict):
-            raise ValueError("retention policy is invalid")
-        path = (
-            "https://api.cloudflare.com/client/v4/accounts/"
-            f"{account_id}/r2/buckets/ordivon-artifacts/lifecycle"
-        )
-        request = urllib.request.Request(
-            path,
-            headers={
-                "Authorization": f"Bearer {token}",
-                "Accept": "application/json",
-                "User-Agent": f"ordivon-world-doctor/{__version__}",
-            },
-        )
-        with urllib.request.urlopen(request, timeout=30) as response:
-            payload = json.loads(response.read())
-        if not isinstance(payload, dict) or payload.get("success") is not True:
-            raise ValueError("Cloudflare lifecycle API returned failure")
-        result = payload.get("result")
-        rules = result.get("rules") if isinstance(result, dict) else None
-        if not isinstance(rules, list):
-            raise ValueError("Cloudflare lifecycle response has no rules")
-        expected = sorted(expected_lifecycle_rules(retention), key=lambda item: item["id"])
-        actual = sorted(
-            [
-                item
-                for item in rules
-                if isinstance(item, dict)
-                and str(item.get("id", "")).startswith(MANAGED_LIFECYCLE_PREFIX)
-            ],
-            key=lambda item: str(item["id"]),
-        )
+        value = json.loads(result.stdout)
+        if not isinstance(value, dict):
+            raise ValueError("provider lifecycle projection is not an object")
+    except (ValueError, json.JSONDecodeError) as error:
         return check(
             "cloudflare-r2-lifecycle",
-            "ok" if actual == expected else "attention",
-            expected=expected,
-            actual=actual,
+            "attention",
+            exitCode=result.returncode,
+            error=str(error),
+            stderr=result.stderr.strip() or None,
         )
-    except (OSError, KeyError, ValueError, json.JSONDecodeError, urllib.error.URLError) as error:
-        return check("cloudflare-r2-lifecycle", "attention", error=str(error))
+    healthy = result.returncode == 0 and value.get("ok") is True
+    return check(
+        "cloudflare-r2-lifecycle",
+        "ok" if healthy else "attention",
+        exitCode=result.returncode,
+        report=value,
+        stderr=result.stderr.strip() or None,
+    )
 
 
 def network_check(repository: Path, runner: CommandRunner) -> dict[str, Any]:
@@ -393,7 +348,6 @@ def collect_report(
             [
                 check("installed-tools", "skipped", reason="offline"),
                 check("edge-client-config", "skipped", reason="offline"),
-                check("cloudflare-control-config", "skipped", reason="offline"),
                 check("cloudflare-edge", "skipped", reason="offline"),
                 check("cloudflare-capabilities", "skipped", reason="offline"),
                 check("cloudflare-r2-lifecycle", "skipped", reason="offline"),
@@ -406,13 +360,9 @@ def collect_report(
             [
                 installed_tools_check(repository),
                 private_config_check(EDGE_CLIENT_CONFIG, "edge-client-config"),
-                private_config_check(
-                    CLOUDFLARE_CONFIG,
-                    "cloudflare-control-config",
-                ),
                 edge_status_check(repository, runner),
-                capability_check(),
-                lifecycle_check(repository),
+                capability_check(runner),
+                lifecycle_check(runner),
                 gc_check(runner),
                 network_check(repository, runner),
             ]

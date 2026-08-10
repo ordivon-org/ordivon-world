@@ -9,7 +9,6 @@ from ordivon_world.cloudflare import (
     WorldOutcomeUnknown,
     WorldProviderError,
 )
-from ordivon_world.telemetry import TraceContext
 
 import json
 import unittest
@@ -191,9 +190,6 @@ class CloudflareWorldAdapterTests(unittest.TestCase):
             effect_id="effect:world:test:fetch:r1",
             url="https://developers.cloudflare.com/",
             capability=self.capability,
-            trace_context=TraceContext(
-                "00-0123456789abcdef0123456789abcdef-0123456789abcdef-01"
-            ),
         )
         self.transport.prepared_value = prepared.to_dict()
         return prepared
@@ -205,7 +201,6 @@ class CloudflareWorldAdapterTests(unittest.TestCase):
             effect_id=first.dispatch.effect_id,
             url="https://developers.cloudflare.com/",
             capability=self.capability,
-            trace_context=first.trace_context,
         )
         self.assertEqual(first.provider_request_id, second.provider_request_id)
         self.assertEqual(first.provider_request_digest, second.provider_request_digest)
@@ -215,6 +210,18 @@ class CloudflareWorldAdapterTests(unittest.TestCase):
             first.dispatch.required_state_refs[0].digest,
             self.capability.condition_digest,
         )
+
+    def test_legacy_trace_context_round_trips_without_being_authored_by_new_prepare(self) -> None:
+        prepared = self.prepare()
+        value = prepared.to_dict()
+        self.assertNotIn("traceContext", value)
+        value["traceContext"] = {
+            "traceparent": "00-0123456789abcdef0123456789abcdef-0123456789abcdef-01",
+            "tracestate": "ordivon=legacy",
+        }
+        restored = PreparedWorldDispatch.from_dict(value)
+        self.assertIsNotNone(restored.trace_context)
+        self.assertEqual(restored.to_dict()["traceContext"], value["traceContext"])
 
     def test_deliver_maps_receipt_and_artifact_to_host_observation(self) -> None:
         prepared = self.prepare()
@@ -226,10 +233,7 @@ class CloudflareWorldAdapterTests(unittest.TestCase):
         body = self.adapter.read_artifact(observed.envelope.evidence_refs[0])
         self.assertEqual(body, b"world-result")
         assert self.transport.post_headers is not None
-        self.assertEqual(
-            self.transport.post_headers["traceparent"],
-            prepared.trace_context.traceparent if prepared.trace_context else None,
-        )
+        self.assertNotIn("traceparent", self.transport.post_headers)
         self.assertEqual(
             self.transport.post_headers["x-ordivon-dispatch-id"],
             prepared.dispatch.dispatch_id,

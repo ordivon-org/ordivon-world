@@ -48,6 +48,7 @@ World is a repository and adapter boundary. It is **not** a World daemon, workfl
 - [`docs/operations.md`](docs/operations.md) — setup, doctor, GC, deployment and recovery.
 - [`docs/contracts.md`](docs/contracts.md) — JSON Schema, deterministic identities and Host mapping.
 - [`docs/verification.md`](docs/verification.md) — deterministic, provider and live-system gates.
+- [`docs/high-pressure-provider-verification-hp5.md`](docs/high-pressure-provider-verification-hp5.md) — HP5 provider/verification ownership and deletion court.
 - [`SECURITY.md`](SECURITY.md) and [`docs/data-and-privacy.md`](docs/data-and-privacy.md) — trust and data boundaries.
 - [`docs/authority.md`](docs/authority.md) — which source owns each fact.
 - [`docs/retained-boundaries.md`](docs/retained-boundaries.md) — why the active scope remains narrow.
@@ -142,7 +143,7 @@ The public package depends on exact remote-reachable Host and Protocol revisions
 - replay and idempotency conflict detection;
 - release, rollback, lifecycle and deferred garbage collection.
 
-Cloudflare remains authoritative for Worker execution, R2 state, provider versions and provider Receipts.
+Cloudflare remains authoritative for Worker execution, R2 state, provider versions and provider Receipts. HP5 proved that this provider subtree can pass its full CI as an independent Git root while the World Python package/wheel passes with the subtree absent. Co-location is therefore an operational convenience, not World ownership; the provider implementation is owner-separated and extractable.
 
 ### Network condition tools
 

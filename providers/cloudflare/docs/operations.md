@@ -8,7 +8,6 @@ lifecycle: active
 source_role: canonical
 visibility: public
 owners:
-  - ordivon-world
   - ordivon-cloudflare-provider
 audience:
   - operator
@@ -183,10 +182,16 @@ Receipt replay occurs before budget consumption. A rate-limited first execution 
 
 ## R2 lifecycle
 
-Apply the managed lifecycle rules through the Cloudflare R2 Lifecycle API with:
+Read the current managed lifecycle state without mutation through the installed provider projection:
 
 ```bash
-scripts/configure-r2-lifecycle
+ordivon-edge-lifecycle --check
+```
+
+Apply the managed lifecycle rules explicitly through the same provider-owned controller:
+
+```bash
+ordivon-edge-lifecycle
 ```
 
 Retention is defined once in `config/edge-policy.json`. Request states, Receipt mirrors, cleanup tombstones, and Request-ID idempotency are retained for 90 days. Fetch and Browser Artifacts are retained for 91 days so a replayable Receipt does not outlive its result. Legacy Receipt objects remain untouched until their existing lifecycle expires.
@@ -202,7 +207,7 @@ GC accepts only generation-matching `fetch/v2` and `browser/v2` keys from `clean
 
 ## Local operational installation
 
-Install the client, release controller, GC controller, and daily GC timer:
+Install the client, the exact provider policy snapshot, release controller, lifecycle controller, GC controller, and daily GC timer:
 
 ```bash
 scripts/install-edge-operations
@@ -227,8 +232,8 @@ Artifact downloads fail closed unless `X-Ordivon-Sha256` is present and matches 
 
 `config/edge-policy.json` is the single source for execution bounds, lease durations, expected rate limits, and retention. The Worker combines that document with the effective `FETCH_ALLOWED_HOSTS` binding and reports a fingerprint such as `p1.6.<digest>`. An expired Pending request cannot be taken over when that fingerprint changed. `pnpm check:policy` rejects drift between the policy document and Wrangler configuration.
 
-The lifecycle controller preserves non-Ordivon rules, replaces all rules whose IDs begin with `edge-v2-`, then rereads the API and requires an exact match. It does not depend on Wrangler or the local Node dependency tree.
+The installed lifecycle controller reads the installed provider policy at `/usr/local/lib/ordivon-world/edge-policy.json`; checkout execution uses the checkout policy, and `ORDIVON_EDGE_POLICY` is an explicit override. The install/doctor path digest-checks that materialized policy against current source. The lifecycle controller owns both observation and mutation semantics. `--check` performs exactly one GET and compares provider-owned expected/actual managed rules without PUT; the no-flag path preserves non-Ordivon rules, replaces all rules whose IDs begin with `edge-v2-`, then rereads the API and requires an exact match. It does not depend on Wrangler or the local Node dependency tree.
 
 ## Installed release source
 
-`ordivon-edge-release` resolves provider source from `/root/projects/ordivon-world/providers/cloudflare` by default. Set `ORDIVON_WORLD_REPO` to a different World repository root when the checkout lives elsewhere.
+`ordivon-edge-release` currently resolves the co-located provider source from `/root/projects/ordivon-world/providers/cloudflare` by default. HP5 proved the provider can operate as an independent Git root; the legacy `ORDIVON_WORLD_REPO` override may point at that source root when extracted. This environment variable name is historical and does not confer World ownership.

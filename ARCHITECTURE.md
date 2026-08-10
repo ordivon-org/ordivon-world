@@ -28,14 +28,14 @@ It does not centralize all external systems into one World object. Each owner/pr
 | World Entity Migration | cross-World migration identity, source-departure/continuity binding, Host-retained uncertainty and destination receipt correlation | source-local history, portable cognition ownership, destination current Presence, source-authority translation, global Presence database |
 | Source domain (Game first) | native source occurrence, egress/departure policy and source-specific evidence | portable cognition ownership, destination admission/materialization |
 | Destination domain (Security first) | ingress policy, Resource/Message admission, KVM Entity carrier materialization, physical re-observation/compensation and native-substrate `not_committed` proof | source-domain truth, global Presence truth or cross-relay source authentication unless explicitly configured |
-| Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact and deployment identity | Host Task meaning |
+| Cloudflare | Worker execution, R2 request state, lease generation, Receipt, Artifact, deployment/release, lifecycle/GC and owner-native health projections | Host Task meaning or World prepared-dispatch identity |
 | Domain verifier | whether observed external facts satisfy the Task | provider transport or retry |
 
 ## Components
 
 ```text
 src/ordivon_world/
-├── cloudflare.py       signed provider transport and adapter
+├── cloudflare.py       exact provider binding/reconciliation plus private signed transport
 ├── browser.py          Browser Receipt/Manifest/Artifact bundle verification
 ├── foreign_egress.py   Workstation-owned foreign-egress capability projection
 ├── effect_paths.py     informational Agent-facing effect-path comparison
@@ -48,15 +48,17 @@ src/ordivon_world/
 ├── entity_migration.py Entity departure/migration contracts and Host journal
 ├── entity_wire.py      Entity destination wire mapping and failure classification
 ├── schemas.py          local Draft 2020-12 Schema Registry
-├── telemetry.py        W3C Trace Context validation and propagation
-├── doctor.py           repository, installation and live health projection
+├── telemetry.py        legacy W3C Trace Context decode/round-trip helper
+├── doctor.py           owner-native health aggregation; no provider control-plane ownership
 └── contracts/          packaged provider and Host-facing contracts
 
-providers/cloudflare/
+providers/cloudflare/  provider-owned, extractable implementation currently co-located
 ├── src/                Cloudflare Worker
 ├── scripts/            client, release, lifecycle and GC controllers
 ├── config/             provider policy authority
 └── test/               provider state-machine and operations tests
+
+HP5 copied that subtree into a separate Git root and its full provider CI remained green. In the inverse trial, removing the subtree entirely still left 139 World Python tests and the isolated wheel gate green. The directory is therefore not part of World semantic authority. World doctor consumes installed provider projections (`ordivon-edge capabilities` and `ordivon-edge-lifecycle --check`) rather than reading the Cloudflare control credential or rebuilding lifecycle policy itself.
 
 modules/network-observation/
 └── scripts/            private path observation and explicit VPN operations
@@ -82,7 +84,7 @@ Before POST, the adapter can reread capabilities and compare the exact condition
 - the exact deterministic request ID;
 - the canonical request body;
 - HMAC authentication;
-- optional W3C trace headers and Dispatch correlation for telemetry.
+- `x-ordivon-dispatch-id` correlation. New HP5 dispatches no longer author or propagate W3C Trace Context; optional retained legacy `traceContext` values remain readable but do not participate in current delivery/reconciliation.
 
 The provider request digest remains provider-native and is verified against the returned Receipt.
 
@@ -109,7 +111,7 @@ Cloudflare Receipt `started_at` / `completed_at` remain provider-native times. `
 
 These timestamps are not interchangeable. `availableAt` does not mean source occurrence, provider completion, Host admission, Agent read time, truth, freshness or authority. New observations retain it in World CAS; legacy observations without it remain readable with unknown availability. If the same provider receipt is reconciled again, World returns the first retained observation instead of rewriting availability history.
 
-A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
+A succeeded Browser operation is a three-Artifact bundle: PNG screenshot, UTF-8 rendered HTML and JSON Manifest. `BrowserArtifactBundle` verifies the shared request ID and lease generation, the Receipt primary Manifest, exact Artifact order and media types, byte counts, SHA-256 values, PNG signature, UTF-8 decoding, and Manifest equality with Receipt execution and page facts. HP5 physically removed this bundle interpretation and verified each Artifact digest independently; that thinner path incorrectly accepted Manifest semantic drift, Receipt byte-count drift and Receipt↔Manifest page-fact drift while every individual digest remained valid. The bundle therefore survives as an explicit production module. This proves bundle integrity, not that the page content is truthful or satisfies the Task.
 
 ## Agent-facing Effect Path Query
 

@@ -143,7 +143,7 @@ The Manifest is the Receipt's primary Artifact and contains the first two Artifa
 
 ## Telemetry
 
-`traceparent`, optional `tracestate` and an `x-ordivon-dispatch-id` header may accompany provider calls. They are not signed into the current provider request identity and are not durable evidence. Their sole purpose is correlation in logs and traces.
+Current provider calls carry `x-ordivon-dispatch-id` correlation. HP5 proved W3C Trace Context had no effect on consequence identity or fresh-controller recovery and the current provider log surface did not consume it. New `PreparedWorldDispatch` values therefore omit `traceContext` and current delivery/reconciliation do not propagate it. The schema keeps `traceContext` as an optional legacy property so already retained pre-HP5 values can be decoded and round-tripped without rewriting history; it remains neither provider identity nor durable evidence.
 
 ## Change policy
 

@@ -6,7 +6,7 @@ import unittest
 from ordivon_world.doctor import (
     CommandResult,
     contract_check,
-    expected_lifecycle_rules,
+    lifecycle_check,
     network_check,
     overall_status,
     repository_check,
@@ -78,21 +78,20 @@ class DoctorTests(unittest.TestCase):
         self.assertFalse(result["report"]["config_valid"])
         self.assertEqual(result["stderr"], "profile needs attention")
 
-    def test_expected_lifecycle_rules_match_retention_contract(self) -> None:
-        rules = expected_lifecycle_rules(
-            {
-                "request_state": 90,
-                "receipt_mirror": 90,
-                "artifacts": 91,
-                "cleanup_tasks": 90,
-            }
-        )
-        self.assertEqual(len(rules), 5)
-        self.assertEqual(rules[0]["id"], "edge-v2-request-state-90d")
-        self.assertEqual(
-            rules[2]["deleteObjectsTransition"]["condition"]["maxAge"],
-            91 * 86_400,
-        )
+    def test_lifecycle_check_preserves_provider_projection_on_nonzero_exit(self) -> None:
+        def runner(command: list[str]) -> CommandResult:
+            self.assertEqual(command[-1], "--check")
+            return CommandResult(
+                1,
+                '{"ok":false,"bucket":"ordivon-artifacts","expected":[],"actual":[]}\n',
+                "policy drift\n",
+            )
+
+        result = lifecycle_check(runner)
+        self.assertEqual(result["status"], "attention")
+        self.assertEqual(result["exitCode"], 1)
+        self.assertFalse(result["report"]["ok"])
+        self.assertEqual(result["stderr"], "policy drift")
 
 
 if __name__ == "__main__":

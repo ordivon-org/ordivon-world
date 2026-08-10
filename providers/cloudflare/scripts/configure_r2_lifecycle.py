@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import pathlib
@@ -13,7 +14,14 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BUCKET = "ordivon-artifacts"
 CLOUDFLARE_CONFIG = pathlib.Path("/root/.config/ordivon/secrets/cloudflare.json")
-POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
+SOURCE_POLICY_CONFIG = ROOT / "config" / "edge-policy.json"
+INSTALLED_POLICY_CONFIG = pathlib.Path("/usr/local/lib/ordivon-world/edge-policy.json")
+POLICY_CONFIG = pathlib.Path(
+    os.environ.get(
+        "ORDIVON_EDGE_POLICY",
+        str(SOURCE_POLICY_CONFIG if SOURCE_POLICY_CONFIG.is_file() else INSTALLED_POLICY_CONFIG),
+    )
+)
 MANAGED_PREFIX = "edge-v2-"
 SECONDS_PER_DAY = 86400
 
@@ -76,7 +84,22 @@ def managed_rules(retention: dict[str, int]) -> list[dict[str, Any]]:
     ]
 
 
-def main() -> int:
+def _managed_subset(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(
+        (rule for rule in rules if str(rule.get("id", "")).startswith(MANAGED_PREFIX)),
+        key=lambda rule: str(rule.get("id")),
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="read current lifecycle state and compare it with policy without mutating it",
+    )
+    args = parser.parse_args(argv)
+
     cloudflare = load_json(CLOUDFLARE_CONFIG)
     policy = load_json(POLICY_CONFIG)
     token = cloudflare.get("api_token")
@@ -91,22 +114,37 @@ def main() -> int:
     rules = current.get("rules") if isinstance(current, dict) else None
     if not isinstance(rules, list):
         raise LifecycleError("Cloudflare lifecycle response has no rules")
+
+    expected_managed = managed_rules(retention)
+    expected_sorted = sorted(expected_managed, key=lambda rule: str(rule.get("id")))
+    actual_managed = _managed_subset(rules)
+    if args.check:
+        healthy = actual_managed == expected_sorted
+        print(
+            json.dumps(
+                {
+                    "ok": healthy,
+                    "bucket": BUCKET,
+                    "expected": expected_sorted,
+                    "actual": actual_managed,
+                },
+                indent=2,
+            )
+        )
+        return 0 if healthy else 1
+
     preserved = [
         rule
         for rule in rules
         if isinstance(rule, dict) and not str(rule.get("id", "")).startswith(MANAGED_PREFIX)
     ]
-    expected_managed = managed_rules(retention)
     api_request("PUT", path, token, {"rules": [*preserved, *expected_managed]})
     verified = api_request("GET", path, token)
     verified_rules = verified.get("rules") if isinstance(verified, dict) else None
     if not isinstance(verified_rules, list):
         raise LifecycleError("Updated lifecycle response has no rules")
-    actual_managed = sorted(
-        (rule for rule in verified_rules if str(rule.get("id", "")).startswith(MANAGED_PREFIX)),
-        key=lambda rule: str(rule.get("id")),
-    )
-    if actual_managed != sorted(expected_managed, key=lambda rule: str(rule.get("id"))):
+    actual_managed = _managed_subset(verified_rules)
+    if actual_managed != expected_sorted:
         raise LifecycleError("Lifecycle verification did not match the policy")
     print(json.dumps({"ok": True, "bucket": BUCKET, "rules": verified_rules}, indent=2))
     return 0

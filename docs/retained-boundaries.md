@@ -70,7 +70,7 @@ The reactivated responsibility is admitted because its absence reproduced concre
 - lifecycle and deferred cleanup;
 - current R2 API contract tests.
 
-Cloudflare remains authoritative for provider state. World maps those facts but does not duplicate their lifecycle.
+Cloudflare remains authoritative for provider state. World maps those facts but does not duplicate their lifecycle. HP5 tightened that statement physically: lifecycle/capability health are now consumed through provider-owned projections, and the World doctor no longer reads the Cloudflare control credential or calls the lifecycle API directly. The provider subtree passed its full CI as an independent Git root, while the World Python/wheel boundary passed with that subtree absent; co-location is operational, not semantic ownership.
 
 ## Retained Host-facing responsibilities
 
@@ -94,6 +94,9 @@ Cloudflare remains authoritative for provider state. World maps those facts but 
 - focused secret, key, namespace and scheduler tests.
 
 Network mutation remains operator-only. HP0 removed the previously reserved `network-observation` public Schema because no current producer or independent consumer used it; owner-local `ordivon-vpn`/Surfshark reports remain operational evidence rather than a speculative shared contract. Local VPN or route observations are not required state for remote Cloudflare Fetch or Browser execution because no measured failure shows that local path identity changes the semantics of the already-bound remote operation.
+
+
+HP5 also re-tested two retained helpers. `BrowserArtifactBundle` survived because deleting it let three cross-object semantic corruptions pass despite valid individual Artifact digests. W3C Trace Context did not survive current production pressure: trace-on and trace-off had identical request identity and recovery, and the provider did not consume the headers, so new dispatches no longer author/propagate it while legacy retained values remain readable.
 
 ## Still removed
 

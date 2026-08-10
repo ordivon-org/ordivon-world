@@ -1,0 +1,150 @@
+{
+  "adapterBinding": {
+    "adapterRejectedBoth": true,
+    "schemaValidButWrongPreparedDispatch": [
+      "request-digest-drift",
+      "receipt-id-drift"
+    ]
+  },
+  "browserDeletionShadow": {
+    "allIndividualArtifactDigestsValid": true,
+    "providerCommitGate": [
+      "bounded-browser-success",
+      "policy-rejection-before-browser",
+      "non-png-fails-before-artifact-commit"
+    ],
+    "unsafeRawArtifactOnlyCases": [
+      "manifest-semantic-drift",
+      "receipt-byte-count-drift",
+      "receipt-browser-semantic-drift"
+    ]
+  },
+  "clientCompatibility": {
+    "difference": "User-Agent only",
+    "hmacProtocolEquivalent": true,
+    "vectors": 3
+  },
+  "doctorOwnerRelocation": {
+    "capabilityProjection": "ordivon-edge capabilities",
+    "installedLifecycleProjection": "ordivon-edge-lifecycle --check",
+    "installedPolicyPath": "/usr/local/lib/ordivon-world/edge-policy.json",
+    "lifecycleProjection": "configure_r2_lifecycle.py --check",
+    "liveCapabilitiesReady": 4,
+    "liveLifecycleActual": 5,
+    "liveLifecycleExpected": 5,
+    "liveLifecycleOk": true,
+    "sourceInstalledPolicyDigestChecked": true,
+    "worldCallsLifecycleApiDirectly": false,
+    "worldReadsCloudflareControlCredentialDirectly": false
+  },
+  "kind": "ordivon.world.hp5-provider-verification-acceptance",
+  "laws": [
+    "Provider-valid does not mean bound to this prepared consequence.",
+    "Artifact digest integrity does not imply multi-object Browser observation integrity.",
+    "Telemetry that does not change recovery or diagnosis should not remain a default production contract.",
+    "Doctor aggregates owner truth; it must not recreate owner control-plane logic.",
+    "Repository co-location is not authority ownership."
+  ],
+  "portableAcceptance": {
+    "jobId": "job-019feba4-e86e-7301-ac2d-2c0a1df19c17",
+    "packagedSchemas": 28,
+    "providerControllerTests": 30,
+    "providerTypeScriptTests": 29,
+    "pythonTests": 139,
+    "status": "passed",
+    "terminalEvidenceDigest": "sha256:b69c0a3c1230eb8302fc33af02c05052f7384be9a13d188114063d67d7f3d387"
+  },
+  "providerSeparation": {
+    "sameRepoSemanticallyRequired": false,
+    "standaloneProviderFullCiPassed": true,
+    "worldPythonTestsWithoutProviderSubtree": 139,
+    "worldWheelWithoutProviderSubtreePassed": true
+  },
+  "runtimeEvidence": [
+    {
+      "jobId": "job-019feb91-9e9d-7f72-bd2d-8b73022e517f",
+      "role": "hp5-inventory",
+      "terminalEvidenceDigest": "sha256:a28f1e9e1ce73993884b12f0962bc2b4c979605dee2a367f29ee7921f3567ffc"
+    },
+    {
+      "jobId": "job-019feb93-b16e-7ab3-b5a0-baf80ffaffea",
+      "role": "browser-bundle-deletion-shadow",
+      "terminalEvidenceDigest": "sha256:c691d38594a706512906c5d915643088e496d87f2f3cbf4eee8ebe59c1c66e75"
+    },
+    {
+      "jobId": "job-019feb95-2376-78c3-a278-defde949a3c5",
+      "role": "trace-context-ab",
+      "terminalEvidenceDigest": "sha256:5fabca4457348a08ba4d41c4609178bd5e2c6de67d00bc4b97d996652e359574"
+    },
+    {
+      "jobId": "job-019feb95-ccad-7b92-9ab6-be5c1999429c",
+      "role": "provider-client-signing-compatibility",
+      "terminalEvidenceDigest": "sha256:9a0bc8cd8532ca3cfbec549811a2ecea5b0fb881e4e820e982d15672cdda2438"
+    },
+    {
+      "jobId": "job-019feb9b-00c4-7c23-88ea-e6649d22a9b6",
+      "role": "adapter-exact-binding-survival",
+      "terminalEvidenceDigest": "sha256:1ee5a8ca386c39a029c4692bd6837d2e10245cb57b135af299cfa60e06921ff5"
+    },
+    {
+      "jobId": "job-019feb9b-267e-7ef1-98c1-b588cebfd2bc",
+      "role": "provider-browser-commit-gate",
+      "terminalEvidenceDigest": "sha256:def1f2950210388929bcab07d7bb973e4a5055093c10298d9beae06660ec658a"
+    },
+    {
+      "jobId": "job-019feb9a-9c32-7f83-b921-081f97babb9e",
+      "role": "owner-contraction-focused-gate",
+      "terminalEvidenceDigest": "sha256:613747f6407ab9087cf584c8572f1bd0d86bab4692b499a8e36011fbfc59445b"
+    },
+    {
+      "jobId": "job-019feb9b-efff-72e1-bf32-303664f63e1d",
+      "role": "standalone-provider-full-ci",
+      "terminalEvidenceDigest": "sha256:59bb15f3994a4ca3005db45b7225369fc1e4bd412604f6b9ce25471f86e695b8"
+    },
+    {
+      "jobId": "job-019feb9c-2f9d-77f3-b08e-50a5447f3d48",
+      "role": "world-core-without-provider-subtree",
+      "terminalEvidenceDigest": "sha256:09602bd26168dfd79e9ee92a17383a93c2a0b5897f7936af665603cd99c1dd5e"
+    },
+    {
+      "jobId": "job-019feb9c-f3bf-7441-ad44-761bf8ed1381",
+      "role": "live-provider-owner-projections",
+      "terminalEvidenceDigest": "sha256:d2e1e31fea23149c80ec2568cac7b39a0b9021188bebf820fde385b9cf3b133a"
+    },
+    {
+      "jobId": "job-019feba2-4a7b-7ca0-8636-fa9cecc65c8f",
+      "role": "hp5-full-portable-precommit",
+      "terminalEvidenceDigest": "sha256:3a784dd99691bec0062ec387dbfe3d7e3f8f3636f41b94034c284b9789eee417"
+    },
+    {
+      "jobId": "job-019feba4-e86e-7301-ac2d-2c0a1df19c17",
+      "role": "hp5-final-full-portable-precommit",
+      "terminalEvidenceDigest": "sha256:b69c0a3c1230eb8302fc33af02c05052f7384be9a13d188114063d67d7f3d387"
+    }
+  ],
+  "schemaVersion": 1,
+  "sourceBaseRevision": "b60a3e830fb5e1561e1a48cc13365d7bd5514e14",
+  "status": "passed-precommit",
+  "surface": {
+    "rootFacadeAfter": 14,
+    "rootFacadeBefore": 17
+  },
+  "traceAB": {
+    "legacyTraceReadable": true,
+    "newDispatchAuthorsTrace": false,
+    "postsWithTrace": 1,
+    "postsWithoutTrace": 1,
+    "sameConsequenceIdentity": true,
+    "sameRecovery": true
+  },
+  "verdicts": {
+    "browserArtifactBundle": "RETAIN-PRODUCTION-EXPLICIT-MODULE",
+    "cloudflareConfig": "PRIVATE-EXPLICIT-MODULE",
+    "cloudflareProvider": "PROVIDER-OWNED-EXTRACTABLE-CURRENTLY-COLOCATED",
+    "cloudflareWorldAdapter": "RETAIN-PRODUCTION",
+    "signedHttpTransport": "RETAIN-PRIVATE-MECHANIC",
+    "traceContext": "DEMOTE-LEGACY",
+    "verificationReceipt": "OUTSIDE-WORLD-CORE",
+    "worldDoctor": "RETAIN-AGGREGATOR"
+  }
+}
