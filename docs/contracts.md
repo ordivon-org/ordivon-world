@@ -16,6 +16,8 @@ Published schemas:
 | `world-prepared-dispatch` | durable Host-to-provider binding |
 | `world-observation` | provider Receipt mapped to Host evidence |
 | `network-observation` | future normalized read-only network condition evidence |
+| `foreign-egress-capability` | World projection of one owner-observed, destination-qualified foreign-egress relationship |
+| `foreign-egress-capability-reference` | digest-only handoff reference that requires activation-owner revalidation |
 | `entity-departure-receipt` | source-World authority for one exact local Presence departure |
 | `entity-migration-plan` | exact migration/entity/source/destination/departure/continuity identity |
 | `entity-migration-destination-request` | materialize/reconcile Entity destination request |

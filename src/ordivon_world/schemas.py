@@ -21,6 +21,8 @@ _CONTRACT_NAMES = (
     "entity-migration-plan",
     "entity-migration-receipt",
     "fetch-request",
+    "foreign-egress-capability",
+    "foreign-egress-capability-reference",
     "message-delivery-destination-request",
     "message-delivery-destination-response",
     "message-delivery-not-committed",

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.foreign-egress-capability-handoff-acceptance",
+  "recordedDate": "2026-08-10",
+  "worldBaseRevision": "567a6c1688e226a9f74c430ed66ebde43151986c",
+  "workstationRevision": "ca1514e3c2953706254cfa774230998a294009ea",
+  "owner": {
+    "authority": "ordivon.workstation.surfpath",
+    "fullDiscovery": {
+      "jobId": "job-019fe9f0-67a0-7ea2-8ec1-413cf37d3811",
+      "result": "timed_out",
+      "timeoutMs": 180000,
+      "interpretation": "full 415-variant scan is not the hot-path refresh primitive"
+    },
+    "narrowDiscovery": {
+      "jobId": "job-019fe9f5-4a14-7ed0-a74e-6d6dad5a4fe7",
+      "result": "succeeded",
+      "durationMs": 39056,
+      "nodes": ["jp-tok"],
+      "protocols": ["openvpn-udp"]
+    },
+    "observationDigest": "sha256:327472b0046df888da2e573c6a59e9c8334d72212298f38885313e28dee77e4d",
+    "catalogDigest": "sha256:1782aa5050bde036324487a755c86efb253563b783bb23085c70dd23a0ab3a1c",
+    "observedAt": "2026-08-10T04:37:13.650844Z",
+    "freshnessWindowSeconds": 180,
+    "qualifiedPathCount": 2
+  },
+  "wx1Projection": {
+    "jobId": "job-019fe9f6-cbca-7a83-b618-b6c212e721b5",
+    "capabilityDigest": "sha256:4c070368181602b2cf88d39ca18c48f23ca5a7b6fa8571fbb625f20506e998f8",
+    "selectedPathDigest": "sha256:ad19ae221df2a3028e8a16b554cf152194c6f383ab7a9a3f8c45d82adee6f5eb",
+    "relationship": {
+      "ingress": "native-a",
+      "routeProfile": "A",
+      "transport": "openvpn-udp",
+      "node": "jp-tok",
+      "endpointHost": "jp-tok.prod.surfshark.com",
+      "endpointIp": "172.216.10.36",
+      "endpointPort": 1194,
+      "observedEgressIp": "172.216.10.37",
+      "observedLocation": "JP",
+      "observedColo": "NRT",
+      "destination": "openai",
+      "destinationUrl": "https://api.openai.com/v1/models",
+      "destinationSelectedAddress": "162.159.140.245"
+    },
+    "rawSecretsProjected": false,
+    "physicalActivationOwnedByWorld": false,
+    "requiresOwnerRevalidation": true
+  },
+  "wx2Handoff": {
+    "consumerWorkspaceId": "world-wx2-consumer-20260810",
+    "positiveJobId": "job-019fe9f7-ae8c-79a3-ad9e-9d9ccb33caaa",
+    "positiveResult": "succeeded",
+    "positiveStdout": "OPENAI_HTTP=401",
+    "rawSecretsTransferred": false,
+    "ownerRevalidationRequired": true,
+    "staleReferenceJobId": "job-019fe9f8-15f0-7280-983c-8b85c73c8514",
+    "staleReferenceResult": "failed_before_activation",
+    "staleReferenceReason": "observation-digest-changed-before-activation"
+  },
+  "verification": {
+    "preReferenceContractFullSuiteJobId": "job-019fe9f5-ddc7-7600-8beb-6d6a5e2ee6c3",
+    "preReferenceContractTestsPassed": 122,
+    "finalLocalAcceptanceJobId": "job-019fea01-3084-7120-b4f0-55313fe6a289",
+    "finalLocalAcceptanceResult": "succeeded",
+    "finalPythonTestsPassed": 122,
+    "finalWheelSchemaCount": 28
+  },
+  "claims": [
+    "World can project a Workstation-owned destination-qualified path without taking physical routing or VPN authority.",
+    "A second Runtime Job can consume a digest-only capability reference without raw VPN secrets and request owner revalidation before effect.",
+    "Historical or replaced observation identity fails closed before activation.",
+    "The experiment does not establish a generic Transfer framework or provider-independent redundancy."
+  ]
+}

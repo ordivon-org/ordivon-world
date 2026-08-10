@@ -461,3 +461,50 @@ usable service != effect proven
 ```
 
 Connector P1 still does not justify a global Connector manager, automatic relay selection or route mutation. The next experiments should prefer materially different real workloads over repeated relay enumeration. The request-scoped positive control is evidence that capability-granular external relationships are viable; repeated domain consumers are still required before extracting a shared production contract.
+
+
+## W-X1 / W-X2: owner-observed foreign-egress capability and handoff
+
+A 2026-08-10 experiment reused the Workstation-owned Surfpath schema-v2 substrate rather than moving VPN mechanics into World. The first saved observation was historically qualified but about 3,940 seconds old against Workstation's 180-second execution window. `surfpath status` therefore reported `fresh=false` and `executableNow=false`. World rejected that condition as current capability authority.
+
+A complete 415-variant discovery then hit its bounded Runtime deadline at 180 seconds. A narrower owner-native refresh for the already relevant `jp-tok + openvpn-udp` family completed in about 39 seconds and produced two currently qualified paths. This is evidence for query-shaped refresh around candidate relationships, not for a global background route manager.
+
+W-X1 explicitly selected one of those paths rather than accepting Workstation's advisory ranking implicitly. The selected relationship was:
+
+```text
+native-a
+  → OpenVPN UDP
+  → Surfshark jp-tok
+  → exact endpoint 172.216.10.36:1194
+  → observed JP/NRT egress 172.216.10.37
+  → OpenAI HTTPS gate
+```
+
+World projected that owner observation into `ordivon.world.foreign-egress-capability`. The projection retains only the semantic relationship, owner observation/path/catalog digests, destination evidence and freshness window. It deliberately omits route-table/user mechanics, provider binary paths, authentication authority paths and raw VPN configuration. `activationAuthority` remains `ordivon.workstation.surfpath`, and every projection states `requiresOwnerRevalidation=true`.
+
+The live W-X1 capability digest was `sha256:4c070368181602b2cf88d39ca18c48f23ca5a7b6fa8571fbb625f20506e998f8`, bound to Surfpath observation `sha256:327472b0046df888da2e573c6a59e9c8334d72212298f38885313e28dee77e4d` and selected path `sha256:ad19ae221df2a3028e8a16b554cf152194c6f383ab7a9a3f8c45d82adee6f5eb`.
+
+W-X2 then opened a separate clean Runtime Workspace/Job context. That consumer received only the capability/observation/path digests and asked the Workstation owner to activate the selected relationship. It received no Surfshark username/password, OpenVPN auth file, private configuration or provider implementation path. Workstation revalidated the saved observation identity, current path binding and OpenAI destination gate before execution. A keyless `GET https://api.openai.com/v1/models` returned HTTP 401 through the selected JP egress, which is the expected bounded reachability result without API authority.
+
+A negative control supplied the previous observation digest. Workstation rejected it before activation because the current saved observation identity had changed; the requested payload was never executed. Thus the handoff object is not a durable route grant.
+
+The retained laws are:
+
+```text
+historically qualified path
+!= current effect authority
+
+World capability projection
+= semantic relationship + owner evidence + time applicability
+
+capability-reference handoff
+!= secret transfer
+
+fresh World reference
+!= activation authority
+
+activation
+requires owner revalidation of current relationship and destination gate
+```
+
+W-X1/W-X2 justify the narrow `foreign-egress-capability` and `foreign-egress-capability-reference` contracts for this proven consumer. They still do **not** justify a generic Transfer framework, global capability router, automatic provider selection or persistent World-owned network session.

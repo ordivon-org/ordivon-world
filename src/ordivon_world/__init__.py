@@ -36,6 +36,11 @@ from .entity_wire import (
     EntityMigrationWireError,
     EntityMigrationWireTransport,
 )
+from .foreign_egress import (
+    ForeignEgressCapability,
+    ForeignEgressCapabilityStale,
+    ForeignEgressProjectionError,
+)
 from .host import (
     HostWorldError,
     HostWorldExtension,
@@ -119,6 +124,9 @@ __all__ = [
     "EntityMigrationWireDestination",
     "EntityMigrationWireError",
     "EntityMigrationWireTransport",
+    "ForeignEgressCapability",
+    "ForeignEgressCapabilityStale",
+    "ForeignEgressProjectionError",
     "HostEntityMigrationJournal",
     "HostEntityMigrationStep",
     "PreparedEntityMigration",
