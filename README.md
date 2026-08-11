@@ -13,8 +13,8 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-10
-summary: Owner-preserving external relationships, temporally explicit provider observations, recoverable effects and cross-World transfers, with Agent-facing choice that never becomes action authority.
+updated: 2026-08-12
+summary: Public entry to owner-preserving external observation, recoverable effects, cross-World transfers, temporal provenance, and reconciliation without a global World authority.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -25,143 +25,198 @@ related:
 ---
 # Ordivon World
 
-Ordivon World connects Host-owned work to independently authoritative environments. The released production boundary centers on the direct external-provider seam, three language-neutral inter-World trajectories (Resource Transfer, Message Delivery and Entity Migration), bounded owner inspection and narrow temporal provenance. W-X1/W-X3 foreign-egress/effect-path laws remain historical research evidence, but HP8 removes their executable Python APIs and packaged contracts after HP4 failed to prove a fresh-Agent decision advantage.
+An Agent sends a request to an external provider. The provider may have committed the effect, but the response disappears before the caller receives it.
+
+What is true now?
+
+- the caller intended one external operation;
+- Host may have retained one durable Effect/Dispatch identity;
+- World may know the exact provider request identity and the condition under which it was admitted;
+- the provider may or may not have committed the operation;
+- a local process result cannot answer that provider-owned question;
+- issuing a fresh request merely because the response was lost may duplicate the consequence.
+
+**Ordivon World is the narrow boundary that connects Ordivon work to independently authoritative environments without pretending to own those environments.** It binds exact external identities, preserves the evidence needed to reconcile uncertain effects, and carries selected Resource, Message, and Entity trajectories between owners while leaving native truth with those owners.
 
 ```text
-Host Task / Effect / Dispatch
+Host work / domain intent
         ↓
-World provider adapter
+World binds one owner-native external operation
         ↓
-external provider request / operation
+provider or destination owner
         ↓
-Receipt / Artifact / condition observation
+Receipt / native observation / Artifact
         ↓
-Host Observation / independent Verification
+World maps exact evidence and uncertainty
+        ↓
+Host/domain verification decides what the result means
 ```
 
-World is a repository and adapter boundary. It is **not** a World daemon, workflow engine, provider broker, general connector platform, network control plane, Sandbox service, Task database, or completion authority. HP0–HP8 are now closed for the current evidence; there is no numbered next foundation stage. New World work starts from a reproduced workload/failure.
+World is not a daemon, workflow engine, provider broker, global capability registry, network control plane, universal connector platform, Sandbox, Task database, or completion authority.
 
-## Start here
+## Who owns what
 
-- [`ARCHITECTURE.md`](ARCHITECTURE.md) — ownership and execution flow.
-- [`STATUS.md`](STATUS.md) — what is implemented, deployed, verified, or still pending.
-- [`docs/operations.md`](docs/operations.md) — setup, doctor, GC, deployment and recovery.
-- [`docs/contracts.md`](docs/contracts.md) — JSON Schema, deterministic identities and Host mapping.
-- [`docs/verification.md`](docs/verification.md) — deterministic, provider and live-system gates.
-- [`docs/high-pressure-provider-verification-hp5.md`](docs/high-pressure-provider-verification-hp5.md) — HP5 provider/verification ownership and deletion court.
-- [`docs/high-pressure-survival-hp6-hp8.md`](docs/high-pressure-survival-hp6-hp8.md) — final knowledge-GC, chaos and Minimal World tournament closeout.
-- [`docs/research-closeouts.md`](docs/research-closeouts.md) — compact laws/evidence index for closed W4/W5/Sense-Connect-Act research.
-- [`SECURITY.md`](SECURITY.md) and [`docs/data-and-privacy.md`](docs/data-and-privacy.md) — trust and data boundaries.
-- [`docs/authority.md`](docs/authority.md) — which source owns each fact.
-- [`docs/retained-boundaries.md`](docs/retained-boundaries.md) — why the active scope remains narrow.
+| Responsibility | Owner |
+| --- | --- |
+| Task, Effect, Dispatch, revision fencing, Task-level UNKNOWN, Verification and completion | Host |
+| local Workspace/Job/Attempt/process execution | Runtime |
+| bounded Agent Run and Provider/Tool cognition | Harness |
+| provider-native request state, occurrence, Receipt, remote Artifact and current provider capability | provider |
+| source-domain egress/issuance/departure fact | source domain |
+| destination-domain ingress/materialization/current state | destination domain |
+| exact cross-owner binding, trajectory identity, retained uncertainty, reconciliation and evidence mapping | World |
 
-## Active capabilities
+World may persist or project an owner's evidence. That does not transfer semantic or factual ownership to World.
 
-### Closed relationship/effect-path research
+## One recoverable external effect
 
-W-X1/W-X3 established that capability/path evidence is owner-, path- and time-scoped, but HP4 failed to show fresh-Agent decision advantage from the executable `ForeignEgressCapability` / `EffectPathQuery` projection layer. HP8 therefore removes those research-only Python APIs and packaged contracts from the product package. The accepted laws, counterexamples and immutable evidence remain in [`docs/research-closeouts.md`](docs/research-closeouts.md) and `evidence/acceptance/`. Reopening requires a new real consumer failure.
+The direct provider path is deliberately small:
 
-### External commitment continuity
+```text
+observe current provider capability
+→ bind exact request + condition digest
+→ derive deterministic provider request identity
+→ persist PreparedWorldDispatch before delivery
+→ deliver once
+→ Receipt | UNKNOWN
+→ if UNKNOWN, query the original provider request
+→ map exact provider evidence
+→ Host/domain verifies the consequence
+```
 
-W5-E tested whether Agent path choice itself needs another durable World journal. A historical Surfpath reference remained structurally intact after expiry, but the Workstation owner rejected it before the child effect. Fresh rediscovery of the same logical `jp-tok / openvpn-udp` intent produced new observation, path and capability identities; an exact new reference was then revalidated and reached OpenAI with HTTP 401.
+If the provider response is lost after commitment, World keeps `UNKNOWN` until the original request is reconciled. A missing Receipt is not proof that nothing happened. A new controller, process, machine, or Runtime Workspace does not create authority to redispatch an old consequence under a new identity.
 
-The retained law is that pre-admission observation/query/selection is recomputable planning state. World durability begins when an owner admits an exact consequence-capable operation whose outcome may later be Receipt or UNKNOWN. Those durable boundaries already exist in the typed Provider, Resource, Message and Entity journals and are discoverable through `WorldTaskInspector`; no `CapabilityManager`, selection journal or generic commitment registry is required. See [`docs/research-closeouts.md`](docs/research-closeouts.md#external-commitment-continuity); the full experiment is historical under `docs/archive/research/`.
+## Three cross-World trajectories
 
-### Execution mobility
+World also carries three production trajectory families. They share a recovery skeleton but intentionally keep different domain meanings.
 
-W-X4 moved one Host-correlated objective across Runtime `local_linux` and `windows_native` Jobs. Runtime terminal evidence kept target/provider/Job/Artifact lineage exact while both targets independently verified the same canonical source bytes. World did not gain process, filesystem or execution-target ownership.
+### Resource Transfer
 
-The post-admission half then split one Cloudflare Effect across fresh Runtime controller workspaces: the source controller freshly observed provider capability, emitted one POST, lost the committed response and durably entered UNKNOWN; the destination controller restored the original prepared dispatch and reconciled the exact provider request with zero recovery POSTs. A fresh execution context did not become authority to repeat an old consequence.
+```text
+source owner proves egress
+→ World binds transferId + payload/provenance
+→ destination independently admits/materializes
+→ receipt or UNKNOWN
+→ reconcile the exact transfer
+```
 
-One physical gap remains outside World: current Runtime `windows_native` cannot use the `workspace.execBound` immutable external-input path because that path requires `contained_local` while Windows-native currently supports `trusted_local`. World deliberately does not implement a byte-copy compatibility layer. See [`docs/research-closeouts.md`](docs/research-closeouts.md#execution-mobility); the full experiment is historical under `docs/archive/research/`.
+The first production path is Station Zero Game → Security SampleVault. Source truth remains Game-owned; destination materialization remains Security-owned.
 
-### Temporal provider observations
+### Message Delivery
 
-Cloudflare provider Receipts retain provider-native `started_at` / `completed_at`. World `WorldObservation` separately records `availableAt`: when the complete provider observation first becomes available to the World controller. `WorldTaskInspector` projects both time sources without treating either as current external truth or action authority.
+```text
+source owner proves issuance
+→ World binds messageId + exact payload/provenance
+→ destination independently admits delivery
+→ receipt or UNKNOWN
+→ reconcile the exact message
+```
 
-P2 was forced by a real response-loss experiment: one fresh Cloudflare Fetch completed at `07:04:39.956Z`, while the reconciled observation first became available to World at `07:04:51.422995Z` after a deliberate delay; Host admitted the evidence milliseconds later. Raw Host revision history could recover admission time, but the prior World observation and Agent-facing projection could not. World therefore added one availability coordinate rather than a generic temporal ontology. Provider time, World availability time and Host event time remain owned by their respective layers.
+**Delivery does not mean knowledge.** A destination inbox can prove that a Message was admitted without proving that an Agent read it, believed it, understood it, or promoted it into world truth.
 
-`availableAt` is not truth time, source-occurrence time, Host admission time or Agent read time. Historical observations lacking it remain structurally readable; new Cloudflare observations emit it, and repeated reconciliation preserves the first retained availability rather than rewriting history.
+### Entity Migration
 
-### Cross-World Resource Transfer
+```text
+source owner proves departure
+→ World binds migrationId + opaque continuity
+→ destination binds/materializes the carrier
+→ native evidence proves or leaves uncertainty
+→ reconcile without rewriting predecessor history
+```
 
-The Python package exposes `ResourceEgressReceipt`, `ResourceTransferBundle`, `HostResourceTransferJournal`, `ResourceTransferWireDestination` and the packaged Resource JSON contracts. The first production trajectory is Station Zero Game → Security SampleVault.
+A historical migration receipt proves a historical trajectory. It does not prove that the Entity is currently present at the destination. Current Presence remains owner- and scope-bound.
 
-The source World must first issue an exact `ResourceEgressReceipt`; the destination then independently admits/materializes the transfer. A response loss remains UNKNOWN until the original destination operation is reconciled. A destination-authored, identity-bound `not_committed` proof may release UNKNOWN back to PREPARED for the exact original retry.
+## Current release boundary
 
-The current Security CLI trusts its local caller to carry an authentic source-authority receipt. Untrusted-relay deployments require independent source-authority authentication; World does not claim a universal PKI. See [`docs/w2-resource-transfer-production.md`](docs/w2-resource-transfer-production.md).
+The current package line is `0.4.0`. Its retained production boundary includes:
 
-A Host Task may retain multiple Resource trajectories addressed by `transferId`. A Task with multiple trajectories requires explicit selection; implicit ambiguous lookup fails closed.
+- Host-facing Cloudflare Fetch and Browser Snapshot binding/reconciliation;
+- exact Browser bundle integrity across screenshot, rendered HTML and Manifest;
+- provider-native `started_at` / `completed_at` plus World-owned observation `availableAt` without merging their clocks or meanings;
+- Resource Transfer, Message Delivery, and Entity Migration contracts with durable Host-backed trajectory state;
+- per-trajectory addressing where real multi-trajectory failures justified it;
+- `WorldTaskInspector`, a bounded read-only projection over retained World commitments that grants neither action authority nor external currentness;
+- owner-native World doctor aggregation;
+- operator-scoped network observation/condition tools.
 
-### Cross-World Message Delivery
+The Cloudflare Worker/operations subtree is co-located but provider-owned and independently extractable. World can pass its Python/wheel boundary with that subtree absent; the provider can pass its own CI independently.
 
-The Python package exposes `MessageIssuanceReceipt`, `MessageDeliveryBundle`, `HostMessageDeliveryJournal`, `MessageDeliveryWireDestination` and the packaged Message JSON contracts. The first production trajectory is Station Zero Game → Security durable Message inbox.
+Detailed current capability state and known limits live in [`STATUS.md`](STATUS.md).
 
-Game issues a Message only from a retained Fact visible to the issuing faction. Security independently admits the exact Message as management-classified information. Delivery does **not** promote the foreign claim into destination knowledge or world-truth. Response loss remains UNKNOWN until the original Message is reconciled; a destination-authored `not_committed` proof can release only that exact UNKNOWN Message for one exact original retry.
+## Seven boundaries that prevent wrong external claims
 
-A Host Task may retain multiple Message trajectories addressed by `messageId`. Pre-W2 flat Message state remains recoverable and migrates atomically on the first later mutation. See [`docs/w2-message-delivery-production.md`](docs/w2-message-delivery-production.md).
+### Provider success is not Task completion
 
-The Message experiments did not force a first-class `WorldLink`: authenticated endpoint discovery and destination identity were sufficient across endpoint replacement, process/socket rematerialization and endpoint relocation.
+A provider Receipt can prove a provider-native occurrence. Host/domain verification still decides whether that occurrence satisfies the Task or product objective.
 
-### Cross-World Entity Migration
+### Historical occurrence is not current Presence
 
-The Python package exposes `EntityDepartureReceipt`, `EntityMigrationBundle`, `HostEntityMigrationJournal`, `EntityMigrationWireDestination` and the packaged Entity Migration JSON contracts. The first production trajectory is Station Zero Game verified departure → Security Windows KVM continuity carrier.
+Yesterday's observed resource, path, Entity, or provider state remains historical evidence. A current decision that depends on present state must re-observe or reconcile through the owner that can establish currentness.
 
-Game owns only source Presence departure; opaque continuity is retained by Host and delivered to the destination. Security durably binds the migration before native launch, stages continuity on an `ORDIVON_MIG` FAT volume, and uses KVM/QMP/native evidence rather than Guest self-report as materialization authority. The accepted first deployment is a trusted local owner-originated caller: a fresh Game process re-read the exact departure authority before World transported it, while Security still declares `sourceAuthorityAuthentication=caller-trust-boundary`.
+### Delivery is not cognition
 
-Migration `not_committed` is stronger than receipt absence. Provably body-free abandoned staging or TPM-only preparation may be compensated to zero residuals and released only with `nativeSubstrateChecked=true` plus `exactOriginalRetrySafe=true`; ambiguous QEMU launch evidence remains UNKNOWN. Recovery never rewrites the historical predecessor owner. A historical migration receipt does not claim current live Presence, and this profile does not authenticate Game authority through an untrusted relay. See [`docs/w2-entity-migration-production.md`](docs/w2-entity-migration-production.md).
+Message transport occurrence does not prove destination knowledge, understanding, acceptance, or belief.
 
-Entity Migration remains one migration per Host Task in 0.4.0. No real workload has yet forced multi-migration Task addressing, Guest cognition activation, a global Presence database, or a first-class `WorldLink`.
+### Reconciliation precedes redispatch
 
-### Host-facing Cloudflare adapter
+Response loss creates uncertainty, not permission to issue a new effect. Query the original request/trajectory identity first.
 
-The Python package in `src/ordivon_world/` provides:
+### Observation time sources stay separate
 
-- current Cloudflare capability snapshots;
-- deterministic Dispatch-to-provider request identity;
-- Fetch and Browser Snapshot request construction;
-- pre-dispatch capability-condition fencing;
-- response-loss reconciliation by the original provider request ID;
-- Cloudflare Receipt and R2 Artifact mapping into Host `ObservationEnvelope` and `ArtifactRef` values;
-- Browser screenshot, rendered HTML and Manifest bundle verification across Receipt, Host evidence and downloaded bytes;
-- Host CAS/Journal persistence through `HostWorldExtension`;
-- multiple provider trajectories per Host Task, addressed by Host `dispatchId`;
-- backward recovery/migration for pre-0.2.1 flat provider extension state;
-- W3C Trace Context propagation as non-authoritative telemetry.
+Provider execution time, World observation availability, and Host admission time describe different events under different owners. `availableAt` is not occurrence time, freshness, currentness, action authority, or completion.
 
-The public package depends on exact remote-reachable Host and Protocol revisions. It does not copy Host Task semantics into World.
+### Structural receipts do not create trust
 
-### Cloudflare provider
+A receipt can preserve exact identity and provenance without authenticating an untrusted relay. Current Resource/Message/Entity production integrations state their trust profile explicitly instead of claiming a universal PKI.
 
-[`providers/cloudflare/`](providers/cloudflare/) contains the TypeScript Worker and operator controllers for:
+### Task identity is not trajectory identity
 
-- bounded HTTPS Fetch;
-- bounded Browser Rendering snapshots;
-- private R2 Artifacts;
-- pending and committed request state;
-- generation-fenced leases;
-- replay and idempotency conflict detection;
-- release, rollback, lifecycle and deferred garbage collection.
+A Host Task may contain multiple provider/resource/message trajectories. Their native identities (`dispatchId`, `transferId`, `messageId`, `migrationId`) remain separate so one uncertain trajectory does not silently redefine another.
 
-Cloudflare remains authoritative for Worker execution, R2 state, provider versions and provider Receipts. HP5 proved that this provider subtree can pass its full CI as an independent Git root while the World Python package/wheel passes with the subtree absent. Co-location is therefore an operational convenience, not World ownership; the provider implementation is owner-separated and extractable.
+## What World deliberately does not persist
 
-### Network condition tools
+Not every observation or Agent choice deserves durable World state.
 
-[`modules/network-observation/`](modules/network-observation/) retains workstation-specific WireGuard and Surfshark tools. They report or explicitly alter operator-controlled network conditions. They do not automatically select routes or grant an Agent network mutation authority.
+Before owner admission, discovery, capability observation, path comparison, and Agent selection are normally recomputable planning state. If the controller disappears, observe current owner reality again and let the Agent choose again.
 
-## Core rules
+```text
+Observe → Query → Select       recomputable
+                 │
+                 ▼
+      owner admits exact consequence
+                 │
+          durability fence
+                 ▼
+Prepared / Bound / Dispatched
+                 │
+          Receipt | UNKNOWN
+                 │
+              Reconcile
+```
 
-1. **Native owners keep authority.** Source Worlds own egress/departure facts, destination Worlds own ingress/materialization facts, and Host owns Task/uncertainty continuity.
-2. **Provider owns provider truth.** World maps exact provider identities and evidence; it does not reinterpret a successful provider response as Task completion.
-3. **Reconcile before redispatch.** A lost response creates UNKNOWN. Recovery queries the original provider request before another external action is considered.
-4. **Conditions are explicit.** A Dispatch binds the capability condition on which it relies. Drift fences the old binding.
-5. **Telemetry is not evidence.** Trace headers help operations but do not replace durable request identity, Receipt, Artifact digest or Host CAS.
-6. **Trust is explicit.** Structural receipts do not magically authenticate a source across an untrusted relay.
-7. **Task identity is not trajectory identity.** Trajectories retain native semantic identity (`transferId` / `messageId` / `migrationId` / `dispatchId`). Resource, Message and provider paths use per-ID maps after real multi-trajectory failures; Entity Migration remains one-per-Task until such a failure exists.
-8. **Share views before sharing ownership.** W-X3 proved that a narrow shared projection can preserve provider-native evidence without transferring ownership; HP4 then showed that such a projection still has to prove Agent decision value before becoming a default product surface. Physical owners revalidate before effect.
-9. **Keep time sources separate.** Provider occurrence/completion time, World observation availability and Host admission time are different owner-native facts. Availability is not truth, currentness, authority or completion.
-10. **Persist consequences, not every choice.** Owner observations, effect-path queries and pre-admission Agent selections may be recomputed from current reality. Durable World continuity begins at owner admission of an exact consequence-capable operation; after that fence, Receipt/UNKNOWN/reconciliation must survive controller replacement.
-11. **Move lineage by owner, not by abstraction.** Host semantic Task identity, Runtime execution/input/Artifact lineage and World external-effect state remain separate through execution migration. A new execution target re-observes pre-admission World reality; already-admitted consequences retain exact identity and reconcile before retry.
+This is why World does not have a generic CapabilityManager, selection journal, Presence database, relationship manager, or universal commitment registry.
+
+## Research that was deliberately not promoted
+
+World's research corpus is much larger than the current product. Closed W4/W5/Sense–Connect–Act and W-X/HP studies established useful laws about path evidence, Presence, discovery, connection, interaction, temporal provenance, execution mobility, and deletion pressure. Several plausible shared APIs were removed after they failed to improve fresh-Agent decisions or could remain owner-local.
+
+Those results remain reproducible evidence under [`docs/research-closeouts.md`](docs/research-closeouts.md), [`docs/high-pressure-survival-hp6-hp8.md`](docs/high-pressure-survival-hp6-hp8.md), and `docs/archive/research/`. Their phase numbering is not required to understand or use the current product.
+
+A new shared World abstraction requires a named current workload, a reproduced failure, and evidence that direct Host + owner/provider composition cannot hold the residual responsibility cleanly.
+
+## Start according to your job
+
+| Need | Read |
+| --- | --- |
+| understand why World exists and where truth stays | this README |
+| inspect current release capability and limits | [`STATUS.md`](STATUS.md) |
+| understand exact ownership and execution flow | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
+| inspect which source owns each current fact | [`docs/authority.md`](docs/authority.md) |
+| inspect request/trajectory identities and JSON contracts | [`docs/contracts.md`](docs/contracts.md) |
+| operate, deploy, diagnose, GC or recover | [`docs/operations.md`](docs/operations.md) |
+| determine what evidence actually proves | [`docs/verification.md`](docs/verification.md) |
+| understand why the retained boundary is narrow | [`docs/retained-boundaries.md`](docs/retained-boundaries.md) |
+| inspect closed research and reopening conditions | [`docs/research-closeouts.md`](docs/research-closeouts.md) |
 
 ## Development
 
@@ -177,10 +232,14 @@ Repository-only health:
 uv run ordivon-world-doctor --repo . --offline
 ```
 
-Live machine and provider health:
+Live machine/provider health must be queried from the owning systems. See [`docs/operations.md`](docs/operations.md).
 
-```bash
-uv run ordivon-world-doctor --repo /root/projects/ordivon-world
-```
+## Security and data
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) before changing an external action, request identity, Receipt, Artifact, retention or recovery contract.
+World crosses external authority boundaries. External actions therefore require exact identity, current condition binding, explicit trust assumptions, durable uncertainty, and owner-native evidence. Telemetry correlation is not evidence. A route being reachable is not permission to use it. A successful transport is not semantic acceptance.
+
+Read [`SECURITY.md`](SECURITY.md) and [`docs/data-and-privacy.md`](docs/data-and-privacy.md) before exposing adapters or transporting sensitive material.
+
+## License
+
+Apache License 2.0. See [`LICENSE`](LICENSE).

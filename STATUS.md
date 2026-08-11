@@ -4,91 +4,100 @@
 
 Repository package version: `0.4.0`.
 
-The active production boundary consists of the Host-facing Cloudflare exact-binding/recovery adapter, temporally explicit provider observations, explicit Browser bundle integrity, production Resource Transfer, Message Delivery and Entity Migration contracts, and bounded owner inspection. The co-located Cloudflare Worker/operations subtree is provider-owned and independently extractable; World doctor consumes owner-native provider projections. Foreign-egress/effect-path laws remain historical research evidence after HP8 removed their research-only executable APIs/contracts; there is no independent World service, global Observation ontology, capability registry or provider router.
+Ordivon World is an operational owner-preserving adapter/trajectory boundary for the currently admitted provider and cross-World workloads. It is not a standalone World service or a global source of external truth.
 
-## Capability status
+The active production surface consists of:
 
-| Capability | State | Evidence |
-|---|---|---|
-| HP6–HP8 final survival | closed; Minimal World landed candidate | closed research moved behind one 9/9 compact retrieval index; 96 mixed-chaos invocations passed before and after contraction; research-only Foreign Egress / Effect Path modules/tests/3 contracts removed; product suite now 121 tests and 25 packaged schemas |
-| HP5 Provider / Verification Court | closed candidate; owner boundary contracted | Browser bundle deletion accepted 3 digest-valid semantic corruptions and was retained as an explicit module; exact adapter binding rejected schema-valid wrong-request Receipts; trace-on/off recovery was identical so new Trace Context authoring/propagation was removed; Doctor now consumes provider-native capability/lifecycle projections; standalone Provider full CI and World-without-provider 139-test/wheel gates both passed; root facade 17→14 |
-| HP0–HP4 high-pressure survival | closed candidate; contraction + targeted clarity fixes | default Python facade 90→17; packaged schemas 29→28; five inactive W5 falsifier scripts removed; direct-Host kill test reproduced duplicate consequences without UNKNOWN/reconcile; Resource/Message wire genericization passed tests but grew 364→377 lines and was reverted; 30 fresh Harness/DeepSeek evaluation Runs demoted path projections and forced `actionAuthority` plus explicit no-redispatch recovery hints |
-| Cloudflare Fetch provider | operational | provider tests, deployed health and Receipt replay |
-| Cloudflare Browser Snapshot provider | operational | Worker `ba64a576-1986-4967-96d6-3d2390f7afc6`, release-controller dual smoke and deployed capability output |
-| Browser Host continuity and bundle verification | live verified | one Browser POST, injected response loss, fresh-Host reconciliation, three verified Artifacts and no Task completion claim |
-| private R2 Artifact reads | operational | provider and client digest, media-type, byte-count and download-contract tests |
-| deterministic Host Dispatch binding | verified | Python adapter, exact identity and Host integration tests |
-| response-loss fresh-Host recovery | verified | one provider POST, fresh Host Receipt lookup and preserved Task state |
-| Host schema-v5 namespaced World continuity | verified against Host `95cd547` | Provider/Resource/Message/Entity journals read the opaque `world` namespace; a Provider UNKNOWN survived a later Host `task.context-checkpointed`, a fresh World controller recovered the exact prepared dispatch and reconciled the original request with POST count remaining one |
-| bounded World owner inspection | verified product boundary; World-local, read-only | `WorldTaskInspector` revision-fences one Task through Host's schema-blind namespace snapshot and combines four owner-local projections without knowing typed journal storage fields or returning payload/provenance/continuity bodies; retained Provider observations now expose separate provider `started_at` / `completed_at` and World `availableAt` time sources while still granting neither action authority nor external currentness |
-| W-X2 capability-reference handoff | verified cross-Workspace consumer | a separate Runtime consumer received only capability/observation/path digests; Workstation revalidated the exact current observation/path/destination before running the keyless OpenAI GET, which returned HTTP 401. A stale observation digest was rejected before activation. Capability reference transfer did not transfer VPN credentials or activation authority. |
-| P2 observation availability | verified narrow temporal provenance; no generic Observation ontology | A fresh non-replayed Cloudflare Fetch completed at `2026-08-10T07:04:39.956Z`; injected response loss plus a bounded delay meant the complete observation first became available to World at `07:04:51.422995Z`, with Host admission at `07:04:51.455Z`. Prior World/Agent projections retained only provider receipt/digests and could not recover local availability without raw Host revision access. `WorldObservation.availableAt` now records first World availability, `WorldTaskInspector.temporalEvidence` projects provider and World time sources separately, legacy observations remain readable, and repeated reconcile preserves the first retained availability. Availability does not imply truth, freshness, external currentness, action authority or Host completion. |
-| W1 cross-World evidence program | completed | P0–P5 proved Resource/Entity/Message durability, UNKNOWN recovery, Link rebinding, federation composition, untrusted-relay provenance and independent concurrency; W2 promoted Resource, Message and Entity Migration only after independent production integration |
-| W2 Resource Transfer | production contract, cross-repository verified | Game retained/replayed source egress → World per-transfer durable Host journal/wire → Security transfer-specific ingress; crash-window `not_committed`, multi-transfer Task addressing and legacy flat-state recovery verified |
-| W2 Message Delivery | production contract, cross-repository verified | Game visible retained Fact issuance → World per-message Host journal/wire → Security management-classified durable inbox; both UNKNOWN branches, live-commit race, broadcast semantics and legacy flat-state recovery verified |
-| W2 Message endpoint/Link falsifier | first-class WorldLink not forced | pinned destination identity detected endpoint replacement; stable identity survived PID/socket rematerialization; signed discovery handled endpoint relocation without Link identity/lifecycle |
-| W2 Entity Migration | production contract, cross-repository and real-KVM verified | Game retained verified extraction and fresh-process departure reread → World/Host exact continuity journal + wire → Security real KVM carrier; fresh Host retained the receipt with one destination exchange, no blind redispatch, no NIC and zero-residual cleanup under the `trusted-local-owner-originated-caller` profile |
-| W5-A Agent Embodiment | research closeout; A0–A4-P1 verified, no production contract | A0–A3 prove owner-separated, action-scoped subject × cognition × Body occurrence with live Harness cognition and native Game effects. A4 proves that current Presence is scope-bound owner observation rather than durable history: the same Game Subject/Body moved `PRESENT → UNKNOWN → PRESENT` across scoped admissions, Security observation failure degraded to `UNKNOWN`, clean Body destruction produced `absent-through-body`, and the same Subject was simultaneously present through Game while absent through Security Body A. Query-shaped current evidence was sufficient; no global Presence registry was justified |
-| W5-B Agent Presence | research closeout; B0–B2 verified, no production Presence contract | B0 proves current relation evidence resolves an Agent body-choice that history alone cannot; B1 proves Security as a second bounded subject-active destination while retaining Host-native Body truth; B2 shows the cross-domain minimum is a six-role proof interface (`subjectRef`, `ownerId`, `bodyRef`, `scopeDigest`, `admissionDigest`, `occurrenceDigest`) rather than a union of Game cognition/Planning and Security migration/generation semantics. No Presence registry, Embodiment manager or shared production occurrence schema is justified before a third materially different consumer |
-| W5-C Discovery & Connection | research closeout; C0–C1 verified, no World connection manager | C0 proves discovery, reachability, relationship/session and authority are orthogonal owner-native dimensions. C1 proves their Agent-facing decision value: historical discovery plus authority yields `rediscover-or-defer`, fresh reachability plus authority yields `contact`, and fresh reachability without issuance authority yields `not-authorized`; only the authorized case produced one exact Message POST while the no-authority case was rejected before transport. No WorldLink, global Agent/discovery/reachability registry or universal relationship manager is justified without a real protocol-native session workload |
-| W5-D Interaction | research closeout; D0–D1 verified, no generic interaction manager | D0 shows typed semantic families share a lower causal/recovery skeleton while Resource, Message, Entity and direct provider effects retain different source/destination meanings. D1 composes Message + Resource on one durable Host Task: Message commits once, Resource becomes UNKNOWN, a fresh Agent selects reconciliation, exact `NOT_COMMITTED` releases only the Resource for retry, and the chain converges forward across fresh Host processes without rollback, authority promotion, global transaction state or Message redelivery. Fresh-Agent discovery of retained typed commitments is provided by `WorldTaskInspector`; W5-E tests where that durability should begin. |
-| W5-E External Commitment Continuity | P3 research closeout; live expiry/re-establishment verified, no generic commitment layer | The historical W-X2 Surfpath reference remained intact but was rejected by its owner at age 14,105.8s versus a 180s horizon before the child executable ran. Fresh `jp-tok/openvpn-udp` rediscovery produced new observation/path/capability identities; the Agent explicitly selected a current qualified path, owner revalidation succeeded and a keyless OpenAI GET returned HTTP 401. P3 therefore keeps observation/query/selection as recomputable planning and starts durable continuity only at owner admission of an exact consequence-capable operation. Existing typed Provider/Resource/Message/Entity journals plus `WorldTaskInspector` already cover that boundary; no CapabilityManager, selection journal or global commitment registry is justified. |
-| W-X4 Execution Mobility | P4 research closeout; Linux→Windows lineage + cross-controller UNKNOWN reconciliation verified; Runtime immutable-input gap remains | One Host-correlated objective ran first under Runtime `local_linux_runner_v1`, then `windows_native_launcher_v1` with limited Windows authority. Both independently verified the same canonical README digest while Windows Runtime evidence froze the upstream Linux Job/Artifact identities. A separate Cloudflare effect was then admitted in one fresh Runtime controller, committed once and forced to UNKNOWN by response loss; another fresh workspace restored the exact dispatch and reconciled the original provider request with 0 POSTs while preserving Task state/frontier. No World ExecutionMigrationManager, execution-world registry or filesystem abstraction was forced. Current `workspace.execBound` cannot target `windows_native` because immutable inputs require Runtime `contained_local` while Windows-native currently supports `trusted_local`; that owner-side substrate requirement is tracked separately. |
-| Sense / Connect / Act Sensor P0 | research evidence; borrowed Sensor verified, no production Sensor manager | Current World already has target-first observations, typed transports and mature effect/reconciliation families, but lacks an Agent-facing unknown-environment discovery substrate. A live borrowed Cloudflare Sensor observed the public VPN Gate catalog when direct ambient and `native-a` observations failed, saw a dynamic 97→99 candidate population, and extracted advertised OpenVPN TCP/443 Connector affordances without connecting. Temporary Worker/DNS/Route resources were deleted and exact GET verification returned 404. |
-| Sense / Connect / Act Connector P0 | research passed; staged borrowed relation verified, full borrowed egress not proven | VPN Gate separated advertised/reachable/TLS/peer/tunnel stages; Snowflake through Workstation Direct Route A physically formed volunteer-peer WebRTC connections, completed a Tor relay handshake and encrypted directory relation, but degraded at consensus loading and never reached 100% bootstrap in 180s/360s windows. A rootless UID951/capability-zero obfs4 control reached only PT initialization while all seven bundled bridge sockets remained SYN-SENT. Connector state is therefore staged, path-bound and degradable rather than boolean; no Connector manager or automatic route selection is justified. |
-| Sense / Connect / Act Connector P1 + Effector P0 | research boundary closed; request-scoped positive effect verified, public-volunteer stable egress not proven | Snowflake Route A/B remained below usable SOCKS service; OpenVPN reached verified TLS/peer initiation without `PUSH_REPLY`; portable SSTP/PPP proved PAP-authenticated SSTP and one real IPCP IPv4 assignment (`10.240.138.203` ↔ `1.0.0.1`) but did not prove stable forwarding and did not reproduce assignment reliably. A dynamic VPN Gate snapshot changed to 98 rows / 96 returned candidates with 90 new `(host, IP)` pairs relative to an earlier 64-candidate view. A separate account-authorized fixed Cloudflare request-scoped Connector completed one `https://example.com/` Fetch (HTTP 200, 559 bytes, response digest retained), proving Connect→bounded Effect→Observation without a host-wide tunnel. P1 also exposed Surfshark half-dead capture as a shared Workstation failure domain; user VPN state was restored through Surfshark's own `connect_button`, and both ambient HTTPS and `native-a` were re-observed usable. No Connector manager, automatic relay selection or route mutation is justified. |
-| W2 KVM migration recovery | current Security recovery law physically verified | predecessor ownership remains provenance; independently re-observed completion may repair publication; dead body-free staged/TPM-only preparation may be compensated to zero residuals and released `not_committed`; ambiguous QEMU launch evidence remains UNKNOWN and cannot authorize retry |
-| W2 Host trajectory addressing | evidence-driven, intentionally asymmetric | Resource/Message/provider use per-ID maps after reproduced multi-trajectory failures; Entity Migration retains one `migrationId` per Task because no multi-migration workload has forced a map |
-| live Host→Cloudflare W1 acceptance | verified locally | clean-revision private receipt under `target/acceptance/` |
-| cross-language JSON Schema | verified | twenty-five packaged Draft 2020-12 production/compatibility Schemas; provider fixtures plus Game-produced Resource, Message and Entity departure authority documents validated across TypeScript/Python |
-| W3C trace propagation | implemented as telemetry | not used as durable evidence or authority |
-| World doctor | operational owner-native aggregator | repository-only and live machine/provider modes; capability/lifecycle truth comes from installed provider projections rather than World-owned Cloudflare control logic |
-| Cloudflare GC source contract | operational | R2 List Objects uses `per_page` and cursor with focused tests |
-| installed GC controller | operational | source/installed digests match; oneshot exits with `Result=success` and status 0 |
-| Network condition tools | operational, operator-only | static, key-pair, namespace, scheduler and live doctor checks |
-| GitHub CI, CodeQL and dependency automation | configured | remote execution begins after the local commits are pushed |
+- direct Host-facing Cloudflare Fetch/Browser exact binding and response-loss reconciliation;
+- Browser screenshot/rendered-HTML/Manifest bundle verification;
+- temporally explicit provider observations with separate provider and World availability coordinates;
+- production Resource Transfer, Message Delivery, and Entity Migration contracts;
+- bounded read-only owner inspection through `WorldTaskInspector`;
+- owner-native doctor aggregation and operator-scoped network condition tools.
 
-## P0–P1 closeout
+The co-located Cloudflare Worker/operations subtree remains provider-owned and independently extractable. Foreign-egress/effect-path projection APIs and other research-only shared layers were removed from the product after high-pressure deletion tests failed to justify them as default Agent surfaces.
 
-P0–P1 is closed for a source revision only when the following evidence is regenerated for that exact clean revision:
+## Current capability matrix
 
-1. the locked portable gate passes, including Python, Worker, provider-controller, network, dependency-audit and wheel checks;
-2. Cloudflare GC succeeds through the corrected API contract;
-3. `ordivon-world-doctor` reports no unresolved repository, installation, provider, lifecycle, GC or network fault on the target machine;
-4. a live W1 receipt proves response loss, fresh-Host recovery, exactly one provider POST, Artifact verification and no Task completion claim;
-5. source and installed controller digests agree;
-6. the source repository remains clean after private receipts are written to ignored storage.
+| Capability | State | What it proves |
+| --- | --- | --- |
+| Cloudflare Fetch / Browser adapter | operational and live-verified | exact provider binding, one-request recovery, provider Receipt/Artifact mapping; not Task completion |
+| Browser Artifact bundle | retained production module | cross-Artifact/Receipt/Manifest integrity; not page truth or Task satisfaction |
+| Resource Transfer | production contract | exact source-egress → destination-ingress trajectory with UNKNOWN recovery; not global resource ownership |
+| Message Delivery | production contract | exact issuance/delivery trajectory with UNKNOWN recovery; not destination knowledge or belief |
+| Entity Migration | production contract | source departure + destination carrier materialization/recovery under the accepted trust profile; not current global Presence |
+| temporal provider observation | verified narrow provenance | provider start/completion and World `availableAt` remain separate owner-native times; no generic temporal ontology |
+| WorldTaskInspector | verified read-only projection | revision-coherent retained commitment inspection; no action authority or external currentness |
+| World doctor | operational | aggregates owner-native repository/machine/provider health; does not become provider control-plane authority |
+| network condition tools | operational, operator-scoped | observe or explicitly alter operator-controlled paths; no automatic routing authority |
 
-The current local `main` follows this closeout path. Remote CI execution and public publication are separate release actions and are not implied until the commits are pushed.
+## Stable laws retained from research
 
-## P2 Browser continuity closeout
+The large W/HP/Sense–Connect–Act research programme has been contracted into a smaller set of current laws:
 
-P2 extends the same direct Host-to-Cloudflare boundary to Browser Snapshot without introducing a provider broker or World runtime. All six acceptance conditions are closed:
+- native providers and domains retain occurrence/current-state authority;
+- historical truth and currentness are distinct;
+- response loss is `UNKNOWN` until the original external identity is reconciled;
+- pre-admission discovery/selection is generally recomputable; durable World continuity begins at exact consequence admission;
+- transport delivery does not imply destination cognition;
+- source and destination semantics remain different even when trajectory recovery skeletons resemble one another;
+- provider time, World availability time, and Host admission time are not interchangeable;
+- structural provenance is not a universal authentication mechanism;
+- new execution contexts do not authorize replay of old admitted consequences;
+- a narrow shared projection still has to prove decision value before becoming a default product surface.
 
-1. Browser Manifest is a shared TypeScript/Python machine contract;
-2. succeeded Browser Receipts require screenshot, rendered HTML and primary Manifest Artifacts from one request generation;
-3. Provider rejects non-PNG screenshot output before committing Browser Artifacts;
-4. fresh Host recovery queries the original Browser request and performs no second POST;
-5. Host verifies the three-Artifact bundle while preserving Task state and Ready Frontier;
-6. the committed Worker candidate passed stable zero-traffic admission, Fetch and Browser smoke, promotion and live Browser response-loss acceptance.
-
-The promoted Worker is `ba64a576-1986-4967-96d6-3d2390f7afc6`, with Worker-input digest prefix `854721962bd3f31a`. Private release receipt `release-20260804T085441Z.json` has SHA-256 `16d7e8766646729244abd99a75eaffd49cb83eec8d0e0aa6ea78545d3066bf7c`. The live Browser receipt is bound to source revision `deebb30216b7a831e058a6d3577e1926e8dbfa87`, has SHA-256 `6bab1e39172e390cf9cdff2444da7fd390502064a346f015189f0fc553e22356`, and proves 20 of 20 checks including one first-execution POST, committed-response loss, Host UNKNOWN, fresh-Host recovery, three Artifact verifications and no Task completion claim.
-
-Provider capability negotiation and Effect rebinding remain conditional because P1/P2 have not demonstrated a semantically equivalent replacement-provider need. Local network observations remain outside required remote Cloudflare Dispatch state because no observed failure justifies that coupling.
-
-## HP-series closeout
-
-HP0–HP8 are closed for the current evidence. World has no HP9 foundation backlog. Reopening a deleted/rejected surface requires a named current workload and reproduced owner-bound failure. Open Workstation/Host/Harness/Runtime requirements remain their owners' tasks rather than unfinished World stages.
+Exact experiments, receipts, counterexamples, and reopening conditions remain in [`docs/research-closeouts.md`](docs/research-closeouts.md), [`docs/high-pressure-survival-hp6-hp8.md`](docs/high-pressure-survival-hp6-hp8.md), and the archived research tree.
 
 ## Known limits
 
-- The production remote-provider adapter set contains only Cloudflare. HP8 removed the research-only Foreign Egress / Effect Path executable APIs and contracts after HP4 failed to prove a fresh-Agent decision advantage; historical evidence remains in the research archive.
-- Missing provider Receipt state remains UNKNOWN; automatic redispatch is forbidden.
-- New World dispatches no longer author or propagate Trace Context. Exact dispatch/provider request identities remain current correlation and recovery anchors; optional legacy `traceContext` is readable only for retained-state compatibility.
-- Browser capability is a bounded snapshot, not arbitrary Computer Use.
-- Network tools do not grant Agents route, VPN or key-management authority.
-- World does not yet implement RAG, SaaS, database, webhook, MQTT, OPC UA or Sandbox adapters.
-- Entity Migration materializes a continuity carrier; it still does not prove Guest-side subject activation or current Presence. W5-A A3 proves bounded action-scoped subject/cognition activation through a Game Actor; A4-P0 additionally proves that historical embodiment/materialization evidence can outlive both subject-binding currentness and physical Body currentness, so `materialized` or `active Actor` must not be read as a global Presence claim.
-- No package-index publication or production support guarantee exists.
+- World has no independent daemon or database; durable typed trajectory state is retained through Host extension state and owner/provider systems.
+- Current production Resource/Message/Entity integrations use explicit trust profiles and do not claim universal source authentication through an untrusted relay.
+- Entity Migration remains one migration per Host Task in `0.4.0`; no real multi-migration failure has justified a map yet.
+- `WorldTaskInspector` is World-local and does not establish a generic cross-domain Observation or Owner registry.
+- Historical receipts cannot establish current Presence, reachability, capability, or provider state without applicable owner-native re-observation.
+- Network observation tools do not automatically choose or activate routes for an Agent.
+- World does not own Runtime execution migration or immutable-input transport. Physical execution/input gaps remain Runtime/Workstation responsibilities.
+- Provider success remains evidence for later Host/domain verification, not automatic completion.
 
-See [`docs/verification.md`](docs/verification.md).
+## Live state is owner-native
+
+This page does not own current deployment health, provider versions, R2 state, installed controller digests, network state, active Host Tasks, or current external Presence. Query the systems that own those facts.
+
+Repository-only health:
+
+```bash
+uv run ordivon-world-doctor --repo . --offline
+```
+
+Live machine/provider health:
+
+```bash
+uv run ordivon-world-doctor --repo /root/projects/ordivon-world
+```
+
+Cloudflare health, capability, Receipt, Artifact, deployment, and lifecycle facts remain provider-native. Host Task/Dispatch/Verification facts remain Host-native. Local network facts remain operating-system/operator-native.
+
+## Verification
+
+For repository changes:
+
+```bash
+uv sync --locked
+cd providers/cloudflare && pnpm install --frozen-lockfile && cd ../..
+scripts/local-acceptance
+```
+
+External-effect or provider changes additionally require the live acceptance/doctor gates documented in [`docs/verification.md`](docs/verification.md) and [`docs/operations.md`](docs/operations.md). CI cannot claim live provider or machine health.
+
+## Reopen conditions
+
+Reopen the active World boundary when a current workload demonstrates one of the following:
+
+- direct Host + provider/domain composition cannot preserve an external consequence correctly;
+- a third materially different consumer forces a shared relation/Presence/interaction contract that current typed owner paths cannot express;
+- independent source authentication is required across an untrusted relay;
+- current trajectory addressing fails under real multi-trajectory use;
+- Agent decisions repeatedly fail because a removed shared projection provides information that owner-native evidence cannot supply compactly;
+- a provider/domain ownership change invalidates the current authority map.
+
+Research history alone is not a reopening condition.
