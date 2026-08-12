@@ -7,7 +7,6 @@ from ordivon_world.doctor import (
     CommandResult,
     contract_check,
     lifecycle_check,
-    network_check,
     overall_status,
     repository_check,
     systemd_properties,
@@ -62,21 +61,6 @@ class DoctorTests(unittest.TestCase):
         value = systemd_properties("ordivon-edge-gc.service", runner)
         self.assertEqual(value["Result"], "success")
         self.assertEqual(value["ActiveState"], "inactive")
-
-    def test_network_check_preserves_structured_report_on_nonzero_exit(self) -> None:
-        def runner(command: list[str]) -> CommandResult:
-            self.assertEqual(command[-1], "doctor")
-            return CommandResult(
-                1,
-                '{"config_valid":false,"key_pair_consistent":true,"missing_commands":[]}\n',
-                "profile needs attention\n",
-            )
-
-        result = network_check(Path("/repo"), runner)
-        self.assertEqual(result["status"], "attention")
-        self.assertEqual(result["exitCode"], 1)
-        self.assertFalse(result["report"]["config_valid"])
-        self.assertEqual(result["stderr"], "profile needs attention")
 
     def test_lifecycle_check_preserves_provider_projection_on_nonzero_exit(self) -> None:
         def runner(command: list[str]) -> CommandResult:

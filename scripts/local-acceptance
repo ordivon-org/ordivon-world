@@ -25,8 +25,6 @@ UVX=${UVX:-$(command -v uvx)}
   pnpm run ci
 )
 (
-  cd modules/network-observation
-  scripts/check-vpn-controller
 )
 
 "$UVX" pip-audit -r requirements-audit.txt

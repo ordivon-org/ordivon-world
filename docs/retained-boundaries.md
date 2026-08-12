@@ -85,15 +85,9 @@ Cloudflare remains authoritative for provider state. World maps those facts but 
 - preserve Task state and Ready Frontier while appending opaque extension facts;
 - keep provider success separate from Host Verification and completion.
 
-## Retained network responsibilities
+## Workstation-owned network responsibilities
 
-- explicit `ordivon-vpn` and key-pair operations;
-- isolated WireGuard namespace topology;
-- Surfshark before/after measurement;
-- profile validation, discovery and bounded ranking;
-- focused secret, key, namespace and scheduler tests.
-
-Network mutation remains operator-only. HP0 removed the previously reserved `network-observation` public Schema because no current producer or independent consumer used it; owner-local `ordivon-vpn`/Surfshark reports remain operational evidence rather than a speculative shared contract. Local VPN or route observations are not required state for remote Cloudflare Fetch or Browser execution because no measured failure shows that local path identity changes the semantics of the already-bound remote operation.
+Local Surfshark/WireGuard mechanics are no longer a World responsibility. Workstation owns provider identity, transport discovery, explicit path selection, isolated namespaces, key/profile consistency, transactional key materialization, and cleanup. World may bind a selected owner-projected capability or consequence when required, but it does not install, operate, or doctor the local VPN substrate.
 
 
 HP5 also re-tested two retained helpers. `BrowserArtifactBundle` survived because deleting it let three cross-object semantic corruptions pass despite valid individual Artifact digests. W3C Trace Context did not survive current production pressure: trace-on and trace-off had identical request identity and recovery, and the provider did not consume the headers, so new dispatches no longer author/propagate it while legacy retained values remain readable.

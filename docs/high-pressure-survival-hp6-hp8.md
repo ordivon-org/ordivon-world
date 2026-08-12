@@ -106,8 +106,8 @@ Minimality is owner-correctness plus maintenance cost, not the smallest file cou
 
 - `TraceContext` remains a tiny legacy decode/round-trip mechanic because retained pre-HP5 dispatches may contain it; new work does not author or propagate it.
 - `providers/cloudflare/` remains provider-owned and extractable but currently co-located because HP5 found no operational reason to pay a repository split cost.
-- `modules/network-observation` / `ordivon-vpn` remains until Workstation completes the already-open substitution experiment for its isolated WireGuard namespace/key/cleanup invariants.
-- the older Host pin remains until Host resolves the 9→34 dependency-graph packaging pressure; World does not vendor or copy Host.
+- the former `modules/network-observation` / `ordivon-vpn` handoff is complete: Workstation now proves isolated namespace, key/profile authority, transactional key materialization, and cleanup invariants, so World no longer retains that local actuator.
+- Host resolved the 9→34 dependency-graph packaging pressure by separating the MCP server SDK from Host core dependencies; World can consume the narrow base distribution without vendoring or copying Host.
 - Windows immutable external-input portability remains Runtime-owned.
 - the Harness no-Tool correction failure remains Harness-owned.
 

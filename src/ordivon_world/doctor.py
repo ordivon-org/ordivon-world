@@ -137,10 +137,6 @@ def installed_tools_check(repository: Path) -> dict[str, Any]:
             repository / "providers/cloudflare/scripts/configure_r2_lifecycle.py",
             Path("/usr/local/sbin/ordivon-edge-lifecycle"),
         ),
-        (
-            repository / "modules/network-observation/scripts/ordivon-vpn",
-            Path("/usr/local/sbin/ordivon-vpn"),
-        ),
     )
     items: list[dict[str, Any]] = []
     current = True
@@ -294,44 +290,6 @@ def lifecycle_check(runner: CommandRunner) -> dict[str, Any]:
     )
 
 
-def network_check(repository: Path, runner: CommandRunner) -> dict[str, Any]:
-    installed = Path("/usr/local/sbin/ordivon-vpn")
-    source = repository / "modules/network-observation/scripts/ordivon-vpn"
-    executable = installed if installed.is_file() else source
-    result = runner([str(executable), "doctor"])
-    try:
-        value = json.loads(result.stdout)
-    except json.JSONDecodeError as error:
-        return check(
-            "network-observation",
-            "attention",
-            exitCode=result.returncode,
-            error=f"ordivon-vpn doctor returned invalid JSON: {error}",
-            stderr=result.stderr.strip() or None,
-        )
-    if not isinstance(value, dict):
-        return check(
-            "network-observation",
-            "attention",
-            exitCode=result.returncode,
-            error="ordivon-vpn doctor returned a non-object",
-            stderr=result.stderr.strip() or None,
-        )
-    healthy = (
-        result.returncode == 0
-        and value.get("config_valid") is True
-        and value.get("key_pair_consistent") is True
-        and value.get("missing_commands") == []
-    )
-    return check(
-        "network-observation",
-        "ok" if healthy else "attention",
-        exitCode=result.returncode,
-        report=value,
-        stderr=result.stderr.strip() or None,
-    )
-
-
 def collect_report(
     repository: Path,
     *,
@@ -352,7 +310,6 @@ def collect_report(
                 check("cloudflare-capabilities", "skipped", reason="offline"),
                 check("cloudflare-r2-lifecycle", "skipped", reason="offline"),
                 check("cloudflare-gc", "skipped", reason="offline"),
-                check("network-observation", "skipped", reason="offline"),
             ]
         )
     else:
@@ -364,7 +321,6 @@ def collect_report(
                 capability_check(runner),
                 lifecycle_check(runner),
                 gc_check(runner),
-                network_check(repository, runner),
             ]
         )
     return {
@@ -380,7 +336,7 @@ def collect_report(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ordivon-world-doctor",
-        description="Inspect repository, provider, retention, GC and network operational truth.",
+        description="Inspect repository, provider, retention and GC operational truth.",
     )
     parser.add_argument("--repo", default=str(DEFAULT_REPOSITORY))
     parser.add_argument("--offline", action="store_true")

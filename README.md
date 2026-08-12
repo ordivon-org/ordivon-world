@@ -137,7 +137,7 @@ The current package line is `0.4.0`. Its retained production boundary includes:
 - per-trajectory addressing where real multi-trajectory failures justified it;
 - `WorldTaskInspector`, a bounded read-only projection over retained World commitments that grants neither action authority nor external currentness;
 - owner-native World doctor aggregation;
-- operator-scoped network observation/condition tools.
+- Workstation-projected local network capabilities when an external World operation needs them; local Surfshark/WireGuard provider, key-materialization, namespace, route, discovery, and recovery mechanics remain Workstation-owned rather than a second World actuator.
 
 The Cloudflare Worker/operations subtree is co-located but provider-owned and independently extractable. World can pass its Python/wheel boundary with that subtree absent; the provider can pass its own CI independently.
 

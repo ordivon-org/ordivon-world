@@ -34,8 +34,6 @@ managed_paths:
   - providers/cloudflare/docs/reliability.md
   - providers/cloudflare/docs/security.md
   - providers/cloudflare/docs/release.md
-  - modules/network-observation/README.md
-  - modules/network-observation/docs/vpn-namespace.md
 enforcement: strict
 maintainers:
   - zycxfyh

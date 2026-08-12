@@ -35,8 +35,6 @@ This runs TypeScript type checking, provider state-machine tests, Python control
 ### 4. Network operator layer
 
 ```bash
-cd modules/network-observation
-scripts/check-vpn-controller
 ```
 
 This verifies command syntax, key/profile handling, namespace topology and profile scheduler behavior without exposing private keys.

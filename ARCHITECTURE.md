@@ -56,8 +56,6 @@ providers/cloudflare/  provider-owned, extractable implementation currently co-l
 
 HP5 copied that subtree into a separate Git root and its full provider CI remained green. In the inverse trial, removing the subtree entirely still left 139 World Python tests and the isolated wheel gate green. The directory is therefore not part of World semantic authority. World doctor consumes installed provider projections (`ordivon-edge capabilities` and `ordivon-edge-lifecycle --check`) rather than reading the Cloudflare control credential or rebuilding lifecycle policy itself.
 
-modules/network-observation/
-└── scripts/            private path observation and explicit VPN operations
 ```
 
 ## Dispatch flow
