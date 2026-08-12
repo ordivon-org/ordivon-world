@@ -10,7 +10,7 @@ import tempfile
 import zipfile
 
 EXPECTED_VERSION = "0.4.0"
-HOST_REVISION = "95cd5479e71281baed5a1d1c34cbfaadffe2a22f"
+HOST_REVISION = "d53d924f546403208792a364995d3740dafd2be0"
 EXPECTED_SCHEMA_NAMES = (
     "browser-manifest",
     "browser-request",
