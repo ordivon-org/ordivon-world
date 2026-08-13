@@ -18,11 +18,27 @@ AuthorityClass = Literal[
 SourceKind = Literal["aggregator", "index", "owner"]
 TermsStatus = Literal["allowed", "conditional", "unknown", "forbidden"]
 TransportStatus = Literal["available", "unavailable", "unknown"]
+AuthorityStatus = Literal["active", "missing", "expired", "revoked", "unknown"]
+EligibilityStatus = Literal["eligible", "ineligible", "unknown"]
+AcquisitionMode = Literal[
+    "agent-self-service",
+    "human-login",
+    "human-verification",
+    "human-payment",
+    "human-contract",
+    "operator-grant",
+]
 Decision = Literal[
     "owner-verification-required",
+    "acquisition-verification-required",
     "not-fit",
+    "not-eligible",
     "blocked-by-terms",
-    "authority-required",
+    "authority-required",  # legacy projection; new evaluations use acquisition decisions below
+    "acquire-now",
+    "human-action-required",
+    "prerequisite-acquisition-required",
+    "defer-acquisition",
     "transport-verification-required",
     "transport-unavailable",
     "consumable-now",
@@ -269,14 +285,180 @@ class TransportEvidence:
 
 
 @dataclass(frozen=True, slots=True)
+class AuthorityEvidence:
+    """Evidence that Ordivon actually possesses a resource-specific authority.
+
+    OwnerVerification states what the provider requires. This object states what
+    we currently possess. It never carries a secret value: ``authority_id`` is a
+    non-secret handle such as a secret reference, account id, or entitlement id.
+    """
+
+    resource_id: str
+    observed_at: str
+    authority_class: AuthorityClass
+    authority_id: str
+    status: AuthorityStatus
+    evidence_refs: tuple[str, ...]
+    expires_at: str | None = None
+
+    def __post_init__(self) -> None:
+        _nonempty("resource identity", self.resource_id)
+        _nonempty("authority identity", self.authority_id)
+        _utc(self.observed_at)
+        if self.authority_class not in _AUTHORITY_FRICTION:
+            raise ValueError("unsupported authority class")
+        if self.status not in {"active", "missing", "expired", "revoked", "unknown"}:
+            raise ValueError("unsupported authority status")
+        if self.expires_at is not None:
+            _utc(self.expires_at)
+        object.__setattr__(self, "evidence_refs", _tuple_strings("evidence refs", self.evidence_refs))
+        if not self.evidence_refs:
+            raise ValueError("authority evidence requires evidence refs")
+
+    def is_active(self, *, as_of: str, max_age_seconds: int) -> bool:
+        if max_age_seconds < 0:
+            raise ValueError("max authority-evidence age must be non-negative")
+        age = (_utc(as_of) - _utc(self.observed_at)).total_seconds()
+        if not 0 <= age <= max_age_seconds or self.status != "active":
+            return False
+        return self.expires_at is None or _utc(self.expires_at) > _utc(as_of)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schemaVersion": 1,
+            "kind": "ordivon.world.resource-authority-evidence",
+            "resourceId": self.resource_id,
+            "observedAt": self.observed_at,
+            "authorityClass": self.authority_class,
+            "authorityId": self.authority_id,
+            "status": self.status,
+            "expiresAt": self.expires_at,
+            "evidenceRefs": list(self.evidence_refs),
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class AcquisitionAssessment:
+    """Current estimate of whether acquiring missing authority is worth doing.
+
+    Account/key/student/payment friction is modeled as cost, never as moral veto.
+    Values are normalized so the assumptions remain inspectable and falsifiable.
+    """
+
+    resource_id: str
+    observed_at: str
+    eligibility: EligibilityStatus
+    acquisition_mode: AcquisitionMode
+    expected_benefit: float
+    option_value: float
+    acquisition_cost: float
+    maintenance_cost: float
+    payment_exposure: float
+    lock_in_cost: float
+    expiry_pressure: float
+    evidence_refs: tuple[str, ...]
+    human_actions: tuple[str, ...] = ()
+    prerequisite_resources: tuple[str, ...] = ()
+    nominal_value: str | None = None
+    expires_at: str | None = None
+
+    def __post_init__(self) -> None:
+        _nonempty("resource identity", self.resource_id)
+        _utc(self.observed_at)
+        if self.eligibility not in {"eligible", "ineligible", "unknown"}:
+            raise ValueError("unsupported acquisition eligibility")
+        if self.acquisition_mode not in {
+            "agent-self-service", "human-login", "human-verification", "human-payment",
+            "human-contract", "operator-grant",
+        }:
+            raise ValueError("unsupported acquisition mode")
+        for label in (
+            "expected_benefit", "option_value", "acquisition_cost", "maintenance_cost",
+            "payment_exposure", "lock_in_cost", "expiry_pressure",
+        ):
+            object.__setattr__(self, label, _unit_interval(label.replace("_", " "), getattr(self, label)))
+        object.__setattr__(self, "evidence_refs", _tuple_strings("evidence refs", self.evidence_refs))
+        object.__setattr__(self, "human_actions", _tuple_strings("human actions", self.human_actions))
+        object.__setattr__(self, "prerequisite_resources", _tuple_strings("prerequisite resources", self.prerequisite_resources))
+        if self.resource_id in set(self.prerequisite_resources):
+            raise ValueError("resource cannot depend on its own acquisition")
+        if not self.evidence_refs:
+            raise ValueError("acquisition assessments require evidence refs")
+        if self.expires_at is not None:
+            _utc(self.expires_at)
+        if self.nominal_value is not None:
+            _nonempty("nominal value", self.nominal_value)
+
+    @property
+    def requires_human_action(self) -> bool:
+        return self.acquisition_mode != "agent-self-service"
+
+    @property
+    def gross_opportunity_value(self) -> float:
+        return 0.65 * self.expected_benefit + 0.35 * self.option_value
+
+    @property
+    def burden(self) -> float:
+        return (
+            0.25 * self.acquisition_cost
+            + 0.20 * self.maintenance_cost
+            + 0.25 * self.payment_exposure
+            + 0.15 * self.lock_in_cost
+            + 0.15 * self.expiry_pressure
+        )
+
+    @property
+    def net_opportunity_value(self) -> float:
+        return self.gross_opportunity_value - self.burden
+
+    def is_current(self, *, as_of: str, max_age_seconds: int) -> bool:
+        if max_age_seconds < 0:
+            raise ValueError("max acquisition-assessment age must be non-negative")
+        age = (_utc(as_of) - _utc(self.observed_at)).total_seconds()
+        if not 0 <= age <= max_age_seconds:
+            return False
+        return self.expires_at is None or _utc(self.expires_at) > _utc(as_of)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schemaVersion": 1,
+            "kind": "ordivon.world.resource-acquisition-assessment",
+            "resourceId": self.resource_id,
+            "observedAt": self.observed_at,
+            "eligibility": self.eligibility,
+            "acquisitionMode": self.acquisition_mode,
+            "expectedBenefit": self.expected_benefit,
+            "optionValue": self.option_value,
+            "acquisitionCost": self.acquisition_cost,
+            "maintenanceCost": self.maintenance_cost,
+            "paymentExposure": self.payment_exposure,
+            "lockInCost": self.lock_in_cost,
+            "expiryPressure": self.expiry_pressure,
+            "grossOpportunityValue": round(self.gross_opportunity_value, 6),
+            "burden": round(self.burden, 6),
+            "netOpportunityValue": round(self.net_opportunity_value, 6),
+            "requiresHumanAction": self.requires_human_action,
+            "humanActions": list(self.human_actions),
+            "prerequisiteResources": list(self.prerequisite_resources),
+            "nominalValue": self.nominal_value,
+            "expiresAt": self.expires_at,
+            "evidenceRefs": list(self.evidence_refs),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class ConsumerDemand:
     workload_id: str
     purpose: str
     required_capabilities: tuple[str, ...]
     preferred_capabilities: tuple[str, ...] = ()
+    # Kept for compatibility/reporting. It is NOT an acquisition veto.
     authority_budget: AuthorityClass = "anonymous-public"
     owner_max_age_seconds: int = 30 * 24 * 60 * 60
+    authority_max_age_seconds: int = 24 * 60 * 60
+    acquisition_max_age_seconds: int = 7 * 24 * 60 * 60
     transport_max_age_seconds: int = 5 * 60
+    acquisition_threshold: float = 0.15
     reuse_weight: float = 0.25
     diversity_weight: float = 0.15
 
@@ -287,13 +469,18 @@ class ConsumerDemand:
         object.__setattr__(self, "preferred_capabilities", _tuple_strings("preferred capabilities", self.preferred_capabilities))
         if self.authority_budget not in _AUTHORITY_FRICTION:
             raise ValueError("unsupported authority budget")
-        if self.owner_max_age_seconds < 0 or self.transport_max_age_seconds < 0:
+        if min(self.owner_max_age_seconds, self.authority_max_age_seconds, self.acquisition_max_age_seconds, self.transport_max_age_seconds) < 0:
             raise ValueError("currentness budgets must be non-negative")
+        threshold = float(self.acquisition_threshold)
+        if not -1.0 <= threshold <= 1.0:
+            raise ValueError("acquisition threshold must be within [-1, 1]")
+        object.__setattr__(self, "acquisition_threshold", threshold)
         object.__setattr__(self, "reuse_weight", _unit_interval("reuse weight", self.reuse_weight))
         object.__setattr__(self, "diversity_weight", _unit_interval("diversity weight", self.diversity_weight))
 
     @property
     def authority_friction_budget(self) -> int:
+        """Legacy projection only; acquisition is no longer hard-gated by this value."""
         return _AUTHORITY_FRICTION[self.authority_budget]
 
 
@@ -328,17 +515,17 @@ class ResourceEvaluation:
     diversity_potential: float
     outcome_prior: float
     authority_friction: int
+    authority_present: bool
+    acquisition_net_value: float | None
+    acquisition_mode: AcquisitionMode | None
     potential_score: float
 
     def __post_init__(self) -> None:
         if self.decision not in {
-            "owner-verification-required",
-            "not-fit",
-            "blocked-by-terms",
-            "authority-required",
-            "transport-verification-required",
-            "transport-unavailable",
-            "consumable-now",
+            "owner-verification-required", "acquisition-verification-required", "not-fit",
+            "not-eligible", "blocked-by-terms", "authority-required", "acquire-now",
+            "human-action-required", "prerequisite-acquisition-required", "defer-acquisition", "transport-verification-required",
+            "transport-unavailable", "consumable-now",
         }:
             raise ValueError("unsupported resource decision")
 
@@ -366,6 +553,9 @@ class ResourceEvaluation:
             "diversityPotential": self.diversity_potential,
             "outcomePrior": self.outcome_prior,
             "authorityFriction": self.authority_friction,
+            "authorityPresent": self.authority_present,
+            "acquisitionNetValue": self.acquisition_net_value,
+            "acquisitionMode": self.acquisition_mode,
             "potentialScore": self.potential_score,
         }
 
@@ -376,13 +566,17 @@ def evaluate_resource(
     *,
     as_of: str,
     owner: OwnerVerification | None = None,
+    authority: AuthorityEvidence | None = None,
+    acquisition: AcquisitionAssessment | None = None,
+    prerequisite_authorities: Iterable[AuthorityEvidence] = (),
     transport: TransportEvidence | None = None,
     outcomes: Iterable[ConsumptionOutcome] = (),
 ) -> ResourceEvaluation:
-    """Evaluate one candidate without converting discovery into authority.
+    """Evaluate one candidate without conflating required and possessed authority.
 
-    Hard decisions happen before scoring. The score exists only for ordering
-    candidates already in the same semantic decision class.
+    Provider requirements are owner truth. Acquisition is a value/cost decision.
+    AuthorityEvidence proves what is actually possessed. Only then does transport
+    become relevant for non-anonymous resources.
     """
 
     _utc(as_of)
@@ -406,6 +600,10 @@ def evaluate_resource(
     reasons: list[str] = []
     authority_friction = 5
     owner_current = False
+    authority_present = False
+    acquisition_current = False
+    acquisition_net_value: float | None = None
+    acquisition_mode: AcquisitionMode | None = None
     transport_current = False
 
     if missing:
@@ -426,35 +624,102 @@ def evaluate_resource(
         elif owner.terms_status == "unknown":
             decision = "owner-verification-required"
             reasons.append("owner-terms-unknown")
-        elif authority_friction > demand.authority_friction_budget:
-            decision = "authority-required"
-            reasons.append(f"authority-friction-{authority_friction}-exceeds-budget-{demand.authority_friction_budget}")
-        elif transport is None or transport.resource_id != candidate.resource_id:
-            decision = "transport-verification-required"
-            reasons.append("no-matching-transport-evidence")
         else:
-            transport_current = transport.is_current(as_of=as_of, max_age_seconds=demand.transport_max_age_seconds)
-            if not transport_current or transport.status == "unknown":
-                decision = "transport-verification-required"
-                reasons.append("transport-evidence-stale-or-unknown")
-            elif transport.status == "unavailable":
-                decision = "transport-unavailable"
-                reasons.append("current-scoped-transport-unavailable")
+            if owner.authority_class == "anonymous-public":
+                authority_present = True
+            elif (
+                authority is not None
+                and authority.resource_id == candidate.resource_id
+                and authority.authority_class == owner.authority_class
+                and authority.is_active(as_of=as_of, max_age_seconds=demand.authority_max_age_seconds)
+            ):
+                authority_present = True
             else:
-                decision = "consumable-now"
+                if authority is not None and authority.resource_id == candidate.resource_id:
+                    reasons.append("authority-evidence-not-active-or-not-matching-owner-requirement")
+                if acquisition is None or acquisition.resource_id != candidate.resource_id:
+                    decision = "acquisition-verification-required"
+                    reasons.append("missing-current-acquisition-assessment")
+                else:
+                    acquisition_current = acquisition.is_current(
+                        as_of=as_of, max_age_seconds=demand.acquisition_max_age_seconds
+                    )
+                    acquisition_mode = acquisition.acquisition_mode
+                    acquisition_net_value = acquisition.net_opportunity_value
+                    prerequisite_map = {row.resource_id: row for row in prerequisite_authorities}
+                    missing_prerequisites = [
+                        resource_id for resource_id in acquisition.prerequisite_resources
+                        if resource_id not in prerequisite_map
+                        or not prerequisite_map[resource_id].is_active(
+                            as_of=as_of, max_age_seconds=demand.authority_max_age_seconds
+                        )
+                    ]
+                    if not acquisition_current:
+                        decision = "acquisition-verification-required"
+                        reasons.append("acquisition-assessment-stale")
+                    elif missing_prerequisites:
+                        decision = "prerequisite-acquisition-required"
+                        reasons.append("missing-prerequisite-authority:" + ",".join(missing_prerequisites))
+                    elif acquisition.eligibility == "ineligible":
+                        decision = "not-eligible"
+                        reasons.append("current-owner-eligibility-not-satisfied")
+                    elif acquisition_net_value < demand.acquisition_threshold:
+                        decision = "defer-acquisition"
+                        reasons.append(
+                            f"net-opportunity-{acquisition_net_value:.3f}-below-threshold-{demand.acquisition_threshold:.3f}"
+                        )
+                    elif acquisition.eligibility == "unknown":
+                        if acquisition.requires_human_action:
+                            decision = "human-action-required"
+                            reasons.append("positive-net-value-eligibility-resolved-in-human-acquisition-flow")
+                        else:
+                            decision = "acquisition-verification-required"
+                            reasons.append("acquisition-eligibility-unknown")
+                    elif acquisition.requires_human_action:
+                        decision = "human-action-required"
+                        reasons.append("positive-net-value-requires-human-action")
+                    else:
+                        decision = "acquire-now"
+                        reasons.append("positive-net-value-agent-acquisition")
+
+            if authority_present:
+                if transport is None or transport.resource_id != candidate.resource_id:
+                    decision = "transport-verification-required"
+                    reasons.append("no-matching-transport-evidence")
+                else:
+                    transport_current = transport.is_current(
+                        as_of=as_of, max_age_seconds=demand.transport_max_age_seconds
+                    )
+                    if not transport_current or transport.status == "unknown":
+                        decision = "transport-verification-required"
+                        reasons.append("transport-evidence-stale-or-unknown")
+                    elif transport.status == "unavailable":
+                        decision = "transport-unavailable"
+                        reasons.append("current-scoped-transport-unavailable")
+                    else:
+                        decision = "consumable-now"
 
     evidence_quality = 0.0
     if owner is not None and owner.resource_id == candidate.resource_id:
         evidence_quality += 0.45 if owner_current else 0.2
     if candidate.owner_evidence_present:
         evidence_quality += 0.1
+    if authority is not None and authority.resource_id == candidate.resource_id:
+        evidence_quality += 0.1 if authority_present else 0.03
+    if acquisition is not None and acquisition.resource_id == candidate.resource_id:
+        evidence_quality += 0.1 if acquisition_current else 0.03
     if transport is not None and transport.resource_id == candidate.resource_id:
         evidence_quality += 0.35 if transport_current and transport.status == "available" else 0.1
     if relevant_outcomes:
         evidence_quality += 0.1
     evidence_quality = min(1.0, evidence_quality)
 
-    friction_term = max(0.0, 1.0 - min(authority_friction, 5) / 5.0)
+    if authority_present:
+        acquisition_term = 1.0
+    elif acquisition_net_value is not None:
+        acquisition_term = max(0.0, min(1.0, (acquisition_net_value + 1.0) / 2.0))
+    else:
+        acquisition_term = 0.5
     potential_score = (
         0.30 * required_fit
         + 0.10 * preferred_fit
@@ -462,7 +727,7 @@ def evaluate_resource(
         + demand.reuse_weight * candidate.reuse_potential
         + demand.diversity_weight * candidate.diversity_potential
         + 0.10 * outcome_prior
-        + 0.10 * friction_term
+        + 0.10 * acquisition_term
     )
     normalizer = 0.75 + demand.reuse_weight + demand.diversity_weight
     potential_score = min(1.0, potential_score / normalizer)
@@ -478,61 +743,57 @@ def evaluate_resource(
         diversity_potential=candidate.diversity_potential,
         outcome_prior=round(outcome_prior, 6),
         authority_friction=authority_friction,
+        authority_present=authority_present,
+        acquisition_net_value=None if acquisition_net_value is None else round(acquisition_net_value, 6),
+        acquisition_mode=acquisition_mode,
         potential_score=round(potential_score, 6),
     )
 
 
 def pareto_frontier(evaluations: Iterable[ResourceEvaluation]) -> tuple[ResourceEvaluation, ...]:
-    """Return non-dominated consumable candidates.
+    """Return non-dominated consumable candidates on benefit dimensions only.
 
-    Benefit dimensions are maximized while authority friction is minimized.
-    Scalar score is deliberately excluded from dominance.
+    Authority friction is not a moral penalty. Once authority is actually held,
+    the frontier should not demote a useful resource merely because acquisition
+    once required an account, student verification, or payment verification.
     """
 
     rows = [row for row in evaluations if row.decision == "consumable-now"]
 
     def dominates(left: ResourceEvaluation, right: ResourceEvaluation) -> bool:
         benefit_ge = all(a >= b for a, b in zip(left.benefit_vector, right.benefit_vector, strict=True))
-        friction_le = left.authority_friction <= right.authority_friction
-        strict = (
-            any(a > b for a, b in zip(left.benefit_vector, right.benefit_vector, strict=True))
-            or left.authority_friction < right.authority_friction
-        )
-        return benefit_ge and friction_le and strict
+        strict = any(a > b for a, b in zip(left.benefit_vector, right.benefit_vector, strict=True))
+        return benefit_ge and strict
 
     frontier = [row for row in rows if not any(dominates(other, row) for other in rows if other is not row)]
-    return tuple(sorted(frontier, key=lambda row: (-row.potential_score, row.authority_friction, row.resource_id)))
+    return tuple(sorted(frontier, key=lambda row: (-row.potential_score, row.resource_id)))
 
 
 def rank_resource_evaluations(evaluations: Iterable[ResourceEvaluation]) -> tuple[ResourceEvaluation, ...]:
     decision_order = {
         "consumable-now": 0,
-        "transport-verification-required": 1,
-        "authority-required": 2,
-        "owner-verification-required": 3,
-        "transport-unavailable": 4,
-        "not-fit": 5,
-        "blocked-by-terms": 6,
+        "acquire-now": 1,
+        "human-action-required": 2,
+        "prerequisite-acquisition-required": 3,
+        "transport-verification-required": 4,
+        "acquisition-verification-required": 5,
+        "owner-verification-required": 6,
+        "authority-required": 6,
+        "defer-acquisition": 7,
+        "transport-unavailable": 8,
+        "not-eligible": 9,
+        "not-fit": 10,
+        "blocked-by-terms": 11,
     }
     return tuple(sorted(
         evaluations,
-        key=lambda row: (
-            decision_order[row.decision],
-            -row.potential_score,
-            row.authority_friction,
-            row.resource_id,
-        ),
+        key=lambda row: (decision_order[row.decision], -row.potential_score, row.resource_id),
     ))
 
 
 @dataclass(frozen=True, slots=True)
 class ResourceOpportunityBoard:
-    """Demand-scoped work queue for a large, cheap candidate universe.
-
-    Candidate generation may be broad. Expensive owner/transport verification is
-    bounded by ``verification_budget`` so discovery breadth does not create a
-    proportional governance backlog.
-    """
+    """Demand-scoped work queue for discovery, acquisition, transport and use."""
 
     workload_id: str
     as_of: str
@@ -540,27 +801,37 @@ class ResourceOpportunityBoard:
     evaluations: tuple[ResourceEvaluation, ...]
     frontier: tuple[ResourceEvaluation, ...]
     owner_verification_queue: tuple[ResourceEvaluation, ...]
+    acquisition_verification_queue: tuple[ResourceEvaluation, ...]
+    acquire_now_queue: tuple[ResourceEvaluation, ...]
+    human_action_queue: tuple[ResourceEvaluation, ...]
+    dependent_acquisition_queue: tuple[ResourceEvaluation, ...]
     transport_verification_queue: tuple[ResourceEvaluation, ...]
     authority_queue: tuple[ResourceEvaluation, ...]
     consumption_queue: tuple[ResourceEvaluation, ...]
     feedback_queue: tuple[ResourceEvaluation, ...]
+    deferred_acquisition: tuple[ResourceEvaluation, ...]
     rejected: tuple[ResourceEvaluation, ...]
 
     def to_dict(self) -> dict[str, Any]:
         def ids(rows: tuple[ResourceEvaluation, ...]) -> list[str]:
             return [row.resource_id for row in rows]
         return {
-            "schemaVersion": 1,
+            "schemaVersion": 2,
             "kind": "ordivon.world.resource-opportunity-board",
             "workloadId": self.workload_id,
             "asOf": self.as_of,
             "candidateCount": self.candidate_count,
             "frontier": ids(self.frontier),
             "ownerVerificationQueue": ids(self.owner_verification_queue),
+            "acquisitionVerificationQueue": ids(self.acquisition_verification_queue),
+            "acquireNowQueue": ids(self.acquire_now_queue),
+            "humanActionQueue": ids(self.human_action_queue),
+            "dependentAcquisitionQueue": ids(self.dependent_acquisition_queue),
             "transportVerificationQueue": ids(self.transport_verification_queue),
             "authorityQueue": ids(self.authority_queue),
             "consumptionQueue": ids(self.consumption_queue),
             "feedbackQueue": ids(self.feedback_queue),
+            "deferredAcquisition": ids(self.deferred_acquisition),
             "rejected": ids(self.rejected),
             "evaluations": [row.to_dict() for row in self.evaluations],
         }
@@ -572,14 +843,17 @@ def build_opportunity_board(
     *,
     as_of: str,
     owners: Iterable[OwnerVerification] = (),
+    authorities: Iterable[AuthorityEvidence] = (),
+    acquisitions: Iterable[AcquisitionAssessment] = (),
     transports: Iterable[TransportEvidence] = (),
     outcomes: Iterable[ConsumptionOutcome] = (),
     verification_budget: int = 12,
 ) -> ResourceOpportunityBoard:
-    """Turn a broad universe into a bounded next-action board.
+    """Turn a broad universe into bounded verification plus active acquisition.
 
-    The function deliberately does not fetch, provision, authenticate, or mutate
-    external resources. It selects which expensive fact should be acquired next.
+    Broad discovery stays cheap. Verification work is budgeted. Positive-EV
+    legitimate acquisition is surfaced explicitly rather than hidden behind an
+    authority queue or suppressed by an anonymous-only preference.
     """
 
     if verification_budget < 0:
@@ -587,12 +861,17 @@ def build_opportunity_board(
     _utc(as_of)
     candidate_rows = tuple(candidates)
     owner_map = {row.resource_id: row for row in owners}
+    authority_map = {row.resource_id: row for row in authorities}
+    acquisition_map = {row.resource_id: row for row in acquisitions}
     transport_map = {row.resource_id: row for row in transports}
     outcome_rows = tuple(outcomes)
     evaluated = tuple(
         evaluate_resource(
             candidate, demand, as_of=as_of,
             owner=owner_map.get(candidate.resource_id),
+            authority=authority_map.get(candidate.resource_id),
+            acquisition=acquisition_map.get(candidate.resource_id),
+            prerequisite_authorities=tuple(authority_map.values()),
             transport=transport_map.get(candidate.resource_id),
             outcomes=outcome_rows,
         )
@@ -605,7 +884,12 @@ def build_opportunity_board(
 
     owner_queue = bucket("owner-verification-required")[:verification_budget]
     remaining = max(0, verification_budget - len(owner_queue))
+    acquisition_verification = bucket("acquisition-verification-required")[:remaining]
+    remaining = max(0, remaining - len(acquisition_verification))
     transport_queue = bucket("transport-verification-required")[:remaining]
+    acquire_now = bucket("acquire-now")
+    human_action = bucket("human-action-required")
+    dependent = bucket("prerequisite-acquisition-required")
     consumable = bucket("consumable-now")
     frontier = pareto_frontier(consumable)
     outcome_keys = {(row.resource_id, row.workload_id) for row in outcome_rows}
@@ -613,9 +897,10 @@ def build_opportunity_board(
         row for row in consumable
         if (row.resource_id, demand.workload_id) not in outcome_keys
     )
+    deferred = bucket("defer-acquisition")
     rejected = tuple(
         row for row in ranked
-        if row.decision in {"not-fit", "blocked-by-terms", "transport-unavailable"}
+        if row.decision in {"not-fit", "not-eligible", "blocked-by-terms", "transport-unavailable"}
     )
     return ResourceOpportunityBoard(
         workload_id=demand.workload_id,
@@ -624,9 +909,14 @@ def build_opportunity_board(
         evaluations=ranked,
         frontier=frontier,
         owner_verification_queue=owner_queue,
+        acquisition_verification_queue=acquisition_verification,
+        acquire_now_queue=acquire_now,
+        human_action_queue=human_action,
+        dependent_acquisition_queue=dependent,
         transport_verification_queue=transport_queue,
-        authority_queue=bucket("authority-required"),
+        authority_queue=acquire_now + human_action,
         consumption_queue=consumable,
         feedback_queue=feedback,
+        deferred_acquisition=deferred,
         rejected=rejected,
     )

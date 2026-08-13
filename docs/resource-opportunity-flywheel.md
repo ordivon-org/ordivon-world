@@ -1,134 +1,209 @@
 # Resource Opportunity Flywheel
 
-Ordivon should search the external world broadly without turning every observed service, dataset, API, model, machine, or account offer into owned infrastructure.
+Ordivon should search the external world broadly, acquire legitimate high-value resources aggressively, and keep discovery, acquisition, authority, transport, and actual utility as separate facts.
 
-The governing asymmetry is simple:
+The governing asymmetry is:
 
-- candidate discovery is cheap and should optimize recall;
-- owner verification is more expensive and should be selective;
-- authority acquisition can create durable user obligations and must be explicit;
-- transport evidence is current, path- and resolver-scoped rather than a property of the resource forever;
-- only real consumption can establish whether a resource was useful for a workload.
-
-The resulting loop is deliberately thin:
+- discovery is cheap, so optimize recall;
+- owner verification is selective and current;
+- acquisition friction is a cost term, **not a moral veto**;
+- willingness to acquire authority is not evidence that the authority is already held;
+- human participation is reserved for irreducible identity, MFA, CAPTCHA, payment, or personally binding actions;
+- transport is `(resource, path, resolver, time)` rather than a permanent property of a provider;
+- only semantic consumption can establish workload value.
 
 ```text
-broad discovery feeds / indexes / search
-                |
-                v
-        ResourceCandidate
-        + exact provenance
-                |
-                v
-      demand-scoped potential
-                |
-       bounded verification budget
-          /              \
-         v                v
- owner-native facts   transport + resolver evidence
-         \                /
-          \              /
-           v            v
-          hard admission gates
-                 |
-        +--------+--------+
-        |                 |
-        v                 v
- authority queue     consumable-now
-                          |
-                    Pareto frontier
-                          |
-                     real consumer
-                          |
-                 ConsumptionOutcome
-                          |
-                    ranking feedback
+broad discovery
+      |
+      v
+ResourceCandidate
+      |
+      v
+OwnerVerification  -- what the provider currently requires
+      |
+      +-----------------------------+
+      | anonymous                   | gated
+      v                             v
+ transport                  AcquisitionAssessment
+                                    |
+                         net opportunity value
+                           /        |         \
+                          v         v          v
+                    acquire-now  human-action  defer
+                          |         |
+                          +----+----+
+                               v
+                       AuthorityEvidence
+                      -- what we actually hold
+                               |
+                               v
+                  transport + resolver evidence
+                               |
+                               v
+                         consumable-now
+                               |
+                         Pareto frontier
+                               |
+                        semantic consumer
+                               |
+                      ConsumptionOutcome
+                               |
+                         ranking feedback
 ```
 
 ## 1. Broad recall is not authority
 
-Aggregators, awesome lists, search engines, registries, OpenAPI directories, academic indexes, social discovery and provider comparison sites are candidate generators. They may establish that a claim was observed at a time and location. They cannot establish current owner terms, license, quota, payment requirements, identity requirements, or permission to consume.
+Aggregators, search engines, awesome lists, entitlement catalogs, registries, social discovery, comparison pages, and OpenAPI directories are candidate generators. They may establish that a resource or offer was observed. They do not establish current owner terms, eligibility, quota, payment exposure, license, or permission.
 
-`DiscoveryEvidence.source_kind` therefore distinguishes `aggregator`, `index`, and `owner` structurally. A candidate without a matching `OwnerVerification` remains `owner-verification-required` regardless of how many aggregators mention it.
+`DiscoveryEvidence.source_kind` keeps `aggregator`, `index`, and `owner` distinct. A candidate remains `owner-verification-required` until a current matching `OwnerVerification` exists.
 
-## 2. Verify the smallest high-potential set
+## 2. Provider requirement, acquisition decision, and possessed authority are three coordinates
 
-A universe can contain hundreds of candidates while the owner-verification queue remains small. `build_opportunity_board(..., verification_budget=N)` spends at most `N` expensive verification slots at a time.
+The old model conflated these questions:
 
-The budget first resolves missing/stale owner facts, then spends remaining capacity on missing/stale transport facts. This is not because owner facts are intrinsically more important; it prevents network testing from being performed for a resource whose terms or authority already make it unusable.
+1. What authority does the provider require?
+2. Is obtaining it worth the cost?
+3. Do we actually possess it now?
 
-Candidate breadth therefore does not create a proportional governance backlog.
+They are now represented separately:
 
-## 3. Keep orthogonal facts orthogonal
+- `OwnerVerification.authority_class`: required class (`free-key`, `account`, `student`, `payment`, ...).
+- `AcquisitionAssessment`: current eligibility, acquisition mode, benefit, option value, burden, human actions, expiry, and prerequisites.
+- `AuthorityEvidence`: current non-secret proof that Ordivon actually holds the required authority.
 
-The following must not be collapsed into one confidence or quality score:
+A demand may be willing to acquire a payment-gated resource and still have no authority. Conversely, once a student/account/key authority is held, the resource is not permanently penalized for the historical friction required to obtain it.
 
-- owner identity and currentness;
-- service terms and allowed purpose;
-- content/data/model license;
-- account, key, student, identity, payment or operator authority;
-- price/quota class;
-- machine interface;
-- current path + resolver reachability;
-- workload capability fit;
-- observed consumer value.
+## 3. Maximize lawful net opportunity value
 
-Hard gates are evaluated before ranking. A high-value resource forbidden for the workload is still blocked. A free-key resource does not become anonymous because it scores well. A public dataset does not imply that the hosted API is free for commercial production.
+Account creation, student verification, free-tier enrollment, and free API keys are ordinary acquisition costs when the provider permits them. They are not reasons to abstain.
 
-## 4. Transport is `(resource, path, resolver, time)`
+`AcquisitionAssessment` computes an inspectable normalized estimate:
 
-`TransportEvidence` explicitly carries both `path_id` and `resolver_id`. This prevents an ambient DNS failure, polluted resolver, stale VPN generation, or temporary route failure from being promoted into a permanent claim that the owner resource is unavailable.
+```text
+gross opportunity
+  = 0.65 * expected benefit
+  + 0.35 * option value
 
-Workstation owns these physical facts. World consumes the evidence without becoming the route or resolver authority.
+burden
+  = 0.25 * acquisition cost
+  + 0.20 * maintenance cost
+  + 0.25 * payment exposure
+  + 0.15 * lock-in cost
+  + 0.15 * expiry pressure
 
-## 5. Pareto before scalar ranking
+net opportunity = gross opportunity - burden
+```
 
-A universal scalar score destroys useful trade-offs. A lower-friction, broadly reusable public dataset and a more diverse but narrower resource can both be rational choices.
+If eligible and net value clears the workload threshold:
 
-Ordivon therefore:
+- `agent-self-service` -> `acquire-now`;
+- login / student / identity / payment / contract step -> `human-action-required`.
 
-1. applies hard admission gates;
-2. computes the non-dominated `pareto_frontier` among `consumable-now` resources;
-3. uses `potential_score` only as a tie-break/order hint inside a semantic class.
+If current eligibility is false -> `not-eligible`. If the net value is weak -> `defer-acquisition`. Those are factual/economic decisions, not moralized authority classes.
 
-The score is not permission, truth, or a substitute for the frontier.
+Provider rules still bind. Ordivon must not create duplicate free-tier accounts contrary to rules, misrepresent student/identity eligibility, evade quotas, bypass payment controls, or convert someone else's entitlement into its own.
 
-## 6. Consumption closes the loop
+## 4. Parent entitlements compress human work
 
-A resource that passes owner and transport checks is still only a hypothesis about utility. Actual consumers should emit bounded `ConsumptionOutcome` evidence: workload identity, timestamp, whether the resource was useful, an approximate value in `[0,1]`, and evidence references.
+Many resources are unlocked by one upstream entitlement. `AcquisitionAssessment.prerequisite_resources` captures this explicitly.
 
-Outcome evidence may change future ordering. It never changes owner authority, terms, license, or transport truth.
+Example:
 
-Resources in `consumable-now` with no workload-specific outcome are placed in the `feedback_queue`. This makes dogfood a first-class part of resource research rather than an optional postscript.
+```text
+GitHub Student Developer Pack
+        | verify once
+        v
+student entitlement authority
+        |
+        +-- Codespaces
+        +-- Datadog
+        +-- Camber
+        +-- MongoDB
+        +-- Sentry
+        +-- partner offers ...
+```
 
-## 7. Opportunity board lanes
+Before the parent authority exists, children enter `dependentAcquisitionQueue`; they do not each create duplicate human-verification work. After the parent is proven active, each child can move into its own lowest-cost claim lane.
 
-`ResourceOpportunityBoard` exposes separate next-action lanes:
+## 5. Human Action Queue is an execution boundary
 
-- `frontier`: non-dominated immediately consumable resources;
-- `owner_verification_queue`: top candidates whose owner facts are absent/stale;
-- `transport_verification_queue`: owner-admitted candidates needing current path+resolver evidence;
-- `authority_queue`: resources whose only remaining blocker is a stronger user authority class;
-- `consumption_queue`: all currently consumable candidates;
-- `feedback_queue`: consumable candidates still lacking outcome evidence for this workload;
-- `rejected`: capability mismatch, terms block, or current transport failure.
+The Human Action Queue should contain only actions an Agent cannot correctly complete itself, for example:
 
-This is a work-selection projection, not a durable resource inventory and not an automatic provisioning system.
+- CAPTCHA;
+- MFA / SMS / email confirmation in a third-party UI;
+- student or legal identity verification;
+- payment-card entry;
+- personally binding terms or attestations;
+- irreversible paid commitments.
 
-## 8. Expansion policy
+Research, comparison, configuration, transport testing, secret-reference design, post-acquisition validation, integration, quota tracking, expiry tracking, and consumption belong to the Agent.
 
-Prefer expansion in this order unless a concrete workload proves otherwise:
+## 6. Verification budget bounds expensive facts, not opportunity breadth
 
-1. anonymous, owner-published machine-readable resources;
-2. bulk snapshots/indexes that reduce repeated API/network dependency;
-3. free-key/account resources with clear marginal value;
-4. student/identity/payment-gated resources only for a named workload;
-5. new external compute/network authority only after existing resources are shown insufficient.
+`build_opportunity_board(..., verification_budget=N)` allows a universe to contain thousands of cheap candidates while only `N` expensive missing facts are investigated at once. Budget is spent in dependency order:
 
-Self-hostable alternatives should remain part of discovery because they convert recurring SaaS authority/cost into local execution cost. They are candidates, not automatically better choices.
+1. owner verification;
+2. acquisition/eligibility verification;
+3. transport verification after authority exists.
 
-## 9. Currentness and invalidation
+This is a work-selection optimization. It is not a reason to suppress high-value gated candidates.
 
-No owner verification or transport result is permanent. Consumer demand supplies explicit freshness budgets. Stale evidence returns to a verification queue rather than being silently trusted.
+## 7. Transport is downstream of acquisition
 
-This makes resource research a continuous world-model update loop without requiring a continuously growing orchestration framework.
+A transient DNS or network failure on a signup page must not erase a positive-EV entitlement. Transport becomes a hard requirement when Ordivon is ready to consume the machine interface.
+
+`TransportEvidence` carries `path_id`, `resolver_id`, timestamp, status and latency. Workstation owns these physical facts; World consumes them without becoming route/DNS authority.
+
+## 8. Pareto after authority is held
+
+Among `consumable-now` resources, the Pareto frontier uses benefit dimensions. Historical authority friction is intentionally excluded from dominance: once the authority is legitimately held, a useful student/account resource should not lose forever to an anonymous resource merely because registration happened in the past.
+
+Scalar `potential_score` remains an ordering hint, never authority or truth.
+
+## 9. Semantic consumption closes the loop
+
+TCP/TLS/HTTP success is not utility. The consumer must validate the expected semantic object before emitting `ConsumptionOutcome(useful=true)`. This prevents error pages, stale endpoints, empty quota shells, or nominal credits that cannot serve the workload from being mistaken for useful resources.
+
+Outcomes affect future search/ranking, but never rewrite owner terms, eligibility, authority, license, or transport evidence.
+
+## 10. Opportunity board lanes
+
+`ResourceOpportunityBoard` schema v2 exposes:
+
+- `frontier`: non-dominated resources usable now;
+- `ownerVerificationQueue`: missing/stale owner truth;
+- `acquisitionVerificationQueue`: missing/stale eligibility or cost facts;
+- `acquireNowQueue`: positive-EV acquisition the Agent can perform itself;
+- `humanActionQueue`: positive-EV acquisition requiring irreducible human action;
+- `dependentAcquisitionQueue`: child offers waiting on parent entitlements;
+- `transportVerificationQueue`: possessed resources needing current route/resolver proof;
+- `consumptionQueue`: resources usable now;
+- `feedbackQueue`: usable resources without workload outcome;
+- `deferredAcquisition`: legitimate but currently below the acquisition threshold;
+- `rejected`: terms, eligibility, fit, or current transport facts that actually block the resource.
+
+`authorityQueue` is retained as a compatibility projection of `acquireNowQueue + humanActionQueue`; it should not be interpreted as a moral quarantine.
+
+## 11. Expansion policy
+
+Do not artificially order the universe as anonymous -> account -> student -> payment. Instead, compare all legitimate candidates on expected net opportunity value. A $100 student credit requiring one verification can dominate a weak anonymous API; a card-gated trial can be rational if spending protection is strong; an anonymous resource can dominate both when it gives the same capability with lower total burden.
+
+The search universe should explicitly include:
+
+- anonymous/open data;
+- free API keys and developer plans;
+- student/education entitlements;
+- free trials and recurring monthly credits;
+- cloud compute/storage/network credits;
+- model inference quotas;
+- search/index APIs;
+- observability/security/dev tooling;
+- domains/hosting/CI/CD;
+- research/startup/community grants;
+- self-hostable substitutes.
+
+Scarcity or the possibility that another eligible person might also use the resource is not a reason to abstain from a legitimate entitlement. Capacity, currentness, rules, and net value are the relevant facts.
+
+## 12. Currentness and invalidation
+
+Owner terms, offers, eligibility, credits, authority state, transport, and consumer utility all expire at different rates. Each evidence type therefore carries its own timestamp/freshness budget. Stale evidence returns to the appropriate verification lane instead of silently persisting as truth.

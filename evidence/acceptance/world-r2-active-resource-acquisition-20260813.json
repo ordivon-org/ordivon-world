@@ -1,0 +1,1146 @@
+{
+  "acceptanceDigest": "sha256:3ad899c9eed03c2f51c0af1f22570c0abdf1591b8a4b1a542981420fcf734683",
+  "acquisitionAssessments": [
+    {
+      "acquisitionCost": 0.12,
+      "acquisitionMode": "human-verification",
+      "burden": 0.076,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://docs.github.com/en/education/about-github-education/github-education-for-students/github-terms-and-conditions-for-the-student-developer-pack"
+      ],
+      "expectedBenefit": 1.0,
+      "expiresAt": null,
+      "expiryPressure": 0.15,
+      "grossOpportunityValue": 1.0,
+      "humanActions": [
+        "open GitHub Education benefits",
+        "submit current student verification if not already approved"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.05,
+      "maintenanceCost": 0.08,
+      "netOpportunityValue": 0.924,
+      "nominalValue": "GitHub Pro + 80+ resource entitlement",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 1.0,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:github-student-pack",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.15,
+      "acquisitionMode": "human-verification",
+      "burden": 0.1065,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://azure.microsoft.com/en-us/free/students/",
+        "https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/"
+      ],
+      "expectedBenefit": 1.0,
+      "expiresAt": null,
+      "expiryPressure": 0.2,
+      "grossOpportunityValue": 0.993,
+      "humanActions": [
+        "sign in with Microsoft account",
+        "verify full-time university status using institutional academic verification"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.1,
+      "maintenanceCost": 0.12,
+      "netOpportunityValue": 0.8865,
+      "nominalValue": "$100/12 months; no credit card",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.98,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:azure-for-students",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.25,
+      "acquisitionMode": "human-payment",
+      "burden": 0.2685,
+      "eligibility": "unknown",
+      "evidenceRefs": [
+        "https://aws.amazon.com/free/",
+        "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-FAQ.html"
+      ],
+      "expectedBenefit": 0.95,
+      "expiresAt": null,
+      "expiryPressure": 0.55,
+      "grossOpportunityValue": 0.95,
+      "humanActions": [
+        "start AWS new-customer Free Plan signup",
+        "enter valid payment method for identity verification",
+        "complete identity verification",
+        "do not convert to Paid plan during initial dogfood"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.15,
+      "maintenanceCost": 0.28,
+      "netOpportunityValue": 0.6815,
+      "nominalValue": "up to $200 credits / up to 6 months",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.95,
+      "paymentExposure": 0.18,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:aws-free-plan",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.25,
+      "acquisitionMode": "human-payment",
+      "burden": 0.268,
+      "eligibility": "unknown",
+      "evidenceRefs": [
+        "https://docs.cloud.google.com/free/docs/free-cloud-features",
+        "https://cloud.google.com/signup-faqs"
+      ],
+      "expectedBenefit": 0.98,
+      "expiresAt": null,
+      "expiryPressure": 0.65,
+      "grossOpportunityValue": 0.9695,
+      "humanActions": [
+        "start Google Cloud Free Trial signup",
+        "enter payment method for identity verification",
+        "do not manually upgrade to Paid billing during initial dogfood"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.15,
+      "maintenanceCost": 0.24,
+      "netOpportunityValue": 0.7015,
+      "nominalValue": "$300 / 90 days + Free Tier",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.95,
+      "paymentExposure": 0.15,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:gcp-free-trial",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.38,
+      "acquisitionMode": "human-payment",
+      "burden": 0.3075,
+      "eligibility": "unknown",
+      "evidenceRefs": [
+        "https://www.oracle.com/cloud/free/faq/",
+        "https://docs.oracle.com/iaas/Content/FreeTier/freetier.htm"
+      ],
+      "expectedBenefit": 0.86,
+      "expiresAt": null,
+      "expiryPressure": 0.35,
+      "grossOpportunityValue": 0.902,
+      "humanActions": [
+        "start OCI Free Tier signup",
+        "choose home region deliberately",
+        "complete CAPTCHA/email/phone identity steps",
+        "enter supported payment card for verification",
+        "accept Oracle Cloud terms"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.2,
+      "maintenanceCost": 0.4,
+      "netOpportunityValue": 0.5945,
+      "nominalValue": "$300/30 days + Always Free",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.98,
+      "paymentExposure": 0.2,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:oci-free-tier",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.08,
+      "acquisitionMode": "human-login",
+      "burden": 0.0515,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://console.groq.com/docs/rate-limits",
+        "https://console.groq.com/docs/billing-faqs"
+      ],
+      "expectedBenefit": 0.98,
+      "expiresAt": null,
+      "expiryPressure": 0.08,
+      "grossOpportunityValue": 0.952,
+      "humanActions": [
+        "create/sign in to GroqCloud account",
+        "generate API key"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.05,
+      "maintenanceCost": 0.06,
+      "netOpportunityValue": 0.9005,
+      "nominalValue": "Free Plan model quotas",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.9,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:groq-free-api",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.2,
+      "acquisitionMode": "human-payment",
+      "burden": 0.1935,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://api-dashboard.search.brave.com/documentation/pricing",
+        "https://api-dashboard.search.brave.com/documentation/quickstart",
+        "https://api-dashboard.search.brave.com/documentation/resources/help-feedback"
+      ],
+      "expectedBenefit": 1.0,
+      "expiresAt": null,
+      "expiryPressure": 0.08,
+      "grossOpportunityValue": 0.993,
+      "humanActions": [
+        "create Brave Search API account and verify email",
+        "enter credit card to subscribe to Search plan",
+        "set monthly spending limit before issuing production key",
+        "generate API key"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.08,
+      "maintenanceCost": 0.16,
+      "netOpportunityValue": 0.7995,
+      "nominalValue": "~1000 Search requests/month covered by recurring $5 credit at current price",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.98,
+      "paymentExposure": 0.35,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:brave-search-api",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.06,
+      "acquisitionMode": "human-login",
+      "burden": 0.035,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://developers.openalex.org/api-reference/authentication",
+        "https://developers.openalex.org/guides/authentication"
+      ],
+      "expectedBenefit": 0.92,
+      "expiresAt": null,
+      "expiryPressure": 0.05,
+      "grossOpportunityValue": 0.885,
+      "humanActions": [
+        "create/sign in to OpenAlex account",
+        "copy free API key"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.03,
+      "maintenanceCost": 0.04,
+      "netOpportunityValue": 0.85,
+      "nominalValue": "$1/day recurring API usage",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.82,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:openalex-api-key",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.08,
+      "acquisitionMode": "human-login",
+      "burden": 0.044,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://techdocs.gbif.org/en/openapi/v1/occurrence",
+        "https://techdocs.gbif.org/en/data-use/api-downloads"
+      ],
+      "expectedBenefit": 0.75,
+      "expiresAt": null,
+      "expiryPressure": 0.05,
+      "grossOpportunityValue": 0.7605,
+      "humanActions": [
+        "register/sign in to GBIF account",
+        "verify email if requested"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.03,
+      "maintenanceCost": 0.06,
+      "netOpportunityValue": 0.7165,
+      "nominalValue": "bulk occurrence download authority",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.78,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:gbif-account",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.08,
+      "acquisitionMode": "human-login",
+      "burden": 0.0595,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://huggingface.co/docs/inference-providers/en/pricing"
+      ],
+      "expectedBenefit": 0.86,
+      "expiresAt": null,
+      "expiryPressure": 0.05,
+      "grossOpportunityValue": 0.895,
+      "humanActions": [
+        "create/sign in to Hugging Face account",
+        "create scoped user access token only when a consumer needs it"
+      ],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.08,
+      "maintenanceCost": 0.1,
+      "netOpportunityValue": 0.8355,
+      "nominalValue": "$0.10/month inference credits + Hub authority",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.96,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [],
+      "requiresHumanAction": true,
+      "resourceId": "resource:huggingface-account-token",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.02,
+      "acquisitionMode": "agent-self-service",
+      "burden": 0.024,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://education.github.com/pack"
+      ],
+      "expectedBenefit": 0.88,
+      "expiresAt": null,
+      "expiryPressure": 0.08,
+      "grossOpportunityValue": 0.824,
+      "humanActions": [],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.02,
+      "maintenanceCost": 0.02,
+      "netOpportunityValue": 0.8,
+      "nominalValue": "Free GitHub Pro; GitHub Education currently projects 3K Actions minutes/month, 2GB Packages storage.",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.72,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [
+        "resource:github-student-pack"
+      ],
+      "requiresHumanAction": false,
+      "resourceId": "resource:github-student-pro",
+      "schemaVersion": 1
+    },
+    {
+      "acquisitionCost": 0.02,
+      "acquisitionMode": "agent-self-service",
+      "burden": 0.024,
+      "eligibility": "eligible",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://education.github.com/pack"
+      ],
+      "expectedBenefit": 0.88,
+      "expiresAt": null,
+      "expiryPressure": 0.08,
+      "grossOpportunityValue": 0.824,
+      "humanActions": [],
+      "kind": "ordivon.world.resource-acquisition-assessment",
+      "lockInCost": 0.02,
+      "maintenanceCost": 0.02,
+      "netOpportunityValue": 0.8,
+      "nominalValue": "GitHub Education currently projects Pro-level Codespaces; current student page advertises 180 Codespaces hours and 20GB storage/month.",
+      "observedAt": "2026-08-13T08:25:00Z",
+      "optionValue": 0.72,
+      "paymentExposure": 0.0,
+      "prerequisiteResources": [
+        "resource:github-student-pack"
+      ],
+      "requiresHumanAction": false,
+      "resourceId": "resource:github-student-codespaces",
+      "schemaVersion": 1
+    }
+  ],
+  "asOf": "2026-08-13T08:25:00Z",
+  "board": {
+    "acquireNowQueue": [],
+    "acquisitionVerificationQueue": [],
+    "asOf": "2026-08-13T08:25:00Z",
+    "authorityQueue": [
+      "resource:azure-for-students",
+      "resource:github-student-pack",
+      "resource:brave-search-api",
+      "resource:gcp-free-trial",
+      "resource:huggingface-account-token",
+      "resource:groq-free-api",
+      "resource:aws-free-plan",
+      "resource:oci-free-tier",
+      "resource:openalex-api-key",
+      "resource:gbif-account"
+    ],
+    "candidateCount": 12,
+    "consumptionQueue": [],
+    "deferredAcquisition": [],
+    "dependentAcquisitionQueue": [
+      "resource:github-student-codespaces",
+      "resource:github-student-pro"
+    ],
+    "evaluations": [
+      {
+        "acquisitionMode": "human-verification",
+        "acquisitionNetValue": 0.8865,
+        "authorityFriction": 2,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 1.0,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.826521,
+        "preferredFit": 0.0,
+        "resourceId": "resource:azure-for-students",
+        "reusePotential": 1.0,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-verification",
+        "acquisitionNetValue": 0.924,
+        "authorityFriction": 2,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.95,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.81975,
+        "preferredFit": 0.0,
+        "resourceId": "resource:github-student-pack",
+        "reusePotential": 1.0,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-payment",
+        "acquisitionNetValue": 0.7995,
+        "authorityFriction": 4,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.98,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.819562,
+        "preferredFit": 0.0,
+        "resourceId": "resource:brave-search-api",
+        "reusePotential": 1.0,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-payment",
+        "acquisitionNetValue": 0.7015,
+        "authorityFriction": 4,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.96,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-eligibility-resolved-in-human-acquisition-flow"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.807979,
+        "preferredFit": 0.0,
+        "resourceId": "resource:gcp-free-trial",
+        "reusePotential": 0.98,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-login",
+        "acquisitionNetValue": 0.8355,
+        "authorityFriction": 1,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.95,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.807729,
+        "preferredFit": 0.0,
+        "resourceId": "resource:huggingface-account-token",
+        "reusePotential": 0.96,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-login",
+        "acquisitionNetValue": 0.9005,
+        "authorityFriction": 1,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.9,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.806271,
+        "preferredFit": 0.0,
+        "resourceId": "resource:groq-free-api",
+        "reusePotential": 0.98,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-payment",
+        "acquisitionNetValue": 0.6815,
+        "authorityFriction": 4,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.95,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-eligibility-resolved-in-human-acquisition-flow"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.805479,
+        "preferredFit": 0.0,
+        "resourceId": "resource:aws-free-plan",
+        "reusePotential": 0.98,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-payment",
+        "acquisitionNetValue": 0.5945,
+        "authorityFriction": 4,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 1.0,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-eligibility-resolved-in-human-acquisition-flow"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.793521,
+        "preferredFit": 0.0,
+        "resourceId": "resource:oci-free-tier",
+        "reusePotential": 0.9,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-login",
+        "acquisitionNetValue": 0.85,
+        "authorityFriction": 1,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.8,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.78125,
+        "preferredFit": 0.0,
+        "resourceId": "resource:openalex-api-key",
+        "reusePotential": 0.95,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "human-login",
+        "acquisitionNetValue": 0.7165,
+        "authorityFriction": 2,
+        "authorityPresent": false,
+        "decision": "human-action-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.8,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "positive-net-value-requires-human-action"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.740271,
+        "preferredFit": 0.0,
+        "resourceId": "resource:gbif-account",
+        "reusePotential": 0.78,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "agent-self-service",
+        "acquisitionNetValue": 0.8,
+        "authorityFriction": 2,
+        "authorityPresent": false,
+        "decision": "prerequisite-acquisition-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.72,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "missing-prerequisite-authority:resource:github-student-pack"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.759583,
+        "preferredFit": 0.0,
+        "resourceId": "resource:github-student-codespaces",
+        "reusePotential": 0.92,
+        "schemaVersion": 1
+      },
+      {
+        "acquisitionMode": "agent-self-service",
+        "acquisitionNetValue": 0.8,
+        "authorityFriction": 2,
+        "authorityPresent": false,
+        "decision": "prerequisite-acquisition-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.55,
+        "evidenceQuality": 0.65,
+        "hardReasons": [
+          "missing-prerequisite-authority:resource:github-student-pack"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.7375,
+        "preferredFit": 0.0,
+        "resourceId": "resource:github-student-pro",
+        "reusePotential": 0.95,
+        "schemaVersion": 1
+      }
+    ],
+    "feedbackQueue": [],
+    "frontier": [],
+    "humanActionQueue": [
+      "resource:azure-for-students",
+      "resource:github-student-pack",
+      "resource:brave-search-api",
+      "resource:gcp-free-trial",
+      "resource:huggingface-account-token",
+      "resource:groq-free-api",
+      "resource:aws-free-plan",
+      "resource:oci-free-tier",
+      "resource:openalex-api-key",
+      "resource:gbif-account"
+    ],
+    "kind": "ordivon.world.resource-opportunity-board",
+    "ownerVerificationQueue": [],
+    "rejected": [],
+    "schemaVersion": 2,
+    "transportVerificationQueue": [],
+    "workloadId": "world:active-resource-acquisition-r2"
+  },
+  "githubStudentPackDependentCatalog": [
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "cloud",
+      "claimRisk": "new-user/promotion/payment verification should be revalidated at redemption",
+      "name": "DigitalOcean",
+      "offer": "$200 platform credit for 1 year on current GitHub Education catalog; selected GPU/third-party AI services excluded",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "compute-ai",
+      "name": "Camber",
+      "offer": "200 CPU hours + 75GB storage + 200 LLM messages/month",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "observability",
+      "name": "Datadog",
+      "offer": "Pro account including 10 servers, free 2 years",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "web-data-acquisition",
+      "name": "Zyte Scrapy Cloud",
+      "offer": "1 Free Forever Scrapy Cloud Unit; unlimited team/projects/requests; 120-day retention",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "observability",
+      "name": "Sentry",
+      "offer": "50K errors, 100K transactions, 1GB attachments, 500 replays, Team features, 1 year renewable, on-demand disabled",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "backend-cloud",
+      "name": "Appwrite",
+      "offer": "Education plan with 2 projects at Pro-equivalent resource limits while Student Pack membership remains active",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "secrets",
+      "name": "Doppler",
+      "offer": "Team subscription while active student",
+      "priority": "P0-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "database",
+      "name": "MongoDB",
+      "offer": "$50 Atlas credits + Compass + University + free certification valued at $150",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "data-notebook",
+      "name": "Deepnote",
+      "offer": "Team plan while student; unlimited basic machines up to 5GB RAM/2vCPU and premium integrations",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "app-hosting",
+      "name": "Heroku",
+      "offer": "$13 USD/month credit for 24 months",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "observability",
+      "name": "New Relic",
+      "offer": "free while student; GitHub catalog states $300/month value",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "auth",
+      "name": "Clerk",
+      "offer": "Pro plan free while student",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "remote-access",
+      "name": "Termius",
+      "offer": "Pro and Team features free while student",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "secrets",
+      "name": "1Password",
+      "offer": "1 year free including Developer Tools",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "cloud-emulation",
+      "name": "LocalStack",
+      "offer": "free license to powerful AWS emulator",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "developer-tools",
+      "name": "JetBrains",
+      "offer": "free student subscription, renewable annually",
+      "priority": "P2-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "domain",
+      "name": "Name.com",
+      "offer": "one select free domain from 25+ extensions",
+      "priority": "P1-after-pack"
+    },
+    {
+      "catalogEvidence": "https://education.github.com/pack",
+      "category": "domain",
+      "name": ".TECH",
+      "offer": "one standard .TECH domain free for 1 year",
+      "priority": "P2-after-pack"
+    }
+  ],
+  "humanActionPolicy": {
+    "agentOwns": [
+      "discovery",
+      "official owner revalidation",
+      "ranking",
+      "integration design",
+      "post-acquisition credential validation",
+      "quota/expiry tracking",
+      "transport selection",
+      "dogfood"
+    ],
+    "humanOnly": [
+      "third-party login/registration UI when no connector exists",
+      "CAPTCHA",
+      "MFA/email/SMS confirmation",
+      "student/identity verification",
+      "payment-card entry",
+      "personally binding terms/attestations",
+      "irreversible paid upgrade"
+    ]
+  },
+  "kind": "ordivon.world.active-resource-acquisition-r2-acceptance",
+  "localAuthorityInventory": {
+    "githubBaseAccount": {
+      "evidence": "runtime non-secret gh auth status",
+      "login": "zycxfyh",
+      "status": "active-login-proven",
+      "studentEntitlementProven": false
+    },
+    "otherProviderAuthority": {
+      "note": "absence of matching Ordivon secrets/CLI state is not proof that no external account exists",
+      "status": "not-proven-locally"
+    }
+  },
+  "ownerVerifications": [
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "student",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://docs.github.com/en/education/about-github-education/github-education-for-students/github-terms-and-conditions-for-the-student-developer-pack"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://education.github.com/pack/join",
+      "ownerId": "owner:github-education",
+      "quotaClass": "80+ student resources; GitHub Pro and partner offers",
+      "resourceId": "resource:github-student-pack",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "student",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://azure.microsoft.com/en-us/free/students/",
+        "https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://azure.microsoft.com/en-us/free/students/",
+      "ownerId": "owner:microsoft-azure",
+      "quotaClass": "$100 within 12 months; 20+ 12-month services and 65+ always-free services; annual student renewal",
+      "resourceId": "resource:azure-for-students",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "payment",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://aws.amazon.com/free/",
+        "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-FAQ.html"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://aws.amazon.com/free/",
+      "ownerId": "owner:aws",
+      "quotaClass": "new customer: $100 signup + up to $100 earned; Free Plan up to 6 months; 30+ always-free services",
+      "resourceId": "resource:aws-free-plan",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "payment",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://docs.cloud.google.com/free/docs/free-cloud-features",
+        "https://cloud.google.com/signup-faqs"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://cloud.google.com/free",
+      "ownerId": "owner:google-cloud",
+      "quotaClass": "$300 Welcome credit valid 90 days + 20+ Free Tier products; trial billing closes unless manually upgraded",
+      "resourceId": "resource:gcp-free-trial",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "payment",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://www.oracle.com/cloud/free/faq/",
+        "https://docs.oracle.com/iaas/Content/FreeTier/freetier.htm"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://www.oracle.com/cloud/free/",
+      "ownerId": "owner:oracle-cloud",
+      "quotaClass": "$300 up to 30 days + Always Free resources; one free account per person; home-region capacity matters",
+      "resourceId": "resource:oci-free-tier",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "free-key",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://console.groq.com/docs/rate-limits",
+        "https://console.groq.com/docs/billing-faqs"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://console.groq.com/",
+      "ownerId": "owner:groq",
+      "quotaClass": "Free Plan per-org rate limits; examples include GPT-OSS/Qwen/Llama and Whisper; payment method required only for Developer upgrade",
+      "resourceId": "resource:groq-free-api",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "payment",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://api-dashboard.search.brave.com/documentation/pricing",
+        "https://api-dashboard.search.brave.com/documentation/quickstart",
+        "https://api-dashboard.search.brave.com/documentation/resources/help-feedback"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://api-dashboard.search.brave.com/",
+      "ownerId": "owner:brave-search",
+      "quotaClass": "$5 per 1000 Search requests with $5 recurring monthly credits; 50 QPS; card required; PAYG beyond credits",
+      "resourceId": "resource:brave-search-api",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "free-key",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://developers.openalex.org/api-reference/authentication",
+        "https://developers.openalex.org/guides/authentication"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://openalex.org/settings/api",
+      "ownerId": "owner:openalex",
+      "quotaClass": "$1 free API usage every day; roughly 10k list/filter, 1k search or 100 content downloads/day depending mix",
+      "resourceId": "resource:openalex-api-key",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "account",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://techdocs.gbif.org/en/openapi/v1/occurrence",
+        "https://techdocs.gbif.org/en/data-use/api-downloads"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://www.gbif.org/",
+      "ownerId": "owner:gbif",
+      "quotaClass": "most API anonymous; registered account unlocks asynchronous occurrence downloads and download citation workflows",
+      "resourceId": "resource:gbif-account",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "free-key",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://huggingface.co/docs/inference-providers/en/pricing"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://huggingface.co/join",
+      "ownerId": "owner:huggingface",
+      "quotaClass": "free users receive $0.10 monthly Inference Providers credits; hub/model/dataset value is broader and per-repository licenses/gating still apply",
+      "resourceId": "resource:huggingface-account-token",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "student",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://education.github.com/pack"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://github.com/education/students",
+      "ownerId": "owner:github",
+      "quotaClass": "Free GitHub Pro; GitHub Education currently projects 3K Actions minutes/month, 2GB Packages storage.",
+      "resourceId": "resource:github-student-pro",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "noncommercial-research-development"
+      ],
+      "authorityClass": "student",
+      "costClass": "free-or-credit-backed-entry",
+      "evidenceRefs": [
+        "https://github.com/education/students",
+        "https://education.github.com/pack"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "service-terms-and-resource-specific-content-rights",
+      "machineInterfaces": [
+        "web-signup",
+        "api-or-cloud-console"
+      ],
+      "notes": [],
+      "officialLocator": "https://github.com/education/students",
+      "ownerId": "owner:github",
+      "quotaClass": "GitHub Education currently projects Pro-level Codespaces; current student page advertises 180 Codespaces hours and 20GB storage/month.",
+      "resourceId": "resource:github-student-codespaces",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T08:25:00Z"
+    }
+  ],
+  "policy": "maximize lawful expected net opportunity value; authority friction is cost, not moral veto",
+  "schemaVersion": 1,
+  "transportObservation": {
+    "finding": "signup-page transport was inconsistent and is intentionally not an acquisition veto; transport is revalidated after authority for machine consumption",
+    "generationDigest": "sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+    "jobId": "job-019ffa31-e718-7e92-883e-ac844eea4b01"
+  },
+  "truthRole": "owner-revalidated-acquisition-plan-with-local-authority-observation",
+  "watchOrTemporarilyUnavailable": [
+    {
+      "action": "do not spend human time until catalog changes",
+      "evidence": "https://education.github.com/pack",
+      "resource": "GitHub Copilot Student",
+      "status": "temporarily-unavailable-for-new-signups"
+    },
+    {
+      "action": "after Student Pack activation, verify exact account eligibility/payment and credit duration before provisioning",
+      "evidence": "https://education.github.com/pack",
+      "resource": "DigitalOcean student credit redemption",
+      "status": "current-catalog-offer-but-claim-path-needs-redemption-time-revalidation"
+    }
+  ],
+  "workloadId": "world:active-resource-acquisition-r2"
+}

@@ -3,6 +3,8 @@ from __future__ import annotations
 import unittest
 
 from ordivon_world.resource_discovery import (
+    AcquisitionAssessment,
+    AuthorityEvidence,
     ConsumerDemand,
     ConsumptionOutcome,
     DiscoveryEvidence,
@@ -92,6 +94,46 @@ def transport(
     )
 
 
+
+def acquisition(
+    resource_id: str = "resource:open-data",
+    *,
+    eligibility: str = "eligible",
+    mode: str = "agent-self-service",
+    expected_benefit: float = 0.9,
+    option_value: float = 0.8,
+    acquisition_cost: float = 0.1,
+    maintenance_cost: float = 0.1,
+    payment_exposure: float = 0.0,
+    lock_in_cost: float = 0.1,
+    expiry_pressure: float = 0.1,
+    observed_at: str = "2026-08-13T04:58:00Z",
+    human_actions: tuple[str, ...] = (),
+    prerequisite_resources: tuple[str, ...] = (),
+) -> AcquisitionAssessment:
+    return AcquisitionAssessment(
+        resource_id=resource_id, observed_at=observed_at, eligibility=eligibility,
+        acquisition_mode=mode, expected_benefit=expected_benefit, option_value=option_value,
+        acquisition_cost=acquisition_cost, maintenance_cost=maintenance_cost,
+        payment_exposure=payment_exposure, lock_in_cost=lock_in_cost,
+        expiry_pressure=expiry_pressure, evidence_refs=("artifact:acquisition",),
+        human_actions=human_actions, prerequisite_resources=prerequisite_resources,
+    )
+
+
+def authority_evidence(
+    resource_id: str = "resource:open-data",
+    *,
+    authority: str = "free-key",
+    status: str = "active",
+    observed_at: str = "2026-08-13T04:59:00Z",
+) -> AuthorityEvidence:
+    return AuthorityEvidence(
+        resource_id=resource_id, observed_at=observed_at, authority_class=authority,
+        authority_id=f"secret-ref:{resource_id}", status=status,
+        evidence_refs=("artifact:authority",),
+    )
+
 def demand(*, authority: str = "anonymous-public", purpose: str = "academic-research") -> ConsumerDemand:
     return ConsumerDemand(
         workload_id="workload:research",
@@ -144,15 +186,116 @@ class ResourceDiscoveryTests(unittest.TestCase):
         )
         self.assertEqual(evaluation.decision, "blocked-by-terms")
 
-    def test_account_resource_stays_authority_required_under_anonymous_budget(self) -> None:
+    def test_authority_budget_is_not_a_veto_for_positive_value_acquisition(self) -> None:
         evaluation = evaluate_resource(
             candidate(),
             demand(authority="anonymous-public"),
             as_of=NOW,
             owner=owner(authority="free-key"),
+            acquisition=acquisition(),
             transport=transport(),
         )
-        self.assertEqual(evaluation.decision, "authority-required")
+        self.assertEqual(evaluation.decision, "acquire-now")
+        self.assertGreater(evaluation.acquisition_net_value or 0.0, 0.15)
+
+    def test_missing_possessed_authority_never_turns_willingness_into_access(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(authority="payment"), as_of=NOW,
+            owner=owner(authority="free-key"), transport=transport(),
+        )
+        self.assertEqual(evaluation.decision, "acquisition-verification-required")
+        self.assertFalse(evaluation.authority_present)
+
+    def test_active_authority_evidence_unlocks_transport_and_consumption(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(), as_of=NOW, owner=owner(authority="free-key"),
+            authority=authority_evidence(), acquisition=acquisition(), transport=transport(),
+        )
+        self.assertEqual(evaluation.decision, "consumable-now")
+        self.assertTrue(evaluation.authority_present)
+
+    def test_high_value_student_entitlement_becomes_human_action_not_rejection(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(), as_of=NOW, owner=owner(authority="student"),
+            acquisition=acquisition(
+                mode="human-verification", human_actions=("verify-current-student-status",),
+                expected_benefit=1.0, option_value=1.0, acquisition_cost=0.2,
+            ),
+        )
+        self.assertEqual(evaluation.decision, "human-action-required")
+        self.assertGreater(evaluation.acquisition_net_value or 0.0, 0.15)
+
+    def test_child_offer_waits_on_parent_entitlement_without_duplicate_human_action(self) -> None:
+        parent = candidate("resource:github-student-pack")
+        child = candidate("resource:github-pack-datadog")
+        board = build_opportunity_board(
+            (parent, child), demand(), as_of=NOW,
+            owners=(
+                owner("resource:github-student-pack", authority="student"),
+                owner("resource:github-pack-datadog", authority="account"),
+            ),
+            acquisitions=(
+                acquisition(
+                    "resource:github-student-pack", mode="human-verification",
+                    human_actions=("verify-student-status",), expected_benefit=1.0, option_value=1.0,
+                ),
+                acquisition(
+                    "resource:github-pack-datadog", mode="human-login",
+                    prerequisite_resources=("resource:github-student-pack",),
+                    human_actions=("redeem-partner-offer",), expected_benefit=0.9, option_value=0.7,
+                ),
+            ),
+        )
+        self.assertEqual([row.resource_id for row in board.human_action_queue], ["resource:github-student-pack"])
+        self.assertEqual([row.resource_id for row in board.dependent_acquisition_queue], ["resource:github-pack-datadog"])
+
+    def test_parent_authority_releases_child_into_its_own_acquisition_lane(self) -> None:
+        child = candidate("resource:github-pack-datadog")
+        parent_authority = authority_evidence(
+            "resource:github-student-pack", authority="student"
+        )
+        board = build_opportunity_board(
+            (child,), demand(), as_of=NOW,
+            owners=(owner("resource:github-pack-datadog", authority="account"),),
+            authorities=(parent_authority,),
+            acquisitions=(acquisition(
+                "resource:github-pack-datadog", mode="human-login",
+                prerequisite_resources=("resource:github-student-pack",),
+                human_actions=("redeem-partner-offer",),
+            ),),
+        )
+        self.assertEqual([row.resource_id for row in board.human_action_queue], ["resource:github-pack-datadog"])
+        self.assertEqual(board.dependent_acquisition_queue, ())
+
+    def test_negative_net_value_is_deferred_not_moralized(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(), as_of=NOW, owner=owner(authority="payment"),
+            acquisition=acquisition(
+                mode="human-payment", expected_benefit=0.2, option_value=0.1,
+                acquisition_cost=0.9, maintenance_cost=0.8, payment_exposure=1.0,
+                lock_in_cost=0.8, expiry_pressure=0.8, human_actions=("enter-payment-method",),
+            ),
+        )
+        self.assertEqual(evaluation.decision, "defer-acquisition")
+        self.assertLess(evaluation.acquisition_net_value or 0.0, 0.15)
+
+    def test_unknown_new_customer_eligibility_can_be_resolved_in_positive_value_human_flow(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(), as_of=NOW, owner=owner(authority="payment"),
+            acquisition=acquisition(
+                eligibility="unknown", mode="human-payment", expected_benefit=0.9, option_value=0.9,
+                payment_exposure=0.2, human_actions=("complete-provider-signup",),
+            ),
+        )
+        self.assertEqual(evaluation.decision, "human-action-required")
+        self.assertIn("eligibility-resolved-in-human-acquisition-flow", evaluation.hard_reasons[0])
+
+    def test_ineligible_entitlement_is_rejected_by_owner_fact_not_friction(self) -> None:
+        evaluation = evaluate_resource(
+            candidate(), demand(), as_of=NOW, owner=owner(authority="student"),
+            acquisition=acquisition(eligibility="ineligible", mode="human-verification"),
+        )
+        self.assertEqual(evaluation.decision, "not-eligible")
 
     def test_transport_currentness_includes_resolver_identity(self) -> None:
         evidence = transport()
@@ -207,6 +350,17 @@ class ResourceDiscoveryTests(unittest.TestCase):
         self.assertEqual(len(board.transport_verification_queue), 0)
         self.assertEqual(len(board.evaluations), 20)
 
+    def test_opportunity_board_spends_verification_budget_on_acquisition_facts_before_transport(self) -> None:
+        acquisition_missing = candidate("resource:acquisition-missing")
+        transport_missing = candidate("resource:transport-missing")
+        board = build_opportunity_board(
+            (acquisition_missing, transport_missing), demand(), as_of=NOW,
+            owners=(owner("resource:acquisition-missing", authority="free-key"), owner("resource:transport-missing")),
+            verification_budget=1,
+        )
+        self.assertEqual([row.resource_id for row in board.acquisition_verification_queue], ["resource:acquisition-missing"])
+        self.assertEqual(board.transport_verification_queue, ())
+
     def test_opportunity_board_spends_remaining_budget_on_transport_verification(self) -> None:
         owner_missing = candidate("resource:owner-missing")
         transport_missing = candidate("resource:transport-missing")
@@ -220,19 +374,29 @@ class ResourceDiscoveryTests(unittest.TestCase):
         self.assertEqual([row.resource_id for row in board.owner_verification_queue], ["resource:owner-missing"])
         self.assertEqual([row.resource_id for row in board.transport_verification_queue], ["resource:transport-missing"])
 
-    def test_opportunity_board_separates_authority_from_consumption_and_feedback(self) -> None:
+    def test_opportunity_board_separates_acquire_human_transport_and_consumption(self) -> None:
         public = candidate("resource:public")
-        gated = candidate("resource:gated")
+        agent = candidate("resource:agent")
+        human = candidate("resource:human")
+        owned = candidate("resource:owned")
         board = build_opportunity_board(
-            (public, gated),
-            demand(),
-            as_of=NOW,
-            owners=(owner("resource:public"), owner("resource:gated", authority="free-key")),
-            transports=(transport("resource:public"), transport("resource:gated")),
+            (public, agent, human, owned), demand(), as_of=NOW,
+            owners=(
+                owner("resource:public"), owner("resource:agent", authority="free-key"),
+                owner("resource:human", authority="student"), owner("resource:owned", authority="free-key"),
+            ),
+            authorities=(authority_evidence("resource:owned"),),
+            acquisitions=(
+                acquisition("resource:agent"),
+                acquisition("resource:human", mode="human-verification", human_actions=("verify-student",)),
+            ),
+            transports=(transport("resource:public"), transport("resource:owned")),
         )
-        self.assertEqual([row.resource_id for row in board.consumption_queue], ["resource:public"])
-        self.assertEqual([row.resource_id for row in board.feedback_queue], ["resource:public"])
-        self.assertEqual([row.resource_id for row in board.authority_queue], ["resource:gated"])
+        self.assertEqual([row.resource_id for row in board.consumption_queue], ["resource:owned", "resource:public"])
+        self.assertEqual({row.resource_id for row in board.feedback_queue}, {"resource:public", "resource:owned"})
+        self.assertEqual([row.resource_id for row in board.acquire_now_queue], ["resource:agent"])
+        self.assertEqual([row.resource_id for row in board.human_action_queue], ["resource:human"])
+        self.assertEqual({row.resource_id for row in board.authority_queue}, {"resource:agent", "resource:human"})
 
     def test_rank_keeps_hard_decision_classes_ahead_of_score(self) -> None:
         usable = evaluate_resource(

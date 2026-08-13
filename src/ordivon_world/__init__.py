@@ -9,6 +9,8 @@ from .entity_migration import EntityMigrationBundle
 from .host import HostWorldExtension
 from .message_delivery import MessageDeliveryBundle
 from .resource_discovery import (
+    AcquisitionAssessment,
+    AuthorityEvidence,
     ConsumerDemand,
     ConsumptionOutcome,
     DiscoveryEvidence,
@@ -38,6 +40,8 @@ __all__ = [
     "DiscoveryEvidence",
     "ResourceCandidate",
     "OwnerVerification",
+    "AuthorityEvidence",
+    "AcquisitionAssessment",
     "TransportEvidence",
     "ConsumerDemand",
     "ConsumptionOutcome",
