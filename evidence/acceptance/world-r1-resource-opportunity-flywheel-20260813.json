@@ -1,0 +1,699 @@
+{
+  "acceptanceDigest": "sha256:e509ccda909a67848ee3bdd9cb06a3dd1f6feea3c6b5fc19d019ea62d6c3e379",
+  "asOf": "2026-08-13T07:05:00Z",
+  "board": {
+    "asOf": "2026-08-13T07:05:00Z",
+    "authorityQueue": [
+      "resource:gbif-occurrence-bulk-download",
+      "resource:openalex-api-free-key"
+    ],
+    "candidateCount": 7,
+    "consumptionQueue": [
+      "resource:commoncrawl-http-data",
+      "resource:openalex-snapshot",
+      "resource:gbif-occurrence-search",
+      "resource:nasa-cmr-public-search",
+      "resource:crossref-rest-public"
+    ],
+    "evaluations": [
+      {
+        "authorityFriction": 0,
+        "decision": "consumable-now",
+        "demandFit": 1.0,
+        "diversityPotential": 0.95,
+        "evidenceQuality": 0.9,
+        "hardReasons": [],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 1.0,
+        "potentialScore": 0.9125,
+        "preferredFit": 0.5,
+        "resourceId": "resource:commoncrawl-http-data",
+        "reusePotential": 0.88,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 0,
+        "decision": "consumable-now",
+        "demandFit": 1.0,
+        "diversityPotential": 0.8,
+        "evidenceQuality": 0.9,
+        "hardReasons": [],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 1.0,
+        "potentialScore": 0.902083,
+        "preferredFit": 0.5,
+        "resourceId": "resource:openalex-snapshot",
+        "reusePotential": 0.95,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 0,
+        "decision": "consumable-now",
+        "demandFit": 1.0,
+        "diversityPotential": 0.88,
+        "evidenceQuality": 0.9,
+        "hardReasons": [],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 1.0,
+        "potentialScore": 0.88,
+        "preferredFit": 0.5,
+        "resourceId": "resource:gbif-occurrence-search",
+        "reusePotential": 0.78,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 0,
+        "decision": "consumable-now",
+        "demandFit": 1.0,
+        "diversityPotential": 0.82,
+        "evidenceQuality": 0.9,
+        "hardReasons": [],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 1.0,
+        "potentialScore": 0.878333,
+        "preferredFit": 0.5,
+        "resourceId": "resource:nasa-cmr-public-search",
+        "reusePotential": 0.82,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 0,
+        "decision": "consumable-now",
+        "demandFit": 1.0,
+        "diversityPotential": 0.55,
+        "evidenceQuality": 0.9,
+        "hardReasons": [],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 1.0,
+        "potentialScore": 0.854167,
+        "preferredFit": 0.5,
+        "resourceId": "resource:crossref-rest-public",
+        "reusePotential": 0.92,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 2,
+        "decision": "authority-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.9,
+        "evidenceQuality": 0.45,
+        "hardReasons": [
+          "authority-friction-2-exceeds-budget-0"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.76875,
+        "preferredFit": 0.5,
+        "resourceId": "resource:gbif-occurrence-bulk-download",
+        "reusePotential": 0.86,
+        "schemaVersion": 1
+      },
+      {
+        "authorityFriction": 1,
+        "decision": "authority-required",
+        "demandFit": 1.0,
+        "diversityPotential": 0.62,
+        "evidenceQuality": 0.45,
+        "hardReasons": [
+          "authority-friction-1-exceeds-budget-0"
+        ],
+        "kind": "ordivon.world.resource-evaluation",
+        "outcomePrior": 0.5,
+        "potentialScore": 0.7575,
+        "preferredFit": 0.5,
+        "resourceId": "resource:openalex-api-free-key",
+        "reusePotential": 0.95,
+        "schemaVersion": 1
+      }
+    ],
+    "feedbackQueue": [],
+    "frontier": [
+      "resource:commoncrawl-http-data",
+      "resource:openalex-snapshot"
+    ],
+    "kind": "ordivon.world.resource-opportunity-board",
+    "ownerVerificationQueue": [],
+    "rejected": [],
+    "schemaVersion": 1,
+    "transportVerificationQueue": [],
+    "workloadId": "world:research-data-pack-r1"
+  },
+  "candidates": [
+    {
+      "candidateDigest": "sha256:2cac04ac6cb670977d685607473c1c2c77012338d0fad56d1a29ab30a16f6bfd",
+      "capabilities": [
+        "public-data-read",
+        "bulk-snapshot",
+        "machine-readable-jsonl",
+        "scholarly-graph"
+      ],
+      "diversityPotential": 0.8,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "OpenAlex public snapshot",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:openalex-snapshot",
+      "reusePotential": 0.95,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:def4ea22ee8b238648da8773c4b24d5849ada9f341e44c688458f644ac69277d",
+      "capabilities": [
+        "public-data-read",
+        "machine-readable-api",
+        "scholarly-metadata"
+      ],
+      "diversityPotential": 0.55,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "Crossref public REST API",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:crossref-rest-public",
+      "reusePotential": 0.92,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:1d1e38ef3c854d4a4cd326ffdf4d887fe8f605c051e174690e3769c96316e7be",
+      "capabilities": [
+        "public-data-read",
+        "bulk-snapshot",
+        "web-corpus",
+        "machine-readable-index"
+      ],
+      "diversityPotential": 0.95,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "Common Crawl HTTP data",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:commoncrawl-http-data",
+      "reusePotential": 0.88,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:192ff5ddd60a723725d7227c651d73d5557e04e846b1c77dc10345b7ba253678",
+      "capabilities": [
+        "public-data-read",
+        "machine-readable-api",
+        "earth-observation-metadata",
+        "stac-search"
+      ],
+      "diversityPotential": 0.82,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "NASA CMR public search",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:nasa-cmr-public-search",
+      "reusePotential": 0.82,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:a8e6caefc3562f1096d567a4e4eea87086352d5ff23ef9b763a534d0203638c2",
+      "capabilities": [
+        "public-data-read",
+        "machine-readable-api",
+        "biodiversity-occurrence"
+      ],
+      "diversityPotential": 0.88,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "GBIF occurrence search",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:gbif-occurrence-search",
+      "reusePotential": 0.78,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:47f58e604e93acfee48a93f2ca3490f6013c9dbf94c7bb94054e3b0fe1b41df6",
+      "capabilities": [
+        "public-data-read",
+        "machine-readable-api",
+        "scholarly-graph"
+      ],
+      "diversityPotential": 0.62,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "OpenAlex REST API",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:openalex-api-free-key",
+      "reusePotential": 0.95,
+      "schemaVersion": 1
+    },
+    {
+      "candidateDigest": "sha256:65dfb943c436a0b14e8d345e2780e1f92c48019952b651c66148235bd3b90047",
+      "capabilities": [
+        "public-data-read",
+        "bulk-snapshot",
+        "biodiversity-occurrence"
+      ],
+      "diversityPotential": 0.9,
+      "interfaces": [
+        "https"
+      ],
+      "kind": "ordivon.world.resource-candidate",
+      "metadata": {},
+      "name": "GBIF occurrence bulk download",
+      "ownerHint": null,
+      "provenance": [
+        {
+          "evidenceRefs": [
+            "source:world-r1-seed"
+          ],
+          "locator": "ordivon://world/r1-tier0-seed",
+          "observedAt": "2026-08-13T07:00:00Z",
+          "sourceDigest": null,
+          "sourceId": "source:world-r1-seed",
+          "sourceKind": "index"
+        }
+      ],
+      "resourceId": "resource:gbif-occurrence-bulk-download",
+      "reusePotential": 0.86,
+      "schemaVersion": 1
+    }
+  ],
+  "consumptionOutcomes": [
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9f0-1771-7e11-a96d-4dc21a5c9aa6",
+        "sha256:d5ec7031a6f475fa646e97856c8cf6790b475fbcdd135b15e7695ee4506dfa98"
+      ],
+      "observedAt": "2026-08-13T07:04:20Z",
+      "resourceId": "resource:openalex-snapshot",
+      "useful": true,
+      "value": 1.0,
+      "workloadId": "world:research-data-pack-r1"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289",
+        "sha256:75230d397b50224239f26976c76192341ad3bf8a5e21516b888f09834ae5aa26"
+      ],
+      "observedAt": "2026-08-13T07:03:31Z",
+      "resourceId": "resource:crossref-rest-public",
+      "useful": true,
+      "value": 1.0,
+      "workloadId": "world:research-data-pack-r1"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289",
+        "sha256:20c2c05d3fa05a259b2791f379ea586a30034423f40fb00e7a18c170675d1753"
+      ],
+      "observedAt": "2026-08-13T07:03:31Z",
+      "resourceId": "resource:commoncrawl-http-data",
+      "useful": true,
+      "value": 1.0,
+      "workloadId": "world:research-data-pack-r1"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289",
+        "sha256:406da1da3e6fa0f4fa58856d50d86e24cdcaacce8d9666ad0419d05ce905eb9e"
+      ],
+      "observedAt": "2026-08-13T07:03:31Z",
+      "resourceId": "resource:nasa-cmr-public-search",
+      "useful": true,
+      "value": 1.0,
+      "workloadId": "world:research-data-pack-r1"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289",
+        "sha256:84c8f7731a37eb3e6337f64129544454e57eede98acc9778322e355068c9fb81"
+      ],
+      "observedAt": "2026-08-13T07:03:31Z",
+      "resourceId": "resource:gbif-occurrence-search",
+      "useful": true,
+      "value": 1.0,
+      "workloadId": "world:research-data-pack-r1"
+    }
+  ],
+  "consumptionSamples": {
+    "commonCrawl": {
+      "firstPath": "crawl-data/CC-MAIN-2026-25/segments/1780687572080.85/warc/CC-MAIN-20260605214811-20260606004811-00000.warc.gz"
+    },
+    "crossref": {
+      "DOI": "10.1201/9781003606055-5",
+      "title": "Machine learning vs. neutrosophic machine learning"
+    },
+    "gbif": {
+      "datasetKey": "50c9509d-22c7-4a22-a47d-8c48425ef4a7",
+      "key": 5938027458,
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "scientificName": "Passer montanus saturatus Stejneger, 1885"
+    },
+    "nasaCmr": {
+      "id": "C2515837343-GES_DISC",
+      "title": "Aqua AIRS-MODIS 1-km Matchup Indexes V1 (Aqua_AIRS_MODIS1km_IND) at GES_DISC"
+    },
+    "openalexSnapshot": {
+      "date": "2026-06-26",
+      "entity": "works",
+      "fileCount": 2446,
+      "format": "jsonl",
+      "recordCount": 510372821
+    }
+  },
+  "dogfoodFalsifiers": [
+    {
+      "correction": "https://openalex.s3.amazonaws.com/data/jsonl/works/manifest.json",
+      "correctionEvidence": "runtime:job-019ff9f0-1771-7e11-a96d-4dc21a5c9aa6",
+      "reason": "owner returned NoSuchKey; pre-2026 flat snapshot path was stale",
+      "rejectedLocator": "https://openalex.s3.amazonaws.com/data/works/manifest",
+      "resourceId": "resource:openalex-snapshot"
+    },
+    {
+      "class": "transport-currentness",
+      "evidence": "runtime:job-019ff9ec-82b9-7652-bc44-6401ab1c09f4",
+      "finding": "Crossref/NASA/GBIF initially timed out on one Surfshark probe but later qualified on native-a/native-b and/or Surfshark; owner availability was not downgraded from one path failure."
+    },
+    {
+      "class": "semantic-consumption",
+      "finding": "HTTP transport success and a non-empty body were insufficient for utility; the stale OpenAlex key returned a NoSuchKey error body and was rejected before ConsumptionOutcome."
+    }
+  ],
+  "kind": "ordivon.world.resource-opportunity-r1-acceptance",
+  "ownerVerifications": [
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "anonymous-public",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:openalex-download",
+        "official:openalex-pricing"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "CC0",
+      "machineInterfaces": [
+        "s3-anonymous",
+        "https"
+      ],
+      "notes": [],
+      "officialLocator": "https://developers.openalex.org/download/download-to-machine",
+      "ownerId": "owner:openalex",
+      "quotaClass": "~330GB compressed full snapshot; quarterly public snapshot",
+      "resourceId": "resource:openalex-snapshot",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "anonymous-public",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:crossref-rest",
+        "official:crossref-auth"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "open metadata; abstracts may retain publisher/author copyright",
+      "machineInterfaces": [
+        "https-json"
+      ],
+      "notes": [],
+      "officialLocator": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+      "ownerId": "owner:crossref",
+      "quotaClass": "public pool rate/concurrency limits",
+      "resourceId": "resource:crossref-rest-public",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "anonymous-public",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:commoncrawl-get-started",
+        "official:commoncrawl-terms"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "Common Crawl ToU; crawled content may carry third-party terms/rights",
+      "machineInterfaces": [
+        "https",
+        "s3-anonymous"
+      ],
+      "notes": [],
+      "officialLocator": "https://commoncrawl.org/get-started",
+      "ownerId": "owner:commoncrawl",
+      "quotaClass": "bulk HTTP(S) / anonymous data access",
+      "resourceId": "resource:commoncrawl-http-data",
+      "schemaVersion": 1,
+      "termsStatus": "conditional",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "anonymous-public",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:nasa-cmr-api",
+        "official:nasa-earthdata-data-use"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "NASA-led data generally CC0 unless marked; non-NASA data inherits source restrictions",
+      "machineInterfaces": [
+        "https-json",
+        "stac",
+        "xml"
+      ],
+      "notes": [],
+      "officialLocator": "https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html",
+      "ownerId": "owner:nasa-earthdata",
+      "quotaClass": "public search; protected/private concepts require token",
+      "resourceId": "resource:nasa-cmr-public-search",
+      "schemaVersion": 1,
+      "termsStatus": "conditional",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "anonymous-public",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:gbif-api",
+        "official:gbif-terms"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "per-dataset CC0 / CC BY / CC BY-NC license inheritance",
+      "machineInterfaces": [
+        "https-json"
+      ],
+      "notes": [],
+      "officialLocator": "https://techdocs.gbif.org/en/openapi/v1/occurrence",
+      "ownerId": "owner:gbif",
+      "quotaClass": "search max 300/page and 100k offset+limit boundary",
+      "resourceId": "resource:gbif-occurrence-search",
+      "schemaVersion": 1,
+      "termsStatus": "conditional",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "free-key",
+      "costClass": "free-daily-quota",
+      "evidenceRefs": [
+        "official:openalex-auth",
+        "official:openalex-changelog"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "CC0",
+      "machineInterfaces": [
+        "https-json"
+      ],
+      "notes": [],
+      "officialLocator": "https://developers.openalex.org/api-reference/authentication",
+      "ownerId": "owner:openalex",
+      "quotaClass": "API key required; free daily usage budget",
+      "resourceId": "resource:openalex-api-free-key",
+      "schemaVersion": 1,
+      "termsStatus": "allowed",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    },
+    {
+      "allowedPurposes": [
+        "academic-research"
+      ],
+      "authorityClass": "account",
+      "costClass": "free",
+      "evidenceRefs": [
+        "official:gbif-downloads",
+        "official:gbif-terms"
+      ],
+      "kind": "ordivon.world.resource-owner-verification",
+      "licenseClass": "per-dataset CC0 / CC BY / CC BY-NC license inheritance",
+      "machineInterfaces": [
+        "https-async-download"
+      ],
+      "notes": [],
+      "officialLocator": "https://techdocs.gbif.org/en/data-use/api-downloads",
+      "ownerId": "owner:gbif",
+      "quotaClass": "registered GBIF account + HTTP Basic auth; async download limits",
+      "resourceId": "resource:gbif-occurrence-bulk-download",
+      "schemaVersion": 1,
+      "termsStatus": "conditional",
+      "verifiedAt": "2026-08-13T07:00:00Z"
+    }
+  ],
+  "schemaVersion": 1,
+  "transportEvidence": [
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9f0-1771-7e11-a96d-4dc21a5c9aa6"
+      ],
+      "latencyMs": 2257.3,
+      "observedAt": "2026-08-13T07:04:20Z",
+      "pathId": "fabric:native-a",
+      "resolverId": "resolver:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resourceId": "resource:openalex-snapshot",
+      "status": "available"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289"
+      ],
+      "latencyMs": 5122.0,
+      "observedAt": "2026-08-13T07:03:31Z",
+      "pathId": "fabric:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resolverId": "resolver:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resourceId": "resource:commoncrawl-http-data",
+      "status": "available"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289"
+      ],
+      "latencyMs": 3165.5,
+      "observedAt": "2026-08-13T07:03:31Z",
+      "pathId": "fabric:native-b",
+      "resolverId": "resolver:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resourceId": "resource:crossref-rest-public",
+      "status": "available"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289"
+      ],
+      "latencyMs": 2422.9,
+      "observedAt": "2026-08-13T07:03:31Z",
+      "pathId": "fabric:native-b",
+      "resolverId": "resolver:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resourceId": "resource:nasa-cmr-public-search",
+      "status": "available"
+    },
+    {
+      "evidenceRefs": [
+        "runtime:job-019ff9ee-e6c7-7771-9e07-898103fe0289"
+      ],
+      "latencyMs": 6153.1,
+      "observedAt": "2026-08-13T07:03:31Z",
+      "pathId": "fabric:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resolverId": "resolver:surf-clash:sha256:51c712d235d0a7d81d0b1af605eb8c4d992cfa650cc0db0d788c45bac36cdeef",
+      "resourceId": "resource:gbif-occurrence-search",
+      "status": "available"
+    }
+  ],
+  "truthRole": "dogfood-evidence-not-owner-authority",
+  "workloadId": "world:research-data-pack-r1"
+}
