@@ -24,8 +24,6 @@ UVX=${UVX:-$(command -v uvx)}
   cd providers/cloudflare
   pnpm run ci
 )
-(
-)
 
 "$UVX" pip-audit -r requirements-audit.txt
 
