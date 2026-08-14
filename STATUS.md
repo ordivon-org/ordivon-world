@@ -56,7 +56,7 @@ Exact experiments, receipts, counterexamples, and reopening conditions remain in
 - `WorldTaskInspector` is World-local and does not establish a generic cross-domain Observation or Owner registry.
 - Historical receipts cannot establish current Presence, reachability, capability, or provider state without applicable owner-native re-observation.
 - Network observation tools do not automatically choose or activate routes for an Agent.
-- World does not own Runtime execution migration or immutable-input transport. Physical execution/input gaps remain Runtime/Workstation responsibilities.
+- World does not own Runtime execution migration or immutable-input transport. Runtime now supports exact immutable-input materialization on both admitted execution targets within its proven target-specific authority boundaries; future physical execution/input gaps remain Runtime/Workstation responsibilities.
 - Provider success remains evidence for later Host/domain verification, not automatic completion.
 
 ## Live state is owner-native

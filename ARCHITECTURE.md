@@ -185,7 +185,7 @@ lineage        lineage
        Reconcile
 ```
 
-Runtime `foreignReferences` are identity/correlation commitments, not Artifact transport. Likewise, a shared canonical Git revision is not evidence that an external immutable input was materialized for every target. W-X4 physically found that current Windows-native Runtime admission cannot consume `workspace.execBound`; that is a Runtime substrate requirement rather than justification for a World filesystem, byte-transfer or execution-migration manager.
+Runtime `foreignReferences` are identity/correlation commitments, not Artifact transport. Likewise, a shared canonical Git revision is not evidence that an external immutable input was materialized for every target. W-X4 originally found that Windows-native Runtime admission could not consume `workspace.execBound`; current Runtime has since implemented and real-system-verified limited-authority Windows immutable-input admission. That evolution remains a Runtime substrate responsibility and still does not justify a World filesystem, byte-transfer or execution-migration manager.
 
 ## Contract boundary
 
