@@ -95,3 +95,41 @@ class WorldTaskInspector:
                 "unknown-outcome-requires-owner-reconciliation-before-retry",
             ],
         }
+
+    def inspect_replacement_readiness(
+        self, task_id: str, *, expected_revision: int
+    ) -> dict[str, Any]:
+        """Project whether controller replacement would orphan reconciliation work.
+
+        This is derived, revision-fenced information only. A clear result never
+        grants retry, reconciliation, dispatch, or external-currentness authority.
+        """
+
+        inspection = self.inspect_task(task_id, expected_revision=expected_revision)
+        blockers: list[dict[str, Any]] = []
+        for commitment in inspection["commitments"]:
+            operation = commitment.get("nextOwnerOperation")
+            if isinstance(operation, str) and operation.startswith("reconcile-"):
+                blockers.append(
+                    {
+                        "family": commitment["family"],
+                        "identity": commitment["identity"],
+                        "state": commitment["state"],
+                        "nextOwnerOperation": operation,
+                    }
+                )
+        return {
+            "schemaVersion": 1,
+            "kind": "ordivon.world.controller-replacement-readiness",
+            "taskId": task_id,
+            "taskRevision": inspection["taskRevision"],
+            "replaceable": not blockers,
+            "reconciliationBlockers": blockers,
+            "actionAuthority": "not-granted-by-inspection",
+            "externalCurrentness": "not-claimed",
+            "constraints": [
+                "derived-from-owner-native-commitment-projections",
+                "clear-readiness-does-not-grant-action-authority",
+                "unknown-outcome-remains-owner-reconciliation-work",
+            ],
+        }
