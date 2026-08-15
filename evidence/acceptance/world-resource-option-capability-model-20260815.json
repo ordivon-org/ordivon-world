@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-option-capability-model-acceptance",
+  "status": "passed",
+  "observedAt": "2026-08-15T03:59:00Z",
+  "laws": [
+    "Resource != Capability",
+    "Resource abundance != Redundancy",
+    "Actionable Resource requires current owner-grounded relation evidence",
+    "Option is demand-scoped actionable possibility, not durable ambient authority",
+    "Redundancy requires substitutability, current actionability and relevant failure-domain independence",
+    "Capability and Capacity are distinct",
+    "A lower-layer Capability may be a higher-layer Resource",
+    "Capability may improve future Resource acquisition",
+    "Effects plus attribution produce Knowledge that improves later selection",
+    "Historical evidence does not replace currentness",
+    "Pre-admission option selection remains recomputable planning state",
+    "World compresses reality into bounded actionable possibilities while preserving fact ownership"
+  ],
+  "flywheel": [
+    "reality",
+    "discovery",
+    "resources",
+    "owner-truth-and-authority",
+    "actionable-resources",
+    "qualification",
+    "options",
+    "diversity-and-failure-domain-analysis",
+    "optionality-and-redundancy",
+    "selection-and-composition",
+    "capability",
+    "effect",
+    "evidence-and-attribution",
+    "knowledge",
+    "better-resource-acquisition-and-retirement"
+  ],
+  "worldStocks": [
+    "resource-capital",
+    "authority-capital",
+    "option-capital",
+    "capability-capital",
+    "knowledge-capital"
+  ],
+  "currentEngineeringMapping": {
+    "ResourceCandidate": "cheap discovered resource candidate",
+    "OwnerVerification": "provider/owner requirement truth",
+    "AuthorityEvidence": "possessed current authority",
+    "TransportEvidence": "owner-projected current access evidence",
+    "AcquisitionAssessment.optionValue": "expected future option value before authority acquisition",
+    "ResourceEvaluation": "demand-scoped current planning projection",
+    "ResourceCandidate.diversityPotential": "heuristic potential only; not independence proof",
+    "ConsumptionOutcome": "semantic workload feedback",
+    "ResourceOpportunityBoard": "bounded planning/verification/consumption work surface"
+  },
+  "networkFalsifier": {
+    "candidateUniverse": {
+      "logicalNodes": 142,
+      "transportVariants": 415
+    },
+    "financeHotMembers": 2,
+    "provenDiversity": [
+      "protocol",
+      "vpn-tunnel",
+      "provider-node",
+      "remote-endpoint"
+    ],
+    "notProvenIndependent": [
+      "physical-access-domain"
+    ],
+    "reason": "the current Finance members ultimately share the same physical access domain; raw node/variant cardinality cannot be promoted to physical redundancy"
+  },
+  "researchConcepts": {
+    "resourceToCapabilityConversionRate": {
+      "name": "RCR",
+      "status": "research-only-unmeasured",
+      "meaning": "efficiency of converting candidate resources into proven reusable capability"
+    },
+    "marginalWorldValue": {
+      "status": "qualitative-only",
+      "positiveTerms": [
+        "capability",
+        "optionality",
+        "failure-domain-independence",
+        "capacity",
+        "information"
+      ],
+      "negativeTerms": [
+        "acquisition-cost",
+        "maintenance-cost",
+        "coordination-complexity",
+        "risk"
+      ]
+    }
+  },
+  "nonPromotions": [
+    "global-capability-registry",
+    "universal-option-database",
+    "world-owned-network-router",
+    "universal-failure-domain-ontology",
+    "single-world-value-score",
+    "persistent-pre-admission-selection-journal",
+    "global-resource-ownership-service"
+  ],
+  "reopeningQuestions": [
+    "Does owner-native failure-domain evidence improve fresh-Agent selection enough to justify a bounded projection?",
+    "Can RCR be measured against actual capability growth rather than activity volume?",
+    "When should a cold resource universe gain a warm qualified reservoir and hot active set?",
+    "Which bottleneck evidence best predicts marginal resource value?"
+  ]
+}

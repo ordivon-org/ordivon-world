@@ -120,7 +120,13 @@ class DiscoveryEvidence:
 
 @dataclass(frozen=True, slots=True)
 class ResourceCandidate:
-    """A cheap-to-create candidate, not permission to consume the resource."""
+    """A cheap-to-create candidate, not permission or a proven capability.
+
+    ``diversity_potential`` is only a discovery/ranking heuristic for expected
+    marginal diversity. It is not evidence that two resources are independent
+    under any concrete failure domain. Independence remains an owner-native,
+    current relation fact (for example a Workstation physical-access observation).
+    """
 
     resource_id: str
     name: str
@@ -505,6 +511,14 @@ class ConsumptionOutcome:
 
 @dataclass(frozen=True, slots=True)
 class ResourceEvaluation:
+    """Demand-scoped planning projection, not a durable capability grant.
+
+    ``consumable-now`` means the supplied owner/authority/transport evidence is
+    sufficient for this demand at ``as_of``. It does not mean that a collection
+    of evaluations forms redundant capability: substitutability and relevant
+    failure-domain independence must be established separately by their owners.
+    """
+
     resource_id: str
     decision: Decision
     hard_reasons: tuple[str, ...]

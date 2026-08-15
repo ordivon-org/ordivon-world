@@ -216,6 +216,7 @@ A new shared World abstraction requires a named current workload, a reproduced f
 | operate, deploy, diagnose, GC or recover | [`docs/operations.md`](docs/operations.md) |
 | determine what evidence actually proves | [`docs/verification.md`](docs/verification.md) |
 | turn broad resource discovery into bounded owner/transport verification and consumption | [`docs/resource-opportunity-flywheel.md`](docs/resource-opportunity-flywheel.md) |
+| understand how resources become options, redundancy and capability without a global registry | [`docs/resource-option-capability-model.md`](docs/resource-option-capability-model.md) |
 | understand why the retained boundary is narrow | [`docs/retained-boundaries.md`](docs/retained-boundaries.md) |
 | inspect closed research and reopening conditions | [`docs/research-closeouts.md`](docs/research-closeouts.md) |
 

@@ -207,3 +207,25 @@ Scarcity or the possibility that another eligible person might also use the reso
 ## 12. Currentness and invalidation
 
 Owner terms, offers, eligibility, credits, authority state, transport, and consumer utility all expire at different rates. Each evidence type therefore carries its own timestamp/freshness budget. Stale evidence returns to the appropriate verification lane instead of silently persisting as truth.
+
+## 13. Resource abundance, options and capability
+
+The opportunity flywheel is one part of the broader [`Resource → Option → Capability World Model`](resource-option-capability-model.md).
+
+The additional law is:
+
+```text
+resource candidate
+  + current owner truth
+  + possessed authority
+  + current access
+  + workload fit
+        ↓
+current option
+```
+
+Several current options for the same target transition create useful redundancy only when they are substitutable and do not all collapse under the same relevant failure domain. Therefore candidate count, `diversity_potential`, geographic labels, or protocol labels alone must never be reported as proven redundancy.
+
+`diversity_potential` remains an inexpensive candidate-ranking heuristic. Proven independence requires current evidence from the owner of the relevant failure-domain fact (for example Workstation for physical network access). The Resource Opportunity Board intentionally does not persist a universal failure-domain graph.
+
+Semantic consumption then does more than validate utility: attributable outcomes increase Knowledge Capital and can improve later discovery, acquisition, promotion/demotion and retirement decisions. A capability exported by one owner may itself become a resource for another owner, but authority and currentness remain at their original boundaries.
