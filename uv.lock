@@ -40,8 +40,8 @@ wheels = [
 
 [[package]]
 name = "ordivon-host"
-version = "0.1.2"
-source = { git = "https://github.com/zycxfyh/ordivon-host.git?rev=d53d924f546403208792a364995d3740dafd2be0#d53d924f546403208792a364995d3740dafd2be0" }
+version = "0.2.0"
+source = { git = "https://github.com/zycxfyh/ordivon-host.git?rev=ebaf6ef90d87e7bc524e8f30d71521b371d17f2e#ebaf6ef90d87e7bc524e8f30d71521b371d17f2e" }
 dependencies = [
     { name = "ordivon-protocol" },
 ]
@@ -63,7 +63,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "jsonschema", specifier = ">=4.23,<5" },
-    { name = "ordivon-host", git = "https://github.com/zycxfyh/ordivon-host.git?rev=d53d924f546403208792a364995d3740dafd2be0" },
+    { name = "ordivon-host", git = "https://github.com/zycxfyh/ordivon-host.git?rev=ebaf6ef90d87e7bc524e8f30d71521b371d17f2e" },
 ]
 
 [[package]]

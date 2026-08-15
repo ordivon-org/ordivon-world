@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "jsonschema>=4.23,<5",
-  "ordivon-host @ git+https://github.com/zycxfyh/ordivon-host.git@d53d924f546403208792a364995d3740dafd2be0",
+  "ordivon-host @ git+https://github.com/zycxfyh/ordivon-host.git@ebaf6ef90d87e7bc524e8f30d71521b371d17f2e",
 ]
 
 [project.scripts]
