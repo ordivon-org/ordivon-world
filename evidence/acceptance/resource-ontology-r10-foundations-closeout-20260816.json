@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r10-foundations-closeout",
+  "truthRole": "research-acceptance-receipt",
+  "baseRevision": "f8438305c72f4705b8da6415dd804db7ae131c13",
+  "priorFrozenArtifacts": [
+    {
+      "path": "docs/resource-ontology-r0-census.md",
+      "sha256": "sha256:572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9"
+    },
+    {
+      "path": "docs/resource-ontology-r1-theory-triangulation.md",
+      "sha256": "sha256:63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2"
+    },
+    {
+      "path": "docs/resource-ontology-r2-definition-falsification.md",
+      "sha256": "sha256:97a3765d58a74cfdc1f6c3df8076b77f6acb867ae196391ed7c3145e6603cd11"
+    },
+    {
+      "path": "docs/resource-ontology-r3-relation-model.md",
+      "sha256": "sha256:b5d7697736a458678b700835c379dd231d317ad62ae689c0c4b22b67af94e85a"
+    },
+    {
+      "path": "docs/resource-ontology-r4-lifecycle-falsification.md",
+      "sha256": "sha256:b480bbae80d9e685bb3d79971c5d8960f4930a9faf4c2c6e6771206609685fb4"
+    },
+    {
+      "path": "docs/resource-ontology-r5-composition-falsification.md",
+      "sha256": "sha256:154fae1112e3c5ff453a91699382752b0ad5ec3ba5f33c5633805090500e50a6"
+    },
+    {
+      "path": "docs/resource-ontology-r6-conversion-falsification.md",
+      "sha256": "sha256:d422166286a218605b2fedaedf0fd752db8733bcba44214257fb25dc3104c5d7"
+    },
+    {
+      "path": "docs/resource-ontology-r7-ecology-dynamics-falsification.md",
+      "sha256": "sha256:3217f88b9ca6d0fe0ec804778826715ea8a6be6dc579eb6b739f3d4e987754b8"
+    },
+    {
+      "path": "docs/resource-ontology-r8-evidence-resource-falsification.md",
+      "sha256": "sha256:2a6765583473a534e32c85997a38ffa729cf3002f81a7f9c8e315039920eb49f"
+    },
+    {
+      "path": "docs/resource-ontology-r9-cross-domain-dogfood.md",
+      "sha256": "sha256:723baa1ca10e0f3b5ce606ed77403e74e01ccdbe5a0ff5c89ba4e8cb18613a7b"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r1-theory-triangulation-20260815.json",
+      "sha256": "sha256:097ac86884bba58c8f2b18fc32a57af74896112641feed5263f52bff957614a0"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r2-definition-matrix-20260815.json",
+      "sha256": "sha256:1a5d2e0954e74ddbd4fe82c4802728b65e13d18271ac3067bcae09604d4931ec"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r2-falsification-20260815.json",
+      "sha256": "sha256:1887b7d1632a0ca88f874b8b695ccd36e46fd71ae7fdec2328a910c28d839d7b"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r3-relation-20260815.json",
+      "sha256": "sha256:6647fce43aaba535eeb361d61ff4fdf421fa34ccd7b45086b727cc51647f83d1"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r3-relation-matrix-20260815.json",
+      "sha256": "sha256:0dc4709dcd5991a3686278c6227dff7eab7045e6b0a85dad0886bcfef1ace02d"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r4-lifecycle-20260815.json",
+      "sha256": "sha256:acf452ce3fbd03aff1d58847268f302fe53d89c96046add0e7bec5613fe7cfc6"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r4-lifecycle-matrix-20260815.json",
+      "sha256": "sha256:69fb1f9c33e8bacbd5f04a9ed86edadb4b597026a71c6cad6e033114c83b10c7"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r5-composition-20260815.json",
+      "sha256": "sha256:9c847fe4e63c89a749a84be079217114a945358aa22a4de8a556051b2c0f28ce"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r5-composition-matrix-20260815.json",
+      "sha256": "sha256:145b84c56fab87856c9c69ca1549c68d4eb1d1cc28dba266668c033ec61dd722"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r6-conversion-20260815.json",
+      "sha256": "sha256:a86664b976122e4ec8f248031dd759a42dceb79ff8edd52edc6326b87e0179d3"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r6-conversion-matrix-20260815.json",
+      "sha256": "sha256:b933325cbca290d9de6a20c45acf825aa3105055d972b5a491b9bc73a705a17a"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r7-ecology-20260815.json",
+      "sha256": "sha256:67e6e1ee528ae5e08888fe3033bc53a5dc5347c7119389ee26cf17a1e1a5d495"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r7-ecology-matrix-20260815.json",
+      "sha256": "sha256:4816ff5716529a9bdc25869989f09bb76e83164f3abb2c492fef9fed0ef95533"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r8-evidence-resource-20260815.json",
+      "sha256": "sha256:1bcc571eb4eb10011fa01a859db81460380096dba4376d9bd0bb15413d3b2a80"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r8-evidence-resource-matrix-20260815.json",
+      "sha256": "sha256:94978dff657dcbfd47f418542dde336af8126dd05647943932acaafc653f409c"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r9-cross-domain-dogfood-20260815.json",
+      "sha256": "sha256:792c5a561c085fdfb61d460d8486cc6a804483450ce5e81f683380c48501d0c0"
+    },
+    {
+      "path": "evidence/acceptance/resource-ontology-r9-dogfood-matrix-20260815.json",
+      "sha256": "sha256:9a0aac1f05c5f13a5aca8513f19395bdff06ee0e04435edf17ab23c712ef4d7c"
+    },
+    {
+      "path": "docs/resource-option-capability-model.md",
+      "sha256": "sha256:6aec276db2f06f2abe222d07e96527bad4e1144209206d3a8388774533075bc7"
+    },
+    {
+      "path": "docs/resource-opportunity-flywheel.md",
+      "sha256": "sha256:8ee436d6e3daca4e9c1643f7568debe8a76c843631b7234f9e3e94eb5f2542e5"
+    },
+    {
+      "path": "src/ordivon_world/resource_discovery.py",
+      "sha256": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840"
+    },
+    {
+      "path": "tests/test_resource_discovery.py",
+      "sha256": "sha256:7c5874c6bd9c9a2baf27c0b7e5bbd6a7858af7f99f6d6640581cec14945778a1"
+    }
+  ],
+  "priorFrozenArtifactCount": 31,
+  "promotionMatrix": {
+    "path": "evidence/acceptance/resource-ontology-r10-promotion-matrix-20260816.json",
+    "contentDigest": "sha256:6020621acc6973fa8870e050671abee5adad684e5544f645450568458cb025ec",
+    "sha256": "sha256:48689f1af139192f8a20ee0245ab6b90835bd6ab49406bcc2bd85e379fd8a9f2"
+  },
+  "promotedLaws": [
+    {
+      "id": "L1",
+      "law": "Boundary-relative enrollment",
+      "statement": "Resource truth is relative to a declared actor/system boundary and exact Reality aspect; coarse Resource is an existential projection over at least one supported admissible transition witness.",
+      "support": [
+        "R2",
+        "R3",
+        "R9:T01",
+        "R9:T02",
+        "R9:T03"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Hostile/irrelevant aspects, ticker/asset identity, exact reviewed bytes and security target identities can be conflated; capability labels become self-authenticating.",
+      "reopen": "Reopen only if a materially different owner can make correct Resource decisions without actor boundary, aspect identity or any transition witness."
+    },
+    {
+      "id": "L2",
+      "law": "Native truth, projected relation",
+      "statement": "Events, Claims, authority, access, quantities and domain state remain owner-native; World may join/project them but does not become their second source authority.",
+      "support": [
+        "R3",
+        "R4",
+        "R7",
+        "R9:T04",
+        "R9:T22"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Historical/current truth is rewritten by a World state machine and cross-owner projections become accidental authority.",
+      "reopen": "Reopen only if multiple owners demonstrably cannot reconcile required shared truth and one lower owner can own it without duplicating native authority."
+    },
+    {
+      "id": "L3",
+      "law": "Claim-bound evidence",
+      "statement": "Evidence is a provenance/method/time-bound support, contradiction, bounding or unresolved relation to an explicit Claim; Resource-level provenance alone does not establish transition/capability truth.",
+      "support": [
+        "R3",
+        "R8",
+        "R9:T04",
+        "R9:T05",
+        "R9:T18",
+        "R9:T19"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Missing/stale evidence becomes false truth, negative evidence disappears, and aggregator/candidate capability labels can mint current ResourceFor truth.",
+      "reopen": "Reopen only if a simpler representation prevents R9P01 and all five dogfood overclaims without an explicit claim-support boundary."
+    },
+    {
+      "id": "L4",
+      "law": "History is not currentness",
+      "statement": "Historical Events/accepted Claims remain historical truth while current applicability/actionability is recomputed as-of from claim-specific clocks; there is no universal Resource current/lifecycle bit.",
+      "support": [
+        "R4",
+        "R7",
+        "R9:T06",
+        "R9:T23"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Later evidence leaks backward, revoked/stale facts erase history, and one lifecycle state cannot express simultaneous demand-specific projections.",
+      "reopen": "Reopen only if a universal state machine survives concurrent demands, independently stale claims and non-monotonic access without loss."
+    },
+    {
+      "id": "L5",
+      "law": "Actionability and Option are downstream",
+      "statement": "Resource may exist before possessed authority/access/current demand fit; ActionableResourceFor is the demand/time projection where required current conditions hold, and Option is the selectable feasible relation.",
+      "support": [
+        "R2",
+        "R3",
+        "R4",
+        "R9:T07",
+        "R9:T08",
+        "R9:T09"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Gated/deferred/reference resources disappear or Resource collapses into current permission/use.",
+      "reopen": "Reopen only if deferred acquisition, dormant/reference resources and workload-specific actionability can be represented with fewer distinctions without changing decisions."
+    },
+    {
+      "id": "L6",
+      "law": "Feasibility is conjunctive and owner-local",
+      "statement": "Target transitions have explicit Requirements, contextual Assignments and native Constraints; feasible composition is a projection, not a global dependency graph.",
+      "support": [
+        "R5",
+        "R9:T10",
+        "R9:T11",
+        "R9:T24"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Partial resources are treated as jointly sufficient or owner-local admission/reducers are duplicated by a global graph.",
+      "reopen": "Reopen a shared engine only after multiple materially different consumers reproduce the same missing composition executor above owner boundaries."
+    },
+    {
+      "id": "L7",
+      "law": "Quantity only when binding",
+      "statement": "Capacity/rate/budget/stock/flow are native-unit, native-clock constraints used when they change feasibility, throughput, risk, contention, burden or recovery; no global scalar Capacity exists.",
+      "support": [
+        "R5",
+        "R7",
+        "R9:T12",
+        "R9:T25"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Minimum notional, slots, concurrency and review burden cease to affect feasibility; a global scalar launders incompatible units.",
+      "reopen": "Reopen a shared Capacity surface only when one concrete cross-owner query repeatedly needs the same quantity semantics and current owners cannot answer it by projection."
+    },
+    {
+      "id": "L8",
+      "law": "Substitution and redundancy are contextual",
+      "statement": "Substitution derives from alternative feasible assignments for the same requirement/context; redundancy additionally requires sufficient independence against a declared disturbance and requested load.",
+      "support": [
+        "R5",
+        "R7",
+        "R9:T13"
+      ],
+      "dogfoods": [
+        "D-GAME",
+        "D-SEC"
+      ],
+      "deleteConsequence": "Duplicate keys/endpoints/providers are miscounted as capacity or resilience and common-mode failure is hidden.",
+      "reopen": "Reopen intrinsic substitute/redundancy edges only if they remain invariant across purpose, transition, load, time and disturbance."
+    },
+    {
+      "id": "L9",
+      "law": "Action, Effect, Outcome, Attribution, Knowledge remain separate",
+      "statement": "Action records an admitted attempt; Effect is owner-native consequence; Outcome is domain-owned evaluation; Attribution is a separate causal claim; Knowledge is an explicit reusable promotion.",
+      "support": [
+        "R6",
+        "R8",
+        "R9:T14",
+        "R9:T15",
+        "R9:T16",
+        "R9:T17"
+      ],
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Process success becomes domain success, observed outcomes get false causal credit, and every receipt/review/failure becomes promoted knowledge.",
+      "reopen": "Reopen only if a collapsed representation preserves exogenous effects, nested outcomes, uncertainty, counterfactual attribution and learning from failed/invalid episodes."
+    },
+    {
+      "id": "L10",
+      "law": "Evidence acquisition is decision-scoped",
+      "statement": "Transport, target applicability, independence, coverage, reversibility/consequence and value-of-information are downstream questions of a particular Claim and decision; collect direct target evidence only when residual uncertainty can change action.",
+      "support": [
+        "R8",
+        "R9:T20",
+        "R9:T21"
+      ],
+      "dogfoods": [
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Measurement availability becomes an admission reason, weak external evidence is overgeneralized, or every claim requires expensive local replication.",
+      "reopen": "Reopen a universal Transfer Contract only if multiple owners repeatedly need the same persisted transport object and local projection cannot recover the decision."
+    },
+    {
+      "id": "L11",
+      "law": "Promote semantics before machinery",
+      "statement": "A shared production seam is earned only when repeated semantics coincide with repeated missing executable responsibility, owner-local resolution fails, and moving responsibility downward reduces total system complexity.",
+      "support": [
+        "R9:T30",
+        "R9 shared-seam audits"
+      ],
+      "dogfoods": [
+        "D-GAME",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deleteConsequence": "Repeated vocabulary automatically grows registries/services and creates duplicate authority.",
+      "reopen": "This is itself the reopen test for any rejected global surface."
+    }
+  ],
+  "conditionalQueryTemplates": [
+    {
+      "id": "Q1",
+      "name": "Access/transport/materialization",
+      "activateWhen": "current path/bytes/interface determine whether a supported ResourceFor can be exercised now"
+    },
+    {
+      "id": "Q2",
+      "name": "Requirements/Assignments/Constraints",
+      "activateWhen": "a transition needs more than one condition/resource or compatibility/admission matters"
+    },
+    {
+      "id": "Q3",
+      "name": "CapacityFor / load",
+      "activateWhen": "quantity/rate/budget changes feasibility or bottleneck"
+    },
+    {
+      "id": "Q4",
+      "name": "Substitution/redundancy",
+      "activateWhen": "alternatives are compared under a named purpose/load/disturbance"
+    },
+    {
+      "id": "Q5",
+      "name": "Evidence coverage/absence",
+      "activateWhen": "absence, completeness or negative claims depend on observable surfaces"
+    },
+    {
+      "id": "Q6",
+      "name": "Evidence transport/target",
+      "activateWhen": "source evidence is used for a different population/context/decision"
+    },
+    {
+      "id": "Q7",
+      "name": "Reversibility/consequence/VOI",
+      "activateWhen": "deciding whether to acquire more evidence"
+    },
+    {
+      "id": "Q8",
+      "name": "Exact composition identity",
+      "activateWhen": "replay/recovery/effect identity depends materially on exact members/versions"
+    },
+    {
+      "id": "Q9",
+      "name": "Consumption accounting",
+      "activateWhen": "stock/flow/quota/budget continuity matters for that resource family"
+    }
+  ],
+  "rejectedUniversalStructures": [
+    "universal Resource lifecycle/state machine",
+    "global persisted Resource registry/entity",
+    "universal CapabilityManager/object",
+    "global dependency/composition graph/engine",
+    "global Capacity scalar/service",
+    "global EvidenceGraph/BeliefStore/confidence service",
+    "universal persisted Transfer Contract",
+    "generic Outcome/Attribution service",
+    "universal Resource value/maturity scalar",
+    "generic cross-domain consumer/workflow platform"
+  ],
+  "claimProvenanceFix": {
+    "winner": "OwnerVerification.verified_capabilities",
+    "candidateCapabilitiesRole": "discovery/ranking hypothesis",
+    "verifiedCapabilitiesRole": "current owner-attested capability claims for generic demand fit",
+    "missingAttestationDecision": "owner-verification-required",
+    "missingAttestationReason": "required-capabilities-not-owner-attested:<capability>",
+    "staleAttestationFit": 0.0,
+    "newProductionObjects": 0,
+    "newServices": 0
+  },
+  "currentProbes": {
+    "R10P01": {
+      "jobId": "job-01a0064a-7782-7e20-a985-d9f3a3001a1f",
+      "verdict": "FIXED_NARROW_WORLD_LOCAL"
+    },
+    "R10P02": {
+      "jobId": "job-01a0064a-7782-7e20-a985-d9f3a3001a1f",
+      "verdict": "INTENTIONALLY_UNIMPLEMENTED_GENERIC_COMPOSITION"
+    },
+    "R10P03": {
+      "jobId": "job-01a0064a-7782-7e20-a985-d9f3a3001a1f",
+      "verdict": "INTENTIONALLY_ABSENT_GLOBAL_CAPACITY"
+    }
+  },
+  "canonicalDoctrine": "docs/resource-option-capability-model.md",
+  "operationalDoctrine": "docs/resource-opportunity-flywheel.md",
+  "codePaths": [
+    "src/ordivon_world/resource_discovery.py",
+    "tests/test_resource_discovery.py"
+  ],
+  "newSharedServices": [],
+  "foundationsDecision": "PROMOTE_THIN_DOCTRINE_AND_CLOSE_AFTER_FINAL_VALIDATION",
+  "finalValidation": {
+    "jobId": "job-01a0064b-bc19-7432-bcc5-80e64c8a6bb9",
+    "worldUnitTests": 158,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r10Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "contentDigest": "sha256:cd210f1522e06e58f122dd77767c6895f07d745c3fbc4a2b0dc3f399ccea012b"
+}

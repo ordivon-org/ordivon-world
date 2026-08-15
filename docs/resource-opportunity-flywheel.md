@@ -19,7 +19,7 @@ broad discovery
 ResourceCandidate
       |
       v
-OwnerVerification  -- what the provider currently requires
+OwnerVerification  -- current owner terms + attested capabilities
       |
       +-----------------------------+
       | anonymous                   | gated
@@ -55,7 +55,7 @@ OwnerVerification  -- what the provider currently requires
 
 Aggregators, search engines, awesome lists, entitlement catalogs, registries, social discovery, comparison pages, and OpenAPI directories are candidate generators. They may establish that a resource or offer was observed. They do not establish current owner terms, eligibility, quota, payment exposure, license, or permission.
 
-`DiscoveryEvidence.source_kind` keeps `aggregator`, `index`, and `owner` distinct. A candidate remains `owner-verification-required` until a current matching `OwnerVerification` exists.
+`DiscoveryEvidence.source_kind` keeps `aggregator`, `index`, and `owner` distinct. Candidate capability labels remain discovery hypotheses. A candidate remains `owner-verification-required` until a current matching `OwnerVerification` exists **and attests every required capability used by the demand-fit projection**. Owner identity/terms/interface evidence alone must not turn an aggregator capability label into semantic truth.
 
 ## 2. Provider requirement, acquisition decision, and possessed authority are three coordinates
 
@@ -68,6 +68,7 @@ The old model conflated these questions:
 They are now represented separately:
 
 - `OwnerVerification.authority_class`: required class (`free-key`, `account`, `student`, `payment`, ...).
+- `OwnerVerification.verified_capabilities`: current owner-attested capability claims for the exact resource identity; candidate labels not present here cannot establish required demand fit.
 - `AcquisitionAssessment`: current eligibility, acquisition mode, benefit, option value, burden, human actions, expiry, and prerequisites.
 - `AuthorityEvidence`: current non-secret proof that Ordivon actually holds the required authority.
 
@@ -216,7 +217,7 @@ The additional law is:
 
 ```text
 resource candidate
-  + current owner truth
+  + current owner truth / required capability attestation
   + possessed authority
   + current access
   + workload fit

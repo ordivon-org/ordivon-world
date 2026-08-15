@@ -74,6 +74,7 @@ def owner(
         quota_class="bounded-public",
         machine_interfaces=("https",),
         evidence_refs=("artifact:owner",),
+        verified_capabilities=("public-data-read", "bulk-snapshot"),
     )
 
 
@@ -152,6 +153,101 @@ class ResourceDiscoveryTests(unittest.TestCase):
         self.assertFalse(row.owner_evidence_present)
         evaluation = evaluate_resource(row, demand(), as_of=NOW)
         self.assertEqual(evaluation.decision, "owner-verification-required")
+
+    def test_explicit_owner_terms_block_precedes_missing_capability_attestation(self) -> None:
+        row = candidate(owner_source=True)
+        blocked_owner = OwnerVerification(
+            resource_id=row.resource_id,
+            owner_id="owner:test",
+            official_locator="https://owner.test/docs",
+            verified_at="2026-08-13T04:50:00Z",
+            authority_class="anonymous-public",
+            terms_status="forbidden",
+            allowed_purposes=("academic-research",),
+            license_class="cc0",
+            cost_class="free",
+            quota_class="bounded-public",
+            machine_interfaces=("https",),
+            evidence_refs=("artifact:owner-forbidden",),
+            verified_capabilities=(),
+        )
+        evaluation = evaluate_resource(row, demand(), as_of=NOW, owner=blocked_owner)
+        self.assertEqual(evaluation.decision, "blocked-by-terms")
+        self.assertEqual(evaluation.hard_reasons, ("consumer-purpose-not-owner-admitted",))
+
+    def test_candidate_capability_label_without_owner_attestation_fails_closed(self) -> None:
+        row = candidate(owner_source=True)
+        unbound_owner = OwnerVerification(
+            resource_id=row.resource_id,
+            owner_id="owner:test",
+            official_locator="https://owner.test/docs",
+            verified_at="2026-08-13T04:50:00Z",
+            authority_class="anonymous-public",
+            terms_status="allowed",
+            allowed_purposes=("academic-research",),
+            license_class="cc0",
+            cost_class="free",
+            quota_class="bounded-public",
+            machine_interfaces=("https",),
+            evidence_refs=("artifact:owner-identity-terms-interface-only",),
+            verified_capabilities=(),
+        )
+        evaluation = evaluate_resource(
+            row,
+            demand(),
+            as_of=NOW,
+            owner=unbound_owner,
+            transport=transport(),
+        )
+        self.assertEqual(evaluation.decision, "owner-verification-required")
+        self.assertEqual(
+            evaluation.hard_reasons,
+            ("required-capabilities-not-owner-attested:public-data-read",),
+        )
+        self.assertEqual(evaluation.demand_fit, 0.0)
+        self.assertEqual(evaluation.preferred_fit, 0.0)
+
+    def test_stale_owner_capability_attestation_does_not_establish_current_fit(self) -> None:
+        row = candidate(owner_source=True)
+        evaluation = evaluate_resource(
+            row,
+            demand(),
+            as_of=NOW,
+            owner=owner(verified_at="2026-08-12T04:50:00Z"),
+            transport=transport(),
+        )
+        self.assertEqual(evaluation.decision, "owner-verification-required")
+        self.assertEqual(evaluation.hard_reasons, ("owner-verification-stale",))
+        self.assertEqual(evaluation.demand_fit, 0.0)
+        self.assertEqual(evaluation.preferred_fit, 0.0)
+
+    def test_owner_attested_capability_drives_fit_not_candidate_label(self) -> None:
+        row = candidate(owner_source=True)
+        partial_owner = OwnerVerification(
+            resource_id=row.resource_id,
+            owner_id="owner:test",
+            official_locator="https://owner.test/docs",
+            verified_at="2026-08-13T04:50:00Z",
+            authority_class="anonymous-public",
+            terms_status="allowed",
+            allowed_purposes=("academic-research",),
+            license_class="cc0",
+            cost_class="free",
+            quota_class="bounded-public",
+            machine_interfaces=("https",),
+            evidence_refs=("artifact:owner-capability",),
+            verified_capabilities=("public-data-read",),
+        )
+        evaluation = evaluate_resource(
+            row,
+            demand(),
+            as_of=NOW,
+            owner=partial_owner,
+            transport=transport(),
+        )
+        self.assertEqual(evaluation.decision, "consumable-now")
+        self.assertEqual(evaluation.demand_fit, 1.0)
+        self.assertEqual(evaluation.preferred_fit, 0.0)
 
     def test_current_owner_and_transport_make_anonymous_resource_consumable(self) -> None:
         row = candidate(owner_source=True)
