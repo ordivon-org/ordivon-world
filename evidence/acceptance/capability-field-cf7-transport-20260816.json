@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf7-causal-transport",
+  "phase": "CF7",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Transport is claim- and target-relative. Source evidence does not automatically become target truth, effect size, mechanism, authority or currentness.",
+  "externalRefs": {
+    "BareinboimPearl2013": {
+      "title": "Meta-Transportability of Causal Effects: A Formal Approach",
+      "venue": "AISTATS / PMLR 31 (2013)",
+      "boundary": "formal causal transport under explicit source/target assumptions; not a generic Ordivon transport service"
+    },
+    "PearlBareinboim2015": {
+      "title": "External Validity: From Do-Calculus to Transportability Across Populations",
+      "venue": "Statistical Science / arXiv:1503.01603",
+      "boundary": "formal selection-diagram framework for population differences; requires causal assumptions"
+    },
+    "CorreaLeeBareinboim2022": {
+      "title": "Counterfactual Transportability: A Formal Approach",
+      "venue": "ICML / PMLR 162 (2022)",
+      "boundary": "formal counterfactual transport; non-identifiability can remain without additional assumptions"
+    }
+  },
+  "postures": [
+    {"id":"T0","name":"STRUCTURAL_ANALOGY","meaning":"source preserves a useful distinction/question only; target mechanism/effect not claimed"},
+    {"id":"T1","name":"MECHANISM_SUPPORTED","meaning":"named causal mechanism believed shared with explicit changed-mechanism boundaries"},
+    {"id":"T2","name":"CALIBRATED_TARGET","meaning":"source mechanism plus bounded target probe covers decision-relevant moderators/differences"},
+    {"id":"T3","name":"TARGET_NATIVE","meaning":"target owner/population evidence directly answers the target query; source becomes support/prior/comparison"},
+    {"id":"TX","name":"NOT_TRANSPORTABLE_OR_UNKNOWN","meaning":"decision-relevant source-target mechanism difference is unresolved or formal assumptions are insufficient"}
+  ],
+  "cases": [
+    {"id":"TR01","source":"Agent Tool grant","target":"Human legal authority","posture":"T0","why":"structural capability-authority inequality transports; Human institutional mechanism/effect does not"},
+    {"id":"TR02","source":"structured AI tutoring RCT","target":"long-horizon Ordivon technical learning","posture":"T1_OR_T2","why":"learning mechanism may constrain policy, but task/horizon/interaction differ and target dogfood is needed"},
+    {"id":"TR03","source":"brief direct-AI assistance RCT/preprint","target":"professional multi-year deskilling","posture":"TX","why":"horizon/task/mechanism gap is decision-relevant"},
+    {"id":"TR04","source":"MTO childhood neighborhood exposure","target":"adult professional environment change","posture":"T0","why":"history/exposure-duration structure transports; specific effect/mechanism does not"},
+    {"id":"TR05","source":"World capability-authority separation","target":"Finance/Security/Game","posture":"T2_OR_T3","why":"owner-native cases instantiate shared inequality while mechanism remains local"},
+    {"id":"TR06","source":"CF3 institutional mechanism roles","target":"new domain rule failure","posture":"T0_UNTIL_OWNER_EVIDENCE","why":"roles are diagnostic vocabulary; owner facts needed before treatment"},
+    {"id":"TR07","source":"World R7 signed feedback","target":"Human AI dependence","posture":"T1_OR_T2","why":"positive/negative feedback question transports; Human state mechanism needs Human evidence"},
+    {"id":"TR08","source":"one provider currentness rule","target":"another provider","posture":"TX_UNTIL_REVALIDATED","why":"provider currentness/authority is owner-native and may drift"},
+    {"id":"TR09","source":"OFR2 shared semantic inequality","target":"new owner implementation","posture":"T0","why":"shared question is reusable but does not authorize shared machinery"},
+    {"id":"TR10","source":"target-native natural case after external evidence","target":"same owner decision","posture":"T3","why":"target evidence answers current claim while external evidence remains mechanism context"}
+  ],
+  "result": {
+    "minimumReasoningEnvelope": [
+      "source claim/query/population/conditions",
+      "target claim/query/population/conditions",
+      "mechanism or invariance proposed for transport",
+      "known source-target differences and moderators",
+      "evidence supporting shared mechanism",
+      "negative-transfer boundary",
+      "target probe or residual UNKNOWN"
+    ],
+    "status": "RETAIN_AS_REASONING_METHOD_NOT_PERSISTED_CONTRACT",
+    "rejected": [
+      "automatic analogy-to-truth",
+      "transport score",
+      "universal TransportService",
+      "Agent experiment as Human mechanism proof",
+      "source causal effect as target causal effect without assumptions"
+    ]
+  }
+}

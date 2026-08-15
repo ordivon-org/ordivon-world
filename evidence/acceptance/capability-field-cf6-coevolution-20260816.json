@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf6-coevolution",
+  "phase": "CF6",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Coevolution is a family of time-indexed causal hypotheses. Shared loop shape does not establish shared mechanism, direction, or universal state variables.",
+  "externalRefs": {
+    "AJR2004": {
+      "title": "Institutions as the Fundamental Cause of Long-Run Growth",
+      "venue": "NBER w10481",
+      "doi": "10.3386/w10481",
+      "boundary": "country political economy; causal identification and direction are not universal cross-domain laws"
+    },
+    "Glaeser2004": {
+      "title": "Do Institutions Cause Growth?",
+      "venue": "NBER w10568",
+      "doi": "10.3386/w10568",
+      "boundary": "competing institutional/human-capital interpretation; used as anti-overclaim pressure"
+    },
+    "Acemoglu2025": {
+      "title": "Institutions, Technology and Prosperity",
+      "venue": "NBER w33442 (2025)",
+      "doi": "10.3386/w33442",
+      "boundary": "comparative-development and technology framework; not a universal cross-domain coevolution engine"
+    }
+  },
+  "loopFamilies": [
+    {"id":"L1","family":"resource-power-rule","topology":"institution → resource distribution/incentives → de facto power → future institution","pressure":["AJR2004","Acemoglu2025"],"transport":"political-economy specific unless target evidence supports analogous mechanism"},
+    {"id":"L2","family":"capability-opportunity-learning","topology":"capability → opportunity/search success → exposure/practice → later capability","pressure":["Human research","CF4","CF5"],"transport":"Human/education/work contexts; not automatically Agent weights"},
+    {"id":"L3","family":"externalization-dependence-maintenance","topology":"external tool capability → joint output ↑ → internal practice/maintenance/dependence changes → later support selection/recovery capability","pressure":["World R7","Human agentic capability"],"transport":"Human–Agent/system boundary specific"},
+    {"id":"L4","family":"knowledge-resource-search","topology":"promoted Knowledge → changed discovery/acquisition policy → changed Resource/Option set → new evidence/Knowledge","pressure":["World R7"],"transport":"requires Attribution; exogenous resource arrival remains rival"},
+    {"id":"L5","family":"institution-human-capital competing direction","topology":"institution ↔ human capital/development","pressure":["AJR2004","Glaeser2004"],"transport":"direction/strength disputed; anti-overclaim family"}
+  ],
+  "cases": [
+    {"id":"CO01","case":"institution treated as externally fixed throughout horizon","minimumModel":"M4/M5 may suffice","M6Needed":false},
+    {"id":"CO02","case":"today resource distribution changes political power that changes tomorrow rule","minimumModel":"M6 family-specific loop","M6Needed":true},
+    {"id":"CO03","case":"Actor capability changes selected environment; environment then changes later capability","minimumModel":"M4+M5 feedback","M6Needed":"DYNAMIC_FEEDBACK_BUT_NOT_INSTITUTION_REQUIRED"},
+    {"id":"CO04","case":"tool assistance changes practice/dependence, influencing future tool selection","minimumModel":"family-specific system loop","M6Needed":"FEEDBACK_YES_GENERIC_INSTITUTION_NO"},
+    {"id":"CO05","case":"Knowledge precedes more discovered resources but search policy not measured","minimumModel":"no causal loop admitted","M6Needed":false},
+    {"id":"CO06","case":"two development theories disagree on institution↔human-capital direction","minimumModel":"retain competing causal graphs or UNKNOWN","M6Needed":"NO_UNIVERSAL_DIRECTION"},
+    {"id":"CO07","case":"institution update event observed but no evidence prior outcome caused it","minimumModel":"temporal sequence only","M6Needed":false},
+    {"id":"CO08","case":"same feedback inequality recurs across domains with different owner mechanisms","minimumModel":"shared question/feedback law only","M6Needed":"NO_SHARED_MECHANISM"}
+  ],
+  "result": {
+    "coevolution": "RETAIN_AS_FAMILY_OF_TIME_INDEXED_CAUSAL_MODELS_NOT_UNIVERSAL_MODEL",
+    "genericSharedLaw": "If later rules/resources/Actor state are claimed to depend on earlier outcomes/actions, preserve time order, owner-native state, direction, rival causes and Attribution evidence; temporal recurrence alone does not establish a loop.",
+    "m6Gate": [
+      "institution/resource/Actor trajectory is endogenous to prior outcomes at the horizon of the decision",
+      "feedback changes prediction or intervention relative to an exogenous-trajectory model",
+      "direction/mechanism has evidence beyond temporal correlation"
+    ],
+    "independentConvergence": "STRUCTURAL_ONLY_MECHANISMS_DIFFER",
+    "rejected": [
+      "UniversalCoevolutionGraph",
+      "Power scalar",
+      "institution-growth universal direction",
+      "automatic positive flywheel",
+      "recurrence implies causality"
+    ]
+  }
+}

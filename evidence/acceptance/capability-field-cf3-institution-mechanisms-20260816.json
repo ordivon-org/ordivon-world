@@ -1,0 +1,178 @@
+{
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "cases": [
+    {
+      "case": "API exists but account eligibility blocks acquisition",
+      "decisionGain": true,
+      "genericM2": "predicts low/no current outcome if eligibility input=false",
+      "id": "R01",
+      "mechanismDecomposition": "localizes intervention to access/eligibility owner, not capability or compute"
+    },
+    {
+      "case": "Agent technically can write but Security purpose authority forbids target",
+      "decisionGain": true,
+      "genericM2": "can map to no-action",
+      "id": "R02",
+      "mechanismDecomposition": "prevents wrong treatment of adding capability; correct owner is authority/admission"
+    },
+    {
+      "case": "same feasible action, different ownership rule redirects economic value",
+      "decisionGain": true,
+      "genericM2": "can fit different outcome",
+      "id": "R03",
+      "mechanismDecomposition": "identifies ownership/appropriation as intervention surface"
+    },
+    {
+      "case": "same current tool/skill but rollback/reconciliation guarantee differs",
+      "decisionGain": true,
+      "genericM2": "can fit different chosen action probability",
+      "id": "R04",
+      "mechanismDecomposition": "identifies recovery contract as source of expanded exploration set"
+    },
+    {
+      "case": "high-quality opportunity exists but search bandwidth prevents discovery/matching",
+      "decisionGain": true,
+      "genericM2": "can fit access interaction",
+      "id": "R05",
+      "mechanismDecomposition": "locates coordination/information rather than actor skill as treatment"
+    },
+    {
+      "case": "formal rule stated but unenforced",
+      "decisionGain": true,
+      "genericM2": "can fit realized outcome if enforcement variable supplied",
+      "id": "R06",
+      "mechanismDecomposition": "blocks equation of rule text with effective institution"
+    },
+    {
+      "case": "fixed context latency penalty",
+      "decisionGain": false,
+      "genericM2": "sufficient",
+      "id": "R07",
+      "mechanismDecomposition": "adds no intervention or owner value"
+    },
+    {
+      "case": "static skill×tool complement",
+      "decisionGain": false,
+      "genericM2": "sufficient",
+      "id": "R08",
+      "mechanismDecomposition": "institution vocabulary irrelevant"
+    },
+    {
+      "case": "current path down due physical outage",
+      "decisionGain": false,
+      "genericM2": "sufficient with owner path claim",
+      "id": "R09",
+      "mechanismDecomposition": "institution vocabulary would misclassify physical environment"
+    },
+    {
+      "case": "provider price changes and demand ranking changes",
+      "decisionGain": "CONDITIONAL",
+      "genericM2": "predicts ranking change",
+      "id": "R10",
+      "mechanismDecomposition": "incentive/cost role can aid explanation but no new truth owner needed"
+    }
+  ],
+  "kind": "ordivon.world.cf3-institution-mechanism-decomposition",
+  "mechanisms": [
+    {
+      "id": "M-A",
+      "ownerExamples": [
+        "provider eligibility",
+        "Workstation path/materialization",
+        "Human market/school access"
+      ],
+      "question": "Who can reach or receive the resource/opportunity?",
+      "role": "allocation/access",
+      "wrongCollapse": "treats absence of access as low skill or low intrinsic resource value"
+    },
+    {
+      "id": "M-B",
+      "ownerExamples": [
+        "Finance capital admission",
+        "Security authority",
+        "provider entitlement"
+      ],
+      "question": "Who is permitted to commit which transition under what purpose/state?",
+      "role": "authority/admission",
+      "wrongCollapse": "capability becomes permission"
+    },
+    {
+      "id": "M-C",
+      "ownerExamples": [
+        "resource acquisition burden",
+        "work compensation",
+        "maintenance cost"
+      ],
+      "question": "How do rewards, prices, burdens or commitments change selection among feasible actions?",
+      "role": "incentive/cost",
+      "wrongCollapse": "feasible option is mistaken for selected action"
+    },
+    {
+      "id": "M-D",
+      "ownerExamples": [
+        "provider enforcement",
+        "organizational sanction",
+        "protocol rejection"
+      ],
+      "question": "What makes a rule consequential rather than merely stated?",
+      "role": "enforcement/sanction",
+      "wrongCollapse": "declared policy is assumed effective"
+    },
+    {
+      "id": "M-E",
+      "ownerExamples": [
+        "financial ownership",
+        "artifact rights",
+        "employment/client appropriation"
+      ],
+      "question": "Who receives, controls or can reuse the consequence/value?",
+      "role": "ownership/appropriation",
+      "wrongCollapse": "physical effect equals actor benefit/control"
+    },
+    {
+      "id": "M-F",
+      "ownerExamples": [
+        "search assistance",
+        "workflow coordination",
+        "knowledge routing"
+      ],
+      "question": "What repeated rule/process changes matching, information, sequencing or collective action?",
+      "role": "coordination/information",
+      "wrongCollapse": "coordination failure is misdiagnosed as missing individual capability"
+    },
+    {
+      "id": "M-G",
+      "ownerExamples": [
+        "Runtime/World reconciliation",
+        "bankruptcy/safety net analogues",
+        "provider replacement/exit"
+      ],
+      "question": "What happens after failure, uncertainty, dependency or refusal?",
+      "role": "recovery/exit",
+      "wrongCollapse": "same immediate capability is treated as same viable option set"
+    }
+  ],
+  "observedAtMs": 1786826039150,
+  "ownerRevisions": {
+    "computing": "acd896688c26a5ea0dad22d66c7ea30882b1b245",
+    "human": "f7725dfc9b391c3e9a0c509d49795994931c9d63",
+    "world": "803f54aa32a37a2deb93b22d2d821805ae5f04fb"
+  },
+  "phase": "CF3",
+  "programme": "Actor × Environment × Institution Capability Foundations",
+  "result": {
+    "activationRule": "Use only when the question asks which durable rule/process relation should change, who owns that relation, or why two otherwise similar feasible systems differ in recurrent access/authority/incentive/enforcement/ownership/coordination/recovery.",
+    "incrementalRole": "It can change intervention choice, explanation, owner placement and deletion decisions even when generic M2 can fit the same static mapping.",
+    "m3PredictiveFamily": "REJECTED_NOT_RESURRECTED",
+    "mechanismDecomposition": "RETAIN_AS_DECISION_LOCALIZATION_TOOL",
+    "persistence": "REJECT_UNIVERSAL_SCHEMA",
+    "rejected": [
+      "Institution object",
+      "InstitutionQuality scalar",
+      "mandatory seven-field vector",
+      "rule text => effective institution",
+      "mechanism vocabulary for purely physical context"
+    ]
+  },
+  "schemaVersion": 1
+}

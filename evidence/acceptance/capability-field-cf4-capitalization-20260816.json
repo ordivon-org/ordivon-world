@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf4-capitalization-expression",
+  "phase": "CF4",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Distinguish current expression/exercisability from later capability-state production. No universal Actor update law or scalar capital stock is claimed.",
+  "externalRefs": {
+    "Kestin2025": {
+      "title": "AI tutoring outperforms in-class active learning: an RCT introducing a novel research-based design in an authentic educational setting",
+      "venue": "Scientific Reports 15, 17458 (2025)",
+      "doi": "10.1038/s41598-025-97652-6",
+      "design": "randomized crossover authentic undergraduate physics course",
+      "boundary": "structured tutor and bounded short-course learning outcome; not unrestricted AI or long-horizon transfer"
+    },
+    "Liu2026": {
+      "title": "AI Assistance Reduces Persistence and Hurts Independent Performance",
+      "venue": "arXiv:2604.04721 (preprint, 2026)",
+      "design": "randomized controlled trials, total N=1,222 per authors",
+      "boundary": "brief math/reading interactions; preprint and not long-horizon professional deskilling evidence"
+    },
+    "MTO": {
+      "title": "The Effects of Exposure to Better Neighborhoods on Children",
+      "venue": "NBER w21156 / AER 2016",
+      "doi": "10.3386/w21156",
+      "design": "randomized housing voucher experiment with long-run administrative outcomes",
+      "boundary": "specific childhood neighborhood intervention; not a universal environment mechanism"
+    },
+    "CunhaHeckman2007": {
+      "title": "The Technology of Skill Formation",
+      "venue": "NBER w12840 / AER 97(2)",
+      "doi": "10.3386/w12840",
+      "boundary": "human development model; not a universal Actor update equation"
+    }
+  },
+  "cases": [
+    {"id":"P01","pattern":"current path/tool disappears; performance falls immediately; retained actor evidence unchanged","classification":"EXPRESSION_EXERCISABILITY","productionClaim":"NOT_SUPPORTED"},
+    {"id":"P02","pattern":"fatigue reduces current performance and rest restores it without relearning","classification":"EXPRESSION_AVAILABILITY","productionClaim":"NOT_SUPPORTED"},
+    {"id":"P03","pattern":"structured AI tutor yields higher measured learning gain than active-learning comparison in bounded RCT","classification":"CANDIDATE_CAPABILITY_PRODUCTION_UNDER_POLICY","productionClaim":"SUPPORTED_FOR_TESTED_LEARNING_OUTCOME_ONLY","ref":"Kestin2025"},
+    {"id":"P04","pattern":"direct AI assistance raises immediate performance but subsequent unassisted performance/persistence is worse in brief randomized tasks","classification":"JOINT_GAIN_WITH_NEGATIVE_RETAINED_OUTCOME","productionClaim":"NEGATIVE_CHANGE_FOR_TESTED_OUTCOME_HORIZON","ref":"Liu2026"},
+    {"id":"P05","pattern":"same tool assistance increases system output while internal practice falls, but no later test exists","classification":"SUBSTITUTION_RISK","productionClaim":"UNKNOWN"},
+    {"id":"P06","pattern":"repeated exposure followed by later comparable-condition improvement after support removal","classification":"PRODUCTION_CANDIDATE","productionClaim":"NEEDS_ASSIGNMENT_CAUSAL_IDENTIFICATION"},
+    {"id":"P07","pattern":"child moves younger and experiences longer lower-poverty exposure; long-run outcomes improve in randomized MTO subgroup","classification":"HISTORY_EXPOSURE_DURATION_EFFECT","productionClaim":"CAUSAL_ENVIRONMENT_EFFECT_FOR_TESTED_OUTCOMES","ref":"MTO"},
+    {"id":"P08","pattern":"same current environment, different prior practice history and faster recovery/relearning","classification":"HISTORY_DEPENDENT_RETAINED_SUBSTRATE","productionClaim":"SUPPORTED_IF_HISTORY_OUTCOME_LINK_IDENTIFIED"},
+    {"id":"P09","pattern":"tool support is removed and performance remains high on novel variation","classification":"COMPLEMENTATION_TRANSFER_CANDIDATE","productionClaim":"STRONGER_RETAINED_CAPABILITY_EVIDENCE"},
+    {"id":"P10","pattern":"tool support remains essential and independent performance decays while joint output rises","classification":"RATIONAL_OR_FRAGILE_DEPENDENCE","productionClaim":"BOUNDARY_DEPENDS_ON_RECOVERY_OBJECTIVE"},
+    {"id":"P11","pattern":"environment changes outcome and actor simultaneously self-selects into environment","classification":"PRODUCTION_VS_SELECTION_CONFOUNDED","productionClaim":"UNKNOWN_UNTIL_CF5"},
+    {"id":"P12","pattern":"same exposure produces different later state depending on prior skill/stage","classification":"DYNAMIC_COMPLEMENTARITY","productionClaim":"M4_REQUIRED","ref":"CunhaHeckman2007"}
+  ],
+  "result": {
+    "environmentalCapitalization": "RETAIN_AS_CAUSAL_RELATION_CLAIM_NOT_STOCK_OR_OBJECT",
+    "unmasking": "DERIVED_EXPRESSION_CASE",
+    "antiLaw": "More support is not equivalent to more retained Actor capability; less independent skill is not automatically harmful when recovery, verification and objective do not require it.",
+    "productionGate": [
+      "later outcome measures the capability state claimed rather than only current supported output",
+      "comparison varies or removes the support relation relevant to the claim when needed",
+      "time and horizon are explicit",
+      "assignment/confounding is handled enough for the causal claim",
+      "negative-transfer boundary is explicit"
+    ],
+    "rejected": [
+      "EnvironmentalCapital stock",
+      "universal actor update function",
+      "AI causes deskilling universal",
+      "AI improves learning universal",
+      "performance delta as state delta"
+    ]
+  }
+}

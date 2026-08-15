@@ -1,0 +1,137 @@
+{
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "canonicalCompression": {
+    "digest": "sha256:80884ef10d98a3c798b1585c0bebf105888403db786125f2964046b97360d7a0",
+    "path": "docs/capability-context-doctrine.md",
+    "promotionDoc": "docs/capability-field-cf9-compression-promotion.md",
+    "promotionDocDigest": "sha256:be41081762404b130b1b44115672b368d6a4467c95876cd437d56ebf3085e675",
+    "seriesCloseout": "docs/capability-field-cf1-cf9-closeout.md",
+    "seriesCloseoutDigest": "sha256:3bb15d3a3a6dbd104ad5933c78d0464d5f91f03aa22b271ecae768122c2f12c6"
+  },
+  "kind": "ordivon.world.capability-field-cf1-cf9-closeout",
+  "mutationBoundary": {
+    "changedPaths": [
+      "README.md",
+      "docs/capability-context-doctrine.md",
+      "docs/capability-field-cf1-cf9-closeout.md",
+      "docs/capability-field-cf1-static-topology.md",
+      "docs/capability-field-cf2-identification.md",
+      "docs/capability-field-cf3-institution-mechanisms.md",
+      "docs/capability-field-cf4-capitalization-expression.md",
+      "docs/capability-field-cf5-selection-sorting.md",
+      "docs/capability-field-cf6-coevolution.md",
+      "docs/capability-field-cf7-transport.md",
+      "docs/capability-field-cf8-causal-identification.md",
+      "docs/capability-field-cf9-compression-promotion.md",
+      "docs/research-closeouts.md",
+      "evidence/acceptance/capability-field-cf1-cf9-closeout-20260816.json",
+      "evidence/acceptance/capability-field-cf1-static-topology-20260816.json",
+      "evidence/acceptance/capability-field-cf2-identification-20260816.json",
+      "evidence/acceptance/capability-field-cf3-institution-mechanisms-20260816.json",
+      "evidence/acceptance/capability-field-cf4-capitalization-20260816.json",
+      "evidence/acceptance/capability-field-cf5-selection-20260816.json",
+      "evidence/acceptance/capability-field-cf6-coevolution-20260816.json",
+      "evidence/acceptance/capability-field-cf7-transport-20260816.json",
+      "evidence/acceptance/capability-field-cf8-causal-identification-20260816.json",
+      "evidence/acceptance/capability-field-cf9-promotion-20260816.json"
+    ],
+    "productionSourceModified": false,
+    "publishedContractsModified": false,
+    "resourceR10DoctrineModified": false
+  },
+  "negativeResults": [
+    "CapabilityField remains research-program name/shorthand, not production object.",
+    "M3 transition topology remains rejected as independent predictive family; only intervention/owner localization survives.",
+    "Institution remains causal role, not universal object/truth owner.",
+    "Environment remains query-relative causal role, not complete snapshot.",
+    "Coevolution remains family-specific directionally attributed hypotheses, not universal flywheel.",
+    "No universal Person/Environment/Institution variance percentage or InstitutionQuality scalar is supported."
+  ],
+  "observedAtMs": 1786826855039,
+  "ownerBoundary": {
+    "computingRevision": "acd896688c26a5ea0dad22d66c7ea30882b1b245",
+    "humanRevision": "f7725dfc9b391c3e9a0c509d49795994931c9d63",
+    "world": "synthesis/projection doctrine only; owner-native current truth remains native"
+  },
+  "phaseReceipts": {
+    "CF1": {
+      "caseCount": 12,
+      "decisionCount": 0,
+      "digest": "sha256:ef9deaf1f0ba6956c86dd51fecfc4078b8f334411cdbcaa8d161d8d2b4991c5b",
+      "kind": "ordivon.world.cf1-static-topology-matrix"
+    },
+    "CF2": {
+      "caseCount": 12,
+      "decisionCount": 0,
+      "digest": "sha256:4a964cb66466aa1affdfed3dbe9acdfa7d10390a45c78f9f35e5206f1e7d5003",
+      "kind": "ordivon.world.cf2-capability-identification-matrix"
+    },
+    "CF3": {
+      "caseCount": 10,
+      "decisionCount": 0,
+      "digest": "sha256:f5f08eb7ba4f6f0b093e30e9f591ab031e4f08a0fac1831d01588156634036c9",
+      "kind": "ordivon.world.cf3-institution-mechanism-decomposition"
+    },
+    "CF4": {
+      "caseCount": 12,
+      "decisionCount": 0,
+      "digest": "sha256:e8037bdee6914d401811e27efdef5fbc06140e56282309ed485c562e4b370b2f",
+      "kind": "ordivon.world.cf4-capitalization-expression"
+    },
+    "CF5": {
+      "caseCount": 10,
+      "decisionCount": 0,
+      "digest": "sha256:2098c21a183662632f7411ad58b2e311e7c4c8abb021b9fe65e17109d86b957c",
+      "kind": "ordivon.world.cf5-selection-sorting"
+    },
+    "CF6": {
+      "caseCount": 8,
+      "decisionCount": 0,
+      "digest": "sha256:4f597a807755dc782110de04ef8a0c7bf239e397be5c511abb5b78255044b6e7",
+      "kind": "ordivon.world.cf6-coevolution"
+    },
+    "CF7": {
+      "caseCount": 10,
+      "decisionCount": 0,
+      "digest": "sha256:5121564c04d86df1191237c66aff87217646d2f7c508b8decf2c9381f901f142",
+      "kind": "ordivon.world.cf7-causal-transport"
+    },
+    "CF8": {
+      "caseCount": 12,
+      "decisionCount": 0,
+      "digest": "sha256:31886bd2f902b56bd100f4e88be1197f26bdf5896142d3fc1cec7fe309d10aa6",
+      "kind": "ordivon.world.cf8-causal-identification"
+    },
+    "CF9": {
+      "caseCount": 0,
+      "decisionCount": 27,
+      "digest": "sha256:8afed0244b09ebfb319f67b990c5dd79f78235009aaf50799906ab935ede3404",
+      "kind": "ordivon.world.cf9-promotion-audit"
+    }
+  },
+  "postValidationRequirement": "Commit only after staged diff passes; post-commit offline doctor must return repository clean/status=ok before canonical integration.",
+  "programme": "Actor × Environment × Institution Capability Foundations",
+  "promotionSummary": {
+    "canonicalDoctrineDocumentsAdded": 1,
+    "persistedCausalContextPrimitivesAdded": 0,
+    "productionCodePathsAdded": 0,
+    "schemasOrContractsAdded": 0,
+    "semanticRulesPromoted": 14,
+    "servicesOrRegistriesAdded": 0,
+    "universalStructuresRejected": 13
+  },
+  "repositoryValidation": {
+    "compileall": "PASS",
+    "contractsCheck": "PASS (7 schemas / 6 provider fixtures)",
+    "dependencyCheck": "PASS",
+    "docsCheck": "PASS (71 Markdown / 97 local links)",
+    "gitDiffCheck": "PASS",
+    "offlineDoctorPreCommit": "ATTENTION_ONLY_EXPECTED_DIRTY_CF_PATHS; contracts ok",
+    "pythonUnitTests": "158/158 PASS",
+    "result": "PASS_WITH_EXPECTED_PRECOMMIT_DIRTY_DOCTOR",
+    "uvLockCheck": "PASS",
+    "uvSyncLocked": "PASS"
+  },
+  "result": "READY_FOR_REPOSITORY_VALIDATION",
+  "schemaVersion": 1
+}

@@ -1,0 +1,162 @@
+{
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "cases": [
+    {
+      "case": "same actor + same demand; exact current path disappears",
+      "disposition": "KEEP_OWNER_NATIVE_CURRENTNESS",
+      "id": "S01",
+      "required": [
+        "owner_currentness",
+        "actionability"
+      ],
+      "without": "actor-only intrinsic capability incorrectly predicts unchanged exercisability"
+    },
+    {
+      "case": "same malware bytes; static analysis allowed, execution forbidden",
+      "disposition": "KEEP_TRANSITION_AND_AUTHORITY",
+      "id": "S02",
+      "required": [
+        "transition_scope",
+        "authority"
+      ],
+      "without": "resource identity incorrectly implies universal exercisability"
+    },
+    {
+      "case": "two individually valid resources fail joint compatibility requirement",
+      "disposition": "KEEP_CONTEXTUAL_COMPOSITION",
+      "id": "S03",
+      "required": [
+        "requirements",
+        "assignments",
+        "constraints"
+      ],
+      "without": "resource list incorrectly implies feasible composition"
+    },
+    {
+      "case": "same Tool capability exported to Finance and Game under different demands",
+      "disposition": "KEEP_BOUNDARY_AND_DEMAND",
+      "id": "S04",
+      "required": [
+        "consumer_boundary",
+        "demand"
+      ],
+      "without": "provider capability label becomes universal consumer capability"
+    },
+    {
+      "case": "fixed latency penalty applies equally to all actors",
+      "disposition": "ALLOW_SIMPLE_CONTEXT",
+      "id": "S05",
+      "required": [
+        "environment_main_effect"
+      ],
+      "without": "M0 misses outcome shift; M1 is enough"
+    },
+    {
+      "case": "skill×tool complement: neither alone satisfies target transition",
+      "disposition": "ALLOW_M2_INTERACTION",
+      "id": "S06",
+      "required": [
+        "interaction"
+      ],
+      "without": "additive decomposition predicts false independent contribution"
+    },
+    {
+      "case": "legal entitlement exists but bytes/materialization absent",
+      "disposition": "INSTITUTION_ROLE_AS_SUPPORT_NOT_IDENTITY",
+      "id": "S07",
+      "required": [
+        "institutional_relation",
+        "access_materialization"
+      ],
+      "without": "permission becomes current actionability"
+    },
+    {
+      "case": "technical debt removes safe change paths while current developer skill is unchanged",
+      "disposition": "ENVIRONMENT_ROLE_AS_CONSTRAINT",
+      "id": "S08",
+      "required": [
+        "environment_constraint",
+        "option_projection"
+      ],
+      "without": "actor-state model blames actor for lost feasible transitions"
+    },
+    {
+      "case": "same physical effect under two ownership rules produces different appropriable outcome",
+      "disposition": "INSTITUTION_ROLE_FOR_COUNTERFACTUAL",
+      "id": "S09",
+      "required": [
+        "ownership_rule",
+        "outcome_scope"
+      ],
+      "without": "physical effect is mistaken for equivalent domain outcome"
+    },
+    {
+      "case": "all exact owner facts supplied directly; adding named Environment and Institution records changes no decision",
+      "disposition": "REJECT_MANDATORY_CONTEXT_OBJECTS",
+      "id": "S10",
+      "required": [
+        "deletion_test"
+      ],
+      "without": "nothing breaks"
+    },
+    {
+      "case": "current constraints sufficient for decision; complete environment closure is unavailable",
+      "disposition": "REJECT_COMPLETE_ENVIRONMENT",
+      "id": "S11",
+      "required": [
+        "query_relative_support"
+      ],
+      "without": "requiring complete snapshot blocks valid bounded action"
+    },
+    {
+      "case": "M2 generic interaction and decomposed rule topology give identical static action ranking",
+      "disposition": "M3_NOT_NEEDED_FOR_STATIC_PREDICTION",
+      "id": "S12",
+      "required": [
+        "anti_strawman"
+      ],
+      "without": "no predictive loss"
+    }
+  ],
+  "claimBoundary": "Static decision topology only. No actor-state dynamics, assignment endogeneity, causal effect sizes, or normative ranking.",
+  "kind": "ordivon.world.cf1-static-topology-matrix",
+  "observedAtMs": 1786826039150,
+  "ownerRevisions": {
+    "computing": "acd896688c26a5ea0dad22d66c7ea30882b1b245",
+    "human": "f7725dfc9b391c3e9a0c509d49795994931c9d63",
+    "world": "803f54aa32a37a2deb93b22d2d821805ae5f04fb"
+  },
+  "phase": "CF1",
+  "programme": "Actor × Environment × Institution Capability Foundations",
+  "result": {
+    "causalRoles": [
+      "Environment when realized external exposure/condition changes the query",
+      "Institution when durable rule/process relation changes recurrent access/authority/incentive/enforcement/ownership/recovery/exit counterfactual"
+    ],
+    "derived": [
+      "ResourceFor",
+      "ActionableResourceFor",
+      "Option",
+      "boundary-relative Capability"
+    ],
+    "minimalQuery": [
+      "declared actor/system boundary",
+      "target transition",
+      "demand/load",
+      "as_of/currentness",
+      "owner-native aspects/claims/events relevant to target",
+      "requirements/assignments/native constraints",
+      "evidence sufficient for current projection"
+    ],
+    "rejected": [
+      "mandatory Environment coordinate in Resource identity",
+      "mandatory Institution coordinate in Resource identity",
+      "Context object as second source of truth",
+      "complete EnvironmentSnapshot",
+      "persisted CapabilityField",
+      "global static causal graph"
+    ],
+    "verdict": "STATIC_TOPOLOGY_IS_QUERY_PLUS_OWNER_NATIVE_RELATIONS_NOT_NEW_OBJECT_GRAPH"
+  },
+  "schemaVersion": 1
+}

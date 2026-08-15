@@ -131,3 +131,22 @@ Retained result:
 Primary artifacts: [`capability-field-cf0-problem-space.md`](capability-field-cf0-problem-space.md), [`capability-field-cf0-closeout.md`](capability-field-cf0-closeout.md), and `evidence/acceptance/capability-field-cf0-matrix-20260816.json`.
 
 Reopen CF0 only if a new discriminator invalidates the frozen model/problem decomposition or a currently rejected candidate gains a real deletion consequence. Do not create a Capability registry, Institution service, complete Environment snapshot, or scalar quality model from this phase.
+
+
+## Capability Field CF1–CF9 — causal foundations closeout
+
+CF1–CF9 of the Actor × Environment × Institution Capability Foundations programme is **closed**. The programme did not earn a Capability Field implementation. Its reusable result is the compact [`capability-context-doctrine.md`](capability-context-doctrine.md); detailed phase evidence remains in `capability-field-cf1-*.md` through `capability-field-cf9-*.md` and matching `evidence/acceptance/capability-field-cf*-20260816.json` artifacts.
+
+Retained laws:
+
+- Capability remains the existing boundary-/transition-/condition-relative supported relation; realized performance is not retained Actor capability identity.
+- Environment and Institution are query-activated causal roles, not complete World objects or new truth owners.
+- M3 transition topology remains rejected as an independent predictive family; its surviving value is intervention/owner localization when mechanism detail changes the next action.
+- capability production is different from current expression; joint-system and retained component capability may move differently.
+- exposure assignment/sorting is separate from exposure effect; observed environment gaps are not automatically intervention effects.
+- causal claims, transport claims and feedback claims are admitted only to the strength identified by their design, assumptions, target boundary and Attribution evidence.
+- descriptive causal modeling does not define a universal normative `InstitutionQuality` or `CapabilityValue` objective.
+
+Final promotion: **1 compact doctrine document; 0 production code paths, schemas/contracts, services/registries, or persisted Capability/Environment/Institution/causal state primitives.**
+
+Reopen only when a named current workload shows that owner-native Resource/Capability projections plus the compact doctrine cannot represent or correctly localize a repeated decision, causal-identification, transport or recovery failure. Conceptual completeness alone is not a reopen trigger.

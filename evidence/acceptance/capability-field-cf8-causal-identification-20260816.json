@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf8-causal-identification",
+  "phase": "CF8",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Causal admission is query-specific. Design, assignment, assumptions, outcome/horizon and transport boundary limit the strength of the supported claim.",
+  "externalRefs": {
+    "Pearl2010": {"title":"Causal Inference","venue":"PMLR 6 (2010)","boundary":"formal distinction among intervention, counterfactual and causal queries; does not supply Ordivon owner truth"},
+    "HernanRobins2016": {"title":"Using Big Data to Emulate a Target Trial When a Randomized Trial Is Not Available","venue":"American Journal of Epidemiology 183(8), 2016","doi":"10.1093/aje/kwv254","boundary":"target-trial discipline for observational causal analysis; health examples do not become universal domain mechanics"},
+    "BareinboimPearl2012": {"title":"Controlling Selection Bias in Causal Inference","venue":"AISTATS / PMLR 22 (2012)","boundary":"formal recoverability under selection assumptions"},
+    "BareinboimPearl2013": {"title":"Meta-Transportability of Causal Effects: A Formal Approach","venue":"AISTATS / PMLR 31 (2013)","boundary":"transport identification under explicit source/target assumptions"}
+  },
+  "queryClasses": [
+    {"id":"Q0","name":"ASSOCIATION_DESCRIPTION","form":"P(Y|X)","mainBurden":"measurement/selection/currentness","cannotByItself":"intervention effect"},
+    {"id":"Q1","name":"PREDICTIVE_CONDITIONAL","form":"predict Y under observed X,C","mainBurden":"out-of-sample/currentness/selection","cannotByItself":"causal effect"},
+    {"id":"Q2","name":"INTERVENTION","form":"P(Y|do(X)) or potential-outcome contrast","mainBurden":"assignment/exchangeability/positivity/consistency or equivalent structural assumptions","cannotByItself":"mechanism or target transport"},
+    {"id":"Q3","name":"COUNTERFACTUAL","form":"unit/population outcome under alternative condition","mainBurden":"structural identification beyond association","cannotByItself":"cross-domain transport"},
+    {"id":"Q4","name":"DYNAMIC_POLICY","form":"outcome under sequence/regime of exposures","mainBurden":"time-varying assignment/confounding/history","cannotByItself":"institution feedback outside modeled horizon"},
+    {"id":"Q5","name":"MECHANISM_ATTRIBUTION","form":"which path/owner caused effect","mainBurden":"rival mechanisms/mediation/attribution evidence","cannotByItself":"be inferred from total effect"},
+    {"id":"Q6","name":"TRANSPORT","form":"target-domain causal query from source+target evidence","mainBurden":"source-target mechanism differences/selection","cannotByItself":"ignore changed mechanisms"},
+    {"id":"Q7","name":"COEVOLUTION","form":"earlier outcomes change later state/rules and future effects","mainBurden":"time-indexed direction/endogeneity/feedback attribution","cannotByItself":"be inferred from temporal recurrence"}
+  ],
+  "admissionStates": ["DESCRIPTIVE","PREDICTIVE_CONDITIONAL","CAUSAL_ASSUMPTION_BOUND","IDENTIFIED_INTERVENTION","PARTIALLY_IDENTIFIED","TRANSPORTED_UNDER_EXPLICIT_ASSUMPTIONS","UNKNOWN_NOT_IDENTIFIED"],
+  "cases": [
+    {"id":"ID01","evidence":"cross-sectional environment/outcome correlation","admit":"DESCRIPTIVE","reject":"environment intervention effect"},
+    {"id":"ID02","evidence":"randomized assigned intervention with measured outcome","admit":"IDENTIFIED_INTERVENTION for assigned contrast under trial assumptions","reject":"mechanism/transport/long-horizon outcomes not measured"},
+    {"id":"ID03","evidence":"observational target-trial emulation with explicit adjustment assumptions","admit":"CAUSAL_ASSUMPTION_BOUND or identified under stated assumptions","reject":"causal-by-regression-default"},
+    {"id":"ID04","evidence":"time-varying exposure affected by prior outcomes/confounders","admit":"requires dynamic causal design/g-method or equivalent","reject":"single static coefficient"},
+    {"id":"ID05","evidence":"total treatment effect identified","admit":"total effect","reject":"specific mechanism attribution without additional evidence"},
+    {"id":"ID06","evidence":"source RCT plus target observational data and explicit transport assumptions","admit":"TRANSPORTED_UNDER_EXPLICIT_ASSUMPTIONS if conditions hold","reject":"source effect copied to target"},
+    {"id":"ID07","evidence":"strong association but unobserved selection rival remains","admit":"PARTIALLY_IDENTIFIED or UNKNOWN","reject":"forced point causal claim"},
+    {"id":"ID08","evidence":"outcome follows action temporally with multiple exogenous rivals","admit":"Outcome observation","reject":"Attribution"},
+    {"id":"ID09","evidence":"environment support raises current performance, no later independent comparison","admit":"expression/joint-system effect","reject":"capability production"},
+    {"id":"ID10","evidence":"later capability changes after exposure but assignment is endogenous","admit":"candidate production association","reject":"causal capitalization until selection burden addressed"},
+    {"id":"ID11","evidence":"no feasible design can distinguish decision-relevant rivals","admit":"UNKNOWN_NOT_IDENTIFIED","reject":"false certainty"},
+    {"id":"ID12","evidence":"additional evidence cannot change current action/admission/promotion decision","admit":"STOP evidence acquisition","reject":"measurement for completeness"}
+  ],
+  "result": {
+    "minimumCausalQuestion": ["population or Actor/system boundary","exposure/intervention","comparator","assignment process","outcome","horizon","target estimand/claim","identification assumptions","evidence","source-target boundary when transported"],
+    "status": "RETAIN_CAUSAL_ADMISSION_GRAMMAR_NOT_SERVICE",
+    "stoppingRule": "Acquire more evidence only while an unresolved causal distinction can still change action, admission/recovery, production-vs-expression classification, Attribution, transport or Knowledge promotion.",
+    "rejected": ["universal evidence ladder","RCT answers every causal question","regression implies causality","total effect implies mechanism","causal confidence scalar","global CausalGraph service"]
+  }
+}

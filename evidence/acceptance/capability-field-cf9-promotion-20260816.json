@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf9-promotion-audit",
+  "phase": "CF9",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Promotion audit decides which CF0-CF8 results enter compact World doctrine. Promotion does not create owner truth, causal effect sizes, schemas, services, or normative objectives.",
+  "promotionGate": [
+    "repeated decision value across materially different cases or phases",
+    "deleting the distinction causes a concrete wrong action, causal claim, transport claim, or owner placement",
+    "can be represented owner-neutrally without duplicating owner-native truth",
+    "has explicit negative-transfer/falsification boundary",
+    "can be substantially compressed relative to evidence history"
+  ],
+  "decisions": [
+    {"id":"P01","claim":"Capability is boundary-, transition- and condition-relative","decision":"PROMOTE_RULE_REUSE_R10_PRIMITIVE","deletionConsequence":"intrinsic/global capability labels replace query-bound supported transitions"},
+    {"id":"P02","claim":"Realized performance is not retained Actor capability identity","decision":"PROMOTE_RULE","deletionConsequence":"joint/situated output is falsely promoted to independent or transferable capability"},
+    {"id":"P03","claim":"Environment is a query-activated causal role, not complete state","decision":"PROMOTE_RULE","deletionConsequence":"physical/tool/information exposure effects disappear or complete-snapshot fiction is introduced"},
+    {"id":"P04","claim":"Institution is a query-activated durable rule/process causal role","decision":"PROMOTE_RULE","deletionConsequence":"access/authority/ownership/recovery failures are misdiagnosed as actor capability or generic context"},
+    {"id":"P05","claim":"Static owner-native projection is default; activate dynamics only when needed","decision":"PROMOTE_RULE","deletionConsequence":"all current queries inherit unnecessary history/selection/feedback complexity"},
+    {"id":"P06","claim":"Mechanism decomposition earns use when it changes intervention/owner/recovery/attribution","decision":"PROMOTE_RULE","deletionConsequence":"generic fit can point to wrong treatment even when prediction is correct"},
+    {"id":"P07","claim":"Capability production is distinct from current expression/exercisability","decision":"PROMOTE_RULE","deletionConsequence":"performance changes become false state-change claims"},
+    {"id":"P08","claim":"Joint-system and retained component capability may move differently","decision":"PROMOTE_RULE","deletionConsequence":"real leverage is denied or resilience/learning is overstated"},
+    {"id":"P09","claim":"Exposure assignment is distinct from exposure effect","decision":"PROMOTE_RULE","deletionConsequence":"selection/search/admission/composition is mistaken for treatment effect"},
+    {"id":"P10","claim":"Causal claim strength must match identified query/design/assumptions","decision":"PROMOTE_RULE","deletionConsequence":"association, total effect, mechanism, dynamic policy and transport collapse"},
+    {"id":"P11","claim":"Source evidence does not automatically become target truth","decision":"PROMOTE_RULE","deletionConsequence":"structural analogy becomes unsupported target mechanism/effect"},
+    {"id":"P12","claim":"Feedback/co-evolution requires direction-specific Attribution","decision":"PROMOTE_RULE","deletionConsequence":"temporal recurrence or shared loop shape becomes causal flywheel"},
+    {"id":"P13","claim":"Descriptive and normative institution questions remain separate","decision":"PROMOTE_RULE","deletionConsequence":"one hidden welfare/quality objective is smuggled into descriptive causal model"},
+    {"id":"P14","claim":"UNKNOWN remains valid when stronger capability/causal attribution is not identified","decision":"PROMOTE_RULE_REUSE_EXISTING_UNKNOWN","deletionConsequence":"forced person/environment/institution attribution creates false certainty"},
+    {"id":"R01","claim":"CapabilityField object/service","decision":"REJECT_PROMOTION","reason":"existing ResourceFor/Actionability/Option/Capability plus owner-native constraints already answer current static queries"},
+    {"id":"R02","claim":"global intrinsic Capability score","decision":"REJECT_PROMOTION","reason":"boundary/transition/objective dependence and joint-vs-independent distinctions make one scalar misleading"},
+    {"id":"R03","claim":"complete EnvironmentSnapshot","decision":"REJECT_PROMOTION","reason":"environment closure is unbounded/query-relative and partial facts can answer bounded decisions"},
+    {"id":"R04","claim":"universal Institution entity/schema/service","decision":"REJECT_PROMOTION","reason":"mechanisms have different native owners, clocks, authority and persistence semantics"},
+    {"id":"R05","claim":"InstitutionQuality scalar","decision":"REJECT_PROMOTION","reason":"output/autonomy/distribution/resilience/option/safety/recovery can move differently"},
+    {"id":"R06","claim":"M3 transition topology as universal predictive model","decision":"REJECT_PROMOTION","reason":"CF0 found zero incremental static predictive cases over strong M2; CF3 retained only action-localization value"},
+    {"id":"R07","claim":"EnvironmentalCapital stock / universal Actor update law","decision":"REJECT_PROMOTION","reason":"production is causal relation with owner/domain-specific state and mechanism"},
+    {"id":"R08","claim":"CapabilityUnmasking state primitive","decision":"REJECT_PROMOTION","reason":"derived from retained-state evidence plus changed current expression/exercisability"},
+    {"id":"R09","claim":"SelectionScore/Graph/automatic deconfounder","decision":"REJECT_PROMOTION","reason":"assignment mechanisms and identification assumptions are query-specific"},
+    {"id":"R10","claim":"universal causal evidence ladder / CausalGraph/confidence service","decision":"REJECT_PROMOTION","reason":"different causal queries require different designs/assumptions; mechanical central authority is not earned"},
+    {"id":"R11","claim":"TransportScore/TransportService","decision":"REJECT_PROMOTION","reason":"transport depends on explicit source-target mechanism differences and target query"},
+    {"id":"R12","claim":"UniversalCoevolutionGraph / Power scalar","decision":"REJECT_PROMOTION","reason":"feedback families have different mechanisms/owners/clocks and direction is contested"},
+    {"id":"R13","claim":"normative institution optimizer","decision":"REJECT_PROMOTION","reason":"CF series is descriptive/causal; plural objectives were intentionally not collapsed"}
+  ],
+  "promotionResult": {
+    "canonicalDoctrineDocumentsAdded": 1,
+    "productionCodePathsAdded": 0,
+    "schemasOrContractsAdded": 0,
+    "servicesOrRegistriesAdded": 0,
+    "persistedCapabilityCausalStatePrimitivesAdded": 0,
+    "canonicalDocument": "docs/capability-context-doctrine.md",
+    "researchEvidenceRetained": "CF0-CF9 docs and acceptance matrices remain causal/falsification history"
+  }
+}

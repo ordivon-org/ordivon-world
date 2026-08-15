@@ -1,0 +1,109 @@
+{
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "cases": [
+    {
+      "doesNotSupport": "retained independent actor capability",
+      "id": "I01",
+      "observation": "one successful episode with support present",
+      "supports": "conditional episode performance + evidence for supported joint/situated capability"
+    },
+    {
+      "doesNotSupport": "transfer or support-removal capability",
+      "id": "I02",
+      "observation": "same actor succeeds repeatedly under same narrow support",
+      "supports": "more stable conditional capability under that support"
+    },
+    {
+      "doesNotSupport": "universal domain capability",
+      "id": "I03",
+      "observation": "support removed; actor reconstructs and succeeds",
+      "supports": "independent/recovery capability for tested transition"
+    },
+    {
+      "doesNotSupport": "all far transfer",
+      "id": "I04",
+      "observation": "novel tool/environment; actor transfers mechanism successfully",
+      "supports": "bounded transfer capability"
+    },
+    {
+      "doesNotSupport": "AI caused durable deskilling outside tested horizon",
+      "id": "I05",
+      "observation": "assisted output improves while later unassisted performance falls",
+      "supports": "joint-system gain + possible retained-skill cost"
+    },
+    {
+      "doesNotSupport": "capability deletion",
+      "id": "I06",
+      "observation": "current performance falls under fatigue/path outage then returns without relearning",
+      "supports": "expression/availability change"
+    },
+    {
+      "doesNotSupport": "capability production",
+      "id": "I07",
+      "observation": "new environment raises current output but no later comparable-condition test",
+      "supports": "expression/joint-system effect"
+    },
+    {
+      "doesNotSupport": "causal mechanism without assignment/confounding evidence",
+      "id": "I08",
+      "observation": "later comparable-condition performance improves after exposure",
+      "supports": "candidate production/capitalization claim"
+    },
+    {
+      "doesNotSupport": "intrinsic actor ranking",
+      "id": "I09",
+      "observation": "two actors differ in output under nonstandardized environments",
+      "supports": "observed outcome difference"
+    },
+    {
+      "doesNotSupport": "full object-level independent production capability",
+      "id": "I10",
+      "observation": "seeded error is detected and corrected despite high-level support",
+      "supports": "verification/intervention capability"
+    },
+    {
+      "doesNotSupport": "portable capability outside institution",
+      "id": "I11",
+      "observation": "high output depends on employer-internal systems/title/relationships",
+      "supports": "situated system capability"
+    },
+    {
+      "doesNotSupport": "forcing a fictitious independent-capability verdict; correct answer may be UNKNOWN",
+      "id": "I12",
+      "observation": "no support-removal or transfer probe is ethically/operationally justified",
+      "supports": "conditional capability claim may remain useful"
+    }
+  ],
+  "claimBoundary": "Capability is a scoped evidence-backed claim, not a directly observed scalar latent trait. Matrix distinguishes what observations support and what they do not support.",
+  "kind": "ordivon.world.cf2-capability-identification-matrix",
+  "observedAtMs": 1786826039150,
+  "ownerRevisions": {
+    "computing": "acd896688c26a5ea0dad22d66c7ea30882b1b245",
+    "human": "f7725dfc9b391c3e9a0c509d49795994931c9d63",
+    "world": "803f54aa32a37a2deb93b22d2d821805ae5f04fb"
+  },
+  "phase": "CF2",
+  "programme": "Actor × Environment × Institution Capability Foundations",
+  "result": {
+    "identificationRule": "Performance evidence supports only the boundary/conditions actually tested. Stronger retained-actor claims require evidence that removes or varies the support relation relevant to the claim, when doing so is decision-relevant and admissible.",
+    "rejected": [
+      "intrinsic scalar capability score",
+      "one-episode capability identity",
+      "joint output => retained actor skill",
+      "support removal as mandatory universal test",
+      "latent CapabilityState registry"
+    ],
+    "surfaces": [
+      "realized episode performance",
+      "situated capability under ordinary tools/environment",
+      "joint-system capability",
+      "independent capability",
+      "verification/intervention capability",
+      "transfer capability",
+      "recovery capability"
+    ],
+    "unknownRule": "When production and expression cannot be distinguished by available evidence, preserve UNKNOWN rather than infer intrinsic gain/loss.",
+    "unmasking": "DERIVED: stable retained-state evidence + changed current exercisability/expression; no new state primitive earned."
+  },
+  "schemaVersion": 1
+}

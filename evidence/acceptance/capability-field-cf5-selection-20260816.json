@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.cf5-selection-sorting",
+  "phase": "CF5",
+  "baseRevision": "803f54aa32a37a2deb93b22d2d821805ae5f04fb",
+  "claimBoundary": "Selection/sorting is an identification and assignment-process role, not a global entity or automatic bias correction.",
+  "externalRefs": {
+    "CMTO": {
+      "title": "Creating Moves to Opportunity: Experimental Evidence on Barriers to Neighborhood Choice",
+      "venue": "NBER w26164 / American Economic Review 114(5), 2024",
+      "doi": "10.3386/w26164",
+      "design": "two-phase randomized housing search/assistance experiment",
+      "boundary": "housing choice/search process; does not show all environment assignment is friction rather than preference"
+    },
+    "BareinboimPearl2012": {
+      "title": "Controlling Selection Bias in Causal Inference",
+      "venue": "AISTATS / PMLR 22 (2012)",
+      "design": "formal graphical/algebraic recoverability analysis",
+      "boundary": "formal selection-bias conditions, not a universal empirical adjustment recipe"
+    },
+    "Manski2011": {
+      "title": "Genes, Eyeglasses, and Social Policy",
+      "venue": "Journal of Economic Perspectives 25(4)",
+      "doi": "10.1257/jep.25.4.83",
+      "boundary": "variance decomposition is not policy-intervention identification"
+    }
+  },
+  "cases": [
+    {"id":"SEL01","assignment":"randomized treatment/environment offer","effectIdentification":"strong for assigned intervention under trial assumptions","selectionQuestion":"uptake/noncompliance may remain separate"},
+    {"id":"SEL02","assignment":"randomized search/brokerage assistance changes chosen neighborhood","effectIdentification":"identifies effect of assignment mechanism on environment entry","selectionQuestion":"environment choice process itself is intervenable","ref":"CMTO"},
+    {"id":"SEL03","assignment":"high-capability actors preferentially apply to high-opportunity institution","effectIdentification":"raw outcome gap confounded","selectionQuestion":"Actor→Environment path required"},
+    {"id":"SEL04","assignment":"institution admits on hidden trait also predictive of outcome","effectIdentification":"admitted-vs-rejected comparison confounded/collider-prone","selectionQuestion":"Institution→Actor path required"},
+    {"id":"SEL05","assignment":"search cost blocks eligible actors from opportunity","effectIdentification":"environment quality may be high while observed entrants are selected","selectionQuestion":"coordination/information mechanism changes assignment"},
+    {"id":"SEL06","assignment":"family moves after plausibly exogenous displacement; sibling ages differ","effectIdentification":"stronger quasi-experimental exposure design if assumptions hold","selectionQuestion":"selection pressure reduced, not automatically eliminated"},
+    {"id":"SEL07","assignment":"observed covariates adjusted but unobserved stress affects selection and outcome","effectIdentification":"assumption-dependent","selectionQuestion":"UNKNOWN residual confounding remains"},
+    {"id":"SEL08","assignment":"provider/platform changes eligibility rule","effectIdentification":"rule effect on entrant composition distinct from treatment effect inside platform","selectionQuestion":"composition effect"},
+    {"id":"SEL09","assignment":"actors leave harmful institution and survivors look successful","effectIdentification":"survivorship selection","selectionQuestion":"exit mechanism matters"},
+    {"id":"SEL10","assignment":"no credible assignment information available","effectIdentification":"descriptive association only","selectionQuestion":"do not invent causal exposure effect"}
+  ],
+  "result": {
+    "assignmentRelation": "Exposure/Institution assignment is a causal process with possible Actor→Environment, Institution→Actor, common-cause, search-friction and exit paths.",
+    "threeQuestions": [
+      "effect of the environment/institution conditional on entering",
+      "effect of changing the assignment/search/admission mechanism",
+      "effect of changed entrant composition on observed outcomes"
+    ],
+    "selectionStatus": "RETAIN_REQUIRED_IDENTIFICATION_ROLE_NOT_ENTITY",
+    "evidenceClasses": [
+      "randomized assignment",
+      "as-if randomized/natural variation",
+      "longitudinal/within-family or fixed-effect design with explicit assumptions",
+      "measured-confounder adjustment",
+      "unadjusted observational association",
+      "UNKNOWN/unidentified"
+    ],
+    "antiLaw": "Observed environment/institution outcome gap is not the same thing as an exposure effect; selection is sometimes the intervention target rather than nuisance bias.",
+    "rejected": [
+      "SelectionScore",
+      "global SelectionGraph service",
+      "automatic deconfounding",
+      "RCT eliminates every selection or transport issue"
+    ]
+  }
+}
