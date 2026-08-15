@@ -1,0 +1,1412 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r3-relation-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "f6337ab6ca1a30127e1ae2b8882fcbe18c785425",
+  "sourceDigests": {
+    "docs/resource-ontology-r0-census.md": "sha256:572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9",
+    "docs/resource-ontology-r1-theory-triangulation.md": "sha256:63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2",
+    "docs/resource-ontology-r2-definition-falsification.md": "sha256:97a3765d58a74cfdc1f6c3df8076b77f6acb867ae196391ed7c3145e6603cd11",
+    "src/ordivon_world/resource_discovery.py": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840"
+  },
+  "models": {
+    "A": {
+      "name": "Universal Relation Tuple",
+      "frozen": "A Resource relation is one universal tuple containing actor/system boundary, aspect identity, owner, provenance, transition/interface, authority/admissibility, acquisition path, access/transport, capacity, currentness/expiry, cost/risk, dependencies, failure domain and substitutability. The tuple is the Resource relation; missing coordinates are materially incomplete."
+    },
+    "B": {
+      "name": "Actor-Aspect Pair",
+      "frozen": "A Resource relation is established by an actor/system boundary plus an identifiable Reality aspect with evidence that the aspect exists. Transition mechanism, direction, admissibility, feasibility and current qualification are all downstream."
+    },
+    "C": {
+      "name": "Supported Enrollment Relation",
+      "frozen": "Relative to a declared actor/system scope and an identifiable Reality aspect, Resource(actor, aspect, as_of) is supported when there exists at least one transition witness and an evidence envelope whose native claims jointly establish a bounded, admissible path by which the actor can intentionally enroll that aspect as a means, input or enabling relation for that transition family. The coarse Resource projection is existential over transition witnesses; ResourceFor retains the transition family when precision is required. Owner, authority, access, capacity, cost, failure domain and substitutability are not universal Resource-tuple fields; they remain claim-native support or downstream joins."
+    },
+    "D": {
+      "name": "Demand-Only Projection",
+      "frozen": "No workload-independent Resource relation exists. Resource status is only a demand-scoped projection from discovered candidate facts plus current owner/authority/access/fit evidence for one active ConsumerDemand."
+    }
+  },
+  "cases": [
+    {
+      "id": "R01",
+      "sourceCase": "W01",
+      "case": "Discovery source versus owner truth",
+      "pressure": "identity/provenance",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-IDENTITY"
+        }
+      }
+    },
+    {
+      "id": "R02",
+      "sourceCase": "W02",
+      "case": "Required authority versus possessed authority",
+      "pressure": "authority stage separation",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R03",
+      "sourceCase": "W03",
+      "case": "Parent entitlement unlocks children",
+      "pressure": "deferred prerequisite/enrollment",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R04",
+      "sourceCase": "W05",
+      "case": "Signup transport versus resource value",
+      "pressure": "stage/path-scoped access",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R05",
+      "sourceCase": "W07",
+      "case": "Historical admission versus current presence",
+      "pressure": "historical evidence/currentness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-TIME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R06",
+      "sourceCase": "W08",
+      "case": "Capability becomes a higher-layer resource",
+      "pressure": "nested system boundary",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R07",
+      "sourceCase": "N02",
+      "case": "Two logical alternatives share a failure domain",
+      "pressure": "portfolio independence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R08",
+      "sourceCase": "N04",
+      "case": "Executable Snowflake client but no shared capacity",
+      "pressure": "capacity vs relation",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R09",
+      "sourceCase": "N05",
+      "case": "Same mechanism changes actionability under parent relation",
+      "pressure": "relation/path context",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R10",
+      "sourceCase": "N09",
+      "case": "Historical child resource invalidated by parent change",
+      "pressure": "dependency currentness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-TIME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R11",
+      "sourceCase": "N11",
+      "case": "Stable consumer resource over replaceable physical members",
+      "pressure": "semantic identity over mechanism",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R12",
+      "sourceCase": "N12",
+      "case": "Installed capability excluded from ambient authority",
+      "pressure": "possession vs authority",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R13",
+      "sourceCase": "F02",
+      "case": "High-value FRED but current key absent",
+      "pressure": "deferred authority",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R14",
+      "sourceCase": "F03",
+      "case": "Source bytes versus research-grade evidence",
+      "pressure": "truth role/provenance",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R15",
+      "sourceCase": "S02",
+      "case": "OBS retained while listener default-off",
+      "pressure": "dormant resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R16",
+      "sourceCase": "S05",
+      "case": "Figma configured but OAuth consent absent",
+      "pressure": "resource vs actionability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R17",
+      "sourceCase": "S06",
+      "case": "TouchDesigner option before license acquisition",
+      "pressure": "pre-demand/deferred resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R18",
+      "sourceCase": "G01",
+      "case": "CC0 catalog requires exact asset identity/license",
+      "pressure": "aspect identity granularity",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-IDENTITY"
+        }
+      }
+    },
+    {
+      "id": "R19",
+      "sourceCase": "G03",
+      "case": "Live cognition changes actions but not proven player value",
+      "pressure": "transition vs Outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R20",
+      "sourceCase": "Q02",
+      "case": "Provider claim does not become Security truth",
+      "pressure": "claim-native truth role",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R21",
+      "sourceCase": "Q03",
+      "case": "Sample can support static analysis while execution remains unauthorized",
+      "pressure": "transition-specific authority",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R22",
+      "sourceCase": "Q04",
+      "case": "Reference can preserve option without local bytes",
+      "pressure": "representation/materialization",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R23",
+      "sourceCase": "Q06",
+      "case": "Remote entitlement and remote capability are different",
+      "pressure": "authority carrier vs capability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R24",
+      "sourceCase": "H01",
+      "case": "Generic Resource role was deleted in Human",
+      "pressure": "over-broad ontology",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R25",
+      "sourceCase": "H02",
+      "case": "Same tool changes role with the question",
+      "pressure": "actor/question relation",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R26",
+      "sourceCase": "H03",
+      "case": "Joint-system capability does not become retained Human capability",
+      "pressure": "nested actor boundary",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R27",
+      "sourceCase": "H04",
+      "case": "Human attention is scarce conversion capacity",
+      "pressure": "flow/non-object resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R28",
+      "sourceCase": "X08",
+      "case": "Reputation/relationship enables review without being an owned object",
+      "pressure": "social relation resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R29",
+      "sourceCase": "X09",
+      "case": "Technical debt shrinks safe options",
+      "pressure": "direction/liability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R30",
+      "sourceCase": "X12",
+      "case": "Legal permission exists while bytes are absent",
+      "pressure": "institutional relation",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R31",
+      "sourceCase": "X18",
+      "case": "Hostile botnet capability is controlled by adversary",
+      "pressure": "resource-for-whom",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R32",
+      "sourceCase": "X24",
+      "case": "Stale dataset valid historically but not for current-state claim",
+      "pressure": "claim-specific currentness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-TIME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R33",
+      "sourceCase": "X28",
+      "case": "Component useful only with cheaply acquirable complement",
+      "pressure": "bounded complement path",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R34",
+      "sourceCase": "X30",
+      "case": "Formal option expires before prerequisites can be satisfied",
+      "pressure": "temporal bounded feasibility",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R35",
+      "sourceCase": "X05",
+      "case": "Healthy idle GPU with no current workload",
+      "pressure": "workload-independent resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R36",
+      "sourceCase": "X13",
+      "case": "Unexercised contractual option/right",
+      "pressure": "non-object option resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R37",
+      "sourceCase": "X19",
+      "case": "Idle unrestricted cash reserve",
+      "pressure": "rival stock with optionality",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R38",
+      "sourceCase": "X26",
+      "case": "Encrypted backup with irretrievably lost key",
+      "pressure": "identified aspect without feasible path",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DEMAND"
+        }
+      }
+    },
+    {
+      "id": "R39",
+      "sourceCase": "X27",
+      "case": "Decayed skill with bounded cheaper refresh",
+      "pressure": "latent reacquisition resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LAYER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-PAIR"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    },
+    {
+      "id": "R40",
+      "sourceCase": "R3F01",
+      "case": "Aggregator-only capability claim currently reaches consumable-now when owner only confirms terms/interface",
+      "pressure": "transition-witness provenance gap",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-UNIVERSAL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOWITNESS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-SER"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NO-PREDEMAND"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "A": 6,
+      "F": 34
+    },
+    "B": {
+      "P": 28,
+      "A": 3,
+      "F": 9
+    },
+    "C": {
+      "P": 40
+    },
+    "D": {
+      "A": 2,
+      "P": 20,
+      "F": 18
+    }
+  },
+  "coordinateLedger": [
+    {
+      "coordinate": "actor/system scope",
+      "placement": "resource-relation-context",
+      "verdict": "REQUIRED_SEMANTIC",
+      "cases": [
+        "R06",
+        "R25",
+        "R26",
+        "R31"
+      ],
+      "note": "Necessary for resource-for-whom; may be supplied by an explicitly scoped caller rather than duplicated in every record."
+    },
+    {
+      "coordinate": "aspect identity",
+      "placement": "resource-relation-identity",
+      "verdict": "REQUIRED_SEMANTIC",
+      "cases": [
+        "R01",
+        "R18",
+        "R22",
+        "R23"
+      ],
+      "note": "Must identify the Reality aspect/relation/capability/representation being discussed; not restricted to owned objects."
+    },
+    {
+      "coordinate": "transition witness/family",
+      "placement": "support-witness",
+      "verdict": "REQUIRED_PROOF_NOT_COARSE_IDENTITY",
+      "cases": [
+        "R09",
+        "R21",
+        "R24",
+        "R29",
+        "R40"
+      ],
+      "note": "At least one witnessed enrollment transition is necessary to avoid vacuity; coarse Resource(actor,aspect) can existentially project over it, while ResourceFor retains it when precision matters."
+    },
+    {
+      "coordinate": "evidence/provenance envelope",
+      "placement": "support-evidence",
+      "verdict": "REQUIRED_PROOF_NOT_IDENTITY",
+      "cases": [
+        "R01",
+        "R14",
+        "R18",
+        "R20",
+        "R40"
+      ],
+      "note": "Evidence establishes the relation but should not become the Resource identity. Truth-role/provenance of the transition witness must be preserved."
+    },
+    {
+      "coordinate": "bounded enrollment/acquisition feasibility",
+      "placement": "support-predicate",
+      "verdict": "REQUIRED_PROOF_NOT_FIELD",
+      "cases": [
+        "R03",
+        "R13",
+        "R17",
+        "R33",
+        "R34",
+        "R38",
+        "R39"
+      ],
+      "note": "Needed to separate realistic deferred resources from unreachable theoretical utility; represented by native evidence/path claims, not one universal path field."
+    },
+    {
+      "coordinate": "admissibility/directionality",
+      "placement": "support-predicate/native-authority",
+      "verdict": "REQUIRED_PROOF_NOT_FIELD",
+      "cases": [
+        "R21",
+        "R29",
+        "R30",
+        "R31"
+      ],
+      "note": "Must be established from relevant native purpose/authority facts; not reducible to technical feasibility and not copied into a global Resource authority field."
+    },
+    {
+      "coordinate": "owner",
+      "placement": "claim-native-source",
+      "verdict": "DELETE_UNIVERSAL_COORDINATE",
+      "cases": [
+        "R20",
+        "R27",
+        "R28",
+        "R30"
+      ],
+      "note": "Different claims can have different native owners; some resources are relational/social and have no single provider-style owner."
+    },
+    {
+      "coordinate": "possessed consuming authority",
+      "placement": "actionable-resource",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R02",
+        "R12",
+        "R13",
+        "R16",
+        "R21"
+      ],
+      "note": "Current authority determines Actionability for a transition; requiring it for Resource existence collapses Resource into Actionable Resource."
+    },
+    {
+      "coordinate": "access/transport/materialization",
+      "placement": "actionable-resource",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R04",
+        "R15",
+        "R22",
+        "R30"
+      ],
+      "note": "Current access is use/path scoped and not required for a deferred or reference-preserved Resource."
+    },
+    {
+      "coordinate": "capacity/quota",
+      "placement": "actionable-resource-or-option",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R08",
+        "R27",
+        "R37"
+      ],
+      "note": "Capacity answers how much/how often, not whether the underlying Resource relation exists."
+    },
+    {
+      "coordinate": "currentness/expiry",
+      "placement": "evidence-claim-validity",
+      "verdict": "CLAIM_LOCAL_NOT_RESOURCE_FIELD",
+      "cases": [
+        "R04",
+        "R05",
+        "R10",
+        "R32",
+        "R34"
+      ],
+      "note": "Owner terms, authority, transport, presence, historical evidence and option expiry have different clocks; projection is as-of evidence, not one Resource current bit."
+    },
+    {
+      "coordinate": "cost/risk/value",
+      "placement": "acquisition-selection-valuation",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R13",
+        "R17",
+        "R37"
+      ],
+      "note": "Affects whether/when to acquire or select, not Resource identity."
+    },
+    {
+      "coordinate": "dependencies/complements",
+      "placement": "support-or-composition",
+      "verdict": "CONTEXTUAL_NOT_UNIVERSAL",
+      "cases": [
+        "R03",
+        "R10",
+        "R33",
+        "R34"
+      ],
+      "note": "A prerequisite can establish bounded enrollment feasibility before actionability; other dependencies belong to Option/Capability composition."
+    },
+    {
+      "coordinate": "failure domain",
+      "placement": "redundancy-portfolio",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R07",
+        "R11"
+      ],
+      "note": "Relevant to effective redundancy/resilience, not Resource existence."
+    },
+    {
+      "coordinate": "substitutability",
+      "placement": "redundancy-portfolio",
+      "verdict": "DOWNSTREAM",
+      "cases": [
+        "R07",
+        "R17"
+      ],
+      "note": "Substitute arrival can change marginal value without changing Resource identity."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "delete actor/system scope",
+      "result": "FAIL",
+      "cases": [
+        "R31",
+        "R25",
+        "R26"
+      ],
+      "why": "Cannot distinguish resource-for-Ordivon from resource-for-adversary or different actor boundaries."
+    },
+    {
+      "mutation": "delete exact aspect identity",
+      "result": "FAIL",
+      "cases": [
+        "R01",
+        "R18",
+        "R22"
+      ],
+      "why": "Catalog/provider labels transfer claims across heterogeneous underlying aspects."
+    },
+    {
+      "mutation": "delete transition witness entirely",
+      "result": "FAIL",
+      "cases": [
+        "R21",
+        "R29",
+        "R40"
+      ],
+      "why": "Existing things, liabilities and aggregator claims become indistinguishable from enrollable Resources."
+    },
+    {
+      "mutation": "make transition witness part of coarse Resource identity",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R21",
+        "R19",
+        "R35"
+      ],
+      "why": "One aspect fragments into many Resource identities even though transition precision is only needed for ResourceFor/Actionability."
+    },
+    {
+      "mutation": "delete evidence/provenance support",
+      "result": "FAIL",
+      "cases": [
+        "R14",
+        "R20",
+        "R40"
+      ],
+      "why": "Claims become self-authenticating and aggregator capability labels can mint semantic ResourceFor truth."
+    },
+    {
+      "mutation": "copy one universal owner into Resource relation",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R27",
+        "R28",
+        "R30"
+      ],
+      "why": "Attention, relationships/rights and multi-source resources do not have one provider-style owner; ownership belongs to individual claims."
+    },
+    {
+      "mutation": "require current possessed authority in Resource relation",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R13",
+        "R16",
+        "R17"
+      ],
+      "why": "Deferred/gated Resources disappear and Resource collapses toward Actionable Resource."
+    },
+    {
+      "mutation": "require current access/materialization",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R15",
+        "R22",
+        "R30"
+      ],
+      "why": "Dormant/reference/rights-based Resources disappear."
+    },
+    {
+      "mutation": "store one Resource currentness/expiry field",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R04",
+        "R05",
+        "R32",
+        "R34"
+      ],
+      "why": "Distinct supporting claims have different validity clocks and historical truth roles."
+    },
+    {
+      "mutation": "store failure domain/substitutability in Resource identity",
+      "result": "REJECT_ADD",
+      "cases": [
+        "R07",
+        "R11"
+      ],
+      "why": "Portfolio context changes without changing the underlying Resource relation."
+    },
+    {
+      "mutation": "remove bounded feasibility/admissibility from support predicate",
+      "result": "FAIL",
+      "cases": [
+        "R29",
+        "R31",
+        "R34",
+        "R38"
+      ],
+      "why": "Liabilities, hostile capabilities, expired rights and unreachable aspects can be promoted merely because a mechanism can be imagined."
+    }
+  ],
+  "freshSupportedEnrollmentTests": [
+    {
+      "id": "R3Y01",
+      "case": "One API license permits personal research but forbids commercial output; the same aspect has one supported transition family and one unsupported family.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-TRANSITION-SCOPED"
+        }
+      }
+    },
+    {
+      "id": "R3Y02",
+      "case": "A resource relation needs identity evidence from a provider, transport evidence from Workstation, and permission evidence from an account authority; no single system owns all support.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-MULTI-OWNER-EVIDENCE"
+        }
+      }
+    },
+    {
+      "id": "R3Y03",
+      "case": "A stable Workstation egress capability changes its internal path member while preserving its exported semantic capability identity consumed by Finance.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-NESTED-BOUNDARY"
+        }
+      }
+    },
+    {
+      "id": "R3Y04",
+      "case": "Identity evidence remains valid but transport evidence expires; Resource remains supportable while current Actionability becomes unknown until transport refresh.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CLAIM-CURRENTNESS"
+        }
+      }
+    },
+    {
+      "id": "R3Y05",
+      "case": "A jointly maintained open-source tool has no meaningful single owner field; repo identity, license, package provenance and local compatibility come from different authorities.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-NO-UNIVERSAL-OWNER"
+        }
+      }
+    },
+    {
+      "id": "R3Y06",
+      "case": "A complement is not currently held, but owner-native evidence shows a low-cost bounded acquisition path; the component is a Resource but not yet Actionable for a composition requiring the complement.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-DEFERRED-COMPLEMENT"
+        }
+      }
+    },
+    {
+      "id": "R3Y07",
+      "case": "A source aggregator claims capability X, but current owner evidence proves only identity/terms/interface and does not attest X; ResourceFor(X) is not established even if the aspect may be a Resource for another transition.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-WITNESS-PROVENANCE"
+        }
+      }
+    },
+    {
+      "id": "R3Y08",
+      "case": "The same malware bytes are a ResourceFor(static-analysis) under current authority and not ActionableFor(execution); coarse Resource(actor,aspect) remains true because at least one supported transition witness exists.",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-EXISTENTIAL-PROJECTION"
+        }
+      }
+    }
+  ],
+  "provisionalSurvivor": {
+    "model": "C",
+    "name": "Supported Enrollment Relation",
+    "status": "PROVISIONAL_FOR_R4_NOT_CANONICAL_DOCTRINE",
+    "compression": "Coarse Resource relation has two semantic coordinates (actor/system scope, aspect identity) plus two proof obligations (at least one transition witness, evidence envelope proving bounded admissible enrollability). Transition family is retained in ResourceFor when precision is required; owner/authority/access/capacity/currentness/cost/dependencies/failure-domain/substitutability are not universal Resource identity fields."
+  },
+  "implementationFalsifiers": [
+    {
+      "id": "R3F01",
+      "observed": true,
+      "jobClientRequestId": "world-r3-capability-provenance-falsifier-20260815-02",
+      "result": "Current evaluate_resource can return consumable-now when required capability exists only in aggregator-authored ResourceCandidate.capabilities while OwnerVerification confirms terms/interface but does not attest the capability semantics.",
+      "interpretation": "Transition witness provenance is a real truth-boundary requirement. This is recorded as an existing evaluator debt; R3 does not modify production code."
+    },
+    {
+      "id": "R3F02",
+      "observed": true,
+      "jobClientRequestId": "world-r3-capability-provenance-falsifier-20260815-03",
+      "result": "Current evaluate_resource also returns consumable-now when ResourceCandidate has mixed owner+aggregator resource-level provenance, while the owner evidence proves resource existence/terms/interface and only the aggregator claim semantically supports the required capability.",
+      "interpretation": "Resource-level owner provenance is insufficient to prove claim-level transition semantics. Evidence support must preserve which native claim supports which transition witness; merely having some owner provenance on the ResourceCandidate cannot upgrade unrelated capability labels."
+    }
+  ],
+  "contentDigest": "sha256:621c9d1006dd99fa89cf933d05c640824d61841be331836fcd5cdb32aa35f586"
+}

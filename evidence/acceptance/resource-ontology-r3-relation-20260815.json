@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r3-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "f6337ab6ca1a30127e1ae2b8882fcbe18c785425",
+  "artifacts": {
+    "r3": {
+      "path": "docs/resource-ontology-r3-relation-model.md",
+      "sha256": "b5d7697736a458678b700835c379dd231d317ad62ae689c0c4b22b67af94e85a"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r3-relation-matrix-20260815.json",
+      "sha256": "0dc4709dcd5991a3686278c6227dff7eab7045e6b0a85dad0886bcfef1ace02d",
+      "contentDigest": "sha256:621c9d1006dd99fa89cf933d05c640824d61841be331836fcd5cdb32aa35f586"
+    }
+  },
+  "coverage": {
+    "relationDiscriminators": 40,
+    "freshPostFreeze": 8,
+    "totalSupportedEnrollment": 48,
+    "coordinateLedger": 15,
+    "deletionTests": 11,
+    "requiredDeletions": 5,
+    "rejectedAdditions": 6,
+    "implementationFalsifiers": 2
+  },
+  "modelCounts": {
+    "A": {
+      "A": 6,
+      "F": 34
+    },
+    "B": {
+      "P": 28,
+      "A": 3,
+      "F": 9
+    },
+    "C": {
+      "P": 40
+    },
+    "D": {
+      "A": 2,
+      "P": 20,
+      "F": 18
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "C",
+    "name": "Supported Enrollment Relation",
+    "status": "PROVISIONAL_FOR_R4_NOT_CANONICAL_DOCTRINE",
+    "compression": "Coarse Resource relation has two semantic coordinates (actor/system scope, aspect identity) plus two proof obligations (at least one transition witness, evidence envelope proving bounded admissible enrollability). Transition family is retained in ResourceFor when precision is required; owner/authority/access/capacity/currentness/cost/dependencies/failure-domain/substitutability are not universal Resource identity fields."
+  },
+  "implementationDebt": [
+    {
+      "id": "R3F01",
+      "observed": true,
+      "jobClientRequestId": "world-r3-capability-provenance-falsifier-20260815-02",
+      "result": "Current evaluate_resource can return consumable-now when required capability exists only in aggregator-authored ResourceCandidate.capabilities while OwnerVerification confirms terms/interface but does not attest the capability semantics.",
+      "interpretation": "Transition witness provenance is a real truth-boundary requirement. This is recorded as an existing evaluator debt; R3 does not modify production code."
+    },
+    {
+      "id": "R3F02",
+      "observed": true,
+      "jobClientRequestId": "world-r3-capability-provenance-falsifier-20260815-03",
+      "result": "Current evaluate_resource also returns consumable-now when ResourceCandidate has mixed owner+aggregator resource-level provenance, while the owner evidence proves resource existence/terms/interface and only the aggregator claim semantically supports the required capability.",
+      "interpretation": "Resource-level owner provenance is insufficient to prove claim-level transition semantics. Evidence support must preserve which native claim supports which transition witness; merely having some owner provenance on the ResourceCandidate cannot upgrade unrelated capability labels."
+    }
+  ],
+  "centralResult": "Resource is provisionally a supported relation projection across truth owners: coarse identity uses actor/system scope + aspect identity, while transition witness and evidence envelope are proof obligations. Current authority/access/capacity are Actionability joins; currentness is claim-local; failure-domain/substitutability are portfolio relations.",
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r3Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionSchema": false,
+    "resourceRegistry": false,
+    "globalRelationGraph": false
+  },
+  "next": "R4 lifecycle/state-space falsification after canonical main revalidation."
+}
