@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r5-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "300e3feef2be31ed3c8f72dfcb7383b1fd50979a",
+  "artifacts": {
+    "r5": {
+      "path": "docs/resource-ontology-r5-composition-falsification.md",
+      "sha256": "154fae1112e3c5ff453a91699382752b0ad5ec3ba5f33c5633805090500e50a6"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r5-composition-matrix-20260815.json",
+      "sha256": "145b84c56fab87856c9c69ca1549c68d4eb1d1cc28dba266668c033ec61dd722",
+      "contentDigest": "sha256:ae77167dde45c0fe421adcd9a10c47af3ee618fa7fb32f9e40376fb37787989b"
+    }
+  },
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "300e3feef2be31ed3c8f72dfcb7383b1fd50979a"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "d9fdbfcbf2d578135587813cb9c8c14b640fbb40"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "coverage": {
+    "compositionDiscriminators": 40,
+    "freshPostFreeze": 8,
+    "totalSurvivorSurface": 48,
+    "relationLedger": 13,
+    "deletionTests": 12,
+    "requiredStructuralDistinctions": 5,
+    "rejectedRootAbstractions": 7,
+    "executedEvaluatorProbes": 4,
+    "frozenHistoricalSourceRefs": 37
+  },
+  "modelCounts": {
+    "A": {
+      "F": 36,
+      "A": 4
+    },
+    "B": {
+      "P": 6,
+      "F": 28,
+      "A": 6
+    },
+    "C": {
+      "P": 32,
+      "A": 8
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Requirement–Assignment–Constraint Projection",
+    "status": "PROVISIONAL_FOR_R6_NOT_CANONICAL_DOCTRINE",
+    "compression": "Composition is a context-bound satisfiability/proof problem, not a global Resource graph. For actor/transition/demand/load/as_of, domain-authored requirements are assigned current ResourceFor/ActionableResourceFor projections under native compatibility, authority/currentness, capacity, temporal/effect/recovery and disturbance constraints. Substitution/complementarity/prerequisite/modifier/bottleneck/redundancy are derived relations. Persist exact bundle identity only at an owner-native action/effect/recovery boundary that requires it."
+  },
+  "centralResult": "Composition is provisionally a context-bound requirement-assignment-constraint proof, not a property of a Resource bag or a universal dependency graph. Substitution, complementarity, prerequisite, conversion modifier, bottleneck and redundancy are derived relations over feasible assignments.",
+  "rootCompression": {
+    "required": [
+      "transition-specific Requirement",
+      "contextual Assignment",
+      "material compatibility/semantic constraints",
+      "capacity/load constraints when binding",
+      "disturbance/failure-domain evidence for redundancy"
+    ],
+    "nativeConstraints": [
+      "authority/currentness",
+      "capacity with native units",
+      "temporal/admission ordering",
+      "effect/recovery identity",
+      "failure-domain/disturbance evidence"
+    ],
+    "derivedRelations": [
+      "substitution",
+      "complementarity",
+      "prerequisite",
+      "conversion modifier/catalyst",
+      "bottleneck",
+      "redundancy"
+    ],
+    "persistenceRule": "Persist exact composition identity only where one owner-native admission/effect/recovery boundary requires exact member identity; recompute planning composition elsewhere."
+  },
+  "implementationEvidence": {
+    "clientRequestId": "world-r5-current-composition-gap-probes-20260815-01",
+    "result": "PASS",
+    "currentGap": "Current World resource evaluator is per-candidate and cannot satisfy a conjunctive demand x+y from separate x and y Resources.",
+    "control": "A lower-owner Resource exporting composite semantic capability x+y is consumable-now, showing that lower-owner composition plus semantic export remains the preferred path when one owner can own the whole capability.",
+    "carriedDebt": [
+      "R3F01 claim-level transition provenance",
+      "R3F02 resource-level owner provenance does not prove capability claim"
+    ]
+  },
+  "sourceIntegrity": {
+    "siblingOwnersChecked": 8,
+    "selectedFilesComparedToFrozenCommits": 27,
+    "result": "PASS"
+  },
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r5Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionCompositionEngine": false,
+    "dependencyGraph": false,
+    "compositionRegistry": false,
+    "globalSubstituteEdges": false,
+    "globalComplementEdges": false,
+    "globalCapacityScalar": false
+  },
+  "next": "R6 action/effect/outcome/attribution conversion-chain falsification after canonical main revalidation."
+}
