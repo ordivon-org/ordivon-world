@@ -192,6 +192,9 @@ class OwnerVerification:
     quota_class: str
     machine_interfaces: tuple[str, ...]
     evidence_refs: tuple[str, ...]
+    # Owner-attested current capability claims for this exact resource identity.
+    # ResourceCandidate.capabilities remains discovery/ranking vocabulary only.
+    verified_capabilities: tuple[str, ...] = ()
     notes: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -212,6 +215,7 @@ class OwnerVerification:
         object.__setattr__(self, "allowed_purposes", _tuple_strings("allowed purposes", self.allowed_purposes))
         object.__setattr__(self, "machine_interfaces", _tuple_strings("machine interfaces", self.machine_interfaces))
         object.__setattr__(self, "evidence_refs", _tuple_strings("evidence refs", self.evidence_refs))
+        object.__setattr__(self, "verified_capabilities", _tuple_strings("verified capabilities", self.verified_capabilities))
         object.__setattr__(self, "notes", _tuple_strings("notes", self.notes))
         if not self.evidence_refs:
             raise ValueError("owner verification requires owner evidence")
@@ -242,6 +246,7 @@ class OwnerVerification:
             "quotaClass": self.quota_class,
             "machineInterfaces": list(self.machine_interfaces),
             "evidenceRefs": list(self.evidence_refs),
+            "verifiedCapabilities": list(self.verified_capabilities),
             "notes": list(self.notes),
         }
 
@@ -595,11 +600,21 @@ def evaluate_resource(
 
     _utc(as_of)
     required = set(demand.required_capabilities)
-    offered = set(candidate.capabilities)
-    missing = sorted(required - offered)
-    required_fit = 1.0 if not required else len(required & offered) / len(required)
+    discovered = set(candidate.capabilities)
+    missing = sorted(required - discovered)
     preferred = set(demand.preferred_capabilities)
-    preferred_fit = 0.0 if not preferred else len(preferred & offered) / len(preferred)
+    matching_owner = owner is not None and owner.resource_id == candidate.resource_id
+    matching_owner_current = matching_owner and owner.is_current(
+        as_of=as_of, max_age_seconds=demand.owner_max_age_seconds
+    )
+
+    # Candidate capability labels are discovery hypotheses, not current semantic
+    # capability truth. Only a matching *current* OwnerVerification may attest the
+    # capabilities used for demand-fit and preferred-fit projections.
+    verified_offered = set(owner.verified_capabilities) if matching_owner_current else set()
+    unverified_required = sorted((required & discovered) - verified_offered)
+    required_fit = 1.0 if not required else len(required & verified_offered) / len(required)
+    preferred_fit = 0.0 if not preferred else len(preferred & verified_offered) / len(preferred)
 
     relevant_outcomes = [
         item for item in outcomes
@@ -613,7 +628,7 @@ def evaluate_resource(
     decision: Decision
     reasons: list[str] = []
     authority_friction = 5
-    owner_current = False
+    owner_current = bool(matching_owner_current)
     authority_present = False
     acquisition_current = False
     acquisition_net_value: float | None = None
@@ -623,95 +638,96 @@ def evaluate_resource(
     if missing:
         decision = "not-fit"
         reasons.append("missing-required-capabilities:" + ",".join(missing))
-    elif owner is None or owner.resource_id != candidate.resource_id:
+    elif not matching_owner:
         decision = "owner-verification-required"
         reasons.append("candidate-has-no-matching-owner-verification")
+    elif not matching_owner_current:
+        decision = "owner-verification-required"
+        reasons.append("owner-verification-stale")
+    elif owner.terms_status == "forbidden" or demand.purpose not in set(owner.allowed_purposes):
+        decision = "blocked-by-terms"
+        reasons.append("consumer-purpose-not-owner-admitted")
+    elif owner.terms_status == "unknown":
+        decision = "owner-verification-required"
+        reasons.append("owner-terms-unknown")
+    elif unverified_required:
+        decision = "owner-verification-required"
+        reasons.append("required-capabilities-not-owner-attested:" + ",".join(unverified_required))
     else:
         authority_friction = owner.authority_friction
-        owner_current = owner.is_current(as_of=as_of, max_age_seconds=demand.owner_max_age_seconds)
-        if not owner_current:
-            decision = "owner-verification-required"
-            reasons.append("owner-verification-stale")
-        elif owner.terms_status == "forbidden" or demand.purpose not in set(owner.allowed_purposes):
-            decision = "blocked-by-terms"
-            reasons.append("consumer-purpose-not-owner-admitted")
-        elif owner.terms_status == "unknown":
-            decision = "owner-verification-required"
-            reasons.append("owner-terms-unknown")
+        if owner.authority_class == "anonymous-public":
+            authority_present = True
+        elif (
+            authority is not None
+            and authority.resource_id == candidate.resource_id
+            and authority.authority_class == owner.authority_class
+            and authority.is_active(as_of=as_of, max_age_seconds=demand.authority_max_age_seconds)
+        ):
+            authority_present = True
         else:
-            if owner.authority_class == "anonymous-public":
-                authority_present = True
-            elif (
-                authority is not None
-                and authority.resource_id == candidate.resource_id
-                and authority.authority_class == owner.authority_class
-                and authority.is_active(as_of=as_of, max_age_seconds=demand.authority_max_age_seconds)
-            ):
-                authority_present = True
+            if authority is not None and authority.resource_id == candidate.resource_id:
+                reasons.append("authority-evidence-not-active-or-not-matching-owner-requirement")
+            if acquisition is None or acquisition.resource_id != candidate.resource_id:
+                decision = "acquisition-verification-required"
+                reasons.append("missing-current-acquisition-assessment")
             else:
-                if authority is not None and authority.resource_id == candidate.resource_id:
-                    reasons.append("authority-evidence-not-active-or-not-matching-owner-requirement")
-                if acquisition is None or acquisition.resource_id != candidate.resource_id:
+                acquisition_current = acquisition.is_current(
+                    as_of=as_of, max_age_seconds=demand.acquisition_max_age_seconds
+                )
+                acquisition_mode = acquisition.acquisition_mode
+                acquisition_net_value = acquisition.net_opportunity_value
+                prerequisite_map = {row.resource_id: row for row in prerequisite_authorities}
+                missing_prerequisites = [
+                    resource_id for resource_id in acquisition.prerequisite_resources
+                    if resource_id not in prerequisite_map
+                    or not prerequisite_map[resource_id].is_active(
+                        as_of=as_of, max_age_seconds=demand.authority_max_age_seconds
+                    )
+                ]
+                if not acquisition_current:
                     decision = "acquisition-verification-required"
-                    reasons.append("missing-current-acquisition-assessment")
-                else:
-                    acquisition_current = acquisition.is_current(
-                        as_of=as_of, max_age_seconds=demand.acquisition_max_age_seconds
+                    reasons.append("acquisition-assessment-stale")
+                elif missing_prerequisites:
+                    decision = "prerequisite-acquisition-required"
+                    reasons.append("missing-prerequisite-authority:" + ",".join(missing_prerequisites))
+                elif acquisition.eligibility == "ineligible":
+                    decision = "not-eligible"
+                    reasons.append("current-owner-eligibility-not-satisfied")
+                elif acquisition_net_value < demand.acquisition_threshold:
+                    decision = "defer-acquisition"
+                    reasons.append(
+                        f"net-opportunity-{acquisition_net_value:.3f}-below-threshold-{demand.acquisition_threshold:.3f}"
                     )
-                    acquisition_mode = acquisition.acquisition_mode
-                    acquisition_net_value = acquisition.net_opportunity_value
-                    prerequisite_map = {row.resource_id: row for row in prerequisite_authorities}
-                    missing_prerequisites = [
-                        resource_id for resource_id in acquisition.prerequisite_resources
-                        if resource_id not in prerequisite_map
-                        or not prerequisite_map[resource_id].is_active(
-                            as_of=as_of, max_age_seconds=demand.authority_max_age_seconds
-                        )
-                    ]
-                    if not acquisition_current:
-                        decision = "acquisition-verification-required"
-                        reasons.append("acquisition-assessment-stale")
-                    elif missing_prerequisites:
-                        decision = "prerequisite-acquisition-required"
-                        reasons.append("missing-prerequisite-authority:" + ",".join(missing_prerequisites))
-                    elif acquisition.eligibility == "ineligible":
-                        decision = "not-eligible"
-                        reasons.append("current-owner-eligibility-not-satisfied")
-                    elif acquisition_net_value < demand.acquisition_threshold:
-                        decision = "defer-acquisition"
-                        reasons.append(
-                            f"net-opportunity-{acquisition_net_value:.3f}-below-threshold-{demand.acquisition_threshold:.3f}"
-                        )
-                    elif acquisition.eligibility == "unknown":
-                        if acquisition.requires_human_action:
-                            decision = "human-action-required"
-                            reasons.append("positive-net-value-eligibility-resolved-in-human-acquisition-flow")
-                        else:
-                            decision = "acquisition-verification-required"
-                            reasons.append("acquisition-eligibility-unknown")
-                    elif acquisition.requires_human_action:
+                elif acquisition.eligibility == "unknown":
+                    if acquisition.requires_human_action:
                         decision = "human-action-required"
-                        reasons.append("positive-net-value-requires-human-action")
+                        reasons.append("positive-net-value-eligibility-resolved-in-human-acquisition-flow")
                     else:
-                        decision = "acquire-now"
-                        reasons.append("positive-net-value-agent-acquisition")
-
-            if authority_present:
-                if transport is None or transport.resource_id != candidate.resource_id:
-                    decision = "transport-verification-required"
-                    reasons.append("no-matching-transport-evidence")
+                        decision = "acquisition-verification-required"
+                        reasons.append("acquisition-eligibility-unknown")
+                elif acquisition.requires_human_action:
+                    decision = "human-action-required"
+                    reasons.append("positive-net-value-requires-human-action")
                 else:
-                    transport_current = transport.is_current(
-                        as_of=as_of, max_age_seconds=demand.transport_max_age_seconds
-                    )
-                    if not transport_current or transport.status == "unknown":
-                        decision = "transport-verification-required"
-                        reasons.append("transport-evidence-stale-or-unknown")
-                    elif transport.status == "unavailable":
-                        decision = "transport-unavailable"
-                        reasons.append("current-scoped-transport-unavailable")
-                    else:
-                        decision = "consumable-now"
+                    decision = "acquire-now"
+                    reasons.append("positive-net-value-agent-acquisition")
+
+        if authority_present:
+            if transport is None or transport.resource_id != candidate.resource_id:
+                decision = "transport-verification-required"
+                reasons.append("no-matching-transport-evidence")
+            else:
+                transport_current = transport.is_current(
+                    as_of=as_of, max_age_seconds=demand.transport_max_age_seconds
+                )
+                if not transport_current or transport.status == "unknown":
+                    decision = "transport-verification-required"
+                    reasons.append("transport-evidence-stale-or-unknown")
+                elif transport.status == "unavailable":
+                    decision = "transport-unavailable"
+                    reasons.append("current-scoped-transport-unavailable")
+                else:
+                    decision = "consumable-now"
 
     evidence_quality = 0.0
     if owner is not None and owner.resource_id == candidate.resource_id:
