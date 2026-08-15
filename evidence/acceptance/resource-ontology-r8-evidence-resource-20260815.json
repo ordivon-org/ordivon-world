@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r8-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "b03b40f0adf15df37f284bd0ef9cd9f48ed35bda",
+  "artifacts": {
+    "r8": {
+      "path": "docs/resource-ontology-r8-evidence-resource-falsification.md",
+      "sha256": "2a6765583473a534e32c85997a38ffa729cf3002f81a7f9c8e315039920eb49f"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r8-evidence-resource-matrix-20260815.json",
+      "sha256": "94978dff657dcbfd47f418542dde336af8126dd05647943932acaafc653f409c",
+      "contentDigest": "sha256:07e50589b95347e65144c9f80916b1601e26aca20615df85985ad29ebecf30ab"
+    }
+  },
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "b03b40f0adf15df37f284bd0ef9cd9f48ed35bda"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "coverage": {
+    "frozenDiscriminators": 60,
+    "freshPostFreeze": 12,
+    "totalExpressivitySurface": 72,
+    "relationLedger": 24,
+    "deletionTests": 19,
+    "executedCurrentSystemProbes": 4,
+    "frozenHistoricalSourceRefs": 66,
+    "selectedFrozenSourceFiles": 33,
+    "theoryFamilies": 5,
+    "postFreezeConcurrentFinanceEvidence": 1
+  },
+  "modelCounts": {
+    "A": {
+      "F": 37,
+      "A": 11,
+      "P": 12
+    },
+    "B": {
+      "P": 41,
+      "A": 19
+    },
+    "C": {
+      "P": 60
+    },
+    "D": {
+      "P": 60
+    }
+  },
+  "antiStrawmanCorrection": {
+    "model": "B",
+    "reason": "The former B hard failures concern source-to-target transport, target-specific experience, population-to-individual transport or decision/VOI. Claim-Support Relation can remain valid as root Evidence semantics while those questions are explicitly downstream ActionableEvidenceFor relations. Treating incompleteness as falsity would collapse Evidence and Actionable Evidence.",
+    "before": {
+      "P": 41,
+      "A": 11,
+      "F": 8
+    },
+    "after": {
+      "P": 41,
+      "A": 19
+    }
+  },
+  "expressivityTie": {
+    "frozen": "C and D both pass all 60 frozen discriminators",
+    "fresh": "C and D both pass all 12 fresh post-freeze discriminators",
+    "selectionBasis": "D is provisionally preferred by decomposition/minimality/truth ownership: B-like claim-support semantics remain root Evidence, while transport/currentness/independence/decision/VOI remain downstream projections instead of mandatory fields on every Evidence record."
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Evidence Resource + Decision-Scoped Epistemic Projection",
+    "status": "PROVISIONAL_FOR_R9_NOT_CANONICAL_DOCTRINE",
+    "compression": "Evidence Resource semantics are claim-relative: preserve exact carrier/provenance/method/time and native support for explicit claims. Transportability, applicability/currentness, independence/common-mode, retrievability and decision value are downstream projections relative to Claim × Target × Decision × as_of. Direct target evidence is a residual/calibration anchor, not epistemic monopoly. Negative/failed evidence remains first-class. Evidence never becomes Knowledge without domain/owner promotion."
+  },
+  "centralResult": "The minimal Evidence semantic root is a provenance/method/time-bound support relation to an explicit Claim. Carrier identity alone is insufficient. Source-to-target transport, current applicability, retrievability/authority, set-level independence/common-mode structure, coverage/contradiction and decision/VOI are downstream ActionableEvidenceFor projections. C Universal Transfer Contract and D layered projection both survive 72/72 expressivity; D is preferred provisionally by decomposition/minimality/truth ownership, not because C is falsified.",
+  "rootCompression": {
+    "evidenceCarrier": "exact observation/artifact/trace/receipt identity; necessary for provenance/replay but not sufficient semantic evidence",
+    "claimIdentity": "required semantic coordinate",
+    "claimSupport": "support/contradict/bound/unresolved relation; minimal Evidence semantic root",
+    "provenance": "required and claim-scoped; authentication does not grant universal semantic authority",
+    "methodObservationProcess": "required when coverage, causal or measurement interpretation depends on how evidence was produced",
+    "time": "observed/effective/available/known/applicability clocks remain claim-local and historical truth is immutable",
+    "transport": "source-to-target relation downstream from Evidence existence",
+    "currentnessApplicability": "claim-target-specific projection",
+    "independenceCommonMode": "Evidence-set relation relative to a bias/failure/falsifier class",
+    "coverageCompleteness": "owner-native condition required before no-observation can become evidence of absence",
+    "negativeFailedEvidence": "first-class bounded evidence",
+    "retrievabilityAuthority": "Actionability conditions, not historical claim-support identity",
+    "decisionRelevanceVOI": "downstream and consequence/reversibility dependent",
+    "directTargetEvidence": "calibration/residual anchor, not epistemic monopoly",
+    "proxyEvidence": "claim-bounded machine/Agent/synthetic falsifier sensor, not automatic Human/market authority",
+    "knowledgePromotion": "separate domain/owner decision; Evidence never self-promotes"
+  },
+  "implementationEvidence": {
+    "R8P01": {
+      "clientRequestId": "world-r8-evidence-claim-binding-and-diversity-probes-20260815-01",
+      "jobId": "job-01a005b4-ee75-7ec1-9dd8-5298b99093a0",
+      "result": "owner evidence attests resource/terms/interface only; cap:x appears only as aggregator/candidate label yet evaluate_resource returns consumable-now, demandFit=1.0, evidenceQuality=0.9"
+    },
+    "R8P02": {
+      "clientRequestId": "world-r8-evidence-claim-binding-and-diversity-probes-20260815-01",
+      "jobId": "job-01a005b4-ee75-7ec1-9dd8-5298b99093a0",
+      "result": "same actual evidence with candidate diversityPotential 0 vs 1 changes potentialScore 0.65 -> 0.816667; source labels diversityPotential as heuristic, not independence evidence"
+    },
+    "R8P03": {
+      "clientRequestId": "world-r8-decision-scoped-evidence-voi-falsifier-20260815-01",
+      "jobId": "job-01a005b5-460b-7253-a86f-1d56b6f6fde5",
+      "result": "same prior 0.5 + LR 3 -> posterior 0.75; reversible action EV=0.725 ACT EVPI=0.025, irreversible action EV=-0.5 DO_NOT_ACT EVPI=0.75"
+    },
+    "R8P04": {
+      "clientRequestId": "world-r8-current-evidence-boundary-regression-20260815-01",
+      "jobId": "job-01a005ba-3f5c-7a41-83f9-241c2c3b6180",
+      "result": "3 current World boundary tests pass: delivered foreign claim does not become destination Knowledge; end-to-end authentication does not promote claim to Knowledge; provider observation time remains separate from World availability time"
+    }
+  },
+  "postFreezeConcurrentEvidence": {
+    "financeFr3": {
+      "repository": "/root/projects/ordivon-finance",
+      "revision": "3d714710e330954b2f0f98510ceaf700847b02b6",
+      "path": "design/CARRIER-SEMANTICS.md",
+      "sha256": "sha256:d1995f96f24eae558f09131419fc3df3dca3ea80bd942c10a4fe5611c2e2bd86",
+      "observedAfterModelFreeze": true,
+      "frozenR8BaseFinanceRevision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d",
+      "needles": [
+        "`CarrierObservation` records point-in-time facts and failures without deciding whether a carrier is good:",
+        "A provider/egress failure therefore yields `fundingHistory=UNKNOWN`; it does not create a low carry score or a claim that the carrier is weak.",
+        "No later consumer may reinterpret `QUALIFIED` as trade permission.",
+        "`triageScore` is optional and exists only when every score input is observed.",
+        "FR3 therefore uses the same-day canonical 149-wrapper observation for deterministic semantic replay rather than treating present network instability as financial evidence."
+      ]
+    }
+  },
+  "productionDebts": {
+    "claimLevelProvenance": {
+      "status": "REPRODUCED",
+      "probe": "R8P01",
+      "relationToPrior": "same truth-role debt as R3F01/R3F02",
+      "decision": "do not implement a broad Evidence/Capability schema in R8; require R9 real consumer reproduction before selecting the smallest shared representation unless separately scoped as a narrow correctness change"
+    },
+    "evidenceQualityNaming": {
+      "status": "SEMANTIC_OVERREAD_RISK",
+      "fact": "ResourceEvaluation.evidence_quality is a planner completeness/currentness heuristic over owner/authority/acquisition/transport/outcome presence, not claim-support strength, independence, transportability or epistemic confidence",
+      "decision": "do not promote or reuse as general Evidence quality/confidence"
+    },
+    "diversityPotential": {
+      "status": "EXPECTED_HEURISTIC_BOUNDARY",
+      "probe": "R8P02",
+      "fact": "candidate-authored diversityPotential affects ranking but is explicitly documented as expected marginal-diversity heuristic, not proven independence",
+      "decision": "do not interpret generic Resource ranking as evidence-redundancy truth"
+    }
+  },
+  "theoryTriangulation": [
+    {
+      "id": "T1",
+      "family": "decision analysis / value of information",
+      "source": "Ronald A. Howard, Information Value Theory (1966)",
+      "doi": "10.1109/TSSC.1966.300074",
+      "importedRelation": "information amount is not decision value; information value is decision/preference/uncertainty dependent",
+      "nonTransferable": "does not define Ordivon evidence ontology or a universal action threshold",
+      "ordivonFalsifier": "R8P03 same posterior produces different action and EVPI under different consequence structures"
+    },
+    {
+      "id": "T2",
+      "family": "causal transportability",
+      "source": "Elias Bareinboim & Judea Pearl, Transportability of Causal Effects: Completeness Results",
+      "doi": "10.1609/aaai.v26i1.8232",
+      "importedRelation": "source causal evidence may be reused in a target only relative to modeled source-target differences and available target information",
+      "nonTransferable": "formal causal transport does not automatically govern aesthetic preference, software receipts or noncausal claims",
+      "ordivonFalsifier": "Game/Human cases where external evidence creates transfer hypotheses but target-specific residuals remain"
+    },
+    {
+      "id": "T3",
+      "family": "trial generalizability / target population",
+      "source": "Dahabreh et al., Extending inferences from a randomized trial to a new target population",
+      "doi": "10.1002/sim.8426",
+      "importedRelation": "effect modifiers and selective participation can make source and target effects differ; target covariates can support transport",
+      "nonTransferable": "does not imply every Ordivon target needs a direct experiment or person-level re-estimation",
+      "ordivonFalsifier": "Human M0 heterogeneous individual effects + Evidence Transport contraction"
+    },
+    {
+      "id": "T4",
+      "family": "dependent evidence synthesis",
+      "source": "Hedges, Tipton & Johnson, Robust variance estimation in meta-regression with dependent effect size estimates",
+      "doi": "10.1002/jrsm.5",
+      "erratumDoi": "10.1002/jrsm.17",
+      "importedRelation": "multiple effect sizes sharing participants/investigator/lab can violate independence; raw effect count is not independent evidence count",
+      "nonTransferable": "statistical RVE is not a universal Ordivon evidence combiner",
+      "ordivonFalsifier": "Finance effectiveIndependentTrials and Workstation failure-domain independence cases"
+    },
+    {
+      "id": "T5",
+      "family": "transport sensitivity",
+      "source": "Dahabreh et al., Global Sensitivity Analysis for Studies Extending Inferences From a Randomized Trial to a Target Population (2026)",
+      "doi": "10.1002/sim.70083",
+      "importedRelation": "transport conclusions depend on assumptions whose violations can be sensitivity-tested rather than hidden",
+      "nonTransferable": "does not imply one global sensitivity parameter for heterogeneous Ordivon domains",
+      "ordivonFalsifier": "preserve transport residuals/moderators and contradiction rather than collapse to confidence"
+    }
+  ],
+  "sourceIntegrity": {
+    "frozenRepositories": 9,
+    "selectedFrozenFiles": 33,
+    "exactFrozenSourceRefs": 66,
+    "method": "reconstruct exact selected bytes via git show <frozenRevision>:<path>; mutable sibling worktrees may advance after freeze without rewriting historical evidence",
+    "postFreezeFinanceFr3ExactCommitBound": true,
+    "result": "PASS"
+  },
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r8Specific": "PASS",
+    "gitDiffCheck": "PASS",
+    "note": "first full gate had all standard checks PASS and only a local R8 heading-number assertion error; corrected assertion and reran complete gate successfully"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionEvidenceGraph": false,
+    "productionEvidenceManager": false,
+    "productionClaimRegistry": false,
+    "productionBeliefStore": false,
+    "globalConfidenceScore": false,
+    "globalEvidenceQualityScore": false,
+    "globalVOIEngine": false,
+    "universalPersistedTransferContract": false,
+    "productionClaimLevelEvidenceSchema": false
+  },
+  "next": "R9 cross-domain dogfood: consume the R2-R8 stack in materially different live owners, reproduce or delete shared joins, and only then decide what can be promoted or implemented before R10 compression."
+}
