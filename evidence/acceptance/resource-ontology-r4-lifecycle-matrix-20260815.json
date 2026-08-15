@@ -1,0 +1,1453 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r4-lifecycle-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "6ab6e3cfa09cb9c34f86af8b0748cc66b73bb636",
+  "sourceDigests": {
+    "docs/resource-ontology-r0-census.md": "sha256:572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9",
+    "docs/resource-ontology-r1-theory-triangulation.md": "sha256:63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2",
+    "docs/resource-ontology-r2-definition-falsification.md": "sha256:97a3765d58a74cfdc1f6c3df8076b77f6acb867ae196391ed7c3145e6603cd11",
+    "docs/resource-ontology-r3-relation-model.md": "sha256:b5d7697736a458678b700835c379dd231d317ad62ae689c0c4b22b67af94e85a",
+    "docs/resource-opportunity-flywheel.md": "sha256:8ee436d6e3daca4e9c1643f7568debe8a76c843631b7234f9e3e94eb5f2542e5",
+    "src/ordivon_world/resource_discovery.py": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840",
+    "tests/test_resource_discovery.py": "sha256:7c5874c6bd9c9a2baf27c0b7e5bbd6a7858af7f99f6d6640581cec14945778a1"
+  },
+  "models": {
+    "A": {
+      "name": "Universal Linear Lifecycle",
+      "frozen": "Each Resource has one current lifecycle state that advances through a common ordered chain: LATENT/POTENTIAL -> DISCOVERED -> VERIFIED -> ACQUIRABLE -> HELD/ACQUIRED -> ACCESSIBLE -> QUALIFIED -> ACTIONABLE -> OPTION -> SELECTED/COMPOSED -> CONSUMED -> RETIRED. Regressions are exceptional lifecycle transitions and one state should summarize the current Resource."
+    },
+    "B": {
+      "name": "Orthogonal Universal State Vector",
+      "frozen": "Each Resource has one current universal multidimensional state vector with coordinates for epistemic status, possession/authority, access, capacity, qualification/actionability, selection/consumption and freshness. There is no required linear order, but every Resource is represented by the same coordinate family."
+    },
+    "C": {
+      "name": "Milestone/Event Ledger",
+      "frozen": "Resource lifecycle is represented as an append-only set of milestones/events such as discovered, verified, acquired, accessed, qualified, selected, consumed, expired or retired. Current state is reconstructed from milestone history plus invalidations; milestones are generic across Resource families."
+    },
+    "D": {
+      "name": "Claim/Event Projection Model",
+      "frozen": "There is no universal Resource lifecycle state. Keep native events and claim-specific evidence with their own owners and time semantics; derive Candidate, Resource, ActionableResourceFor and Option as projections for actor/demand/as_of, and derive workflow queues from the next missing or decision-relevant evidence. Acquisition, access, selection, consumption, revocation and expiry are events/relations/claim changes, not steps in one Resource state machine."
+    }
+  },
+  "cases": [
+    {
+      "id": "L01",
+      "sourceCase": "W01",
+      "case": "Aggregator discovery does not establish owner truth",
+      "pressure": "discovered vs verified",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L02",
+      "sourceCase": "W02",
+      "case": "Required authority and possessed authority are separate",
+      "pressure": "verification vs holding",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L03",
+      "sourceCase": "W03",
+      "case": "Parent entitlement may be acquired before child claim",
+      "pressure": "dependency branch ordering",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L04",
+      "sourceCase": "W05",
+      "case": "Signup transport can fail while acquisition remains positive-EV",
+      "pressure": "access before/after acquisition is path-specific",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-MILESTONE-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L05",
+      "sourceCase": "W07",
+      "case": "Historical admission remains true after current presence disappears",
+      "pressure": "history vs current state",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L06",
+      "sourceCase": "W08",
+      "case": "Exported capability becomes higher-layer Resource without repeating lower lifecycle",
+      "pressure": "nested boundary lifecycle reset",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L07",
+      "sourceCase": "N01",
+      "case": "Hundreds of discovered transport variants are not current options",
+      "pressure": "discovery vs qualification",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L08",
+      "sourceCase": "N04",
+      "case": "Client installed/executable while shared capacity absent",
+      "pressure": "held/tool-present vs capacity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-MILESTONE-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L09",
+      "sourceCase": "N09",
+      "case": "Historical child AVAILABLE while current projection becomes UNKNOWN",
+      "pressure": "non-monotonic current projection",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L10",
+      "sourceCase": "N11",
+      "case": "Stable consumer Resource survives replacement of physical members",
+      "pressure": "mechanism events below identity",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-FORCE"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-MILESTONE-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L11",
+      "sourceCase": "N12",
+      "case": "Installed capability exists but is intentionally excluded from ambient authority",
+      "pressure": "possession vs actionability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-MILESTONE-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L12",
+      "sourceCase": "F02",
+      "case": "FRED Resource before current API-key authority",
+      "pressure": "Resource before held authority",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L13",
+      "sourceCase": "F03",
+      "case": "Bytes acquired before research-grade evidence exists",
+      "pressure": "acquired before verified-for-purpose",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L14",
+      "sourceCase": "S02",
+      "case": "OBS retained while listener is default-off",
+      "pressure": "held but not currently accessible/actionable",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-MILESTONE-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L15",
+      "sourceCase": "S05",
+      "case": "Figma configured before OAuth consent",
+      "pressure": "configured/installed before authority",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L16",
+      "sourceCase": "S06",
+      "case": "TouchDesigner Resource/option before license acquisition",
+      "pressure": "pre-demand/pre-authority resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L17",
+      "sourceCase": "G01",
+      "case": "Catalog discovered before exact asset license identity verified",
+      "pressure": "discovery granularity refinement",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L18",
+      "sourceCase": "G03",
+      "case": "Live model consumed but player Outcome still unproven",
+      "pressure": "consumption before outcome proof",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L19",
+      "sourceCase": "Q03",
+      "case": "Same bytes actionable for static analysis but not execution",
+      "pressure": "simultaneous transition-specific actionability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L20",
+      "sourceCase": "Q04",
+      "case": "Reference retained while local bytes absent",
+      "pressure": "option without possession/materialization",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L21",
+      "sourceCase": "Q05",
+      "case": "libvirt available but deliberately deferred",
+      "pressure": "accessible/available without selection",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-FORCE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L22",
+      "sourceCase": "H03",
+      "case": "Joint Human×Agent capability does not become retained Human-alone capability",
+      "pressure": "actor-boundary projection",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L23",
+      "sourceCase": "H04",
+      "case": "Human attention is a flow/capacity resource, not acquired once",
+      "pressure": "flow resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L24",
+      "sourceCase": "X02",
+      "case": "Credential expired; renewal path is separate",
+      "pressure": "expiry of one aspect, resource family persists",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L25",
+      "sourceCase": "X05",
+      "case": "Idle GPU remains Resource with no current workload",
+      "pressure": "Resource without qualification",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L26",
+      "sourceCase": "X08",
+      "case": "Relationship/reputation enables review without object possession",
+      "pressure": "non-object resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L27",
+      "sourceCase": "X12",
+      "case": "Legal permission exists while target bytes absent",
+      "pressure": "right before access/materialization",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L28",
+      "sourceCase": "X13",
+      "case": "Contractual option/right exists unexercised",
+      "pressure": "Option-like resource before use",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L29",
+      "sourceCase": "X19",
+      "case": "Idle cash reserve remains Resource until selected/consumed",
+      "pressure": "rival stock, optionality",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-FORCE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L30",
+      "sourceCase": "X24",
+      "case": "Stale dataset valid historically but invalid for current-state claim",
+      "pressure": "use-specific freshness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L31",
+      "sourceCase": "X27",
+      "case": "Decayed skill retains bounded reacquisition advantage",
+      "pressure": "decay/renewal not simple retirement",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L32",
+      "sourceCase": "X28",
+      "case": "Component useful with cheaply acquirable complement not yet held",
+      "pressure": "resource before complete bundle",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L33",
+      "sourceCase": "R4P01",
+      "case": "Anonymous public Resource reaches consumable-now without AuthorityEvidence/acquisition",
+      "pressure": "no universal held stage",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L34",
+      "sourceCase": "R4P02",
+      "case": "Same Resource same time consumable-now for demand X and not-fit for demand Y",
+      "pressure": "qualification is demand projection",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L35",
+      "sourceCase": "R4P03",
+      "case": "Same Resource same time consumable for research and blocked-by-terms for commercial",
+      "pressure": "rejected is not terminal",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L36",
+      "sourceCase": "R4P04",
+      "case": "Historical ConsumptionOutcome remains true after owner evidence stales and decision regresses",
+      "pressure": "consumed not terminal; history/current split",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L37",
+      "sourceCase": "R4P05",
+      "case": "Authority remains active while transport toggles unavailable to available",
+      "pressure": "held/access orthogonality",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ORTHO"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-HISTORY"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L38",
+      "sourceCase": "R4P06",
+      "case": "Same facts map to acquire-now or defer-acquisition when only demand threshold changes",
+      "pressure": "workflow lane not resource state",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L39",
+      "sourceCase": "R3F02",
+      "case": "Mixed resource-level provenance cannot prove one capability claim",
+      "pressure": "verification is claim-level",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    },
+    {
+      "id": "L40",
+      "sourceCase": "R3Y04",
+      "case": "Identity support remains current while transport support expires",
+      "pressure": "multiple independent clocks",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-ORDER"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-UNIVERSAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-PROJECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECT"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "F": 37,
+      "A": 3
+    },
+    "B": {
+      "A": 5,
+      "P": 15,
+      "F": 20
+    },
+    "C": {
+      "P": 23,
+      "A": 5,
+      "F": 12
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "labelLedger": [
+    {
+      "label": "latent/potential",
+      "classification": "DELETE_ROOT_STATE",
+      "plane": "research-language / bounded-feasibility predicate",
+      "verdict": "REJECT_UNIVERSAL_STATE",
+      "cases": [
+        "L12",
+        "L16",
+        "L25",
+        "L32"
+      ],
+      "reason": "R2 already folds credible future potential into Resource; undiscovered potential is not an operationally knowable state and a separate Potential Resource state duplicates semantics."
+    },
+    {
+      "label": "discovered",
+      "classification": "EVENT_PLUS_EPISTEMIC_CONDITION",
+      "plane": "observation/history",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L01",
+        "L07",
+        "L17"
+      ],
+      "reason": "Discovery is an observation event about a Candidate claim; it does not move Reality or prove owner/transition truth."
+    },
+    {
+      "label": "verified",
+      "classification": "CLAIM_LOCAL_EVIDENCE_STATUS",
+      "plane": "epistemic/owner-native claim",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L01",
+        "L13",
+        "L17",
+        "L39",
+        "L40"
+      ],
+      "reason": "Different claims are verified independently; resource-level verification cannot summarize identity, terms, transition semantics, transport and capacity."
+    },
+    {
+      "label": "acquirable",
+      "classification": "RELATION_PREDICATE",
+      "plane": "bounded enrollment/acquisition support",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L03",
+        "L12",
+        "L16",
+        "L32"
+      ],
+      "reason": "Acquirability is a current relation/path claim and may exist before or after other dimensions; it is not a possession milestone."
+    },
+    {
+      "label": "acquired",
+      "classification": "EVENT",
+      "plane": "history/effect",
+      "verdict": "NOT_UNIVERSAL_STATE",
+      "cases": [
+        "L03",
+        "L13",
+        "L15",
+        "L27"
+      ],
+      "reason": "Acquisition is a historical effect for some families; public, social, flow and exported-capability resources need no acquisition event."
+    },
+    {
+      "label": "held/possessed",
+      "classification": "RELATION_OR_STOCK_FACT",
+      "plane": "authority/material possession/capital depending family",
+      "verdict": "NOT_UNIVERSAL_STATE",
+      "cases": [
+        "L11",
+        "L20",
+        "L23",
+        "L26",
+        "L27",
+        "L33",
+        "L37"
+      ],
+      "reason": "What is held differs by family; anonymous/public, relationships, rights, flow resources and remote references break one universal possession coordinate."
+    },
+    {
+      "label": "accessible",
+      "classification": "PATH_OR_INTERFACE_RELATION",
+      "plane": "current access/transport/materialization",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L04",
+        "L14",
+        "L20",
+        "L27",
+        "L37",
+        "L40"
+      ],
+      "reason": "Access is path/interface/time scoped, can toggle independently of authority, and may be unnecessary for reference/rights resources."
+    },
+    {
+      "label": "qualified",
+      "classification": "DEMAND_SCOPED_PROJECTION",
+      "plane": "consumer demand",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L07",
+        "L19",
+        "L34",
+        "L35"
+      ],
+      "reason": "The same Resource can be qualified for one demand/transition and not another at the same time."
+    },
+    {
+      "label": "actionable",
+      "classification": "DEMAND_TIME_PROJECTION",
+      "plane": "consumer demand + current native joins",
+      "verdict": "DERIVED_PROJECTION",
+      "cases": [
+        "L11",
+        "L19",
+        "L34",
+        "L35",
+        "L37",
+        "L40"
+      ],
+      "reason": "Actionability is meaningful but belongs to ActionableResourceFor(actor,aspect,transition,demand,as_of), not a global lifecycle state."
+    },
+    {
+      "label": "option",
+      "classification": "DEMAND_SCOPED_SELECTABLE_RELATION",
+      "plane": "selection/composition",
+      "verdict": "DERIVED_PROJECTION",
+      "cases": [
+        "L20",
+        "L21",
+        "L28",
+        "L29"
+      ],
+      "reason": "Option is a current selectable use/composition and may itself be represented by a right Resource; it is not a later maturity stage of every Resource."
+    },
+    {
+      "label": "selected",
+      "classification": "DECISION_EVENT",
+      "plane": "decision/history",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L21",
+        "L29",
+        "L38"
+      ],
+      "reason": "Selection is an episode by an actor under a demand; reusable resources remain resources after or before selection."
+    },
+    {
+      "label": "composed",
+      "classification": "COMPOSITION_RELATION_OR_EVENT",
+      "plane": "Option/Capability construction",
+      "verdict": "NOT_RESOURCE_STATE",
+      "cases": [
+        "L03",
+        "L10",
+        "L32"
+      ],
+      "reason": "Composition concerns a bundle/transition, not one component Resource lifecycle; a component can participate in many compositions."
+    },
+    {
+      "label": "consumed",
+      "classification": "CONSUMPTION_EPISODE",
+      "plane": "history/effect/outcome evidence",
+      "verdict": "NOT_TERMINAL_STATE",
+      "cases": [
+        "L18",
+        "L29",
+        "L36"
+      ],
+      "reason": "Consumption can repeat, may deplete or not, and historical consumption remains true when current Actionability regresses."
+    },
+    {
+      "label": "expired/stale/revoked",
+      "classification": "CLAIM_OR_RELATION_INVALIDATION",
+      "plane": "claim-local time/authority",
+      "verdict": "NOT_UNIVERSAL_STATE",
+      "cases": [
+        "L09",
+        "L24",
+        "L30",
+        "L40"
+      ],
+      "reason": "Different claims/aspects expire independently; stale transport does not imply stale identity, and expired credential may leave account/renewal Resources."
+    },
+    {
+      "label": "retired",
+      "classification": "OWNER_DECISION_OR_DEPENDENCY_OUTCOME",
+      "plane": "maintenance/selection policy",
+      "verdict": "NOT_UNIVERSAL_TERMINAL_STATE",
+      "cases": [
+        "L10",
+        "L11",
+        "L21",
+        "L31"
+      ],
+      "reason": "Retirement is a policy/dependency decision and can apply to one mechanism while a higher-level Resource remains; decay may be reversible."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "add one global current lifecycle state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L34",
+        "L35",
+        "L37",
+        "L40"
+      ],
+      "why": "Concurrent demand/transition/access truths require multiple simultaneous projections; one state discards information."
+    },
+    {
+      "mutation": "require monotonic forward progression",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L09",
+        "L24",
+        "L36",
+        "L37"
+      ],
+      "why": "Current projections can regress/toggle while historical truth remains final."
+    },
+    {
+      "mutation": "make discovered a Resource state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L01",
+        "L07",
+        "L17"
+      ],
+      "why": "Discovery is epistemic observation and can precede false/rejected Candidate claims."
+    },
+    {
+      "mutation": "make verified a Resource-wide state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L13",
+        "L39",
+        "L40"
+      ],
+      "why": "Verification is claim-local; different claims can be verified/stale concurrently."
+    },
+    {
+      "mutation": "make held/acquired a universal prerequisite",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L20",
+        "L26",
+        "L27",
+        "L33"
+      ],
+      "why": "Anonymous, reference, social and rights-based Resources need no universal possession step."
+    },
+    {
+      "mutation": "make accessible a universal prerequisite for Resource",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L14",
+        "L20",
+        "L27"
+      ],
+      "why": "Dormant/reference/rights Resources remain Resources without current material access."
+    },
+    {
+      "mutation": "make qualified/actionable global Resource state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L19",
+        "L34",
+        "L35"
+      ],
+      "why": "Qualification/actionability can differ simultaneously by demand/transition."
+    },
+    {
+      "mutation": "make consumed terminal",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L18",
+        "L29",
+        "L36"
+      ],
+      "why": "Consumption is repeatable/non-rival for many families and historical consumption coexists with later non-actionability."
+    },
+    {
+      "mutation": "delete claim-local timestamps/currentness",
+      "result": "FAIL",
+      "cases": [
+        "L09",
+        "L24",
+        "L30",
+        "L40"
+      ],
+      "why": "Cannot distinguish historical truth from current validity or independently stale owner/transport/authority claims."
+    },
+    {
+      "mutation": "delete event/history plane",
+      "result": "FAIL",
+      "cases": [
+        "L05",
+        "L18",
+        "L36"
+      ],
+      "why": "Historical acquisition/consumption/admission must remain true after current projections change."
+    },
+    {
+      "mutation": "delete demand/transition context from Actionability",
+      "result": "FAIL",
+      "cases": [
+        "L19",
+        "L34",
+        "L35"
+      ],
+      "why": "Same Resource simultaneously has incompatible actionability judgments across demands/transitions."
+    },
+    {
+      "mutation": "persist workflow queue as Resource state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "L38",
+        "L01",
+        "L04"
+      ],
+      "why": "Queue placement is derived from current missing evidence, demand policy and verification budget; it can change without Reality changing."
+    }
+  ],
+  "freshProjectionTests": [
+    {
+      "id": "R4Y01",
+      "case": "A public web page is discovered and directly readable before any explicit acquisition event; later its server is temporarily unreachable while a cached exact copy remains available for another transition.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-MULTI-ASPECT-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "R4Y02",
+      "case": "A license is revoked while previously downloaded open-compatible artifacts remain locally usable under a separate surviving license claim; one claim invalidates without collapsing all aspect history.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CLAIM-LOCAL-INVALIDATION"
+        }
+      }
+    },
+    {
+      "id": "R4Y03",
+      "case": "One dataset is simultaneously ActionableFor(historical-analysis) and non-ActionableFor(current-state-estimation) because freshness requirements differ.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONCURRENT-ACTIONABILITY"
+        }
+      }
+    },
+    {
+      "id": "R4Y04",
+      "case": "A consumable API is used successfully, then quota becomes zero, then quota resets next month without any new Resource discovery or acquisition.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CAPACITY-TIME"
+        }
+      }
+    },
+    {
+      "id": "R4Y05",
+      "case": "A Human relationship exists before any Ordivon discovery event and becomes known later; discovery changes epistemic state, not the relationship in Reality.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-EPISTEMIC-REALITY-SPLIT"
+        }
+      }
+    },
+    {
+      "id": "R4Y06",
+      "case": "A model capability is selected into two simultaneous compositions, one succeeds and one fails; the component Resource cannot have one selected/composed/consumed state summarizing both episodes.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-MULTI-EPISODE"
+        }
+      }
+    },
+    {
+      "id": "R4Y07",
+      "case": "A credential object expires but an automated renewal capability immediately produces a new credential; credential-instance history changes while account-level Resource continuity remains.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NESTED-ASPECT-LIFECYCLE"
+        }
+      }
+    },
+    {
+      "id": "R4Y08",
+      "case": "The same resource is in feedbackQueue for workload A, consumptionQueue for workload B, and rejected for workload C at the same as_of because queues are workload projections.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-QUEUE-PROJECTION"
+        }
+      }
+    }
+  ],
+  "implementationProbes": {
+    "clientRequestId": "world-r4-nonlinear-lifecycle-probes-20260815-01",
+    "count": 6,
+    "result": "PASS",
+    "observations": [
+      "anonymous consumable-now without AuthorityEvidence/acquisition",
+      "same resource simultaneous consumable-now and not-fit across demands",
+      "same resource simultaneous consumable and blocked-by-terms across purposes",
+      "historical ConsumptionOutcome survives current owner-verification regression",
+      "authority remains active while transport toggles unavailable/available",
+      "same candidate/owner/acquisition facts yield acquire-now or defer-acquisition solely from demand threshold"
+    ]
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Claim/Event Projection Model",
+    "status": "PROVISIONAL_FOR_R5_NOT_CANONICAL_DOCTRINE",
+    "compression": "No universal Resource lifecycle state survives. Keep three basic planes separate: (1) Reality/relation support for Resource; (2) epistemic/native claim evidence with claim-local currentness; (3) historical events/effects. Derive ActionableResourceFor/Option and workflow lanes as demand/as_of projections. Candidate is an epistemic role, not lifecycle state."
+  },
+  "multiWorkloadProjectionProbe": {
+    "clientRequestId": "world-r4-multi-workload-queue-probe-20260815-01",
+    "result": "PASS",
+    "observations": [
+      "same Resource/native facts at one as_of -> workload A consumable-now",
+      "same Resource/native facts at one as_of -> workload B not-fit",
+      "same Resource/native facts at one as_of -> workload C blocked-by-terms"
+    ],
+    "interpretation": "decision/queue class is workload-scoped projection and cannot be a single Resource lifecycle state"
+  },
+  "contentDigest": "sha256:06d1c0cb71140c6bff53f59d37c0913fe6be5eddf7bbdc4db389d88fc2b4ae9c"
+}
