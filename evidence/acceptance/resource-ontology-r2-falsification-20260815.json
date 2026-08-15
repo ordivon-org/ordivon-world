@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r2-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "a2ea5f7527dcfae686600e0a386543bee7f20dc8",
+  "artifacts": {
+    "r0": {
+      "path": "docs/resource-ontology-r0-census.md",
+      "sha256": "572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9",
+      "cases": 48
+    },
+    "r1": {
+      "path": "docs/resource-ontology-r1-theory-triangulation.md",
+      "sha256": "63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2",
+      "theoryFamilies": 13
+    },
+    "r2": {
+      "path": "docs/resource-ontology-r2-definition-falsification.md",
+      "sha256": "97a3765d58a74cfdc1f6c3df8076b77f6acb867ae196391ed7c3145e6603cd11"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r2-definition-matrix-20260815.json",
+      "sha256": "1a5d2e0954e74ddbd4fe82c4802728b65e13d18271ac3067bcae09604d4931ec",
+      "contentDigest": "sha256:01d08041169872ef5df2edf431227b233191c9ef0efe580068d09d768fe609c8"
+    }
+  },
+  "coverage": {
+    "historicalR0": 48,
+    "preHybridBoundary": 20,
+    "freshPostFreezeE": 10,
+    "totalE": 78,
+    "deletionAdditionTests": 11,
+    "requiredCoordinates": 6,
+    "rejectedAdditions": 5
+  },
+  "familyCombinedCounts": {
+    "A": {
+      "P": 61,
+      "A": 2,
+      "F": 5
+    },
+    "B": {
+      "P": 51,
+      "F": 14,
+      "A": 3
+    },
+    "C": {
+      "P": 46,
+      "A": 18,
+      "F": 4
+    },
+    "D": {
+      "P": 49,
+      "A": 6,
+      "F": 13
+    },
+    "E": {
+      "P": 68
+    }
+  },
+  "freshECounts": {
+    "E": {
+      "P": 10
+    }
+  },
+  "provisionalSurvivor": {
+    "id": "E",
+    "name": "Evidenced Enrollable Potential",
+    "status": "PROVISIONAL_FOR_R3_NOT_WORLD_LAW",
+    "definition": "Relative to a declared actor/system boundary, a Resource is an identifiable aspect of Reality for which sufficient current evidence supports that the actor can intentionally enroll it, either now or through a bounded feasible acquisition/conversion path, as a means, input, or enabling relation for at least one admissible class of future state transitions. A current workload, current access, and possessed authority for the eventual consuming action are not required; those belong to downstream Actionable Resource/Option qualification. A mere target of action, hazard, rumor, stale artifact, or logically possible but unbounded distant usefulness is not sufficient."
+  },
+  "centralResult": "Resource is provisionally actor/system-relative but not current-demand-relative; Candidate is an epistemic hypothesis, current authority/access/fit belong downstream in Actionable Resource, and Option remains demand-scoped rather than defining Resource identity.",
+  "localValidation": {
+    "worldUnittests": 154,
+    "worldUnittestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r2Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "resourceOntologyCanonical": false,
+    "productionApiSchema": false,
+    "globalRegistry": false,
+    "universalLifecycle": false,
+    "globalScalarValue": false
+  },
+  "next": "R3 relation-model falsification only; revalidate canonical main before work."
+}

@@ -1,0 +1,2304 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r2-definition-falsifier-matrix",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "a2ea5f7527dcfae686600e0a386543bee7f20dc8",
+  "r0Digest": "sha256:572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9",
+  "statusLegend": {
+    "P": "definition survives this case without changing its frozen wording",
+    "F": "case falsifies or materially misclassifies the frozen definition",
+    "A": "classification depends on an underspecified coordinate or produces material ambiguity"
+  },
+  "definitions": {
+    "A": {
+      "name": "Broad Potential",
+      "frozen": "An identifiable aspect of Reality is a Resource when there is credible evidence of a non-negligible feasible path by which it could contribute to at least one bounded future state transition inside the relevant system boundary. Current possessed authority, current workload and immediate access are downstream Actionability/Option conditions."
+    },
+    "B": {
+      "name": "Current Relational Affordance",
+      "frozen": "A Resource exists only as a current relation between a specific actor/system boundary with presently possessed abilities/authority and a Reality feature that affords a class of state transitions. No current workload is required, but the enabling relation must exist now."
+    },
+    "C": {
+      "name": "Conversion-Theoretic",
+      "frozen": "Given an explicit transformation regime and composition rules, a Resource is a nontrivial element whose presence changes the reachable convertibility/composition preorder under the transformations admitted by that regime."
+    },
+    "D": {
+      "name": "Option-Set",
+      "frozen": "Relative to a specific actor/system boundary and authority/cost/risk constraints, a Resource is anything whose presence credibly enlarges that actor’s reachable future option set."
+    },
+    "E": {
+      "name": "Evidenced Enrollable Potential",
+      "frozen": "Relative to a declared actor/system boundary, a Resource is an identifiable aspect of Reality for which sufficient current evidence supports that the actor can intentionally enroll it, either now or through a bounded feasible acquisition/conversion path, as a means, input, or enabling relation for at least one admissible class of future state transitions. A current workload, current access, and possessed authority for the eventual consuming action are not required; those belong to downstream Actionable Resource/Option qualification. A mere target of action, hazard, rumor, stale artifact, or logically possible but unbounded distant usefulness is not sufficient."
+    }
+  },
+  "r0Cases": [
+    {
+      "id": "F01",
+      "episode": "SEC EDGAR public data",
+      "observed": "SEC submissions/XBRL are current machine-readable and require no API key, but fair-access policy, identifying user-agent rules and immutable source snapshots still govern use. Public access does not grant trading authority.",
+      "pressure": "public information resource != unrestricted use != effect authority",
+      "anchor": "Host `task:finance-open-public-data-fabric-20260812` rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "F02",
+      "episode": "FRED high-value but gated",
+      "observed": "FRED/ALFRED is considered high-value economic data, but current API use requires a user-held account/key authority. It remains a candidate until that authority is acquired.",
+      "pressure": "known high-value resource != actionable resource",
+      "anchor": "Host `task:finance-open-public-data-fabric-20260812` rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "F03",
+      "episode": "Source bytes versus research evidence",
+      "observed": "Finance requires immutable filing/source snapshots before derived research signals. The same reachable upstream data is not yet attributable evidence until exact source identity is frozen.",
+      "pressure": "observation bytes != research-grade evidence",
+      "anchor": "Host Finance public-data rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "F04",
+      "episode": "Large resource universe collapses through research",
+      "observed": "APF audit observed thousands of available resource candidates compress into a small set of information families/hypotheses, with no out-of-sample survivor and therefore no shadow/capital decision. The zero-trade outcome was valid research.",
+      "pressure": "information abundance != hypothesis quality != capital capability; null outcomes are knowledge",
+      "anchor": "`task:finance:alpha-production-foundations-root-20260815` / APF owner evidence",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "F05",
+      "episode": "Workstation egress as Finance resource",
+      "observed": "Finance consumes `finance-okx` as a narrow available egress capability rather than owning Surfshark nodes, resolver mechanics or tunnel generations.",
+      "pressure": "lower-layer capability becomes a higher-layer resource; implementation should sink below consumer",
+      "anchor": "World resource model §7; Workstation egress-pool evidence",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "G01",
+      "episode": "CC0 catalog still needs exact asset identity",
+      "observed": "Kenney and Poly Haven are strong CC0 seeds, but site metadata/logos are not automatically covered merely because downloadable assets are CC0.",
+      "pressure": "source/catalog label != exact resource authority/license",
+      "anchor": "Host `task:game-open-asset-fabric-20260812` rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CAND"
+        }
+      }
+    },
+    {
+      "id": "G02",
+      "episode": "Freesound is not one legal resource class",
+      "observed": "Freesound contains CC0, CC-BY and CC-BY-NC items. Each sound's exact license determines whether it is actionable for a commercial-capable output.",
+      "pressure": "shared source != homogeneous resource semantics",
+      "anchor": "Game asset-fabric rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "G03",
+      "episode": "Live Agent cognition is operational but value-unproven",
+      "observed": "Current matched Station Zero experiments proved live DeepSeek decisions diverge materially from fixture trajectories with successful provider calls, yet additional player value remains unproven.",
+      "pressure": "expensive capability difference != outcome/value difference",
+      "anchor": "`docs/STATION_ZERO_V3_DOMAIN_VALUE_GV.md` GV6",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "G04",
+      "episode": "Cheaper fixture remains a meaningful substitute",
+      "observed": "Fixture/policy actors preserve a playable baseline and some decision structure, making them a legitimate counterfactual resource against live cognition rather than merely a test stub.",
+      "pressure": "resources can be partially substitutable; marginal value must be measured",
+      "anchor": "Game GV6",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COUNT"
+        }
+      }
+    },
+    {
+      "id": "G05",
+      "episode": "Two Scenario Cases did not equal two broad experiences",
+      "observed": "Production had two Cases, but Junction Bottleneck differed by one exact topology delta. Case count was therefore not accepted as replay/content breadth.",
+      "pressure": "resource/content count != diversity of reachable experience states",
+      "anchor": "Game GV0/GV5",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COUNT"
+        }
+      }
+    },
+    {
+      "id": "G06",
+      "episode": "Existing content levers generated new research archetypes without new core",
+      "observed": "Existing topology, pressure and placement resources were recomposed into mechanically distinct research archetypes without adding a mission factory or new World rules.",
+      "pressure": "complementarity/composition can create capability/option value from existing resources",
+      "anchor": "Game GV5",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COMP"
+        }
+      }
+    },
+    {
+      "id": "H01",
+      "episode": "Generic `resource` role was deleted from Human's minimum model",
+      "observed": "Human M0 found that money, time, roles, rights, relationships, access and tools did not form one useful universal variable role; they were represented question-specifically as situated state/context.",
+      "pressure": "over-broad Resource ontology can reduce explanatory power",
+      "anchor": "Human `methods/m0/MODEL-DELETION.md`",
+      "definitions": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-BROAD-RISK"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-META"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-CIRCULAR"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "H02",
+      "episode": "The same tool changes role with the question",
+      "observed": "Human's retained dynamic model states that a tool can be context, intervention or part of a joint system depending on the study.",
+      "pressure": "resource role is relational/question-dependent rather than intrinsic",
+      "anchor": "Human `methods/m0/DYNAMIC-RESEARCH-MODEL.md`",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-META"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "H03",
+      "episode": "Model output, joint-system capability and retained Human capability diverge",
+      "observed": "Human research treats an Agent/model as a real joint-system resource while refusing to infer that its output has become retained individual knowledge or skill.",
+      "pressure": "resource-assisted effect != internal capability transfer",
+      "anchor": "Human `HUMAN-AI-CAPABILITY-TRANSFER.md`; Host Human root rev8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "H04",
+      "episode": "Not all generated knowledge should consume Human attention",
+      "observed": "AE1 allocates representations using Durability × Future Control Value plus an independent promotion gate; many Agent outputs remain external or locator-level rather than entering stable Human memory.",
+      "pressure": "attention is scarce conversion capacity; maximum knowledge internalization/utilization is not optimal",
+      "anchor": "Host `task:human:agentic-capability-root-20260814` rev8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CAP"
+        }
+      }
+    },
+    {
+      "id": "N01",
+      "episode": "415 Surfshark transport variants",
+      "observed": "The sanitized provider catalog exposed 142 logical nodes / 415 transport variants while current Surfpath execution evidence could still be stale or unqualified. Catalog growth did not create 415 usable egress capabilities.",
+      "pressure": "catalog cardinality != current option count != capability",
+      "anchor": "Workstation `README.md` NX8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COUNT"
+        }
+      }
+    },
+    {
+      "id": "N02",
+      "episode": "`native-a` and `native-b` can converge",
+      "observed": "Two loopback transport profiles can exist while both descend through one native physical WAN/access domain.",
+      "pressure": "nominal alternatives != failure-domain-independent redundancy",
+      "anchor": "Workstation `README.md` network profiles; World resource model §4",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "N03",
+      "episode": "98 public VPN candidates versus one admitted root",
+      "observed": "A fresh VPN Gate directory exposed 98 candidates across many countries/operators, but physical qualification and exact admission were still required and only bounded candidates became roots.",
+      "pressure": "candidate universe != executable resource stock",
+      "anchor": "Workstation `README.md` NX6",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CAND"
+        }
+      }
+    },
+    {
+      "id": "N04",
+      "episode": "Snowflake broker success but no shared capacity",
+      "observed": "A pinned Tor/Lyrebird client could reach the broker and create offers while the broker reported no volunteer proxies. The resource remained known/testable but currently `UNAVAILABLE`.",
+      "pressure": "executable client != available shared resource; capacity is separate",
+      "anchor": "Workstation `README.md` NX1",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOCAP"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "N05",
+      "episode": "Same public mechanism, different parent relation",
+      "observed": "Direct Snowflake attempts failed in one relation while the same pinned client inside an admitted JP outpost bootstrapped and served traffic.",
+      "pressure": "actionability is relation/path/context dependent, not intrinsic to the nominal resource",
+      "anchor": "Workstation `README.md` NX4",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "N06",
+      "episode": "Different roots but shared physical access",
+      "observed": "Root A and B used different route profiles, protocols, nodes and endpoints, yet shared the same local gateway/MAC and Surfshark provider. The retained claim was graph/lifecycle diversity, not physical/provider independence.",
+      "pressure": "diversity has dimensions; redundancy depends on relevant disturbance class",
+      "anchor": "Workstation `README.md` NX5",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "N07",
+      "episode": "Public observation expansion without capability expansion",
+      "observed": "NX8 reached 24/24 current read-only resources across 12 observation owners while current capability coverage stayed 18/22 slots. More observers improved owner/mechanism/method diversity without creating new capability classes.",
+      "pressure": "resource abundance can improve evidence robustness without increasing effect capability",
+      "anchor": "Workstation `README.md` NX8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "N08",
+      "episode": "Large public datasets left indexed",
+      "observed": "M-Lab raw data requires AUP/authenticated access; Censored Planet bulk data can impose requester-pays costs. Bounded APIs already satisfied current high-value truths, so bulk data remained indexed/query-on-demand instead of mirrored.",
+      "pressure": "acquisition/storage/utilization can be irrational when marginal capability is zero",
+      "anchor": "Workstation `README.md` NX7",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "N09",
+      "episode": "Historical child resource invalidated by parent change",
+      "observed": "A child external observation retained its own historical `AVAILABLE` fact, but stopping/replacing the parent Anchor caused current projection to become `UNKNOWN`; fresh discovery was required.",
+      "pressure": "dependency currentness; historical truth survives while current option dies",
+      "anchor": "Workstation `README.md` NX0.1/NX2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-HIST"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-HIST"
+        }
+      }
+    },
+    {
+      "id": "N10",
+      "episode": "Failed WARP experiment becomes search memory",
+      "observed": "A Cloudflare WARP experiment failed to realize a current usable L3 path; cleanup was exact, but the candidate was retained with a lower current-context score and explicit reconsideration triggers.",
+      "pressure": "failed consumption can become Knowledge Resource; retirement can be conditional",
+      "anchor": "Workstation `README.md` NX8 Validation Memory",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "N11",
+      "episode": "Stable consumer resource over replaceable physical members",
+      "observed": "`finance-okx` presents a stable loopback consumer identity while Workstation owns replaceable member leases/generations underneath. A member/path may change without changing Finance's semantic resource identity.",
+      "pressure": "abstraction boundary; stable resource contract can sit over renewable physical options",
+      "anchor": "Workstation `README.md` egress-pool / exterior-connect",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "N12",
+      "episode": "Installed capability deliberately excluded from ambient authority",
+      "observed": "Workstation removed stale user-scope Node/uv/PNPM paths from ambient execution authority while retaining exact installations or historical interpreters where active consumers still required them.",
+      "pressure": "possession != ambient authority; retirement depends on dependencies, not age alone",
+      "anchor": "Workstation `README.md` provider convergence / recovery paths",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "Q01",
+      "episode": "Public vulnerability intelligence is read-only resource, not exploit authority",
+      "observed": "OSV, CISA KEV and NVD were machine-readable and useful for observation/prioritization while explicitly granting no authority to probe or exploit third-party systems.",
+      "pressure": "information resource != action authority",
+      "anchor": "Host `task:security-open-defense-data-fabric-20260812` rev2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "Q02",
+      "episode": "Provider claim and Security truth remain separate",
+      "observed": "Security Research Corpus records provider claims, source snapshots and case evidence but does not promote an upstream classification into independent Security truth.",
+      "pressure": "evidence resource has provenance/truth-role; ingestion != belief/knowledge promotion",
+      "anchor": "`research/corpus/README.md`",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "Q03",
+      "episode": "Sample metadata/materialization never grants execution authority",
+      "observed": "A sample can be cataloged and even materialized in SampleVault while `executionAdmission` remains denied by default.",
+      "pressure": "possession of dangerous resource != authority to consume it through execution",
+      "anchor": "Security corpus README",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "Q04",
+      "episode": "Large retained sample need not be duplicated into every research store",
+      "observed": "A retained case references an exact ~7.4 GiB archive identity/history without copying the bytes into the Git corpus.",
+      "pressure": "local materialization/storage count != knowledge availability; references can preserve option value",
+      "anchor": "Security corpus README",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-HIST"
+        }
+      }
+    },
+    {
+      "id": "Q05",
+      "episode": "libvirt was available but intentionally deferred",
+      "observed": "Security found legitimate feature overlap with libvirt but retained local exact QMP/process/ledger/recovery semantics because libvirt would add another state owner before deleting enough plumbing.",
+      "pressure": "mature available tool can reduce net capability through coordination/authority cost",
+      "anchor": "`research/tool-surface/TS9-VIRTUALIZATION-DISPLACEMENT.md`",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "Q06",
+      "episode": "Remote entitlement and remote capability are different resources",
+      "observed": "CA-LIC experiments showed that a remote license/entitlement decision can leave the protected capability local, whereas external primitive/remote capability moves necessary secret/operation outside the client trust domain.",
+      "pressure": "authority carrier != capability location; superficially similar resources have different causal roles",
+      "anchor": "`research/ca-lic/WORLD_MODEL.md`",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "S01",
+      "episode": "REAPER crossed from installed tool to proven production resource",
+      "observed": "Official REAPER 7.78 was not promoted merely because it launched. ReaScript created native project state and an independent render reconstructed an exact WAV.",
+      "pressure": "installation != capability; native editable state + reproducible effect matters",
+      "anchor": "Host `task:studio:capability-expansion-tool-consumption-20260814` rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "S02",
+      "episode": "OBS capability without permanent listener",
+      "observed": "OBS/obs-websocket was dogfooded through authenticated scene observe/mutate and then restored byte-exact with the websocket server disabled and no listener.",
+      "pressure": "useful capability need not imply permanent utilization/presence; dormant resources can be safer",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "S03",
+      "episode": "Blender exit code zero with failed work",
+      "observed": "Blender dogfood found that a Python traceback can coexist with exit code zero. Artifact/state postconditions were required before the tool counted as successful production equipment.",
+      "pressure": "process success != semantic effect; resource consumption needs outcome evidence",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "S04",
+      "episode": "One successful equipment encounter produced only provisional medium status",
+      "observed": "Blender and OBS established real spatial/live worlds, but Studio promoted those media only to `provisional`; mature craft profiles still require real works.",
+      "pressure": "tool capability != domain mastery/value capability",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "S05",
+      "episode": "Figma installed/configured but OAuth consent absent",
+      "observed": "Figma was installed and official Remote MCP OAuth initiation worked, yet user consent remained incomplete, so no design read/write capability was claimed.",
+      "pressure": "installed/configured != possessed authority != actionable capability",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "S06",
+      "episode": "TouchDesigner remains a high-information candidate",
+      "observed": "TouchDesigner could add a materially new realtime operator/dataflow world, but account/license authority was absent. It remained a valuable candidate rather than being installed to improve tool count.",
+      "pressure": "option value can exist before acquisition; authority is a separate relation",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "S07",
+      "episode": "Inkscape deliberately not acquired",
+      "observed": "Inkscape was withheld because current SVG+rsvg plus higher-information pending Figma work left little marginal information/capability gain.",
+      "pressure": "available resource can have negative/zero marginal acquisition value",
+      "anchor": "Studio capability-expansion rev3",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "W01",
+      "episode": "Discovery source versus owner truth",
+      "observed": "Aggregators, indexes and catalogs can establish that an offer/resource was observed, but not current terms, quota, eligibility, license or permission.",
+      "pressure": "discovery != authority; candidate != actionable resource",
+      "anchor": "`docs/resource-opportunity-flywheel.md` §§1–2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "A",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CAND"
+        }
+      }
+    },
+    {
+      "id": "W02",
+      "episode": "Required authority versus possessed authority",
+      "observed": "World split provider requirement, acquisition desirability and current possessed authority into separate coordinates. A positive-EV gated resource can be worth acquiring while still being unusable now.",
+      "pressure": "requirement != acquisition decision != possession",
+      "anchor": "`docs/resource-opportunity-flywheel.md` §2",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "W03",
+      "episode": "Parent entitlement unlocks children",
+      "observed": "One verified education/student entitlement can unlock many downstream developer offers; before the parent exists the children remain dependent acquisition candidates rather than independent usable resources.",
+      "pressure": "prerequisite resource; complementarity; human-work compression",
+      "anchor": "`docs/resource-opportunity-flywheel.md` §4; Host `task:world-open-knowledge-data-fabric-20260812` rev8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COMP"
+        }
+      }
+    },
+    {
+      "id": "W04",
+      "episode": "Provider-specific acquisition failure",
+      "observed": "OCI Free Tier was a legitimate high-value candidate, but the current operator payment/eligibility path was rejected by the provider. The failure was retained as OCI-specific negative acquisition evidence instead of being generalized to unrelated providers.",
+      "pressure": "acquirable-in-theory != eligible-now; negative evidence; non-generalization",
+      "anchor": "Host `task:world-open-knowledge-data-fabric-20260812` rev8",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "W05",
+      "episode": "Signup transport versus resource value",
+      "observed": "A transient signup-page network failure is not allowed to erase the expected value of an otherwise legitimate entitlement; machine transport is qualified later when actual consumption begins.",
+      "pressure": "access relation is time/path scoped; discovery/acquisition and machine consumption are different stages",
+      "anchor": "`docs/resource-opportunity-flywheel.md` §7; Host rev8 above",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "W06",
+      "episode": "HTTP success versus semantic utility",
+      "observed": "TCP/TLS/HTTP success can return error pages, stale endpoints, empty quota shells or nominal credits that do not serve a workload. World requires semantic consumption before `useful=true`.",
+      "pressure": "reachable != useful; resource value is consumer-relative",
+      "anchor": "`docs/resource-opportunity-flywheel.md` §9",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-SEM"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-SEM"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "W07",
+      "episode": "Historical admission versus current presence",
+      "observed": "Resource Transfer can retain a durable destination receipt even after the native destination bytes are deleted. The receipt proves historical semantic admission, not current resource presence.",
+      "pressure": "historical evidence != current resource state; persistence has multiple meanings",
+      "anchor": "`docs/w2-resource-transfer-production.md` §§5–6",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-HIST"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-HIST"
+        }
+      }
+    },
+    {
+      "id": "W08",
+      "episode": "Capability becomes a higher-layer resource",
+      "observed": "Workstation scoped egress, Runtime contained execution and Harness cognition are capabilities at their native owner boundary but resources to Finance/Game/Security consumers.",
+      "pressure": "Resource/Capability role is system-boundary relative",
+      "anchor": "`docs/resource-option-capability-model.md` §7",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    }
+  ],
+  "boundaryCases": [
+    {
+      "id": "X01",
+      "scenario": "Official high-value API is known and documented, but the actor has no current credential.",
+      "pressure": "pre-authority potential",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOAUTH"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "X02",
+      "scenario": "A credential that used to work has expired and cannot authenticate; renewal is a separate process.",
+      "pressure": "stale artifact",
+      "definitions": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CRED-FAIL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOREL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-NOOBJ"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-STALE"
+        }
+      }
+    },
+    {
+      "id": "X03",
+      "scenario": "A public mechanism-rich research paper is accessible, but there is no current project asking for it.",
+      "pressure": "general-purpose information before demand",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "X04",
+      "scenario": "A private dataset is only rumored to exist; there is no inspectable provenance, owner confirmation or access path.",
+      "pressure": "logical possibility without credible evidence",
+      "definitions": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CRED-FAIL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOREL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-NOOBJ"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CRED"
+        }
+      }
+    },
+    {
+      "id": "X05",
+      "scenario": "A healthy owned GPU is powered off and idle; no current workload needs it.",
+      "pressure": "dormant general-purpose compute",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "X06",
+      "scenario": "There are 415 nominal transport variants whose relevant outage mode is the same physical access/provider domain.",
+      "pressure": "correlated abundance",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-MARGINAL"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COUNT"
+        }
+      }
+    },
+    {
+      "id": "X07",
+      "scenario": "One hour of current Human attention is available.",
+      "pressure": "scarce flow/budget resource",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CAP"
+        }
+      }
+    },
+    {
+      "id": "X08",
+      "scenario": "A trusted collaborator relationship/reputation reliably enables introductions and review, but is not an owned object.",
+      "pressure": "social/institutional relation",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-REL"
+        }
+      }
+    },
+    {
+      "id": "X09",
+      "scenario": "A legacy dependency creates recurring failures and maintenance burden; its presence shrinks feasible safe changes.",
+      "pressure": "liability / negative contribution",
+      "definitions": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-LIAB"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOREL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-DIRECTION"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-LIAB"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-LIAB"
+        }
+      }
+    },
+    {
+      "id": "X10",
+      "scenario": "A malware sample is locally materialized; static analysis is authorized but execution is not.",
+      "pressure": "same object, bounded authority by transition class",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "X11",
+      "scenario": "A model API is operational and changes actions, but no consuming domain has shown better Outcome.",
+      "pressure": "Capability input without value proof",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-SEM"
+        }
+      }
+    },
+    {
+      "id": "X12",
+      "scenario": "A valid legal/license permission exists, but the corresponding tool/data bytes are not currently present.",
+      "pressure": "institutional authority as enabling relation",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "X13",
+      "scenario": "An explicit contractual option/right can be exercised later before expiry but is currently unexercised.",
+      "pressure": "Option as candidate Resource",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-CIRCULAR"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "X14",
+      "scenario": "A failed experiment leaves exact negative evidence and a reconsideration trigger.",
+      "pressure": "Knowledge from failed consumption",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-KNOW"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-HIST"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-KNOW"
+        }
+      }
+    },
+    {
+      "id": "X15",
+      "scenario": "A lower owner exports a stable bounded Capability that a higher owner can consume without knowing its mechanism.",
+      "pressure": "Capability-as-Resource recursion",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-BOUND"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "X16",
+      "scenario": "An arbitrary pebble on the desk has no known Ordivon use or plausible bounded transition mechanism.",
+      "pressure": "everything-is-a-resource attack",
+      "definitions": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CRED-FAIL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOREL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CRED"
+        }
+      }
+    },
+    {
+      "id": "X17",
+      "scenario": "A distant asteroid contains useful minerals in principle, but Ordivon has no plausible bounded acquisition path or horizon.",
+      "pressure": "theoretical usefulness without feasible path",
+      "definitions": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CRED-FAIL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NOREL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-REGIME"
+        },
+        "D": {
+          "status": "F",
+          "reasonCode": "D-NOOPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CRED"
+        }
+      }
+    },
+    {
+      "id": "X18",
+      "scenario": "A hostile botnet capability is controlled by an adversary; it can change Ordivon states only against the owner’s interests.",
+      "pressure": "actor/control/directionality attack",
+      "definitions": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACTOR-GAP"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-DIRECTION"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LIAB"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-HAZARD"
+        }
+      }
+    },
+    {
+      "id": "X19",
+      "scenario": "An unrestricted cash reserve is idle and can be allocated later across multiple domains.",
+      "pressure": "rival stock with option value",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-NONUSE"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OPT"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-NONUSE"
+        }
+      }
+    },
+    {
+      "id": "X20",
+      "scenario": "Open-source tool code is available but incompatible with the current stack; adaptation is feasible with bounded work.",
+      "pressure": "conversion cost before actionability",
+      "definitions": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-POT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-REL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-CONV"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ACQUIRE"
+        },
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "r0": {
+      "A": {
+        "P": 47,
+        "A": 1
+      },
+      "B": {
+        "P": 37,
+        "F": 8,
+        "A": 3
+      },
+      "C": {
+        "P": 34,
+        "A": 13,
+        "F": 1
+      },
+      "D": {
+        "P": 36,
+        "A": 6,
+        "F": 6
+      },
+      "E": {
+        "P": 48
+      }
+    },
+    "boundary": {
+      "A": {
+        "P": 14,
+        "F": 5,
+        "A": 1
+      },
+      "B": {
+        "F": 6,
+        "P": 14
+      },
+      "C": {
+        "A": 5,
+        "F": 3,
+        "P": 12
+      },
+      "D": {
+        "P": 13,
+        "F": 7
+      },
+      "E": {
+        "P": 20
+      }
+    },
+    "combined": {
+      "A": {
+        "P": 61,
+        "A": 2,
+        "F": 5
+      },
+      "B": {
+        "P": 51,
+        "F": 14,
+        "A": 3
+      },
+      "C": {
+        "P": 46,
+        "A": 18,
+        "F": 4
+      },
+      "D": {
+        "P": 49,
+        "A": 6,
+        "F": 13
+      },
+      "E": {
+        "P": 68
+      }
+    },
+    "freshE": {
+      "E": {
+        "P": 10
+      }
+    }
+  },
+  "freshEFalsifiers": [
+    {
+      "id": "X21",
+      "scenario": "GPU waste heat can warm a room, but room heating is outside the declared Ordivon system boundary.",
+      "pressure": "boundary-relative relevance",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-BOUND"
+        }
+      }
+    },
+    {
+      "id": "X22",
+      "scenario": "A stolen third-party credential technically works but its use is not owner-authorized or legally admissible.",
+      "pressure": "technical feasibility without admissibility",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "X23",
+      "scenario": "A free API is reachable now, but provider terms prohibit the intended commercial transition while permitting unrelated personal use.",
+      "pressure": "transition-class-specific permission",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-AUTH"
+        }
+      }
+    },
+    {
+      "id": "X24",
+      "scenario": "A dataset is ten years stale: valid for historical analysis but invalid for a current-state claim.",
+      "pressure": "resource existence versus claim-specific actionability/currentness",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-HIST"
+        }
+      }
+    },
+    {
+      "id": "X25",
+      "scenario": "A random data corpus is accessible and can mechanically enter model training, but there is no evidence it helps any admissible capability and known tests show degradation.",
+      "pressure": "mechanical input versus evidenced directional contribution",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-LIAB"
+        }
+      }
+    },
+    {
+      "id": "X26",
+      "scenario": "An encrypted backup exists, but its key is irretrievably lost and no bounded recovery path is known.",
+      "pressure": "identified object without feasible conversion path",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CRED"
+        }
+      }
+    },
+    {
+      "id": "X27",
+      "scenario": "A formerly learned Human skill has decayed below current usable proficiency, but retained priors make bounded refresh materially cheaper than learning from zero.",
+      "pressure": "latent reacquisition advantage versus current capability",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-DEFER"
+        }
+      }
+    },
+    {
+      "id": "X28",
+      "scenario": "A component has no standalone use and only becomes useful with a complement that is not held but is cheaply and credibly acquirable.",
+      "pressure": "complementarity before current bundle possession",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-COMP"
+        }
+      }
+    },
+    {
+      "id": "X29",
+      "scenario": "A theoretically useful external asset is purchasable only at a cost beyond every bounded Ordivon resource envelope.",
+      "pressure": "technical market availability without bounded feasibility",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-CRED"
+        }
+      }
+    },
+    {
+      "id": "X30",
+      "scenario": "A formal option exists but will expire before the actor can satisfy its prerequisites, making exercise infeasible in time.",
+      "pressure": "nominal right without bounded temporal exercise path",
+      "definitions": {
+        "E": {
+          "status": "P",
+          "reasonCode": "E-STALE"
+        }
+      }
+    }
+  ],
+  "deletionTests": [
+    {
+      "coordinate": "actor/system boundary",
+      "mutation": "Remove actor/system boundary and ask only whether the aspect can contribute to some transition somewhere.",
+      "discriminatorCases": [
+        "X18",
+        "X21",
+        "H02"
+      ],
+      "result": "REQUIRED",
+      "reason": "Without the actor/boundary coordinate, adversary-controlled capability and out-of-boundary utility become indistinguishable from resources available to Ordivon."
+    },
+    {
+      "coordinate": "current evidence / credibility",
+      "mutation": "Replace sufficient current evidence with mere logical possibility.",
+      "discriminatorCases": [
+        "X04",
+        "X16"
+      ],
+      "result": "REQUIRED",
+      "reason": "Rumored datasets and arbitrary objects become Resources merely because an imaginable use can be invented."
+    },
+    {
+      "coordinate": "bounded feasible acquisition/conversion path",
+      "mutation": "Permit any theoretically possible future conversion regardless of horizon/cost/prerequisites.",
+      "discriminatorCases": [
+        "X17",
+        "X26",
+        "X29",
+        "X30"
+      ],
+      "result": "REQUIRED",
+      "reason": "Irretrievable, temporally impossible and economically unreachable objects collapse into the same class as realistic deferred resources."
+    },
+    {
+      "coordinate": "intentional enrollability / directionality",
+      "mutation": "Count anything that changes reachable states, including hazards and burdens.",
+      "discriminatorCases": [
+        "X09",
+        "X18",
+        "X25"
+      ],
+      "result": "REQUIRED",
+      "reason": "Liabilities, hostile capabilities and known-degrading inputs become positive Resources rather than constraints/hazards."
+    },
+    {
+      "coordinate": "identifiable aspect of Reality",
+      "mutation": "Allow vague source/category claims without identifying what object/relation the evidence is about.",
+      "discriminatorCases": [
+        "W01",
+        "G01",
+        "G02",
+        "X04"
+      ],
+      "result": "REQUIRED",
+      "reason": "Catalog-level claims silently transfer authority/license/currentness to heterogeneous underlying items."
+    },
+    {
+      "coordinate": "class of future state transitions / mechanism",
+      "mutation": "Remove the requirement for an evidenced transition class or mechanism.",
+      "discriminatorCases": [
+        "X16",
+        "H01"
+      ],
+      "result": "REQUIRED",
+      "reason": "Resource becomes an uninformative synonym for background Reality."
+    },
+    {
+      "coordinate": "current workload / concrete goal",
+      "mutation": "Require an active workload or current concrete goal for Resource existence.",
+      "discriminatorCases": [
+        "S06",
+        "X03",
+        "X05",
+        "X13",
+        "X19"
+      ],
+      "result": "REJECT_ADD",
+      "reason": "Dormant general-purpose resources and option-bearing rights lose Resource status despite credible bounded future use."
+    },
+    {
+      "coordinate": "current access",
+      "mutation": "Require immediate current access/materialization.",
+      "discriminatorCases": [
+        "F02",
+        "S06",
+        "Q04",
+        "X01",
+        "X12"
+      ],
+      "result": "REJECT_ADD",
+      "reason": "Gated but credibly acquirable resources, references and enabling rights are confused with non-resources."
+    },
+    {
+      "coordinate": "possessed consuming authority",
+      "mutation": "Require the authority needed for eventual consumption to already be possessed.",
+      "discriminatorCases": [
+        "W02",
+        "F02",
+        "S05",
+        "S06",
+        "X01"
+      ],
+      "result": "REJECT_ADD",
+      "reason": "Resource collapses toward Actionable Resource and cannot represent acquisition optionality."
+    },
+    {
+      "coordinate": "proven consumer Outcome/value",
+      "mutation": "Require evidence that use improves the final domain Outcome before something qualifies as Resource.",
+      "discriminatorCases": [
+        "G03",
+        "S04",
+        "X11"
+      ],
+      "result": "REJECT_ADD",
+      "reason": "Inputs with real transition potential are confused with proven value; Resource would collapse toward validated Capability/Outcome."
+    },
+    {
+      "coordinate": "global scalar value",
+      "mutation": "Require every Resource to have one total-order scalar value.",
+      "discriminatorCases": [
+        "S07",
+        "Q05",
+        "N07",
+        "X08"
+      ],
+      "result": "REJECT_ADD",
+      "reason": "Context-dependent, incomparable and option-bearing resources cannot be truthfully totally ordered."
+    }
+  ],
+  "r2ProvisionalResult": {
+    "survivingDefinition": "E",
+    "status": "PROVISIONAL_SURVIVOR_FOR_R3_NOT_WORLD_LAW",
+    "reason": "A survives breadth but needs actor/directionality; B places current authority too early; C is useful conversion algebra but regime-underspecified as ontology; D is circular and portfolio-marginal. E adds only coordinates independently demanded by A falsifiers and then survives ten post-freeze fresh falsifiers.",
+    "candidateLayering": [
+      "Resource Candidate = a claim/observation whose evidence is insufficient to establish E",
+      "Resource = E evidenced enrollable potential",
+      "Actionable Resource = Resource plus current owner truth/possessed authority/access/qualification for a demand",
+      "Option = demand-scoped admissible use/composition available to selection"
+    ],
+    "notPromoted": true
+  },
+  "matrixContentDigest": "sha256:01d08041169872ef5df2edf431227b233191c9ef0efe580068d09d768fe609c8"
+}
