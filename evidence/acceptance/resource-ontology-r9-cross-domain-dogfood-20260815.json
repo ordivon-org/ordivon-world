@@ -1,0 +1,731 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r9-cross-domain-dogfood-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "a531c915c0c14ba49d19270dad35f7289e38d730",
+  "artifacts": {
+    "r9": {
+      "path": "docs/resource-ontology-r9-cross-domain-dogfood.md",
+      "sha256": "723baa1ca10e0f3b5ce606ed77403e74e01ccdbe5a0ff5c89ba4e8cb18613a7b"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r9-dogfood-matrix-20260815.json",
+      "sha256": "9a0aac1f05c5f13a5aca8513f19395bdff06ee0e04435edf17ab23c712ef4d7c",
+      "contentDigest": "sha256:250a6fbb332ff4cc0a7d51611a417e1693491ff72bfa74cd3ee2566f05cfd6e4"
+    }
+  },
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "a531c915c0c14ba49d19270dad35f7289e38d730"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "3d714710e330954b2f0f98510ceaf700847b02b6"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "coverage": {
+    "realOwnerDogfoods": 5,
+    "deletionTests": 32,
+    "retainedRoot": 13,
+    "retainedConditionalOrModeling": 9,
+    "deletedUniversalStructures": 10,
+    "sharedSeamCandidates": 3,
+    "currentWorldProbes": 3,
+    "selectedFrozenSourceFiles": 32,
+    "exactFrozenSourceRefs": 52
+  },
+  "dogfoods": [
+    {
+      "id": "D-FIN",
+      "owner": "Finance",
+      "decision": "FR3 149-wrapper carrier observation→research admission replay",
+      "actualOutcome": "8 QUALIFIED / 13 VIABLE / 30 EVIDENCE_INCOMPLETE / 18 IDENTITY_UNRESOLVED / 68 LIQUIDITY_WEAK / 11 STRUCTURAL_MISMATCH / 1 CARRY_UNFAVORABLE; capitalAuthority=false",
+      "sourceRefs": [
+        "F01",
+        "F02",
+        "F03",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09"
+      ],
+      "stackPressure": {
+        "R2_R3": "identity/claim/evidence define the carrier relation before valuation",
+        "R4": "immutable observations and point-in-time projection; later evidence cannot rewrite earlier known_at",
+        "R5": "hard gates compose conjunctively but are Finance-owned",
+        "R6": "proposal/admission/authority/submission remain distinct",
+        "R7": "minimum notional, capital, leverage and survival are quantitative but owner-relative",
+        "R8": "UNKNOWN/STALE and source-bound evidence alter admission without becoming a score"
+      },
+      "sharedSurfacePressure": "No cross-owner executor missing. Finance already separates observations, admission, belief, survival, authority and execution."
+    },
+    {
+      "id": "D-GAME",
+      "owner": "Game",
+      "decision": "Station Zero GV/G5 product admission and smallest-treatment pressure",
+      "actualOutcome": "two reproduced ordinary-consumer failures both resolved at L2; live cognition operational but player value remains unproven; outer content axes admitted/rejected with exact local criteria; no generic Domain Value service",
+      "sourceRefs": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08"
+      ],
+      "stackPressure": {
+        "R2_R3": "player-facing problem/transition scope controls which evidence matters",
+        "R4": "World facts vs player projection vs product decision remain separate",
+        "R5": "capacity/content/strategy criteria combine, but reducer/admission are Game-native",
+        "R6": "behavioral difference/effect is not player-value Outcome",
+        "R7": "Zone capacity, provider concurrency, latency/cost matter locally",
+        "R8": "Agent evidence can close structural defects but cannot assert delight/preference"
+      },
+      "sharedSurfacePressure": "Game independently requires a second real consumer before extracting a responsibility above the semantic waist."
+    },
+    {
+      "id": "D-STUDIO",
+      "owner": "Studio",
+      "decision": "site-social-card exact Output approval and Web consumption",
+      "actualOutcome": "Output approved and exact bytes consumed locally by Web; parent Production remains review because remote/public publication did not occur; no Human preference ballot needed for bounded legibility defect",
+      "sourceRefs": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "stackPressure": {
+        "R2_R3": "exact owner-bound Claim and artifact identity define what is being expressed/reviewed",
+        "R4": "historical bound revision and current Production/Output states remain owner-native",
+        "R5": "Claim source + exact bytes + render/QC + decision context are conjunctive local requirements",
+        "R6": "render/output acceptance ≠ parent publication Outcome",
+        "R7": "no generic resource ecology needed; medium-specific byte/render constraints suffice",
+        "R8": "machine/browser evidence closes legibility claim; Human-response claim remains separate"
+      },
+      "sharedSurfacePressure": "Production-local records already hold exact evidence and decision context; shared Human-response Evidence schema is explicitly not earned."
+    },
+    {
+      "id": "D-SEC",
+      "owner": "Security",
+      "decision": "bounded D4 no-secondary-effect acceptance + CA5 provider-binding responsibility audit",
+      "actualOutcome": "bounded no-secondary-effect claim accepted with explicit notAcceptedClaims; new Security provider binding not-earned; RangeActionGateway rejected; provenance-reconcile-verify wins control-boundary study",
+      "sourceRefs": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q08"
+      ],
+      "stackPressure": {
+        "R2_R3": "exact target/environment/authority/evidence relation bounds what can be claimed",
+        "R4": "native experiment facts and current applicability remain separate",
+        "R5": "target + provider evidence + authority + independent consequence evidence compose locally",
+        "R6": "MSI/process success and bounded observed Effect are not generalized Outcome/causality",
+        "R7": "phase/currentness/failure-domain independence matter, but remain Security/provider-native",
+        "R8": "acceptedClaim/notAcceptedClaims/coverage/independent evidence directly govern admission"
+      },
+      "sharedSurfacePressure": "Four materially different Security consumers did not reproduce one missing invocation responsibility; broad gateway would duplicate owners."
+    },
+    {
+      "id": "D-HUM",
+      "owner": "Human",
+      "decision": "Evidence-Transport contraction and residual-experiment admission",
+      "actualOutcome": "population/external evidence is default prior; direct fixtures dormant unless transport residual is decision-relevant; AE/C1 admits no new service/registry/scoring system; broad data collection not admitted",
+      "sourceRefs": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08",
+        "H09",
+        "H10"
+      ],
+      "stackPressure": {
+        "R2_R3": "target population/intervention/claim boundary determines evidence meaning",
+        "R4": "prospective frozen claims and later resolution cannot be rewritten",
+        "R5": "experiment admission is conjunction of uncertainty, resolvability, action relevance and acceptable burden",
+        "R6": "assisted output, retained capability, agency and later resolution are distinct Outcomes/claims",
+        "R7": "attention/review/logging burden is quantitative and Human-owned",
+        "R8": "transport analysis and VOI decide whether direct target evidence is worth collecting"
+      },
+      "sharedSurfacePressure": "Human explicitly contracted to natural evidence and no new service/registry/scoring system."
+    }
+  ],
+  "deletionTournament": [
+    {
+      "id": "T01",
+      "distinction": "actor/system boundary",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Deleting owner/actor scope moves authority and evaluation across project boundaries and changes which facts can authorize action."
+    },
+    {
+      "id": "T02",
+      "distinction": "exact subject/aspect identity",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-STUDIO",
+        "D-SEC"
+      ],
+      "deletionEffect": "Deleting identity conflates ticker/economic identity, reviewed bytes/source revision, or exact Security target/environment."
+    },
+    {
+      "id": "T03",
+      "distinction": "explicit transition/claim/demand scope",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Without a named claim/transition, evidence for liquidity, legibility, bounded no-effect or population mechanism can be laundered into unrelated conclusions."
+    },
+    {
+      "id": "T04",
+      "distinction": "native provenance/source authority",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Owner/source evidence determines who may author a fact; normalized labels or transported observations cannot self-authorize."
+    },
+    {
+      "id": "T05",
+      "distinction": "support/contradict/UNKNOWN/STALE structure",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Deleting structured epistemic status turns missing/stale evidence into negative truth and changes admission/recovery."
+    },
+    {
+      "id": "T06",
+      "distinction": "historical time vs current applicability / known_at",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Deleting temporal separation leaks later evidence backward or rewrites historical truth."
+    },
+    {
+      "id": "T07",
+      "distinction": "authority separate from capability/admission",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC"
+      ],
+      "deletionEffect": "QUALIFIED/proposal-ready/rendered/capable never automatically means authorized/submitted/published."
+    },
+    {
+      "id": "T08",
+      "distinction": "access/transport/materialization separate from semantic truth",
+      "verdict": "KEEP_RELATION",
+      "dogfoods": [
+        "D-FIN",
+        "D-STUDIO",
+        "D-SEC"
+      ],
+      "deletionEffect": "Network/materialization failure changes current actionability without rewriting carrier/source/history truth."
+    },
+    {
+      "id": "T09",
+      "distinction": "Resource vs ActionableResource vs Option separation",
+      "verdict": "KEEP_MODELING_DISTINCTION",
+      "dogfoods": [
+        "D-FIN",
+        "D-HUM"
+      ],
+      "deletionEffect": "A discovered/qualified possibility may still be non-actionable or not worth selecting; collapsing them changes acquisition/experiment admission."
+    },
+    {
+      "id": "T10",
+      "distinction": "requirements/constraints conjunction",
+      "verdict": "KEEP_MODELING_DISTINCTION",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "All five owners make real decisions from conjunctive gates; deleting conjunction changes feasibility/admission."
+    },
+    {
+      "id": "T11",
+      "distinction": "assignment/composition identity",
+      "verdict": "CONDITIONAL_LOCAL",
+      "dogfoods": [
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC"
+      ],
+      "deletionEffect": "Useful where exact components/resources are assigned to a transition, but owner-native reducers/manifests already own it."
+    },
+    {
+      "id": "T12",
+      "distinction": "quantitative capacity/rate/budget when binding",
+      "verdict": "KEEP_CONDITIONAL_RELATION",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deletionEffect": "Quantities change actual action when minimum notional/leverage, Zone/concurrency/latency, or review burden bind; units and owners differ."
+    },
+    {
+      "id": "T13",
+      "distinction": "substitution/redundancy independence relative to failure class",
+      "verdict": "KEEP_CONDITIONAL_RELATION",
+      "dogfoods": [
+        "D-GAME",
+        "D-SEC"
+      ],
+      "deletionEffect": "Duplicate keys or shared evidence/provider roots do not add independent capacity/redundancy; disturbance class matters."
+    },
+    {
+      "id": "T14",
+      "distinction": "Action identity separate from physical/mechanical Effect",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-SEC"
+      ],
+      "deletionEffect": "Proposal/commit/attempt can exist without the intended effect; effect uncertainty/recovery changes next action."
+    },
+    {
+      "id": "T15",
+      "distinction": "Effect separate from domain Outcome",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Operational model behavior/render/process effects do not establish alpha, player value, publication, causal harmlessness or retained Human capability."
+    },
+    {
+      "id": "T16",
+      "distinction": "Attribution separate from Outcome",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Observed favorable/unfavorable outcomes do not prove Agent/treatment causality without comparison/mechanism evidence."
+    },
+    {
+      "id": "T17",
+      "distinction": "Knowledge/promotion separate from Evidence",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "One review/trial/receipt does not automatically become product law, taste authority or reusable general knowledge."
+    },
+    {
+      "id": "T18",
+      "distinction": "negative/failed evidence retained",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Failures/UNKNOWN/rejected axes alter ranking, block promotion or narrow hypotheses; deleting them creates false optimism and repeated work."
+    },
+    {
+      "id": "T19",
+      "distinction": "coverage/completeness before evidence-of-absence",
+      "verdict": "KEEP_RELATION",
+      "dogfoods": [
+        "D-FIN",
+        "D-SEC"
+      ],
+      "deletionEffect": "Empty ledger/null observation or no-secondary-effects claim is only bounded by what was actually observable."
+    },
+    {
+      "id": "T20",
+      "distinction": "source→target transport / effect-modifier analysis",
+      "verdict": "KEEP_CONDITIONAL_RELATION",
+      "dogfoods": [
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deletionEffect": "External evidence can generate a hypothesis/prior without becoming target truth; direct target experiment only when residual matters."
+    },
+    {
+      "id": "T21",
+      "distinction": "decision consequence/reversibility/VOI for evidence acquisition",
+      "verdict": "KEEP_CONDITIONAL_RELATION",
+      "dogfoods": [
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deletionEffect": "Clear reversible defects are fixed with less evidence; consequential unresolved Human claims justify residual evidence only when decision-relevant."
+    },
+    {
+      "id": "T22",
+      "distinction": "owner-native state machine vs cross-owner projection",
+      "verdict": "KEEP_ROOT",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Each domain already owns state transitions; a global Resource state would overwrite native authority and currentness semantics."
+    },
+    {
+      "id": "T23",
+      "distinction": "universal Resource lifecycle state",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "No dogfood decision needs one lifecycle axis; native states and projections already decide correctly."
+    },
+    {
+      "id": "T24",
+      "distinction": "global dependency/composition graph or engine",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Conjunctive semantics repeat, but no owner reproduces a missing shared executor; global graph would duplicate local admission/reducers."
+    },
+    {
+      "id": "T25",
+      "distinction": "global Capacity service / scalar capacity",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deletionEffect": "Capacity matters but quantity kind, unit, time window, owner and consequences differ; local semantics already exist."
+    },
+    {
+      "id": "T26",
+      "distinction": "global EvidenceGraph / confidence score / BeliefStore",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "All owners preserve structured evidence/claims locally and reject scalar laundering; no repeated missing shared belief authority."
+    },
+    {
+      "id": "T27",
+      "distinction": "universal persisted Transfer Contract",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-GAME",
+        "D-HUM"
+      ],
+      "deletionEffect": "Transport assessment is useful when source→target questions exist, but direct local evidence does not need every target/moderator/VOI field."
+    },
+    {
+      "id": "T28",
+      "distinction": "generic Outcome/Attribution service",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Outcome semantics are domain-owned and heterogeneous; common terminology does not create shared executable responsibility."
+    },
+    {
+      "id": "T29",
+      "distinction": "universal scalar Resource/value/maturity score",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Hard gates, plural outcomes and structured unknowns repeatedly outrank scalar ranking."
+    },
+    {
+      "id": "T30",
+      "distinction": "generic cross-domain consumer/workflow platform",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-GAME",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Owners explicitly reject it absent repeated responsibility above owner boundaries."
+    },
+    {
+      "id": "T31",
+      "distinction": "universal persisted Resource entity/record",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Real owners persist native observations/claims/state and derive decisions; none requires World to persist one cross-owner Resource record as current authority."
+    },
+    {
+      "id": "T32",
+      "distinction": "universal persisted Capability object / CapabilityManager",
+      "verdict": "DELETE",
+      "dogfoods": [
+        "D-FIN",
+        "D-GAME",
+        "D-STUDIO",
+        "D-SEC",
+        "D-HUM"
+      ],
+      "deletionEffect": "Capabilities are owner/boundary-relative supported abilities or exported relations; each domain can consume them without a global lifecycle/manager, and authority never transfers with the label."
+    }
+  ],
+  "sharedSeamPressure": {
+    "claimLevelProvenance": {
+      "candidate": "shared claim-level evidence/capability schema",
+      "semanticReplication": [
+        "Finance source-bound normalized identity/carrier claims",
+        "Game bounded player/product claims",
+        "Studio exact source-bound Claims",
+        "Security acceptedClaim/notAcceptedClaims + exact native evidence",
+        "Human claim/evidence/challenge/boundary"
+      ],
+      "currentExecutableGap": [
+        "World generic resource_discovery evaluator R8P01/R3F01/R3F02"
+      ],
+      "ownerLocalSolutions": [
+        "Finance FR2/FR3",
+        "Game Game-owned Context/Candidate/Product evidence",
+        "Studio Claim/Receipt/Production records",
+        "Security acceptance evidence/provider audit",
+        "Human experiment packets/protocol"
+      ],
+      "verdict": "SHARED_SEMANTIC_LAW_NOT_SHARED_SERVICE",
+      "productionDisposition": "NARROW_WORLD_LOCAL_CORRECTNESS_DEBT_REMAINS; no global Evidence/Claim service earned",
+      "reason": "The semantic distinction repeats, but the only reproduced missing executable join is the generic World evaluator itself. Other owners already preserve claim boundaries natively."
+    },
+    "quantitativeCapacity": {
+      "candidate": "shared quantitative Capacity surface",
+      "semanticReplication": [
+        "Finance minimum notional/capital/leverage/survival",
+        "Game Zone capacity/provider concurrency/latency",
+        "Runtime operator ceilings/cgroup/output/time limits",
+        "Human review/interruption/logging burden",
+        "Workstation catalog/capability/failure-domain counts"
+      ],
+      "verdict": "CONDITIONAL_PROJECTION_TEMPLATE_ONLY",
+      "productionDisposition": "NO_GLOBAL_CAPACITY_SERVICE",
+      "reason": "Quantity changes decisions, but stock/flow/rate/concurrency/time/attention/capital use different units, clocks, owners and recovery semantics. Native owners already enforce them."
+    },
+    "conjunctiveComposition": {
+      "candidate": "shared Requirements/Assignments/Constraints engine",
+      "semanticReplication": [
+        "Finance hard semantic/survival/belief gates",
+        "Game admission matrices/capacity footprints",
+        "Studio Claim+bytes+QC+decisionContext",
+        "Security target+provider evidence+authority+independent consequence",
+        "Human residual-experiment admission requirements"
+      ],
+      "verdict": "SHARED_MODELING_VOCAB_NOT_ENGINE",
+      "productionDisposition": "NO_GLOBAL_COMPOSITION_ENGINE",
+      "reason": "Conjunction is universal enough as reasoning vocabulary, but every owner already owns the actual reducer/admission. No repeated missing cross-owner executor was reproduced."
+    }
+  },
+  "implementationProbes": {
+    "R9P01": {
+      "clientRequestId": "world-r9-current-three-debt-probes-20260815-01",
+      "jobId": "job-01a005d7-67ce-71c1-b07c-b6e834f90b4b",
+      "classification": "REPRODUCED_CORRECTNESS_DEBT",
+      "result": "owner evidence attests resource/terms/interface while cap:x only comes from aggregator/candidate label; current evaluator still returns consumable-now, demandFit=1.0, evidenceQuality=0.9"
+    },
+    "R9P02": {
+      "clientRequestId": "world-r9-current-three-debt-probes-20260815-01",
+      "jobId": "job-01a005d7-67ce-71c1-b07c-b6e834f90b4b",
+      "classification": "REPRODUCED_GENERIC_PLANNER_REPRESENTATION_GAP",
+      "result": "two resources carrying cap:a and cap:b individually evaluate not-fit with demandFit=0.5 for demand requiring both; current evaluator has no joint composition witness path"
+    },
+    "R9P03": {
+      "clientRequestId": "world-r9-current-three-debt-probes-20260815-01",
+      "jobId": "job-01a005d7-67ce-71c1-b07c-b6e834f90b4b",
+      "classification": "GENERIC_PLANNER_REPRESENTATION_GAP_NOT_PRODUCT_BUG",
+      "result": "ResourceCandidate, ConsumerDemand and ResourceEvaluation expose no first-class quantitative capacity/amount/stock/flow/rate/quota/concurrency/budget coordinate; real owners retain native quantity semantics"
+    }
+  },
+  "centralResult": "Five materially different real owners query a compact set of identity/claim/provenance/time/authority/constraint/consequence/promotion distinctions, but they do not reproduce one missing shared execution owner. Shared semantics are therefore retained mainly as laws/relation templates while owner-native reducers/state remain native. No new shared World production surface is earned in R9.",
+  "productionDecision": {
+    "newSharedWorldSurfaceEarned": false,
+    "reason": "Five materially different owner dogfoods preserve the R2-R8 semantic distinctions that matter, but no broad missing executable responsibility repeats above owner boundaries. The only live correctness debt remains World resource_discovery claim-level provenance itself.",
+    "r10PromotionCandidates": [
+      "actor/system boundary + exact aspect identity",
+      "explicit transition/claim/demand scope",
+      "native provenance and claim support",
+      "owner-native state + cross-owner projection",
+      "Resource vs Actionability/Option",
+      "Requirements/Constraints as modeling relations, not engine",
+      "conditional CapacityFor-style quantity relation, not scalar service",
+      "Action/Effect/Outcome/Attribution/Knowledge separation",
+      "negative/UNKNOWN/STALE evidence and coverage",
+      "Evidence→Knowledge explicit promotion",
+      "source→target transport/VOI as conditional projection"
+    ],
+    "r10DoNotPromote": [
+      "universal Resource lifecycle",
+      "global Resource registry",
+      "global dependency/composition graph",
+      "global Capacity service",
+      "global EvidenceGraph/BeliefStore/confidence score",
+      "universal persisted Transfer Contract",
+      "generic Outcome/Attribution service",
+      "universal scalar value/maturity score",
+      "generic consumer/workflow platform",
+      "universal persisted cross-owner Resource entity",
+      "universal persisted CapabilityManager/object"
+    ]
+  },
+  "rootCompression": {
+    "nativeTruth": "owner-native Events/observations/Claims/authority/quantities/evidence remain with owners that can reconcile them",
+    "contextualProjection": "Resource/Actionability/Evidence/Capacity are evaluated relative to actor, aspect/transition/claim, demand/target/load and time rather than persisted as universal current state",
+    "feasibility": "Requirements/Constraints and exact local assignments/composition are real but remain owner-native unless a repeated cross-owner executor gap appears",
+    "consequence": "Decision/Action != Effect != domain Outcome != Attribution != Knowledge promotion",
+    "extraction": "promote shared semantics before shared machinery; promote machinery only when multiple materially different consumers reproduce the same missing executable responsibility above owner boundaries"
+  },
+  "productionDebts": {
+    "claimLevelProvenance": {
+      "status": "REPRODUCED_CORRECTNESS_DEBT",
+      "probe": "R9P01",
+      "decision": "carry to R10 as a narrow World-local correctness treatment; no global Evidence/Claim service earned"
+    },
+    "conjunctiveComposition": {
+      "status": "REPRODUCED_GENERIC_PLANNER_REPRESENTATION_GAP",
+      "probe": "R9P02",
+      "decision": "retain Requirements/Constraints/composition vocabulary; no global composition engine earned because real owners already own reducers/admission"
+    },
+    "quantitativeCapacity": {
+      "status": "GENERIC_PLANNER_REPRESENTATION_GAP_NOT_PRODUCT_BUG",
+      "probe": "R9P03",
+      "decision": "retain conditional CapacityFor-style relation in doctrine; no global Capacity service until a real cross-owner consumer fails without it"
+    }
+  },
+  "sourceIntegrity": {
+    "method": "reconstruct every selected source via git show <frozenRevision>:<path> and verify sha256 + exact needle",
+    "result": "PASS",
+    "files": 32,
+    "refs": 52
+  },
+  "promotions": {
+    "newSharedWorldSurface": false,
+    "resourceRegistry": false,
+    "resourceLifecycle": false,
+    "capabilityManager": false,
+    "dependencyGraph": false,
+    "compositionEngine": false,
+    "capacityService": false,
+    "evidenceGraph": false,
+    "beliefStore": false,
+    "confidenceService": false,
+    "persistedTransferContract": false,
+    "genericOutcomeService": false,
+    "genericAttributionService": false,
+    "consumerWorkflowPlatform": false
+  },
+  "next": "R10 compression/promotion: freeze R0-R9, promote only laws/relations that survived real dogfood, select the smallest World-local claim-level provenance correction if representation is now clear, explicitly reject unearned global machinery, and close the foundations task after canonical validation.",
+  "localValidation": {
+    "jobId": "job-01a005db-fa73-7b80-8a01-416eb7f2ad99",
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r9Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  }
+}
