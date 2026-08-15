@@ -113,3 +113,21 @@ The research does **not** imply a World Manager, Presence registry, Capability r
 ## Reopening rule
 
 A closed research line may **reopen** and return to active status only after a named current workload reproduces a failure that current Host + Runtime + provider/domain owner + retained World contracts cannot own cleanly. Historical prose alone cannot reactivate a component.
+
+
+## Capability Field CF0 — problem-space phase closeout
+
+CF0 of the Actor × Environment × Institution Capability Foundations programme is **closed as a phase; CF1 remains the active handoff**.
+
+Retained result:
+
+- current World `ResourceFor / ActionableResourceFor / Option / Capability` semantics already provide a relational capability baseline;
+- `CapabilityField` is research shorthand only and did not earn a persisted primitive;
+- Environment and Institution survive as distinct causal roles where deleting exposure versus durable rule/authority/ownership/recovery structure changes the counterfactual, but neither earns a universal object/schema;
+- strong M2 static interaction subsumes every current M3 transition-topology prediction, so `Institutional Conversion Topology` has **0 incremental predictive cases** and remains only a mechanism-decomposition candidate;
+- dynamic capitalization, endogenous selection/sorting and long-horizon coevolution remain the genuinely additional research burdens;
+- normative institution design remains outside CF0–CF9.
+
+Primary artifacts: [`capability-field-cf0-problem-space.md`](capability-field-cf0-problem-space.md), [`capability-field-cf0-closeout.md`](capability-field-cf0-closeout.md), and `evidence/acceptance/capability-field-cf0-matrix-20260816.json`.
+
+Reopen CF0 only if a new discriminator invalidates the frozen model/problem decomposition or a currently rejected candidate gains a real deletion consequence. Do not create a Capability registry, Institution service, complete Environment snapshot, or scalar quality model from this phase.

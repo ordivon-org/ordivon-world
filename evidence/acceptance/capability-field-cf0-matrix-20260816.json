@@ -1,0 +1,1360 @@
+{
+  "antiClaims": [
+    "Institutions are always more important than individuals.",
+    "Observed performance identifies intrinsic capability.",
+    "Environment association is automatically causal exposure.",
+    "Heritability or variance explained gives policy effect.",
+    "A person×institution subgroup pattern proves an interaction mechanism.",
+    "Agent Harness and human institutions are mechanistically equivalent.",
+    "One scalar InstitutionQuality or Capability score is universally valid."
+  ],
+  "candidateDispositions": {
+    "CapabilityField": {
+      "reason": "Current ResourceFor/ActionableResourceFor + requirements/assignments/constraints + Capability already project feasible supported transitions. CF1 must expose residual burden before any object/service.",
+      "status": "RESEARCH_SHORTHAND_REJECT_PERSISTED_PRIMITIVE"
+    },
+    "CapabilityInstitutionCoevolution": {
+      "reason": "Plausible long-horizon feedback, but generic cross-domain mechanism not earned.",
+      "status": "OPEN_RESEARCH_HYPOTHESIS"
+    },
+    "CapabilityUnmasking": {
+      "reason": "Likely expressible as retained actor-state evidence plus changed current Actionability/Option; CF2/CF4 must show residual need.",
+      "status": "DERIVED_CANDIDATE"
+    },
+    "Environment": {
+      "reason": "Realized exposure/conditions matter, but closure is query-relative and unbounded; partial prerequisites must not masquerade as full environment state.",
+      "status": "KEEP_CAUSAL_ROLE_REJECT_COMPLETE_SNAPSHOT"
+    },
+    "EnvironmentalCapitalization": {
+      "reason": "History-dependent actor-state update is independently pressured by Human/World/external evidence and cannot be answered by static current-state interaction alone.",
+      "status": "RESEARCH_DISTINCTION"
+    },
+    "Institution": {
+      "reason": "Rule/authority/ownership/recovery counterfactuals can change predictions, but native facts have different owners and no global institution schema is earned.",
+      "status": "KEEP_CAUSAL_ROLE_REJECT_UNIVERSAL_OBJECT"
+    },
+    "InstitutionQualityScalar": {
+      "reason": "Output, autonomy, distribution, robustness, option value, innovation, maintenance and recovery are non-equivalent outcomes.",
+      "status": "REJECT_ADD"
+    },
+    "InstitutionalConversionTopology": {
+      "reason": "Frozen competition produced 0 incremental discriminator cases over strong M2. CF3 may rescue it only with causal/intervention/owner-placement/deletion value, not descriptive elegance.",
+      "status": "MECHANISM_DECOMPOSITION_CANDIDATE_NOT_MODEL_FAMILY"
+    },
+    "RelationalCapability": {
+      "reason": "World R10 already defines boundary-relative supported transition ability; no new primitive needed.",
+      "status": "EXISTING_DOCTRINE"
+    },
+    "SelectionSorting": {
+      "reason": "Needed to prevent exposure associations from becoming causal claims; not a World entity.",
+      "status": "REQUIRED_IDENTIFICATION_ROLE"
+    }
+  },
+  "cf1Gate": [
+    "Use M0 actor-only, M1 additive context and M2 static interaction as the active predictive competitors.",
+    "Treat transition topology as a mechanism-decomposition candidate inside/above M2, not an independently earned predictive family.",
+    "M4-M6 are explicit scope counterexamples until later rounds.",
+    "Every retained distinction must change at least one frozen prediction/action or a separately measured causal/intervention/owner-placement decision.",
+    "Reuse current ResourceFor/ActionableResourceFor/Option/Capability/Attribution semantics where sufficient.",
+    "No persisted CapabilityField/Institution/Environment schema or service.",
+    "Environment/institution remain causal roles unless owner responsibility is independently earned."
+  ],
+  "claimBoundary": "This artifact freezes problem decomposition, model families, discriminators and candidate dispositions. It does not establish a production ontology, current owner truth outside frozen refs, model fit coefficients, causal effect sizes, or a normative institution ranking.",
+  "counts": {
+    "discriminators": 40,
+    "externalRefs": 9,
+    "modelFamilies": 7,
+    "questionFamilies": 10,
+    "sourceRefs": 12
+  },
+  "discriminators": [
+    {
+      "group": "control",
+      "id": "C01",
+      "kind": "synthetic_control",
+      "modelVerdicts": {
+        "M0": "ENOUGH",
+        "M1": "ENOUGH",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Two actors face the same environment/institution/demand; a verified retained skill difference changes feasible performance. M0 must be allowed to win here.",
+      "refs": [],
+      "requires": [
+        "actor_state"
+      ],
+      "title": "Actor-state difference under standardized conditions"
+    },
+    {
+      "group": "control",
+      "id": "C02",
+      "kind": "synthetic_control",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "ENOUGH",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "A fixed externally imposed latency penalty adds the same delay for every actor and creates no interaction/history/selection question. M1 is sufficient.",
+      "refs": [],
+      "requires": [
+        "actor_state",
+        "environment_main_effect"
+      ],
+      "title": "Independent fixed context penalty"
+    },
+    {
+      "group": "control",
+      "id": "C03",
+      "kind": "synthetic_control",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Two skills/tools are jointly required; neither alone suffices, current states fixed. Strong M2 should win without invoking dynamics or institutions.",
+      "refs": [],
+      "requires": [
+        "actor_state",
+        "interaction",
+        "complement"
+      ],
+      "title": "Static complement interaction"
+    },
+    {
+      "group": "world",
+      "id": "W01",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Institutional permission is an enabling Reality relation but does not imply current materialization/actionability.",
+      "refs": [
+        "world_r3"
+      ],
+      "requires": [
+        "institution_role",
+        "resource_vs_actionability",
+        "transition_scope"
+      ],
+      "title": "Legal permission exists while bytes are absent"
+    },
+    {
+      "group": "world",
+      "id": "W02",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "The same aspect supports one transition under current authority and not another; intrinsic object/actor labels are insufficient.",
+      "refs": [
+        "world_r3",
+        "world_r10"
+      ],
+      "requires": [
+        "actor_boundary",
+        "transition_scope",
+        "authority"
+      ],
+      "title": "Same malware bytes: static analysis allowed, execution not actionable"
+    },
+    {
+      "group": "world",
+      "id": "W03",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Actor state can be unchanged while surrounding technical structure removes safe transitions.",
+      "refs": [
+        "world_r3"
+      ],
+      "requires": [
+        "environment",
+        "feasible_option_set"
+      ],
+      "title": "Technical debt shrinks safe Options"
+    },
+    {
+      "group": "world",
+      "id": "W04",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "ENOUGH",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Current external relation changes exercisability without changing retained actor capability or semantic Resource identity.",
+      "refs": [
+        "world_r7",
+        "world_r10"
+      ],
+      "requires": [
+        "environment",
+        "currentness",
+        "resource_vs_actionability"
+      ],
+      "title": "Current path loss changes Actionability without Resource depletion"
+    },
+    {
+      "group": "world",
+      "id": "W05",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Consumer capability depends on another owner without transfer of its internal mechanism/authority.",
+      "refs": [
+        "world_r10",
+        "computing_capability"
+      ],
+      "requires": [
+        "nested_actor_boundary",
+        "capability_export"
+      ],
+      "title": "Lower-owner capability exported upward as Resource"
+    },
+    {
+      "group": "world",
+      "id": "W06",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Several individually valid resources fail jointly if compatibility/authority/load constraints are not satisfied.",
+      "refs": [
+        "world_r5"
+      ],
+      "requires": [
+        "interaction",
+        "composition",
+        "authority",
+        "capacity"
+      ],
+      "title": "Composition requires current requirements, assignments and native constraints"
+    },
+    {
+      "group": "world",
+      "id": "W07",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "BOUNDARY",
+        "M6": "BOUNDARY"
+      },
+      "pressure": "Observed domain Outcome cannot by itself assign causality to Action, Resource, Actor or environment.",
+      "refs": [
+        "world_r6"
+      ],
+      "requires": [
+        "attribution",
+        "causal_identification"
+      ],
+      "title": "Outcome does not identify actor/environment causal credit"
+    },
+    {
+      "group": "world",
+      "id": "W08",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Temporal order Knowledge→more Resources is not enough; exogenous changes remain possible.",
+      "refs": [
+        "world_r7"
+      ],
+      "requires": [
+        "history",
+        "attribution",
+        "feedback"
+      ],
+      "title": "Knowledge changes later discovery only if causal effect is shown"
+    },
+    {
+      "group": "world",
+      "id": "W09",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Same support can increase system capability and decrease internal practice; effect depends on boundary and horizon.",
+      "refs": [
+        "world_r7",
+        "human_capability"
+      ],
+      "requires": [
+        "nested_actor_boundary",
+        "signed_feedback",
+        "actor_state_update"
+      ],
+      "title": "Tool assistance adds joint capability while internal practice may fall"
+    },
+    {
+      "group": "world",
+      "id": "W10",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Performance decline can reflect decay/fatigue/non-use while retained substrate remains partly recoverable.",
+      "refs": [
+        "world_r7",
+        "human_capability"
+      ],
+      "requires": [
+        "actor_state_update",
+        "history",
+        "expression_vs_production"
+      ],
+      "title": "Human skill decay and relearning are not binary possession"
+    },
+    {
+      "group": "human",
+      "id": "H01",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Assistance can raise current output without proving internal acquisition.",
+      "refs": [
+        "human_capability",
+        "human_hypotheses"
+      ],
+      "requires": [
+        "nested_actor_boundary",
+        "realized_performance_vs_capability"
+      ],
+      "title": "Joint Human–Agent output is not retained Human capability"
+    },
+    {
+      "group": "human",
+      "id": "H02",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "High performance inside one employer can depend on internal systems/title/relationships and fail to transport outside.",
+      "refs": [
+        "human_econ_crosscase"
+      ],
+      "requires": [
+        "environment",
+        "transition_scope",
+        "transfer"
+      ],
+      "title": "Organization-specific specialist capability versus transferable capability"
+    },
+    {
+      "group": "human",
+      "id": "H03",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Fragmented work/continuity can suppress proof/expression of capability without showing its absence.",
+      "refs": [
+        "human_econ_crosscase"
+      ],
+      "requires": [
+        "environment",
+        "expression_vs_production",
+        "continuity"
+      ],
+      "title": "Precarious environment hides existing practical capability"
+    },
+    {
+      "group": "human",
+      "id": "H04",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Immediate supported performance and later unassisted learning can move in different directions.",
+      "refs": [
+        "human_capability",
+        "human_hypotheses"
+      ],
+      "requires": [
+        "interaction",
+        "actor_state_update",
+        "horizon"
+      ],
+      "title": "AI learning effect depends on interaction policy and target outcome"
+    },
+    {
+      "group": "human",
+      "id": "H05",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "System capability under support and actor/system recovery after support removal are distinct outcomes.",
+      "refs": [
+        "human_capability"
+      ],
+      "requires": [
+        "environment",
+        "recovery",
+        "nested_actor_boundary"
+      ],
+      "title": "Provider/tool removal probes recovery capability"
+    },
+    {
+      "group": "human",
+      "id": "H06",
+      "kind": "owner_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Human cross-case review found external support/obligation/rights structures change feasible actions and autonomy.",
+      "refs": [
+        "human_econ_crosscase"
+      ],
+      "requires": [
+        "institution_role",
+        "authority",
+        "ownership",
+        "exit"
+      ],
+      "title": "Institutions/employers/platforms/law alter feasibility and control"
+    },
+    {
+      "group": "agent",
+      "id": "A01",
+      "kind": "controlled_agent_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Weights and reasoning fixed; read-only versus write grant changes feasible consequential transitions.",
+      "refs": [
+        "computing_core",
+        "computing_capability"
+      ],
+      "requires": [
+        "institution_role",
+        "authority",
+        "feasible_action_set"
+      ],
+      "title": "Same model, different Tool grant"
+    },
+    {
+      "group": "agent",
+      "id": "A02",
+      "kind": "controlled_agent_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "ENOUGH",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Actor weights fixed; selected current evidence changes correct action while stale Context does not become actor capability.",
+      "refs": [
+        "computing_core"
+      ],
+      "requires": [
+        "environment",
+        "information",
+        "currentness"
+      ],
+      "title": "Same model, current Context versus stale Context"
+    },
+    {
+      "group": "agent",
+      "id": "A03",
+      "kind": "controlled_agent_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Model is fixed while support system expands feasible tasks; support capability is not model-intrinsic.",
+      "refs": [
+        "computing_capability",
+        "human_capability"
+      ],
+      "requires": [
+        "nested_actor_boundary",
+        "environment",
+        "resource_composition"
+      ],
+      "title": "Same model, Tool/harness support raises joint-system capability"
+    },
+    {
+      "group": "agent",
+      "id": "A04",
+      "kind": "controlled_agent_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Same cognition/goal can recover or lose progress depending on durable state/reconciliation substrate.",
+      "refs": [
+        "computing_capability"
+      ],
+      "requires": [
+        "environment",
+        "recovery",
+        "history"
+      ],
+      "title": "Recovery substrate changes whether failed work can continue"
+    },
+    {
+      "group": "agent",
+      "id": "A05",
+      "kind": "controlled_agent_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "A retained procedure may reduce later model-call burden without changing model weights; system state learns externally.",
+      "refs": [
+        "world_r7",
+        "computing_capability"
+      ],
+      "requires": [
+        "actor_system_state_update",
+        "history",
+        "feedback"
+      ],
+      "title": "Repeated externalization can change future cognitive burden"
+    },
+    {
+      "group": "external",
+      "id": "E01",
+      "kind": "external_causal_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Moving young children to lower-poverty neighborhoods improved later outcomes; gains declined with age at move.",
+      "refs": [
+        "EXT-MTO-2016"
+      ],
+      "requires": [
+        "environment",
+        "history",
+        "exposure_duration",
+        "actor_state_update"
+      ],
+      "title": "Randomized childhood neighborhood exposure has age/duration-dependent long-run effects"
+    },
+    {
+      "group": "external",
+      "id": "E02",
+      "kind": "external_causal_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Randomized customized search assistance substantially increased moves to high-opportunity neighborhoods.",
+      "refs": [
+        "EXT-CMTO-2024"
+      ],
+      "requires": [
+        "selection",
+        "information",
+        "search_friction"
+      ],
+      "title": "Search assistance changes environment assignment"
+    },
+    {
+      "group": "external",
+      "id": "E03",
+      "kind": "external_theory_evidence",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Current skills/investments affect productivity of later investments; static exposure coefficient is incomplete for this question.",
+      "refs": [
+        "EXT-SKILL-2007"
+      ],
+      "requires": [
+        "actor_state_update",
+        "history",
+        "stage",
+        "complementarity"
+      ],
+      "title": "Skill formation is stage-specific and dynamically complementary"
+    },
+    {
+      "group": "external",
+      "id": "E04",
+      "kind": "external_causal_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Effect expression changes across institutional conditions; fixed person effect is insufficient in this study.",
+      "refs": [
+        "EXT-GXI-PONGOU-2017"
+      ],
+      "requires": [
+        "interaction",
+        "institution_role",
+        "identification"
+      ],
+      "title": "Institution quality moderates biological/preconception effect in one natural experiment"
+    },
+    {
+      "group": "external",
+      "id": "E05",
+      "kind": "external_negative_evidence",
+      "modelVerdicts": {
+        "M0": "NA",
+        "M1": "NA",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Subgroup interaction patterns are not self-authenticating causal mechanisms.",
+      "refs": [
+        "EXT-GXE-CONLEY-2010"
+      ],
+      "requires": [
+        "selection",
+        "multiple_testing",
+        "identification"
+      ],
+      "title": "Stronger endogeneity controls can erase celebrated gene×environment interactions"
+    },
+    {
+      "group": "external",
+      "id": "E06",
+      "kind": "external_method_constraint",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Cross-sectional decomposition of outcome variance cannot answer what would happen under institutional/environmental intervention.",
+      "refs": [
+        "EXT-MANSKI-2011"
+      ],
+      "requires": [
+        "variance_vs_intervention",
+        "identification"
+      ],
+      "title": "Heritability variance decomposition is not policy intervention effect"
+    },
+    {
+      "group": "institution",
+      "id": "I01",
+      "kind": "external_theory_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Institutional role is more specific than generic context when counterfactual concerns rules/norms/strategies.",
+      "refs": [
+        "EXT-INST-OSTROM-1995"
+      ],
+      "requires": [
+        "institution_role",
+        "recurrent_rules",
+        "action_situation"
+      ],
+      "title": "Rules/norms/shared strategies structure recurrent action situations"
+    },
+    {
+      "group": "institution",
+      "id": "I02",
+      "kind": "external_theory_evidence",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "BOUNDARY",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Institutions need not be exogenous; current rules affect resources/power that can alter future rules.",
+      "refs": [
+        "EXT-INST-AJR-2004"
+      ],
+      "requires": [
+        "institution_update",
+        "resource_distribution",
+        "power",
+        "feedback"
+      ],
+      "title": "Resource distribution and political institutions jointly change future power/rules"
+    },
+    {
+      "group": "institution",
+      "id": "I03",
+      "kind": "external_competing_evidence",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "High-level institutional correlations admit materially different causal interpretations; CF must not canonize one side from cross-country association.",
+      "refs": [
+        "EXT-INST-AJR-2004",
+        "EXT-INST-GLAESER-2004"
+      ],
+      "requires": [
+        "identification",
+        "competing_causal_model"
+      ],
+      "title": "Institutions-fundamental versus human-capital-first disagreement"
+    },
+    {
+      "group": "institution",
+      "id": "I04",
+      "kind": "synthetic_institution_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Holding actor/resources fixed, one rule change can make an action inadmissible or redirect ownership of the same physical effect.",
+      "refs": [],
+      "requires": [
+        "institution_role",
+        "authority",
+        "ownership"
+      ],
+      "title": "Authority rule changes action, ownership rule changes who captures effect"
+    },
+    {
+      "group": "institution",
+      "id": "I05",
+      "kind": "synthetic_institution_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "BOUNDARY",
+        "M2": "ENOUGH",
+        "M3": "ENOUGH",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Bankruptcy/rollback/safety-net-like recovery changes viable experimentation set without changing immediate technical skill.",
+      "refs": [],
+      "requires": [
+        "institution_role",
+        "recovery",
+        "option_set"
+      ],
+      "title": "Failure recovery rule changes willingness to explore under identical current capability"
+    },
+    {
+      "group": "selection",
+      "id": "S01",
+      "kind": "synthetic_identification_falsifier",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Observed environment-outcome association overstates exposure effect when actor state affects assignment.",
+      "refs": [
+        "human_method"
+      ],
+      "requires": [
+        "selection",
+        "confounding"
+      ],
+      "title": "High-capability actors preferentially enter high-resource environments"
+    },
+    {
+      "group": "selection",
+      "id": "S02",
+      "kind": "synthetic_identification_falsifier",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Comparing admitted versus rejected participants can manufacture an apparent institution effect even with identical treatment inside the institution.",
+      "refs": [
+        "human_method"
+      ],
+      "requires": [
+        "selection",
+        "collider",
+        "unobserved_trait"
+      ],
+      "title": "Institution selects actors on hidden traits"
+    },
+    {
+      "group": "dynamic",
+      "id": "D01",
+      "kind": "synthetic_dynamic_falsifier",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "If histories changed retained state, a current static snapshot cannot reconstruct later capability.",
+      "refs": [
+        "EXT-MTO-2016",
+        "EXT-SKILL-2007"
+      ],
+      "requires": [
+        "history",
+        "actor_state_update"
+      ],
+      "title": "Same current environment, different prior exposure histories"
+    },
+    {
+      "group": "dynamic",
+      "id": "D02",
+      "kind": "synthetic_dynamic_falsifier",
+      "modelVerdicts": {
+        "M0": "BOUNDARY",
+        "M1": "BOUNDARY",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "ENOUGH",
+        "M5": "ENOUGH",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Equal observed performance can hide different retained substrate and future recovery capability.",
+      "refs": [
+        "world_r7",
+        "human_capability"
+      ],
+      "requires": [
+        "latent_substrate",
+        "history",
+        "relearning"
+      ],
+      "title": "Same current performance, different recovery/relearning trajectories"
+    },
+    {
+      "group": "dynamic",
+      "id": "D03",
+      "kind": "synthetic_coevolution_falsifier",
+      "modelVerdicts": {
+        "M0": "FAIL",
+        "M1": "FAIL",
+        "M2": "BOUNDARY",
+        "M3": "BOUNDARY",
+        "M4": "BOUNDARY",
+        "M5": "BOUNDARY",
+        "M6": "ENOUGH"
+      },
+      "pressure": "Treating institution as fixed misses feedback from outcomes/population/resources to future institutional state.",
+      "refs": [
+        "EXT-INST-AJR-2004"
+      ],
+      "requires": [
+        "actor_state_update",
+        "institution_update",
+        "feedback",
+        "selection"
+      ],
+      "title": "Institution changes actor investment, actor success shifts future rule support"
+    }
+  ],
+  "externalRefs": [
+    {
+      "boundary": "Country growth/political-economy framework is not a universal Ordivon institution ontology.",
+      "doi": "10.3386/w10481",
+      "id": "EXT-INST-AJR-2004",
+      "pressure": "Institutions shape incentives/constraints; political institutions and resource distribution jointly shape power and institutional evolution.",
+      "source": "Acemoglu, Johnson & Robinson, Institutions as the Fundamental Cause of Long-Run Growth, NBER w10481 (2004)",
+      "url": "https://www.nber.org/papers/w10481"
+    },
+    {
+      "boundary": "Does not establish human capital as universal cause; used as anti-strawman institutional baseline.",
+      "doi": "10.3386/w10568",
+      "id": "EXT-INST-GLAESER-2004",
+      "pressure": "Strong negative pressure against assuming institutional measures identify fundamental causality; human capital/policy may be more basic under alternative interpretation.",
+      "source": "Glaeser, La Porta, Lopez-de-Silanes & Shleifer, Do Institutions Cause Growth?, NBER w10568 (2004)",
+      "url": "https://www.nber.org/papers/w10568"
+    },
+    {
+      "boundary": "Grammar is not imported as a World schema.",
+      "doi": "10.2307/2082975",
+      "id": "EXT-INST-OSTROM-1995",
+      "pressure": "Institutions are recurrent action regularities structured by rules, norms, shared strategies and the physical world, reconstituted by interaction.",
+      "source": "Crawford & Ostrom, A Grammar of Institutions, APSR 89(3) (1995)",
+      "url": "https://www.cambridge.org/core/journals/american-political-science-review/article/grammar-of-institutions/7D37CD3BC5ED2D9FD57D2EE292958F47"
+    },
+    {
+      "boundary": "Neighborhood effects do not identify one generic environment mechanism or apply to every capability domain.",
+      "doi": "10.1257/aer.20150572",
+      "id": "EXT-MTO-2016",
+      "pressure": "Randomized moves show age/duration of childhood exposure changes long-run outcomes; static current environment is insufficient for this question.",
+      "source": "Chetty, Hendren & Katz, Effects of Exposure to Better Neighborhoods on Children, AER 106(4) (2016)",
+      "url": "https://www.aeaweb.org/articles?id=10.1257/aer.20150572"
+    },
+    {
+      "boundary": "One housing-choice intervention does not imply all environment selection is friction rather than preference.",
+      "doi": "10.1257/aer.20200407",
+      "id": "EXT-CMTO-2024",
+      "pressure": "Randomized customized search assistance changed entry into high-opportunity neighborhoods from 15% to 53%; assignment to environments can depend on search/bandwidth barriers.",
+      "source": "Bergman et al., Creating Moves to Opportunity, AER 114(5) (2024)",
+      "url": "https://www.aeaweb.org/articles?id=10.1257/aer.20200407"
+    },
+    {
+      "boundary": "Child skill-production technology is not a universal actor update equation.",
+      "doi": "10.3386/w12840",
+      "id": "EXT-SKILL-2007",
+      "pressure": "Skill formation is stage-specific with self-productivity and dynamic complementarity; actor state can be path- and timing-dependent.",
+      "source": "Cunha & Heckman, The Technology of Skill Formation, NBER w12840/AER 97(2) (2007)",
+      "url": "https://www.nber.org/papers/w12840"
+    },
+    {
+      "boundary": "Does not deny genetic contributions; separates variance attribution from policy-relevant causal questions.",
+      "doi": "10.1257/jep.25.4.83",
+      "id": "EXT-MANSKI-2011",
+      "pressure": "Cross-sectional heritability decomposition is not policy intervention identification.",
+      "source": "Manski, Genes, Eyeglasses, and Social Policy, JEP 25(4) (2011)",
+      "url": "https://www.aeaweb.org/articles?id=10.1257/jep.25.4.83"
+    },
+    {
+      "boundary": "Narrow empirical interaction; not a universal gene×institution law.",
+      "doi": "10.1257/aer.p20171146",
+      "id": "EXT-GXI-PONGOU-2017",
+      "pressure": "One natural-experiment/twin analysis finds institutional improvement changes expression of biological/preconception effects.",
+      "source": "Pongou, Kuate Defo & Tsala Dimbuene, Excess Male Infant Mortality: The Gene-Institution Interactions, AER 107(5) (2017)",
+      "url": "https://www.aeaweb.org/articles?id=10.1257/aer.p20171146"
+    },
+    {
+      "boundary": "Does not imply no interaction ever exists; raises identification burden.",
+      "doi": "10.3386/w16026",
+      "id": "EXT-GXE-CONLEY-2010",
+      "pressure": "Negative evidence: stronger endogeneity and multiple-testing controls fail to reproduce several celebrated gene×environment interactions.",
+      "source": "Conley & Rauscher, Genetic Interactions with Prenatal Social Environment, NBER w16026 (2010)",
+      "url": "https://www.nber.org/papers/w16026"
+    }
+  ],
+  "kind": "ordivon.world.capability-field-cf0-problem-space-matrix",
+  "modelCompetitionAudit": {
+    "incrementalOverImmediateSimpler": {
+      "M1": 3,
+      "M2": 18,
+      "M3": 0,
+      "M4": 9,
+      "M5": 6,
+      "M6": 2
+    },
+    "m3Disposition": "NOT_INDEPENDENT_PREDICTIVE_FAMILY_AT_CF0",
+    "m3Reason": "No frozen discriminator is ENOUGH under M3 while not ENOUGH under the strong M2 static-interaction baseline. Transition-topology remains a candidate mechanism/causal decomposition only; CF3 must show intervention, identification, owner-placement, recovery, or deletion value beyond generic interaction before it can be promoted as a distinct model family.",
+    "verdictCounts": {
+      "M0": {
+        "BOUNDARY": 9,
+        "ENOUGH": 1,
+        "FAIL": 29,
+        "NA": 1
+      },
+      "M1": {
+        "BOUNDARY": 23,
+        "ENOUGH": 4,
+        "FAIL": 12,
+        "NA": 1
+      },
+      "M2": {
+        "BOUNDARY": 18,
+        "ENOUGH": 22
+      },
+      "M3": {
+        "BOUNDARY": 18,
+        "ENOUGH": 22
+      },
+      "M4": {
+        "BOUNDARY": 9,
+        "ENOUGH": 31
+      },
+      "M5": {
+        "BOUNDARY": 3,
+        "ENOUGH": 37
+      },
+      "M6": {
+        "BOUNDARY": 1,
+        "ENOUGH": 39
+      }
+    }
+  },
+  "modelFamilies": {
+    "M0": {
+      "incrementalGate": "Environment/institution changes add no decision-relevant prediction after actor state is known.",
+      "minimumState": [
+        "actor_state",
+        "demand"
+      ],
+      "name": "actor-only"
+    },
+    "M1": {
+      "incrementalGate": "Independent main effects preserve relevant counterfactual rankings; interactions/history/selection add no decision change.",
+      "minimumState": [
+        "actor_state",
+        "environment_main_effect",
+        "institution_main_effect",
+        "demand"
+      ],
+      "name": "additive-context"
+    },
+    "M2": {
+      "incrementalGate": "Strong baseline for CF1: richer models must expose a missing responsibility rather than hide complexity in generic interactions.",
+      "minimumState": [
+        "actor_state",
+        "environment",
+        "institution_role",
+        "resources",
+        "demand",
+        "interactions"
+      ],
+      "name": "static-interaction-production"
+    },
+    "M3": {
+      "cf0Disposition": "MECHANISM_DECOMPOSITION_CANDIDATE_NOT_INDEPENDENT_PREDICTIVE_FAMILY",
+      "incrementalGate": "Rules change which transitions are admissible/owned/recoverable, not merely expected output.",
+      "minimumState": [
+        "M2",
+        "feasible_action_set",
+        "authority",
+        "ownership",
+        "enforcement",
+        "recovery"
+      ],
+      "name": "transition-topology"
+    },
+    "M4": {
+      "incrementalGate": "Different histories with similar current conditions predict different later capability.",
+      "minimumState": [
+        "M2_or_M3",
+        "history",
+        "actor_state_update",
+        "feedback",
+        "exposure_duration_or_stage"
+      ],
+      "name": "dynamic-capitalization"
+    },
+    "M5": {
+      "incrementalGate": "Observed environment/institution exposure is endogenous enough that causal exposure cannot be identified from outcome differences.",
+      "minimumState": [
+        "M2_or_M4",
+        "assignment_process",
+        "selection_variables",
+        "counterfactual_exposure"
+      ],
+      "name": "endogenous-selection-sorting"
+    },
+    "M6": {
+      "incrementalGate": "Institution trajectory itself depends on actor/resource/power outcomes and this feedback changes later prediction/intervention.",
+      "minimumState": [
+        "M4_or_M5",
+        "institution_update",
+        "resource_or_power_distribution",
+        "population_feedback"
+      ],
+      "name": "actor-institution-coevolution"
+    }
+  },
+  "observedAtMs": 1786823245263,
+  "questionFamilies": [
+    {
+      "id": "Q1",
+      "name": "outcome_attribution"
+    },
+    {
+      "id": "Q2",
+      "name": "capability_identification"
+    },
+    {
+      "id": "Q3",
+      "name": "capability_production"
+    },
+    {
+      "id": "Q4",
+      "name": "capability_expression_unmasking"
+    },
+    {
+      "id": "Q5",
+      "name": "resource_access_allocation"
+    },
+    {
+      "id": "Q6",
+      "name": "learning_capitalization"
+    },
+    {
+      "id": "Q7",
+      "name": "selection_sorting"
+    },
+    {
+      "id": "Q8",
+      "name": "institutional_mechanism"
+    },
+    {
+      "id": "Q9",
+      "name": "coevolution_change"
+    },
+    {
+      "id": "Q10",
+      "name": "normative_evaluation_separate"
+    }
+  ],
+  "schemaVersion": 1,
+  "solutionSpaceGeometry": {
+    "dimensions": {
+      "actorScales": 6,
+      "evidenceRegimes": 5,
+      "interventionTargets": 6,
+      "mechanismFamilies": 10,
+      "objectiveClasses": 4,
+      "rootQuestions": 10,
+      "timeScales": 5
+    },
+    "heuristicRawCells": 360000,
+    "notLiteralTaskCount": true,
+    "orderOfMagnitude": "1e5-1e6 with cross-domain transport"
+  },
+  "sourceRefs": {
+    "computing_capability": {
+      "digest": "sha256:a991296ee3ccdee98e7d3141d22f7d9e7fdbeb9c0cb9aa3bc4215957e331282d",
+      "path": "knowledge/agents/capability-externalization-and-responsibility-placement.md",
+      "repo": "ordivon-computing",
+      "revision": "acd896688c26a5ea0dad22d66c7ea30882b1b245"
+    },
+    "computing_core": {
+      "digest": "sha256:7540af01cce2f846631f80094456630653d3bea481d386ed3fa1610ea8467cc1",
+      "path": "core/foundations.md",
+      "repo": "ordivon-computing",
+      "revision": "acd896688c26a5ea0dad22d66c7ea30882b1b245"
+    },
+    "human_capability": {
+      "digest": "sha256:f6460a0e313eeba035f19138ac8c74c1722c8fef4744d61cd7e78e8ad7a0cd54",
+      "path": "research/agentic-capability/README.md",
+      "repo": "ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "human_econ_crosscase": {
+      "digest": "sha256:20ed0d5191f05679497c34139f501ff0164ac640c272d6c84051df553e7ed039",
+      "path": "research/economy/cases/CROSS-CASE-REVIEW.md",
+      "repo": "ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "human_hypotheses": {
+      "digest": "sha256:aab63a2833a72f5758026583dea105266c904881970f3e90ff5cc66fe76ae2ef",
+      "path": "research/agentic-capability/HYPOTHESES.md",
+      "repo": "ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "human_method": {
+      "digest": "sha256:ace47741cea99a37ea7f0eaa6267d70bd6b5a89087998215a7db6a3d7fee89f8",
+      "path": "methods/METHODOLOGY.md",
+      "repo": "ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "world_r1": {
+      "digest": "sha256:63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2",
+      "path": "docs/resource-ontology-r1-theory-triangulation.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    },
+    "world_r10": {
+      "digest": "sha256:46357a83994dcfb2f9b9ba17edc5f908d934a4f8fdea2edd60e5129c4365ae91",
+      "path": "docs/resource-option-capability-model.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    },
+    "world_r3": {
+      "digest": "sha256:b5d7697736a458678b700835c379dd231d317ad62ae689c0c4b22b67af94e85a",
+      "path": "docs/resource-ontology-r3-relation-model.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    },
+    "world_r5": {
+      "digest": "sha256:154fae1112e3c5ff453a91699382752b0ad5ec3ba5f33c5633805090500e50a6",
+      "path": "docs/resource-ontology-r5-composition-falsification.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    },
+    "world_r6": {
+      "digest": "sha256:d422166286a218605b2fedaedf0fd752db8733bcba44214257fb25dc3104c5d7",
+      "path": "docs/resource-ontology-r6-conversion-falsification.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    },
+    "world_r7": {
+      "digest": "sha256:3217f88b9ca6d0fe0ec804778826715ea8a6be6dc579eb6b739f3d4e987754b8",
+      "path": "docs/resource-ontology-r7-ecology-dynamics-falsification.md",
+      "repo": "ordivon-world",
+      "revision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+    }
+  },
+  "status": "CF0_PROBLEM_SPACE_FROZEN"
+}

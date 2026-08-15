@@ -1,0 +1,119 @@
+{
+  "artifacts": {
+    "closeout": {
+      "digest": "sha256:3723f8b077c76ffaef957428f136fa4ed37ee9ec62935962e3df4b957c4af3d9",
+      "path": "docs/capability-field-cf0-closeout.md"
+    },
+    "matrix": {
+      "digest": "sha256:717fab06b98117d86ebb09418a97d4853ba5991582d57475afbda51f60e96993",
+      "path": "evidence/acceptance/capability-field-cf0-matrix-20260816.json"
+    },
+    "problemSpace": {
+      "digest": "sha256:eea1b1879fae4cd6de0fb1a2bd34bc5cf0e3908b2f4933d8aaa3f9a8d10c58fa",
+      "path": "docs/capability-field-cf0-problem-space.md"
+    },
+    "researchIndex": {
+      "digest": "sha256:3142c5b01ab6553643ae372f4462a5a79ab638cc8907b386e8e54acf0789b879",
+      "path": "docs/research-closeouts.md"
+    }
+  },
+  "candidateBoundary": {
+    "CapabilityField": "RESEARCH_SHORTHAND_REJECT_PERSISTED_PRIMITIVE",
+    "CapabilityInstitutionCoevolution": "OPEN_RESEARCH_HYPOTHESIS",
+    "CapabilityUnmasking": "DERIVED_CANDIDATE",
+    "Environment": "KEEP_CAUSAL_ROLE_REJECT_COMPLETE_SNAPSHOT",
+    "EnvironmentalCapitalization": "RESEARCH_DISTINCTION",
+    "Institution": "KEEP_CAUSAL_ROLE_REJECT_UNIVERSAL_OBJECT",
+    "InstitutionQualityScalar": "REJECT_ADD",
+    "InstitutionalConversionTopology": "MECHANISM_DECOMPOSITION_CANDIDATE_NOT_MODEL_FAMILY",
+    "RelationalCapability": "EXISTING_DOCTRINE",
+    "SelectionSorting": "REQUIRED_IDENTIFICATION_ROLE"
+  },
+  "interpretationBoundary": [
+    "Model verdict counts are not scalar model quality scores.",
+    "M3 zero incremental cases is a CF0 negative result, not proof that institutional mechanisms never matter.",
+    "External evidence constrains identification/model families but does not become Ordivon owner-native truth.",
+    "CF0 does not promote CapabilityField, Institution, EnvironmentSnapshot or InstitutionQuality as production primitives."
+  ],
+  "kind": "ordivon.world.capability-field-cf0-validation",
+  "matrix": {
+    "digest": "sha256:717fab06b98117d86ebb09418a97d4853ba5991582d57475afbda51f60e96993",
+    "discriminators": 40,
+    "externalRefs": 9,
+    "incrementalOverImmediateSimpler": {
+      "M1": 3,
+      "M2": 18,
+      "M3": 0,
+      "M4": 9,
+      "M5": 6,
+      "M6": 2
+    },
+    "m3Incremental": 0,
+    "modelVerdictCounts": {
+      "M0": {
+        "BOUNDARY": 9,
+        "ENOUGH": 1,
+        "FAIL": 29,
+        "NA": 1
+      },
+      "M1": {
+        "BOUNDARY": 23,
+        "ENOUGH": 4,
+        "FAIL": 12,
+        "NA": 1
+      },
+      "M2": {
+        "BOUNDARY": 18,
+        "ENOUGH": 22
+      },
+      "M3": {
+        "BOUNDARY": 18,
+        "ENOUGH": 22
+      },
+      "M4": {
+        "BOUNDARY": 9,
+        "ENOUGH": 31
+      },
+      "M5": {
+        "BOUNDARY": 3,
+        "ENOUGH": 37
+      },
+      "M6": {
+        "BOUNDARY": 1,
+        "ENOUGH": 39
+      }
+    },
+    "models": 7,
+    "questions": 10,
+    "sourceDigestsMatched": true,
+    "sourceRefs": 12
+  },
+  "mutationBoundary": {
+    "canonicalResourceDoctrineModified": false,
+    "newSchemaServiceRegistry": false,
+    "productionSourceModified": false,
+    "publishedContractsModified": false,
+    "researchPathsOnly": true
+  },
+  "observedAtMs": 1786823506409,
+  "postCommitRequirement": "Re-run offline World doctor after commit; repository dirtiness must disappear without any additional production mutation.",
+  "repositoryChecks": {
+    "compileall": "PASS",
+    "contractsCheck": "PASS (7 schemas / 6 provider fixtures)",
+    "dependencyCheck": "PASS",
+    "docsCheck": "PASS (60 markdown / 92 local links)",
+    "doctorDirtyPaths": [
+      "docs/capability-field-cf0-closeout.md",
+      "docs/capability-field-cf0-problem-space.md",
+      "docs/research-closeouts.md",
+      "evidence/acceptance/capability-field-cf0-matrix-20260816.json"
+    ],
+    "gitDiffCheck": "PASS",
+    "offlineDoctorPreCommit": "ATTENTION_ONLY_EXPECTED_DIRTY_RESEARCH_PATHS",
+    "pythonUnittest": "158/158 PASS",
+    "uvLockCheck": "PASS"
+  },
+  "result": "PASS_WITH_EXPECTED_PRECOMMIT_DIRTY_DOCTOR",
+  "schemaVersion": 1,
+  "sourceRevision": "eb2c0bdd6487864d3726a912c905eea87b8c1cfb"
+}
