@@ -1,0 +1,2698 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r8-evidence-resource-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "b03b40f0adf15df37f284bd0ef9cd9f48ed35bda",
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "b03b40f0adf15df37f284bd0ef9cd9f48ed35bda"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "sourceFiles": {
+    "W_R1": {
+      "path": "docs/resource-ontology-r1-theory-triangulation.md",
+      "sha256": "sha256:63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2"
+    },
+    "W_R2": {
+      "path": "docs/resource-ontology-r2-definition-falsification.md",
+      "sha256": "sha256:97a3765d58a74cfdc1f6c3df8076b77f6acb867ae196391ed7c3145e6603cd11"
+    },
+    "W_R3": {
+      "path": "docs/resource-ontology-r3-relation-model.md",
+      "sha256": "sha256:b5d7697736a458678b700835c379dd231d317ad62ae689c0c4b22b67af94e85a"
+    },
+    "W_R6": {
+      "path": "docs/resource-ontology-r6-conversion-falsification.md",
+      "sha256": "sha256:d422166286a218605b2fedaedf0fd752db8733bcba44214257fb25dc3104c5d7"
+    },
+    "W_MODEL": {
+      "path": "docs/resource-option-capability-model.md",
+      "sha256": "sha256:6aec276db2f06f2abe222d07e96527bad4e1144209206d3a8388774533075bc7"
+    },
+    "W_DISC": {
+      "path": "src/ordivon_world/resource_discovery.py",
+      "sha256": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840"
+    },
+    "W_MSG": {
+      "path": "tests/test_message_delivery.py",
+      "sha256": "sha256:f516a322f0ebbc1e455302ddc30ca7a1ecca5cd3bf542d868a7002aed3d78324"
+    },
+    "W_RELAY": {
+      "path": "tests/test_w1_relay_provenance.py",
+      "sha256": "sha256:75428c4094627142bce792f32fc5eb3fe0f1fca8d5230eb2d64876130fcdc7b2"
+    },
+    "W_TIME": {
+      "path": "tests/test_observation_time.py",
+      "sha256": "sha256:25db9b2f077bcd5e1aee8e8d0da8b534aa5ad5fbebd254ec1e68da7ea81c72ac"
+    },
+    "F_ARCH": {
+      "path": "/root/projects/ordivon-finance/design/AGENT-FIRST-ARCHITECTURE.md",
+      "sha256": "sha256:fd70d4db33473b97d0ef8bfb8f95baa9e7765c70d1a1082469190c58350beae1"
+    },
+    "F_SEM": {
+      "path": "/root/projects/ordivon-finance/design/FINANCIAL-RESOURCE-SEMANTICS.md",
+      "sha256": "sha256:625d11180450c289e0c2c6a7914b0b25fddc6ece3677156be2f53f8244947e67"
+    },
+    "F_PERF": {
+      "path": "/root/projects/ordivon-finance/design/OWNER-OBJECTIVE-PERFORMANCE.md",
+      "sha256": "sha256:296206d5016e7dc9a84475ae9ac033b107c033c0386e24e58c237a897dcd46bb"
+    },
+    "F_FR2": {
+      "path": "/root/projects/ordivon-finance/research/financial_resource/FR2-MODEL-COMPETITION.md",
+      "sha256": "sha256:cf0a4f7620527749d6ce08c762bf6dfd2bcccd45b898331c6e3525151f7b0170"
+    },
+    "F_QB3C": {
+      "path": "/root/projects/ordivon-finance/evidence/qb3c-protocol-dogfood-20260812.json",
+      "sha256": "sha256:801dfce5103c8dfeed6994a64eabba7ea3bae9e7ddff27f88d0a38675d9faaee"
+    },
+    "F_QB3CR": {
+      "path": "/root/projects/ordivon-finance/evidence/qb3c-constitution-only-replication-20260812.json",
+      "sha256": "sha256:626113c8f2ff1008ee01e2e8a2ab46abe5c90152ba32cb5b09f0cb6859334512"
+    },
+    "G_GV": {
+      "path": "/root/projects/ordivon-game/docs/STATION_ZERO_V3_DOMAIN_VALUE_GV.md",
+      "sha256": "sha256:1af7135e306069835457a0f86807d532d5887fbabb605e0bbe17637779a398df"
+    },
+    "G_DEV": {
+      "path": "/root/projects/ordivon-game/docs/DEVELOPMENT_MODEL.md",
+      "sha256": "sha256:93462b906fd8856bc6c1a3f37fb1c3d45ac1d9a3453ba83dda776631a63bf6c0"
+    },
+    "S_FAST": {
+      "path": "/root/projects/ordivon-studio/docs/fast-inner-loop.md",
+      "sha256": "sha256:de9f400643f4dcfe2a484bfff80e246fd0826fc05a90b4571a5ece9e759bdb7f"
+    },
+    "S_TECH": {
+      "path": "/root/projects/ordivon-studio/docs/technical-baseline.md",
+      "sha256": "sha256:f5416e7d9eb1b2c02ed4fe1585eef56aa70509ebf791ef250877dcb519d0bc2a"
+    },
+    "S_SOURCES": {
+      "path": "/root/projects/ordivon-studio/research/equipment/sources.json",
+      "sha256": "sha256:e19012d358d1cbecee6b423ec11862bc0d883216db4758d9315d42dfccad838d"
+    },
+    "S_E8": {
+      "path": "/root/projects/ordivon-studio/research/equipment/experiments/e8-capability-expansion-consumption.md",
+      "sha256": "sha256:2747d00fb10945b10bf053858341c0231b50d1b4b42e7447b6d3e657f7da981a"
+    },
+    "S_RUN": {
+      "path": "/root/projects/ordivon-studio/productions/runtime-introduction/README.md",
+      "sha256": "sha256:a10b59958cf09c420cf1fb6015f6217d2f1fa064bd73bd161c9f6dcc7fbb923e"
+    },
+    "Q_R1": {
+      "path": "/root/projects/ordivon-security/evidence/experiments/round1-20260730.json",
+      "sha256": "sha256:14744575eee63145e015fae7b3bcaa09904f318eaac31318b5a493df49dae6f0"
+    },
+    "Q_LIC": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/ca-lic-r1-e919ea5.json",
+      "sha256": "sha256:ca68d1c161ae33268791eb8ad74bc1a55a9277bb590f2881fd180a5ed24457a7"
+    },
+    "Q_CASE": {
+      "path": "/root/projects/ordivon-security/research/cases/windows-kvm-p1-caseb-d-static-baseline.json",
+      "sha256": "sha256:8322fd688d6ef80b01980ee155bd7f0dfc3a032cfc9bd8457ee9b4e4a6749cea"
+    },
+    "H_METH": {
+      "path": "/root/projects/ordivon-human/methods/METHODOLOGY.md",
+      "sha256": "sha256:ace47741cea99a37ea7f0eaa6267d70bd6b5a89087998215a7db6a3d7fee89f8"
+    },
+    "H_CLOSE": {
+      "path": "/root/projects/ordivon-human/methods/m0/CLOSEOUT.md",
+      "sha256": "sha256:3347eccb3a9f1f66b31795f7fd740b8400d5d779b589d8d9ed05aebbb098fd30"
+    },
+    "H_POP": {
+      "path": "/root/projects/ordivon-human/methods/m0/evidence/population-to-individual.json",
+      "sha256": "sha256:0111d0943196671b2145719078129bcb580e2bd6988af71f17d0dc228e06569f"
+    },
+    "H_TRANS": {
+      "path": "/root/projects/ordivon-human/research/agentic-capability/EVIDENCE-TRANSPORT.md",
+      "sha256": "sha256:64d86e069e2aac1734f1d4db329c9e099e66d0b52309bbecd67372b0aa0a2ec0"
+    },
+    "H_CONTRACT": {
+      "path": "/root/projects/ordivon-human/research/agentic-capability/CONTRACTION-20260814.md",
+      "sha256": "sha256:a578b6bdbca609e2d53039d53e6c8869af76276d949091a4ad9d8b5703067757"
+    },
+    "HA_P1": {
+      "path": "/root/projects/ordivon-harness/docs/P1-REUSABLE-KNOWLEDGE-PROCEDURAL-CAPITAL-CLOSEOUT.md",
+      "sha256": "sha256:1900a2da14866337c8cf361fa5dee8a3d2ae0ebab8707b4625ea438178d6712c"
+    },
+    "N_NX6": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx6-strong-roots-node-expansion-20260812.json",
+      "sha256": "sha256:0567c4d5922ee1263277c349679a5be87aedbb08bcb8fd7ea267ae8bb0f9f501"
+    },
+    "N_SEM": {
+      "path": "/root/workstation-lab/docs/semantic-mcp.md",
+      "sha256": "sha256:f090a773372fcb3d76a7dc87f6b37fb5261ba8bbadfe3086bed631edfaa28e50"
+    }
+  },
+  "sourceRefs": {
+    "W01": {
+      "fileKey": "W_R3",
+      "needle": "Transition-witness provenance is not optional, and evidence support must preserve which native claim supports which transition witness."
+    },
+    "W02": {
+      "fileKey": "W_R3",
+      "needle": "ResourceCandidate.capabilities` is suitable as a discovery hint, but a specific `ResourceFor(capability/transition)` or current `consumable-now` judgment must not treat an unbound candidate label as independently verified semantic capability truth."
+    },
+    "W03": {
+      "fileKey": "W_MSG",
+      "needle": "test_delivery_does_not_promote_foreign_claim_to_destination_knowledge"
+    },
+    "W04": {
+      "fileKey": "W_RELAY",
+      "needle": "test_end_to_end_authentication_does_not_promote_claim_to_destination_knowledge"
+    },
+    "W05": {
+      "fileKey": "W_TIME",
+      "needle": "test_world_observation_retains_provider_time_and_world_availability_separately"
+    },
+    "W06": {
+      "fileKey": "W_R2",
+      "needle": "→ Evidence Resource for past admission"
+    },
+    "W07": {
+      "fileKey": "W_R1",
+      "needle": "information amount != decision value"
+    },
+    "W08": {
+      "fileKey": "W_R6",
+      "needle": "Knowledge is an externally/domain-promoted reusable claim that can arise from successful, failed, invalid or uncertain episodes when evidence changes future prediction/selection."
+    },
+    "W09": {
+      "fileKey": "W_R6",
+      "needle": "Empty/missing observations cannot be promoted to absence or outcome truth; source/domain owners retain evidence semantics."
+    },
+    "W10": {
+      "fileKey": "W_MODEL",
+      "needle": "Historical evidence remains historical. Current action still requires current owner facts where currentness matters."
+    },
+    "W11": {
+      "fileKey": "W_DISC",
+      "needle": "``diversity_potential`` is only a discovery/ranking heuristic for expected"
+    },
+    "W12": {
+      "fileKey": "W_DISC",
+      "needle": "evidence_quality += 0.45 if owner_current else 0.2"
+    },
+    "F01": {
+      "fileKey": "F_SEM",
+      "needle": "UNKNOWN is not FAIL."
+    },
+    "F02": {
+      "fileKey": "F_SEM",
+      "needle": "STALE is not current truth."
+    },
+    "F03": {
+      "fileKey": "F_SEM",
+      "needle": "Venue contract mechanics are time-bound observations, not eternal Finance law."
+    },
+    "F04": {
+      "fileKey": "F_FR2",
+      "needle": "A later transition must not leak backwards through an older interval."
+    },
+    "F05": {
+      "fileKey": "F_FR2",
+      "needle": "is intentionally a falsification corpus and is **not** primary-source authority."
+    },
+    "F06": {
+      "fileKey": "F_FR2",
+      "needle": "A production ingestion must preserve the actual issuer/regulator/venue bytes as Evidence and bind normalized rows to that evidence"
+    },
+    "F07": {
+      "fileKey": "F_PERF",
+      "needle": "An empty Capital Ledger is not proof that no external capital flow occurred."
+    },
+    "F08": {
+      "fileKey": "F_PERF",
+      "needle": "Missing, partial or failed coverage keeps performance unavailable."
+    },
+    "F09": {
+      "fileKey": "F_PERF",
+      "needle": "This still does not prove Agent alpha."
+    },
+    "F10": {
+      "fileKey": "F_QB3C",
+      "needle": "A context treatment earns default status only through stable replicated sealed benefit, not persuasive rationale or one favorable carrier."
+    },
+    "F11": {
+      "fileKey": "F_QB3CR",
+      "needle": "effectiveIndependentTrials"
+    },
+    "F12": {
+      "fileKey": "F_QB3CR",
+      "needle": "single-carrier-two-arm-sealed-replication-not-general-law"
+    },
+    "G01": {
+      "fileKey": "G_GV",
+      "needle": "External evidence is used as a **falsifier generator**, not as imported requirements."
+    },
+    "G02": {
+      "fileKey": "G_GV",
+      "needle": "External evidence therefore expands coverage without deciding the implementation."
+    },
+    "G03": {
+      "fileKey": "G_GV",
+      "needle": "Difference alone is not sufficient evidence of player value."
+    },
+    "G04": {
+      "fileKey": "G_GV",
+      "needle": "live cognition improves player value       UNPROVEN"
+    },
+    "G05": {
+      "fileKey": "G_GV",
+      "needle": "Agent/model review may pre-falsify copy, hierarchy, hidden-information leaks, causal inconsistency, or obvious routing defects. It may not be relabeled as evidence of delight, preference, suspense, attachment, or replay desire."
+    },
+    "G06": {
+      "fileKey": "G_GV",
+      "needle": "Do not require a large population before fixing a clear repeated usability defect."
+    },
+    "G07": {
+      "fileKey": "G_GV",
+      "needle": "The current owner/developer is not a clean substitute for a fresh player because prior implementation knowledge changes the test."
+    },
+    "G08": {
+      "fileKey": "G_DEV",
+      "needle": "Simulation volume does not substitute for experience judgment."
+    },
+    "S01": {
+      "fileKey": "S_FAST",
+      "needle": "builds **disposable review evidence**"
+    },
+    "S02": {
+      "fileKey": "S_FAST",
+      "needle": "It is not automatically registered as an Asset, Production Output, Claim, Receipt, or durable research result."
+    },
+    "S03": {
+      "fileKey": "S_FAST",
+      "needle": "Neither proves that the sequence is clear, truthful, beautiful, persuasive, suspenseful, trustworthy, or otherwise aesthetically correct."
+    },
+    "S04": {
+      "fileKey": "S_TECH",
+      "needle": "Human playback or expert calibration is **conditional**, not a universal post-QC ritual"
+    },
+    "S05": {
+      "fileKey": "S_SOURCES",
+      "needle": "Equipment retention is decided by Ordivon execution/friction/production evidence, not vendor capability claims alone."
+    },
+    "S06": {
+      "fileKey": "S_E8",
+      "needle": "Vendor capability claims alone do not graduate equipment."
+    },
+    "S07": {
+      "fileKey": "S_E8",
+      "needle": "process success alone is insufficient."
+    },
+    "S08": {
+      "fileKey": "S_RUN",
+      "needle": "The current Agent surface cannot truthfully establish that auditory-response claim."
+    },
+    "Q01": {
+      "fileKey": "Q_R1",
+      "needle": "improved local diagnostic information and switch recognition, but did not establish transferable capability"
+    },
+    "Q02": {
+      "fileKey": "Q_R1",
+      "needle": "all four one-seed model Trials failed the objective"
+    },
+    "Q03": {
+      "fileKey": "Q_R1",
+      "needle": "one synthetic compromised-member scenario is insufficient"
+    },
+    "Q04": {
+      "fileKey": "Q_R1",
+      "needle": "one trial per provider/memory mode; diagnostic only"
+    },
+    "Q05": {
+      "fileKey": "Q_R1",
+      "needle": "treat every signal as potentially shaped until corroborated by an independent observation."
+    },
+    "Q06": {
+      "fileKey": "Q_R1",
+      "needle": "Phase rotation from 'initial' to 'rotated-defense' with both routes marked stale_after_phase_change."
+    },
+    "Q07": {
+      "fileKey": "Q_LIC",
+      "needle": "\"cachedExactResultSurvivesOutage\": true"
+    },
+    "Q08": {
+      "fileKey": "Q_LIC",
+      "needle": "\"deliveredResultRetroactivelyInvalidatedByRevocation\": false"
+    },
+    "H01": {
+      "fileKey": "H_METH",
+      "needle": "Evidence is sufficient only when its design, measurement, population, timing, and uncertainty support the stated claim."
+    },
+    "H02": {
+      "fileKey": "H_METH",
+      "needle": "Prestige, sample size, predictive accuracy, statistical significance, or model complexity alone do not establish causal or normative authority."
+    },
+    "H03": {
+      "fileKey": "H_METH",
+      "needle": "No single design dominates every question."
+    },
+    "H04": {
+      "fileKey": "H_CLOSE",
+      "needle": "Population evidence has three separate uses"
+    },
+    "H05": {
+      "fileKey": "H_CLOSE",
+      "needle": "Repeated individual observation adds value only when design assumptions support the claim."
+    },
+    "H06": {
+      "fileKey": "H_POP",
+      "needle": "The observational group difference has the opposite sign from the true population average effect because treatment selection is confounded."
+    },
+    "H07": {
+      "fileKey": "H_POP",
+      "needle": "The positive population average does not determine either target: one benefits substantially and one is harmed."
+    },
+    "H08": {
+      "fileKey": "H_TRANS",
+      "needle": "Population-level Human evidence is the default prior; Ordivon-specific experiments are reserved for transport gaps, system-policy questions, and unresolved effect heterogeneity that can change a decision."
+    },
+    "H09": {
+      "fileKey": "H_TRANS",
+      "needle": "Measurement availability alone is not an admission reason."
+    },
+    "H10": {
+      "fileKey": "H_CONTRACT",
+      "needle": "selective transport analysis"
+    },
+    "HA01": {
+      "fileKey": "HA_P1",
+      "needle": "Reusable source presence ≠ Selection"
+    },
+    "HA02": {
+      "fileKey": "HA_P1",
+      "needle": "The external evaluator fixture rejected candidates with unresolved unknowns or no independent evidence."
+    },
+    "HA03": {
+      "fileKey": "HA_P1",
+      "needle": "CompletionProposal`/structured completion is a **candidate for caller/domain verification**, not semantic completion or automatic persistent learning."
+    },
+    "HA04": {
+      "fileKey": "HA_P1",
+      "needle": "two independent Run reuse"
+    },
+    "N01": {
+      "fileKey": "N_NX6",
+      "needle": "provider-mechanism diversity is not a current independent pair when one root is unavailable"
+    },
+    "N02": {
+      "fileKey": "N_NX6",
+      "needle": "negative current observations are retained rather than retried until green"
+    },
+    "N03": {
+      "fileKey": "N_SEM",
+      "needle": "writes a fresh observation only after successful qualification"
+    },
+    "N04": {
+      "fileKey": "N_SEM",
+      "needle": "accepts only an exact saved observation digest and exact prior path digest"
+    }
+  },
+  "models": {
+    "A": {
+      "name": "Artifact / Source Evidence",
+      "frozen": "An Evidence Resource is fundamentally a retrievable, integrity/provenance-bound source artifact, observation, receipt, trace or review packet. If the artifact exists and its source identity is trustworthy, it is the evidence; claim meaning, transport and decision use are interpretations performed later."
+    },
+    "B": {
+      "name": "Claim-Support Relation",
+      "frozen": "Evidence is a provenance/method/time-bound relation between an identifiable observation/artifact and one explicit claim, with support/contradiction/bounding/unknown semantics scoped to the declared context and time. Evidence is not the carrier alone and does not automatically become Knowledge."
+    },
+    "C": {
+      "name": "Universal Transfer Contract",
+      "frozen": "Every actionable Evidence Resource is represented through one universal contract containing source, target, claim, mechanism, moderators/effect modifiers, method/design, uncertainty, independence/common-mode risks, freshness/applicability, permitted action class, falsifier and decision information value. The contract is the primary shared evidence object."
+    },
+    "D": {
+      "name": "Evidence Resource + Decision-Scoped Epistemic Projection",
+      "frozen": "An Evidence Resource is an identifiable provenance-bound observation/artifact/trace whose owner-native semantics support, contradict, bound or leave unresolved at least one explicit claim. Carrier identity, claim support and Knowledge are separate. ActionableEvidenceFor(claim,target,decision,as_of) is a derived projection that joins claim support with source-to-target transport/applicability, claim-specific currentness, retrievability/authority, set-level independence/common-mode structure, and decision consequence/reversibility/value-of-information. Native owners retain evidence and claim truth; consumers/domains own belief and Knowledge promotion. No universal confidence score is required."
+    }
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "sourceCase": "W01",
+      "case": "One evidence object/owner claim may support one transition witness while providing no support for an unrelated capability claim",
+      "pressure": "claim binding",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "sourceCase": "R8P01",
+      "case": "Current World marks cap:x consumable-now even though owner evidence attests only resource/terms/interface and cap:x comes only from aggregator/candidate labeling",
+      "pressure": "claim-level provenance gap",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "sourceCase": "W03",
+      "case": "A foreign claim can be successfully delivered to a destination without becoming destination Knowledge",
+      "pressure": "evidence vs knowledge",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "sourceCase": "W04",
+      "case": "End-to-end authenticated provenance still does not promote the foreign claim to destination Knowledge",
+      "pressure": "authentication vs semantic authority",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "sourceCase": "W05",
+      "case": "Provider observation time and World availability time are separate facts for the same observation",
+      "pressure": "observation vs availability time",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "sourceCase": "W06",
+      "case": "A historical transfer receipt can be Evidence for past admission without proving current native bytes/presence",
+      "pressure": "historical support vs current truth",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "sourceCase": "W07",
+      "case": "Information amount/source count is not equivalent to decision value of information",
+      "pressure": "amount vs value",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "sourceCase": "W08",
+      "case": "Failed, invalid or uncertain episodes can yield reusable Knowledge only after external/domain promotion",
+      "pressure": "negative evidence promotion",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "sourceCase": "W09",
+      "case": "Missing observations cannot be promoted to absence or Outcome truth without owner-native completeness semantics",
+      "pressure": "absence vs evidence of absence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "sourceCase": "R8P02",
+      "case": "Candidate diversityPotential changes planner ranking without failure-domain independence evidence; source explicitly calls it a heuristic",
+      "pressure": "heuristic vs epistemic redundancy",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "sourceCase": "F01",
+      "case": "Finance UNKNOWN means evidence missing/unavailable/insufficient and must not be converted into evidence that a carrier is bad",
+      "pressure": "unknown vs negative evidence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "sourceCase": "F02",
+      "case": "Finance STALE preserves prior evidence while denying current applicability",
+      "pressure": "staleness",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "sourceCase": "F03",
+      "case": "Venue contract mechanics require observation time/evidence/revalidation rather than eternal law",
+      "pressure": "claim-specific freshness",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "sourceCase": "F04",
+      "case": "Finance append-only identity observations prevent later transition knowledge from leaking backward into earlier known_at queries",
+      "pressure": "knowledge time",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "sourceCase": "F05",
+      "case": "Finance FR2 falsification fixture is not primary-source authority despite containing source navigation hints",
+      "pressure": "fixture vs primary evidence",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "sourceCase": "F06",
+      "case": "Production Finance identity ingestion must preserve actual issuer/regulator/venue bytes and bind normalized rows to them",
+      "pressure": "carrier + normalized claim binding",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "sourceCase": "F07",
+      "case": "An empty Capital Ledger is not evidence that no external owner flow occurred",
+      "pressure": "coverage and absence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "sourceCase": "F08",
+      "case": "Missing/partial/failed flow coverage keeps performance unavailable rather than assuming zero flow",
+      "pressure": "completeness gate",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "sourceCase": "F09",
+      "case": "Observed owner-conditioned favorable capital consequence still does not prove Agent alpha without counterfactual/attribution evidence",
+      "pressure": "effect vs causal claim",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "sourceCase": "F10",
+      "case": "A context treatment earns default status through stable replicated sealed benefit, not rationale or one favorable carrier",
+      "pressure": "replication burden",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C21",
+      "sourceCase": "F11",
+      "case": "Finance explicitly counts effective independent trials rather than raw rows/results",
+      "pressure": "independence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C22",
+      "sourceCase": "F12",
+      "case": "A sealed replication can remain single-carrier evidence rather than a general law",
+      "pressure": "scope/generalization",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C23",
+      "sourceCase": "G01",
+      "case": "Game uses external products/research as falsifier generators, not imported Station Zero requirements",
+      "pressure": "external transport",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C24",
+      "sourceCase": "G02",
+      "case": "External evidence expands failure coverage while local reproduction decides whether implementation pressure exists",
+      "pressure": "transport + local probe",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C25",
+      "sourceCase": "G03",
+      "case": "Live-Agent trajectories can differ substantially from fixture trajectories without that difference establishing player value",
+      "pressure": "proxy/effect vs value",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C26",
+      "sourceCase": "G04",
+      "case": "Game can prove live cognition operational/behavioral while keeping player-value claim explicitly UNPROVEN",
+      "pressure": "claim lattice",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C27",
+      "sourceCase": "G05",
+      "case": "Agent/model review can pre-falsify copy/hidden-information defects but cannot be relabeled as delight/preference/replay evidence",
+      "pressure": "proxy boundary",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C28",
+      "sourceCase": "G06",
+      "case": "A clear repeated usability failure can justify a reversible local fix without first obtaining a large population sample",
+      "pressure": "action threshold by consequence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C29",
+      "sourceCase": "G07",
+      "case": "Owner/developer observation is not a clean fresh-player substitute because implementation knowledge is a target/source difference",
+      "pressure": "effect modifier/target mismatch",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C30",
+      "sourceCase": "G08",
+      "case": "Large simulation volume does not substitute for experience judgment",
+      "pressure": "volume vs target evidence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C31",
+      "sourceCase": "S01",
+      "case": "Studio review-video creates disposable review evidence for one artifact iteration",
+      "pressure": "evidence carrier lifecycle",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C32",
+      "sourceCase": "S02",
+      "case": "A review packet is not automatically an Asset, Output, Claim, Receipt or durable research result",
+      "pressure": "evidence vs promotion/persistence",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C33",
+      "sourceCase": "S03",
+      "case": "Technical QC/perception sampling support structural observations but not beauty, truthfulness, persuasion or suspense",
+      "pressure": "claim scope",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C34",
+      "sourceCase": "S04",
+      "case": "Human/expert calibration is conditional on a residual human-response claim, not a universal ritual",
+      "pressure": "target-native residual evidence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C35",
+      "sourceCase": "S05",
+      "case": "Vendor documentation establishes control surfaces but does not establish equipment retention value",
+      "pressure": "source authority is claim-specific",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C36",
+      "sourceCase": "S06",
+      "case": "Equipment graduation requires real execution; vendor capability claims alone are insufficient",
+      "pressure": "potential vs observed target effect",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C37",
+      "sourceCase": "S07",
+      "case": "A Blender process can exit zero while the domain artifact contract fails, so process-success evidence is insufficient for domain success",
+      "pressure": "lower evidence vs higher claim",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C38",
+      "sourceCase": "S08",
+      "case": "Machine evidence can prove exact media/QC facts while the same exact Blob still requires human audition for naturalness/publication worthiness",
+      "pressure": "mixed evidence roles",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C39",
+      "sourceCase": "Q01",
+      "case": "Security state/hypothesis evidence improved local diagnostics but did not establish transferable capability",
+      "pressure": "local effect vs transfer",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C40",
+      "sourceCase": "Q02",
+      "case": "Four failed one-seed model trials support a do-not-promote decision while remaining informative about trace/information behavior",
+      "pressure": "failed trial as evidence",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C41",
+      "sourceCase": "Q03",
+      "case": "One synthetic compromised-member scenario is insufficient evidence for a multi-Agent organization ontology",
+      "pressure": "synthetic evidence scope",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C42",
+      "sourceCase": "Q04",
+      "case": "One trial per provider/memory mode is explicitly diagnostic only, not a general capability ranking",
+      "pressure": "sample scope",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C43",
+      "sourceCase": "Q05",
+      "case": "In adversarial Security evidence, a signal should be treated as shaped until corroborated by an independent observation",
+      "pressure": "independence/adversarial source",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C44",
+      "sourceCase": "Q06",
+      "case": "A phase transition makes prior route intelligence stale while preserving it as historical evidence",
+      "pressure": "context-specific staleness",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C45",
+      "sourceCase": "Q07",
+      "case": "A cached exact Security result survives outage while a new unique job is unavailable",
+      "pressure": "historical evidence vs current capability",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C46",
+      "sourceCase": "Q08",
+      "case": "Credential/service revocation does not retroactively invalidate an already delivered exact result",
+      "pressure": "historical finality",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C47",
+      "sourceCase": "H01",
+      "case": "Human evidence is sufficient only when design, measurement, population, timing and uncertainty support the stated claim",
+      "pressure": "design-to-claim",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C48",
+      "sourceCase": "H02",
+      "case": "Prestige, sample size, accuracy, significance or model complexity alone do not grant causal/normative authority",
+      "pressure": "anti-score",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C49",
+      "sourceCase": "H03",
+      "case": "No single Human study design dominates every question; design must match claim",
+      "pressure": "method heterogeneity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C50",
+      "sourceCase": "H04",
+      "case": "Population observations may describe a distribution, predict under the DGP, or provide a prior for intervention effect—different claims",
+      "pressure": "claim type",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C51",
+      "sourceCase": "H05",
+      "case": "More repeated personal observations help only when identification/design assumptions support the inference",
+      "pressure": "data volume vs identification",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C52",
+      "sourceCase": "H06",
+      "case": "Synthetic Human M0 demonstrates an observational association with the opposite sign from the true average causal effect",
+      "pressure": "measurement/design failure",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C53",
+      "sourceCase": "H07",
+      "case": "A positive population-average effect does not determine an individual target effect; one synthetic target benefits and one is harmed",
+      "pressure": "population-to-target transport",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C54",
+      "sourceCase": "H08",
+      "case": "Mature external Human evidence is the default prior; direct Ordivon experiments are reserved for decision-relevant transport residuals",
+      "pressure": "direct evidence not monopoly",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C55",
+      "sourceCase": "H09",
+      "case": "Availability of a measurement does not by itself justify collecting direct target evidence",
+      "pressure": "VOI/admission",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C56",
+      "sourceCase": "H10",
+      "case": "Human contraction selects transport analysis rather than universal N-of-1 replication",
+      "pressure": "graded evidence acquisition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C57",
+      "sourceCase": "HA01",
+      "case": "An externally promoted reusable source can exist without being selected into a Harness Run",
+      "pressure": "evidence/source presence vs use",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-CARRIER-SUFFICIENT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C58",
+      "sourceCase": "HA02",
+      "case": "Harness procedural candidates with unresolved unknowns or no independent evidence are rejected by the external evaluator",
+      "pressure": "promotion burden",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-SET-OR-DECISION-AMBIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C59",
+      "sourceCase": "HA03",
+      "case": "CompletionProposal with evidence refs remains a candidate for domain verification rather than automatic persistent learning",
+      "pressure": "candidate vs knowledge",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-CARRIER-ONLY-PARTIAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-CLAIM-SUPPORT-SUFFICIENT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C60",
+      "sourceCase": "R8P03",
+      "case": "The same posterior evidence supports a reversible outer probe but not an irreversible core change; EVPI also differs by stakes",
+      "pressure": "decision-scoped threshold/VOI",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CLAIM-RELATION-LOSS"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-DOWNSTREAM-RELATION-OUTSIDE-ROOT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LAYERED-EVIDENCE-PROJECTION"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "F": 37,
+      "A": 11,
+      "P": 12
+    },
+    "B": {
+      "P": 41,
+      "A": 19
+    },
+    "C": {
+      "P": 60
+    },
+    "D": {
+      "P": 60
+    }
+  },
+  "relationLedger": [
+    {
+      "concept": "Evidence carrier/artifact identity",
+      "verdict": "KEEP_SEPARATE",
+      "cases": [
+        "C15",
+        "C16",
+        "C31",
+        "C45"
+      ],
+      "reason": "Bytes/receipt/trace identity is necessary for exact provenance and replay but does not by itself state which higher claim is supported."
+    },
+    {
+      "concept": "Source/provenance identity",
+      "verdict": "REQUIRED_FOR_SUPPORT",
+      "cases": [
+        "C01",
+        "C04",
+        "C16",
+        "C35"
+      ],
+      "reason": "Who/what produced the observation constrains which claims it may author; authentication does not grant semantic authority beyond source scope."
+    },
+    {
+      "concept": "Claim identity",
+      "verdict": "REQUIRED_SEMANTIC_COORDINATE",
+      "cases": [
+        "C01",
+        "C25",
+        "C33",
+        "C47"
+      ],
+      "reason": "The same evidence can strongly support one proposition and be irrelevant to another."
+    },
+    {
+      "concept": "Support relation/polarity",
+      "verdict": "REQUIRED_SEMANTIC_RELATION",
+      "cases": [
+        "C11",
+        "C17",
+        "C40",
+        "C52"
+      ],
+      "reason": "Evidence can support, contradict, bound, or leave unresolved; missing/failed observations are not one universal negative value."
+    },
+    {
+      "concept": "Observation/measurement process",
+      "verdict": "REQUIRED_WHEN_INFERENCE_DEPENDS_ON_COVERAGE",
+      "cases": [
+        "C09",
+        "C17",
+        "C37",
+        "C51"
+      ],
+      "reason": "Absence and causal interpretation depend on what the observation process could have detected and how it was produced."
+    },
+    {
+      "concept": "Observed/effective/available/known time",
+      "verdict": "CLAIM_LOCAL_TEMPORAL_COORDINATES",
+      "cases": [
+        "C05",
+        "C12",
+        "C14",
+        "C44"
+      ],
+      "reason": "Evidence occurrence, target applicability and knowledge availability can move on different clocks; historical truth must not be rewritten."
+    },
+    {
+      "concept": "Currentness/applicability",
+      "verdict": "CLAIM-TARGET-SPECIFIC_PROJECTION",
+      "cases": [
+        "C12",
+        "C13",
+        "C44",
+        "C45"
+      ],
+      "reason": "Evidence bytes can remain while applicability to a current claim expires."
+    },
+    {
+      "concept": "Source→target transport",
+      "verdict": "DOWNSTREAM_RELATION_NOT_EVIDENCE_IDENTITY",
+      "cases": [
+        "C23",
+        "C29",
+        "C53",
+        "C54"
+      ],
+      "reason": "Source evidence remains valid in its source context even when target transport is weak or unknown."
+    },
+    {
+      "concept": "Mechanism/moderator/effect modifier",
+      "verdict": "TRANSPORT_SUPPORT_WHEN_RELEVANT",
+      "cases": [
+        "C29",
+        "C53",
+        "C54"
+      ],
+      "reason": "Differences matter only when they can modify the claim/effect under transfer; they are not mandatory fields on every direct local receipt."
+    },
+    {
+      "concept": "Independence/common-mode",
+      "verdict": "EVIDENCE-SET_RELATION",
+      "cases": [
+        "C20",
+        "C21",
+        "C43",
+        "C58"
+      ],
+      "reason": "Independence is not a property of one citation; it is relative to shared data, method, source, laboratory/model and failure/bias mechanism."
+    },
+    {
+      "concept": "Epistemic redundancy",
+      "verdict": "DERIVED_SET_PROPERTY",
+      "cases": [
+        "C20",
+        "C21",
+        "C43"
+      ],
+      "reason": "Multiple evidence items add resilience/information only to the degree they are substitutable and sufficiently independent for the relevant falsifier."
+    },
+    {
+      "concept": "Evidence completeness/coverage",
+      "verdict": "OWNER-NATIVE_SUPPORT_CONDITION",
+      "cases": [
+        "C09",
+        "C17",
+        "C18"
+      ],
+      "reason": "An empty result can imply absence only when the owner proves the query/measurement coverage needed for that inference."
+    },
+    {
+      "concept": "Contradictory evidence",
+      "verdict": "PRESERVE_AS_STRUCTURE_NOT_AVERAGE_AWAY",
+      "cases": [
+        "C40",
+        "C52",
+        "C53"
+      ],
+      "reason": "Conflict can reveal heterogeneity, confounding or boundary failure; a scalar average may destroy the reason for disagreement."
+    },
+    {
+      "concept": "Negative/failed evidence",
+      "verdict": "FIRST_CLASS_BOUNDED_EVIDENCE",
+      "cases": [
+        "C08",
+        "C11",
+        "C40"
+      ],
+      "reason": "A failure/null/invalid episode can falsify or narrow a claim and later support Knowledge, provided its observation/design semantics are explicit."
+    },
+    {
+      "concept": "Retrievability/materialization",
+      "verdict": "ACTIONABILITY_CONDITION_NOT_SUPPORT_IDENTITY",
+      "cases": [
+        "C31",
+        "C45",
+        "C57"
+      ],
+      "reason": "Evidence can remain semantically valid while temporarily unavailable to a current consumer; exact reuse still needs retrievable bytes/reference."
+    },
+    {
+      "concept": "Authority/access to evidence",
+      "verdict": "ACTIONABILITY_CONDITION",
+      "cases": [
+        "C16",
+        "C35",
+        "C57"
+      ],
+      "reason": "Possessing authority to retrieve or use evidence is separate from whether the evidence supports the claim."
+    },
+    {
+      "concept": "Uncertainty",
+      "verdict": "CLAIM/METHOD_NATIVE_NOT_GLOBAL_SCORE",
+      "cases": [
+        "C11",
+        "C18",
+        "C47",
+        "C58"
+      ],
+      "reason": "UNKNOWN/intervals/unresolved unknowns must remain explicit; one confidence scalar is not universal across heterogeneous claims."
+    },
+    {
+      "concept": "Decision relevance",
+      "verdict": "DOWNSTREAM_PROJECTION",
+      "cases": [
+        "C07",
+        "C28",
+        "C55",
+        "C60"
+      ],
+      "reason": "Evidence value depends on which decision is available, its consequences and whether the claim can change action."
+    },
+    {
+      "concept": "Value of information",
+      "verdict": "DECISION-SCOPED_ACQUISITION_SIGNAL",
+      "cases": [
+        "C07",
+        "C55",
+        "C60"
+      ],
+      "reason": "The same uncertainty can have tiny or large information value depending on stakes, reversibility and current best action."
+    },
+    {
+      "concept": "Knowledge promotion",
+      "verdict": "SEPARATE_DOMAIN/OWNER_DECISION",
+      "cases": [
+        "C03",
+        "C04",
+        "C08",
+        "C59"
+      ],
+      "reason": "Delivery, authentication, critique or CompletionProposal does not automatically produce reusable canonical Knowledge."
+    },
+    {
+      "concept": "Direct target-native evidence",
+      "verdict": "CALIBRATION/RESIDUAL_ANCHOR_NOT_MONOPOLY",
+      "cases": [
+        "C28",
+        "C34",
+        "C54",
+        "C56"
+      ],
+      "reason": "Target-native evidence is indispensable for target-specific residuals but mature external evidence can be the default prior when transport is strong."
+    },
+    {
+      "concept": "Synthetic/Agent/machine evidence",
+      "verdict": "CLAIM-BOUNDED_PROXY/FALSIFIER",
+      "cases": [
+        "C27",
+        "C30",
+        "C33",
+        "C41"
+      ],
+      "reason": "Synthetic or machine evidence can falsify structural defects or exercise mechanisms without inheriting Human preference/market/long-horizon authority."
+    },
+    {
+      "concept": "Source prestige/count/volume",
+      "verdict": "NOT_EVIDENCE_VALUE",
+      "cases": [
+        "C21",
+        "C30",
+        "C48",
+        "C51"
+      ],
+      "reason": "Volume can be dependent, mismeasured or irrelevant; design, claim fit, independence and decision impact dominate raw count."
+    },
+    {
+      "concept": "Historical evidence",
+      "verdict": "PRESERVE_WITHOUT_CURRENT_PROMOTION",
+      "cases": [
+        "C06",
+        "C12",
+        "C14",
+        "C46"
+      ],
+      "reason": "Later staleness, revocation or corrections do not erase what was historically observed/known."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "delete explicit Claim identity from Evidence support",
+      "result": "FAIL",
+      "cases": [
+        "C01",
+        "C25",
+        "C33",
+        "C47"
+      ],
+      "why": "The same bytes/receipt can support a mechanical fact while leaving player value, causality or another transition unsupported."
+    },
+    {
+      "mutation": "delete provenance/source identity",
+      "result": "FAIL",
+      "cases": [
+        "C01",
+        "C04",
+        "C16",
+        "C35"
+      ],
+      "why": "Authentication/authority is claim-specific and normalized/candidate labels cannot self-authenticate semantic truth."
+    },
+    {
+      "mutation": "delete observation/design process",
+      "result": "FAIL",
+      "cases": [
+        "C09",
+        "C17",
+        "C37",
+        "C52"
+      ],
+      "why": "No-observation cannot become absence and correlation cannot become causal evidence without knowing what the process measured."
+    },
+    {
+      "mutation": "delete temporal coordinates and keep one Evidence.current bit",
+      "result": "FAIL",
+      "cases": [
+        "C05",
+        "C12",
+        "C14",
+        "C44"
+      ],
+      "why": "Observed, available, effective, known and applicability time can differ while historical truth persists."
+    },
+    {
+      "mutation": "delete source→target transport relation",
+      "result": "FAIL",
+      "cases": [
+        "C23",
+        "C29",
+        "C53",
+        "C54"
+      ],
+      "why": "External/population evidence can remain valid yet fail to justify a target-specific claim or action."
+    },
+    {
+      "mutation": "delete set-level independence/common-mode reasoning",
+      "result": "FAIL",
+      "cases": [
+        "C20",
+        "C21",
+        "C43",
+        "C58"
+      ],
+      "why": "Replications/citations sharing data/method/source can create false redundancy."
+    },
+    {
+      "mutation": "delete coverage/completeness semantics",
+      "result": "FAIL",
+      "cases": [
+        "C09",
+        "C17",
+        "C18"
+      ],
+      "why": "Empty query/ledger/result cannot prove absence unless the owner proves the observation was complete enough."
+    },
+    {
+      "mutation": "delete negative/failed evidence from the Evidence Resource family",
+      "result": "FAIL",
+      "cases": [
+        "C08",
+        "C11",
+        "C40"
+      ],
+      "why": "Failures can falsify/narrow claims and create methodological/recovery knowledge without a positive Outcome."
+    },
+    {
+      "mutation": "delete Evidence→Knowledge promotion boundary",
+      "result": "FAIL",
+      "cases": [
+        "C03",
+        "C04",
+        "C08",
+        "C59"
+      ],
+      "why": "Transported/authenticated/candidate evidence would automatically become durable semantic belief."
+    },
+    {
+      "mutation": "delete decision context from evidence acquisition/action threshold",
+      "result": "FAIL",
+      "cases": [
+        "C28",
+        "C55",
+        "C60"
+      ],
+      "why": "The same posterior evidence rationally supports a reversible probe but not a costly irreversible change."
+    },
+    {
+      "mutation": "force every Evidence Resource to carry one universal Transfer Contract with target, moderators, independence, action class and VOI",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C05",
+        "C16",
+        "C31",
+        "C45"
+      ],
+      "why": "Direct owner-local observations do not need all downstream coordinates; the fields become nullable/duplicated decision state rather than Evidence identity."
+    },
+    {
+      "mutation": "force one global confidence/evidence-quality scalar",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C10",
+        "C11",
+        "C47",
+        "C60"
+      ],
+      "why": "Completeness, claim support, transport, independence and action value are different relations; averaging them destroys failure reasons."
+    },
+    {
+      "mutation": "use citation/source/result count as epistemic redundancy",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C20",
+        "C21",
+        "C30",
+        "C43"
+      ],
+      "why": "Dependence/common-mode can make many observations one effective evidence lineage."
+    },
+    {
+      "mutation": "require direct target-native evidence before any action",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C23",
+        "C28",
+        "C54",
+        "C56"
+      ],
+      "why": "Strong transported evidence can justify cheap reversible probes; direct evidence is residual/calibrating where target differences matter."
+    },
+    {
+      "mutation": "allow external/synthetic/Agent evidence to assert Human preference or market Outcome directly",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C25",
+        "C27",
+        "C30",
+        "C41"
+      ],
+      "why": "Proxy evidence has bounded structural authority and does not own target Human experience."
+    },
+    {
+      "mutation": "treat failed/null/invalid experiments as zero-value evidence",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C08",
+        "C40",
+        "C52"
+      ],
+      "why": "They can reveal design failure, falsify a promotion, expose confounding or support recovery/methodological Knowledge."
+    },
+    {
+      "mutation": "average contradictory evidence into one score before checking heterogeneity/design/transport",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C40",
+        "C52",
+        "C53"
+      ],
+      "why": "Contradiction may be the evidence of a moderator or identification failure that the average erases."
+    },
+    {
+      "mutation": "treat human presence itself as approval authority",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C34",
+        "C38"
+      ],
+      "why": "Human judgment must be bound to the exact claim/artifact and remains scoped to the decision it can actually observe."
+    },
+    {
+      "mutation": "persist a global EvidenceGraph/BeliefStore because cross-domain evidence relations exist",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C03",
+        "C16",
+        "C23",
+        "C59"
+      ],
+      "why": "Native owners already own source/claim truth and consumers own belief/Knowledge; current failures need narrow joins, not a second semantic authority."
+    }
+  ],
+  "freshProjectionTests": [
+    {
+      "id": "R8Y01",
+      "case": "Ten papers/report URLs derived from one underlying dataset are not ten independent evidence lineages for a claim.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-INDEPENDENCE-SET"
+        }
+      }
+    },
+    {
+      "id": "R8Y02",
+      "case": "A direct target-native anecdote can calibrate or falsify transport but does not automatically dominate a larger well-designed external evidence base for a general mechanism.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-TARGET-CALIBRATION"
+        }
+      }
+    },
+    {
+      "id": "R8Y03",
+      "case": "A null security scan is evidence of absence only when coverage/sensitivity and the relevant target surface are established; otherwise it is UNKNOWN/limited evidence.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-COVERAGE-NEGATIVE"
+        }
+      }
+    },
+    {
+      "id": "R8Y04",
+      "case": "A stable mathematical/specification claim may remain applicable for years while an endpoint-health observation can become stale within minutes; Evidence has no universal freshness clock.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CLAIM-CLOCK"
+        }
+      }
+    },
+    {
+      "id": "R8Y05",
+      "case": "An exact historical receipt may be temporarily inaccessible to one consumer while its prior claim support remains historically valid; retrievability changes Actionability, not past truth.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RETRIEVABILITY"
+        }
+      }
+    },
+    {
+      "id": "R8Y06",
+      "case": "Two genuinely independent methods that converge on one bounded claim can add more epistemic redundancy than a hundred repeated measurements sharing one systematic bias.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-INDEPENDENCE-NOT-COUNT"
+        }
+      }
+    },
+    {
+      "id": "R8Y07",
+      "case": "A machine/Agent review that exposes a literal implementation token in player UI is enough to justify a reversible copy-layer fix but not a claim about market appeal.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CLAIM-ACTION-SCOPE"
+        }
+      }
+    },
+    {
+      "id": "R8Y08",
+      "case": "A transported prior and a fresh target observation can disagree; both Evidence Resources remain, while the target projection must expose the contradiction/moderator instead of deleting one source.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONTRADICTION-PRESERVED"
+        }
+      }
+    },
+    {
+      "id": "R8Y09",
+      "case": "A source correction can supersede current support without rewriting what an earlier decision maker could know at the historical known_at time.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-BITEMPORAL-EVIDENCE"
+        }
+      }
+    },
+    {
+      "id": "R8Y10",
+      "case": "The same posterior evidence can rationally trigger a low-cost reversible probe and block a high-downside irreversible core rewrite; the latter also has higher value for additional information.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DECISION-VOI"
+        }
+      }
+    },
+    {
+      "id": "R8Y11",
+      "case": "Post-freeze Finance FR3 independently separates CarrierObservation, evidence completeness, hard semantic admission and optional ranking: provider funding failure remains UNKNOWN/EVIDENCE_INCOMPLETE and cannot be laundered into a low-quality score.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OBSERVATION-ADMISSION-RANKING-SEPARATION"
+        }
+      },
+      "source": "postFreezeConcurrentEvidence.financeFr3"
+    },
+    {
+      "id": "R8Y12",
+      "case": "Post-freeze Finance FR3 uses prior same-day canonical observations for deterministic replay when a fresh network run fails, rather than treating current network instability as financial evidence or leaking later observations backward.",
+      "status": "P",
+      "models": {
+        "C": {
+          "status": "P",
+          "reasonCode": "C-UNIVERSAL-CONTRACT-CAN-EXPRESS"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-OWNER-TIME-EVIDENCE-BOUNDARY"
+        }
+      },
+      "source": "postFreezeConcurrentEvidence.financeFr3"
+    }
+  ],
+  "theoryTriangulation": [
+    {
+      "id": "T1",
+      "family": "decision analysis / value of information",
+      "source": "Ronald A. Howard, Information Value Theory (1966)",
+      "doi": "10.1109/TSSC.1966.300074",
+      "importedRelation": "information amount is not decision value; information value is decision/preference/uncertainty dependent",
+      "nonTransferable": "does not define Ordivon evidence ontology or a universal action threshold",
+      "ordivonFalsifier": "R8P03 same posterior produces different action and EVPI under different consequence structures"
+    },
+    {
+      "id": "T2",
+      "family": "causal transportability",
+      "source": "Elias Bareinboim & Judea Pearl, Transportability of Causal Effects: Completeness Results",
+      "doi": "10.1609/aaai.v26i1.8232",
+      "importedRelation": "source causal evidence may be reused in a target only relative to modeled source-target differences and available target information",
+      "nonTransferable": "formal causal transport does not automatically govern aesthetic preference, software receipts or noncausal claims",
+      "ordivonFalsifier": "Game/Human cases where external evidence creates transfer hypotheses but target-specific residuals remain"
+    },
+    {
+      "id": "T3",
+      "family": "trial generalizability / target population",
+      "source": "Dahabreh et al., Extending inferences from a randomized trial to a new target population",
+      "doi": "10.1002/sim.8426",
+      "importedRelation": "effect modifiers and selective participation can make source and target effects differ; target covariates can support transport",
+      "nonTransferable": "does not imply every Ordivon target needs a direct experiment or person-level re-estimation",
+      "ordivonFalsifier": "Human M0 heterogeneous individual effects + Evidence Transport contraction"
+    },
+    {
+      "id": "T4",
+      "family": "dependent evidence synthesis",
+      "source": "Hedges, Tipton & Johnson, Robust variance estimation in meta-regression with dependent effect size estimates",
+      "doi": "10.1002/jrsm.5",
+      "erratumDoi": "10.1002/jrsm.17",
+      "importedRelation": "multiple effect sizes sharing participants/investigator/lab can violate independence; raw effect count is not independent evidence count",
+      "nonTransferable": "statistical RVE is not a universal Ordivon evidence combiner",
+      "ordivonFalsifier": "Finance effectiveIndependentTrials and Workstation failure-domain independence cases"
+    },
+    {
+      "id": "T5",
+      "family": "transport sensitivity",
+      "source": "Dahabreh et al., Global Sensitivity Analysis for Studies Extending Inferences From a Randomized Trial to a Target Population (2026)",
+      "doi": "10.1002/sim.70083",
+      "importedRelation": "transport conclusions depend on assumptions whose violations can be sensitivity-tested rather than hidden",
+      "nonTransferable": "does not imply one global sensitivity parameter for heterogeneous Ordivon domains",
+      "ordivonFalsifier": "preserve transport residuals/moderators and contradiction rather than collapse to confidence"
+    }
+  ],
+  "implementationProbes": {
+    "R8P01": {
+      "clientRequestId": "world-r8-evidence-claim-binding-and-diversity-probes-20260815-01",
+      "jobId": "job-01a005b4-ee75-7ec1-9dd8-5298b99093a0",
+      "result": "owner evidence attests resource/terms/interface only; cap:x appears only as aggregator/candidate label yet evaluate_resource returns consumable-now, demandFit=1.0, evidenceQuality=0.9"
+    },
+    "R8P02": {
+      "clientRequestId": "world-r8-evidence-claim-binding-and-diversity-probes-20260815-01",
+      "jobId": "job-01a005b4-ee75-7ec1-9dd8-5298b99093a0",
+      "result": "same actual evidence with candidate diversityPotential 0 vs 1 changes potentialScore 0.65 -> 0.816667; source labels diversityPotential as heuristic, not independence evidence"
+    },
+    "R8P03": {
+      "clientRequestId": "world-r8-decision-scoped-evidence-voi-falsifier-20260815-01",
+      "jobId": "job-01a005b5-460b-7253-a86f-1d56b6f6fde5",
+      "result": "same prior 0.5 + LR 3 -> posterior 0.75; reversible action EV=0.725 ACT EVPI=0.025, irreversible action EV=-0.5 DO_NOT_ACT EVPI=0.75"
+    },
+    "R8P04": {
+      "clientRequestId": "world-r8-current-evidence-boundary-regression-20260815-01",
+      "jobId": "job-01a005ba-3f5c-7a41-83f9-241c2c3b6180",
+      "result": "3 current World boundary tests pass: delivered foreign claim does not become destination Knowledge; end-to-end authentication does not promote claim to Knowledge; provider observation time remains separate from World availability time"
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Evidence Resource + Decision-Scoped Epistemic Projection",
+    "status": "PROVISIONAL_FOR_R9_NOT_CANONICAL_DOCTRINE",
+    "compression": "Evidence Resource semantics are claim-relative: preserve exact carrier/provenance/method/time and native support for explicit claims. Transportability, applicability/currentness, independence/common-mode, retrievability and decision value are downstream projections relative to Claim × Target × Decision × as_of. Direct target evidence is a residual/calibration anchor, not epistemic monopoly. Negative/failed evidence remains first-class. Evidence never becomes Knowledge without domain/owner promotion."
+  },
+  "productionDebts": {
+    "claimLevelProvenance": {
+      "status": "REPRODUCED",
+      "probe": "R8P01",
+      "relationToPrior": "same truth-role debt as R3F01/R3F02",
+      "decision": "do not implement a broad Evidence/Capability schema in R8; require R9 real consumer reproduction before selecting the smallest shared representation unless separately scoped as a narrow correctness change"
+    },
+    "evidenceQualityNaming": {
+      "status": "SEMANTIC_OVERREAD_RISK",
+      "fact": "ResourceEvaluation.evidence_quality is a planner completeness/currentness heuristic over owner/authority/acquisition/transport/outcome presence, not claim-support strength, independence, transportability or epistemic confidence",
+      "decision": "do not promote or reuse as general Evidence quality/confidence"
+    },
+    "diversityPotential": {
+      "status": "EXPECTED_HEURISTIC_BOUNDARY",
+      "probe": "R8P02",
+      "fact": "candidate-authored diversityPotential affects ranking but is explicitly documented as expected marginal-diversity heuristic, not proven independence",
+      "decision": "do not interpret generic Resource ranking as evidence-redundancy truth"
+    }
+  },
+  "contentDigest": "sha256:07e50589b95347e65144c9f80916b1601e26aca20615df85985ad29ebecf30ab",
+  "antiStrawmanCorrection": {
+    "model": "B",
+    "reason": "The former B hard failures concern source-to-target transport, target-specific experience, population-to-individual transport or decision/VOI. Claim-Support Relation can remain valid as root Evidence semantics while those questions are explicitly downstream ActionableEvidenceFor relations. Treating incompleteness as falsity would collapse Evidence and Actionable Evidence.",
+    "before": {
+      "P": 41,
+      "A": 11,
+      "F": 8
+    },
+    "after": {
+      "P": 41,
+      "A": 19
+    }
+  },
+  "expressivityTie": {
+    "frozen": "C and D both pass all 60 frozen discriminators",
+    "fresh": "C and D both pass all 12 fresh post-freeze discriminators",
+    "selectionBasis": "D is provisionally preferred by decomposition/minimality/truth ownership: B-like claim-support semantics remain root Evidence, while transport/currentness/independence/decision/VOI remain downstream projections instead of mandatory fields on every Evidence record."
+  },
+  "postFreezeConcurrentEvidence": {
+    "financeFr3": {
+      "repository": "/root/projects/ordivon-finance",
+      "revision": "3d714710e330954b2f0f98510ceaf700847b02b6",
+      "path": "design/CARRIER-SEMANTICS.md",
+      "sha256": "sha256:d1995f96f24eae558f09131419fc3df3dca3ea80bd942c10a4fe5611c2e2bd86",
+      "observedAfterModelFreeze": true,
+      "frozenR8BaseFinanceRevision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d",
+      "needles": [
+        "`CarrierObservation` records point-in-time facts and failures without deciding whether a carrier is good:",
+        "A provider/egress failure therefore yields `fundingHistory=UNKNOWN`; it does not create a low carry score or a claim that the carrier is weak.",
+        "No later consumer may reinterpret `QUALIFIED` as trade permission.",
+        "`triageScore` is optional and exists only when every score input is observed.",
+        "FR3 therefore uses the same-day canonical 149-wrapper observation for deterministic semantic replay rather than treating present network instability as financial evidence."
+      ]
+    }
+  }
+}
