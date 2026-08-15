@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r6-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "9e60e1b3c5d99d8dce1ec8168a99ba2fc791d2d8",
+  "artifacts": {
+    "r6": {
+      "path": "docs/resource-ontology-r6-conversion-falsification.md",
+      "sha256": "d422166286a218605b2fedaedf0fd752db8733bcba44214257fb25dc3104c5d7"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r6-conversion-matrix-20260815.json",
+      "sha256": "b933325cbca290d9de6a20c45acf825aa3105055d972b5a491b9bc73a705a17a",
+      "contentDigest": "sha256:7500b23582a0b653f4e49dd24d2685cb3551b5f79dc9a21604f4af17e9680931"
+    }
+  },
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "9e60e1b3c5d99d8dce1ec8168a99ba2fc791d2d8"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "7d812d8d41d5ba6b8aa619886beddca94327b11f"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "coverage": {
+    "conversionDiscriminators": 40,
+    "freshPostFreeze": 8,
+    "totalSurvivorSurface": 48,
+    "relationLedger": 12,
+    "deletionTests": 12,
+    "requiredStructuralDistinctions": 5,
+    "rejectedRootAdditions": 7,
+    "executedCurrentSystemProbes": 3,
+    "frozenHistoricalSourceRefs": 40,
+    "selectedSourceFilesComparedToFrozenCommits": 25
+  },
+  "modelCounts": {
+    "A": {
+      "F": 38,
+      "A": 2
+    },
+    "B": {
+      "P": 9,
+      "F": 28,
+      "A": 3
+    },
+    "C": {
+      "P": 34,
+      "A": 3,
+      "F": 3
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Action/Effect Events + Outcome/Attribution Projections",
+    "status": "PROVISIONAL_FOR_R7_NOT_CANONICAL_DOCTRINE",
+    "compression": "Conversion is not one success pipeline. Selection may commit an Action; owner-native Effect events/claims preserve what directly happened or remains unknown; domain-owned Outcome projections evaluate consequences under objective/observer/horizon/context; Attribution is a separate causal claim; Knowledge requires semantic promotion and may arise from successful, failed, invalid or uncertain evidence. Consumption is family-specific accounting parallel to the attempt/effect window. Relations are many-to-many and exogenous effects/outcomes are allowed."
+  },
+  "centralResult": "Conversion is not one universal success pipeline. Action, direct Effect, domain Outcome, causal Attribution and promoted Knowledge are distinct truths with different owners; Consumption is resource-family-specific accounting, and relations are many-to-many with exogenous Effects/Outcomes permitted.",
+  "rootCompression": {
+    "decisionSelection": "upstream choice; may remain non-effectful",
+    "action": "identity-bound admitted/committed attempt to cause or obtain a transition",
+    "effect": "owner-native direct consequence Event/Claim, including success/failure/no-effect/unknown",
+    "outcome": "domain-owned evaluation projection over Effects plus exogenous facts under objective/observer/horizon/comparison/evidence context",
+    "attribution": "separate causal/credit/blame Claim with explicit evidence/uncertainty",
+    "knowledge": "semantically promoted reusable Claim/model/procedure that changes future prediction/selection/verification/recovery and may arise from success or failure",
+    "consumption": "resource-family-specific Event/quantity/reservation/depletion relation parallel to Action/Effect, not a universal lifecycle stage",
+    "cardinality": "many-to-many; Outcome need not have Agent Action ancestry"
+  },
+  "implementationEvidence": {
+    "R6P01": {
+      "clientRequestId": "world-r6-action-effect-success-probe-20260815-01",
+      "jobId": "job-01a00588-999d-7491-8a64-cec8fa64f2c2",
+      "result": "execution-succeeded-semantic-completion-not-evaluated"
+    },
+    "R6P02": {
+      "clientRequestId": "world-r6-action-effect-failure-probe-20260815-01",
+      "jobId": "job-01a00588-b48e-7842-8220-c3135db6d835",
+      "result": "execution-failed-exit-23-with-durable-result"
+    },
+    "R6P03": {
+      "clientRequestId": "world-r6-current-outcome-compression-probe-20260815-01",
+      "jobId": "job-01a0058a-293b-7f41-a713-93eac51330a0",
+      "result": "mixed-excellent-plus-failed-history-equals-one-moderate-useful-history-in-current-ranking"
+    }
+  },
+  "productionDebt": {
+    "currentConsumptionOutcome": "Current `ConsumptionOutcome(resource_id, workload_id, useful, value)` is a useful narrow ranking prior but not a general Outcome model.",
+    "probe": "R6P03 proves it collapses excellent+failed bimodal history and one moderate useful observation to identical potential/evidence/decision under equal other facts.",
+    "decision": "Record debt only. Do not replace it with a universal Outcome schema in R6."
+  },
+  "sourceIntegrity": {
+    "frozenRepositoriesChecked": 9,
+    "selectedFilesComparedToFrozenCommits": 25,
+    "exactSourceRefsResolved": 40,
+    "result": "PASS"
+  },
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r6Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionOutcomeSchema": false,
+    "productionAttributionGraph": false,
+    "productionKnowledgeStore": false,
+    "productionConversionLedger": false,
+    "consumptionOutcomeMigration": false,
+    "globalOutcomeScalar": false
+  },
+  "next": "R7 resource ecology dynamics: stock/flow/capacity/budget/rate, consumption/reservation/depletion, renewal/decay/reacquisition, resource-producing actions/effects and recursive feedback, after canonical main revalidation."
+}
