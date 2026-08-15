@@ -1,0 +1,14 @@
+title = "Ordivon World Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "GBIF datasetKey is a public dataset UUID captured in immutable consumption evidence, not a credential."
+condition = "AND"
+regexTarget = "line"
+paths = ['''^evidence/acceptance/world-r1-resource-opportunity-flywheel-20260813\.json$''']
+regexes = ['''"datasetKey": "50c9509d-22c7-4a22-a47d-8c48425ef4a7"''']
