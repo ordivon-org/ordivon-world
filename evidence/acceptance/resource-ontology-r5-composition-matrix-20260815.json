@@ -1,0 +1,1707 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r5-composition-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "300e3feef2be31ed3c8f72dfcb7383b1fd50979a",
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "300e3feef2be31ed3c8f72dfcb7383b1fd50979a"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "d9fdbfcbf2d578135587813cb9c8c14b640fbb40"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "sourceFiles": {
+    "W_R4": {
+      "path": "docs/resource-ontology-r4-lifecycle-falsification.md",
+      "sha256": "sha256:b480bbae80d9e685bb3d79971c5d8960f4930a9faf4c2c6e6771206609685fb4"
+    },
+    "W_MODEL": {
+      "path": "docs/resource-option-capability-model.md",
+      "sha256": "sha256:6aec276db2f06f2abe222d07e96527bad4e1144209206d3a8388774533075bc7"
+    },
+    "F_EXEC": {
+      "path": "/root/projects/ordivon-finance/deploy/executor/README.md",
+      "sha256": "sha256:f579cee03c7a2996c437d895e0527692c919f0852d487becb9b57d2a62fde51e"
+    },
+    "F_QB": {
+      "path": "/root/projects/ordivon-finance/design/QUANT-BEDROCK.md",
+      "sha256": "sha256:fd714c30c32fd81f55ca841abe4e6c55ce1c4541783c3e62f8fad6cc44119922"
+    },
+    "F_GVA": {
+      "path": "/root/projects/ordivon-finance/design/GVA-RESEARCH-PLATFORM-V0.md",
+      "sha256": "sha256:495d368bde14569ffcda07cb662f96f1e25145ce6565f5f58b25be9864e35453"
+    },
+    "F_DEC": {
+      "path": "/root/projects/ordivon-finance/design/DECISION-PROPOSAL-KERNEL.md",
+      "sha256": "sha256:590407eeed90b9c5b3f2e6c2c943b4dc49e781b06982dfdb46b321f62526915b"
+    },
+    "N_README": {
+      "path": "/root/workstation-lab/README.md",
+      "sha256": "sha256:0592df3c0da31c3f41e33a79a087287f63e50819c7fadcc7edbb550537c304dc"
+    },
+    "N_NX1": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx1-public-bootstrap-20260812.json",
+      "sha256": "sha256:f21e1946fd4713ee6bbfa69c2cbd396e4eaf385a5d3992f1ae6ec31bb8b202cb"
+    },
+    "N_NX4": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx4-multi-owner-fabric-20260812.json",
+      "sha256": "sha256:38ef45032f9fe637fb8104fe834f275b406c187e118884987cc66e4c1fe740b4"
+    },
+    "N_NX5": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx5-independent-roots-20260812.json",
+      "sha256": "sha256:7c07116a33888478414152fb56af6f57a6cb861eefed145e4d5d0945bed43194"
+    },
+    "N_NX5_FAULT": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx5-root-fault-evidence-20260812.json",
+      "sha256": "sha256:811b55f640ab9d3aaceab45b40b831ca5d1d03083deb546664e479b51d7bdf41"
+    },
+    "N_PAL": {
+      "path": "/root/workstation-lab/evidence/pal-p2-capability-transfer-20260813.json",
+      "sha256": "sha256:8787992e29b90758f2d81acf73b7b9d98a34375a6393f020517eafce4b94f626"
+    },
+    "N_HALF": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-network-half-dead-p0-5ace527.json",
+      "sha256": "sha256:167d6624db6e02c92e67246beee91c1b2f929c0cd773c0fc80aa4ce460e4af11"
+    },
+    "N_MP": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-surfshark-multiprotocol-p1-20260810.json",
+      "sha256": "sha256:9d8ef75707b70bdba844ec4d8fc97b94de7ae23ada2abfe14187fff7b71365e5"
+    },
+    "N_NX2": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx2-exterior-discovery-20260812.json",
+      "sha256": "sha256:5889cd652214c3b06dd38b6e799925bea1311c7a2d141274eee6f90dcde430d6"
+    },
+    "R_EFFECT": {
+      "path": "/root/projects/ordivon-runtime/docs/effect-kernel.md",
+      "sha256": "sha256:42610afe1163550caa550f107a7bf8a7a69eac2d2b836247d2330a6e0f691d77"
+    },
+    "S_PF": {
+      "path": "/root/projects/ordivon-studio/research/equipment/PROVIDER-FIRST-PF0.md",
+      "sha256": "sha256:6446eb4d76a08a0dec5ffb8ef8af5e282a444dd775c315ce6060254c37b1cdce"
+    },
+    "S_E8": {
+      "path": "/root/projects/ordivon-studio/research/equipment/evidence/e8-capability-expansion-20260814.json",
+      "sha256": "sha256:3e106058571ca1ac75b60dd1402fd121eca279cb3a5c0404c2b56dbf443044fb"
+    },
+    "S_E7": {
+      "path": "/root/projects/ordivon-studio/scripts/run-e7-equipment-economics.py",
+      "sha256": "sha256:e7415c95a1e6c035c9ac63c2b4a192a98ddbded0df8b8a42bfc9d0b55acd48f9"
+    },
+    "Q_CA5": {
+      "path": "/root/projects/ordivon-security/research/ca5/provider-binding-audit.json",
+      "sha256": "sha256:2b0cf7c79f1df8bad2dd0466d66c9929465c917e2f1f440b6604d1e2af9d91e3"
+    },
+    "Q_CA2": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/ca2-vulnerability-evidence-1cb9c24.json",
+      "sha256": "sha256:16ac49671a7d09eb5305f8c6e16aeea6f4a2d79f6dfb2fc557ebb7b267d0de49"
+    },
+    "Q_D3": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/windows-kvm-p1-case-a-d3-invalid-envelope-3fa9fa6.json",
+      "sha256": "sha256:f211646b266c1f098f10354e8193eba79709dc3039076686e50912ceb5b87b16"
+    },
+    "G_DEV": {
+      "path": "/root/projects/ordivon-game/docs/DEVELOPMENT_MODEL.md",
+      "sha256": "sha256:93462b906fd8856bc6c1a3f37fb1c3d45ac1d9a3453ba83dda776631a63bf6c0"
+    },
+    "G_V3": {
+      "path": "/root/projects/ordivon-game/evidence/acceptance/station-zero-v3-agent-action-admission-8d89410.json",
+      "sha256": "sha256:958eec557115634b23559a0a72ad704423eb05a4380d9bb9965b1226aedcbf61"
+    },
+    "H_TRANSFER": {
+      "path": "/root/projects/ordivon-human/methods/m0/HUMAN-AI-CAPABILITY-TRANSFER.md",
+      "sha256": "sha256:c05bd44c844d600cce3e7ae91e88a16078b08404828fbe6a012030d4002381de"
+    },
+    "H_FOUNDER": {
+      "path": "/root/projects/ordivon-human/research/economy/cases/CASE-005-FOUNDER-DEPENDENT-SMALL-BUSINESS.md",
+      "sha256": "sha256:238de293c4e235c162519b8009f42325a643f216423b507de4d4b21fe3bd9a6a"
+    },
+    "H_AE1": {
+      "path": "/root/projects/ordivon-human/research/agentic-capability/experiments/evidence/ae1-c1-round1.json",
+      "sha256": "sha256:e454b7498bf53bf3b7ba55e7db1e16edeaf6daf6d338ec9f082f93d03bb5e85b"
+    },
+    "HA_P0": {
+      "path": "/root/projects/ordivon-harness/docs/P0-CAPABILITY-COMPOSITION-CLOSEOUT.md",
+      "sha256": "sha256:75c3a746dca82fe67b01116172ea1bbc51edef44d6f6e69d05f767adf6744fe2"
+    },
+    "HA_P2": {
+      "path": "/root/projects/ordivon-harness/docs/P2-PROGRAMMATIC-TOOL-COMPOSITION-CLOSEOUT.md",
+      "sha256": "sha256:3d7931e50179493a638bb2bf062c77b16a430abe8ec96ebe274b3ca9f68510ed"
+    },
+    "HA_R1": {
+      "path": "/root/projects/ordivon-harness/evidence/harness-r1-single-capability-truth-716cc4b.json",
+      "sha256": "sha256:03620676ac61dce77720dd7b67c9de4db52ede5c8b07e3130833be8b7a094284"
+    }
+  },
+  "sourceRefs": {
+    "N1": {
+      "fileKey": "N_README",
+      "needle": "transport/connector redundancy"
+    },
+    "N2": {
+      "fileKey": "N_MP",
+      "needle": "proving protocol-level failure-domain diversity"
+    },
+    "N3": {
+      "fileKey": "N_NX5_FAULT",
+      "needle": "survivingRoot"
+    },
+    "N4": {
+      "fileKey": "N_NX1",
+      "needle": "current shared capacity is zero"
+    },
+    "N5": {
+      "fileKey": "N_NX4",
+      "needle": "the same Snowflake resource may be unavailable in one parent world and available in another"
+    },
+    "N6": {
+      "fileKey": "N_NX2",
+      "needle": "A child resource binds the exact parent capability"
+    },
+    "N7": {
+      "fileKey": "N_PAL",
+      "needle": "finance-okx-ticker"
+    },
+    "N8": {
+      "fileKey": "N_HALF",
+      "needle": "nominally redundant connectors to fail through one shared lower substrate"
+    },
+    "F1": {
+      "fileKey": "F_EXEC",
+      "needle": "Workstation or the deployment owner is responsible for materializing a current scoped egress capability"
+    },
+    "F2": {
+      "fileKey": "F_QB",
+      "needle": "desired de-risking is not executable de-risking"
+    },
+    "F3": {
+      "fileKey": "F_QB",
+      "needle": "about 2.16x, without changing final selection or sealed result"
+    },
+    "F4": {
+      "fileKey": "F_GVA",
+      "needle": "Harness now owns exact restricted-input -> exact provider/adapter/model route admission"
+    },
+    "F5": {
+      "fileKey": "F_DEC",
+      "needle": "A5 owns belief structure; A4 owns survival constraints"
+    },
+    "R1": {
+      "fileKey": "R_EFFECT",
+      "needle": "Host Dependencies are intentionally explicit and partial"
+    },
+    "R2": {
+      "fileKey": "R_EFFECT",
+      "needle": "delayed `dlopen()`"
+    },
+    "R3": {
+      "fileKey": "R_EFFECT",
+      "needle": "private mount namespace inside the target"
+    },
+    "R4": {
+      "fileKey": "R_EFFECT",
+      "needle": "Runtime self-release binds an exact Workspace commit"
+    },
+    "S1": {
+      "fileKey": "S_E8",
+      "needle": "REAPER complements rather than replaces FFmpeg or Resolve Fairlight"
+    },
+    "S2": {
+      "fileKey": "S_PF",
+      "needle": "ImageMagick and FFmpeg image-resize speed was effectively tied"
+    },
+    "S3": {
+      "fileKey": "S_E7",
+      "needle": "python-spatial-projection"
+    },
+    "S4": {
+      "fileKey": "S_E7",
+      "needle": "obs+godot+blender"
+    },
+    "S5": {
+      "fileKey": "S_E7",
+      "needle": "rsvg-convert+figma"
+    },
+    "Q1": {
+      "fileKey": "Q_CA5",
+      "needle": "physicalExecutionAndRecovery"
+    },
+    "Q2": {
+      "fileKey": "Q_CA2",
+      "needle": "one LLVM provider family with three distinct evidence modes"
+    },
+    "Q3": {
+      "fileKey": "Q_CA2",
+      "needle": "standalone caller discarded ca2_process return value"
+    },
+    "Q4": {
+      "fileKey": "Q_D3",
+      "needle": "Guardian max runtime was configured to 90000 ms"
+    },
+    "G1": {
+      "fileKey": "G_DEV",
+      "needle": "Prefer fixture/policy Agents first"
+    },
+    "G2": {
+      "fileKey": "G_DEV",
+      "needle": "Cognition** may be a deterministic policy, a model, a human, or a hierarchy"
+    },
+    "G3": {
+      "fileKey": "G_V3",
+      "needle": "Action admission is scoped to exact Subject x Cognition x Actor x Intent"
+    },
+    "G4": {
+      "fileKey": "G_DEV",
+      "needle": "Studio owns medium choice within the brief"
+    },
+    "H1": {
+      "fileKey": "H_TRANSFER",
+      "needle": "Human-plus-model system capability"
+    },
+    "H2": {
+      "fileKey": "H_TRANSFER",
+      "needle": "Retained human capability"
+    },
+    "H3": {
+      "fileKey": "H_FOUNDER",
+      "needle": "information and operation are trapped in personal attention"
+    },
+    "H4": {
+      "fileKey": "H_AE1",
+      "needle": "durability"
+    },
+    "HA1": {
+      "fileKey": "HA_P2",
+      "needle": "7 model calls / 5 physical Tool calls"
+    },
+    "HA2": {
+      "fileKey": "HA_P0",
+      "needle": "Installed ≠ Run-admitted"
+    },
+    "HA3": {
+      "fileKey": "HA_R1",
+      "needle": "Provider adapter configuration is not capability authority"
+    }
+  },
+  "models": {
+    "A": {
+      "name": "Flat Additive Bag",
+      "frozen": "A Capability is the union/sum of individual Resource capability labels and values. More resources are non-decreasing; resources advertising the same capability are substitutes; composition needs no explicit requirement, assignment, compatibility, capacity, authority or disturbance structure."
+    },
+    "B": {
+      "name": "Universal Dependency Graph",
+      "frozen": "All Resources are nodes in one persistent cross-domain graph with stable typed edges such as requires, substitutes, complements, catalyzes and depends-on. Capability follows by graph reachability after current node-state filtering; the same edge semantics apply across actors, transitions, demands and owners."
+    },
+    "C": {
+      "name": "Transition-Scoped Typed Bundle/Hypergraph",
+      "frozen": "For each target transition, construct a transition-scoped typed bundle/hyperedge over ResourceFor projections. Resources receive explicit roles such as prerequisite, component, complement, substitute, catalyst and redundancy member; current authority/capacity/failure-domain constraints qualify the bundle. A supported bundle establishes an Option/Capability."
+    },
+    "D": {
+      "name": "Requirement–Assignment–Constraint Projection",
+      "frozen": "For actor A, target transition T, demand/load D and as_of t, composition is established only when there exists an assignment of supported ResourceFor/ActionableResourceFor projections to transition-specific requirements such that all material native constraints hold. Requirements state what T needs; assignments state which current resources satisfy them; constraints preserve compatibility, authority/currentness, capacity/load units, temporal/admission ordering, effect/recovery conditions and disturbance-relative independence. Substitution, complementarity, prerequisite, conversion modifiers, bottlenecks and redundancy are derived relations over feasible assignments rather than global Resource edge types. Composition is persisted only when a native owner/effect/recovery boundary requires exact bundle identity."
+    }
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "sourceCase": "R5P01",
+      "case": "Two separate resources x and y cannot satisfy current conjunctive demand x+y in per-resource evaluator",
+      "pressure": "cross-resource conjunction",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "sourceCase": "R5P02",
+      "case": "Lower owner exported composite x+y capability is consumable without World understanding internal composition",
+      "pressure": "boundary export",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "sourceCase": "R5P03",
+      "case": "Two resources advertise x but one transport is unavailable",
+      "pressure": "nominal substitute vs actionable substitute",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "sourceCase": "R5P04",
+      "case": "Same x resource is usable for research but blocked for commercial purpose",
+      "pressure": "purpose-scoped substitution",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "sourceCase": "N1",
+      "case": "native-a/native-b may be connector redundant while converging on one physical WAN",
+      "pressure": "failure-domain independence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "sourceCase": "N2",
+      "case": "WireGuard can fail while OpenVPN remains qualified on same ingress/location",
+      "pressure": "disturbance-specific substitution",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "sourceCase": "N3",
+      "case": "Two admitted roots survive injected failure of the other",
+      "pressure": "effective redundancy under tested root fault",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "sourceCase": "N4",
+      "case": "Snowflake mechanism reaches broker but shared volunteer capacity is zero",
+      "pressure": "capacity blocks composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "sourceCase": "N5",
+      "case": "Same Snowflake resource is unavailable under one parent and available under another",
+      "pressure": "parent-context composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "sourceCase": "N6",
+      "case": "Child relation binds exact ancestor capability and old child invalidates after parent generation replacement",
+      "pressure": "versioned prerequisite",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "sourceCase": "N7",
+      "case": "Ambient succeeds on OKX while native-a/native-b fail; scoped paths succeed on other consumers",
+      "pressure": "transition-specific egress substitute",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "sourceCase": "N8",
+      "case": "Nominally redundant connectors fail together through half-dead shared lower substrate",
+      "pressure": "common-mode failure",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "sourceCase": "F1",
+      "case": "Finance executor composes site/API semantics with Workstation-exported scoped egress but does not own VPN mechanics",
+      "pressure": "cross-owner requirement assignment",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "sourceCase": "F2",
+      "case": "Risk policy wants to reduce exposure but participation/liquidity capacity prevents executable de-risking",
+      "pressure": "bottleneck capacity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "sourceCase": "F3",
+      "case": "Full diagnostic context costs ~2.16x tokens without changing sealed selection/result",
+      "pressure": "non-monotonic additive value",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "sourceCase": "F4",
+      "case": "GVA evidence/rules plus Harness exact route admission jointly establish model/provider use",
+      "pressure": "authority-aware composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "sourceCase": "F5",
+      "case": "Finance decision kernel composes belief structure and survival constraints; either alone is insufficient",
+      "pressure": "multiple semantic requirements",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "sourceCase": "R1",
+      "case": "Runtime Host Dependencies are explicit partial prerequisites, not complete environment closure",
+      "pressure": "declared prerequisite incompleteness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "sourceCase": "R2",
+      "case": "Delayed dlopen consumes changed dependency after pre-spawn validation",
+      "pressure": "temporal dependency continuity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "sourceCase": "R3",
+      "case": "Target private mount namespace can consume different bytes than host-path witness",
+      "pressure": "view-specific compatibility",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C21",
+      "sourceCase": "R4",
+      "case": "Runtime self-release binds exact commit+manifest+authority+deployer+Job because effect identity/recovery requires it",
+      "pressure": "persist bundle only at effect boundary",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C22",
+      "sourceCase": "S1",
+      "case": "REAPER complements rather than replaces FFmpeg/Resolve through distinct editable audio project state",
+      "pressure": "complement not substitute",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-GRAPH"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C23",
+      "sourceCase": "S2",
+      "case": "ImageMagick and FFmpeg tie on speed while ImageMagick survives through lower semantic friction",
+      "pressure": "conversion modifier",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C24",
+      "sourceCase": "S3",
+      "case": "Blender versus Python spatial projection overlap on output but Blender uniquely supplies editable 3D scene/camera/render state",
+      "pressure": "partial substitution",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C25",
+      "sourceCase": "S4",
+      "case": "OBS+Godot+Blender fallback does not automatically equal TouchDesigner live node/sensor world",
+      "pressure": "bundle semantic non-equivalence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C26",
+      "sourceCase": "S5",
+      "case": "Inkscape fallback relation changes when Figma is pending/available and when local vector mutation is required",
+      "pressure": "context-dependent substitute set",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C27",
+      "sourceCase": "Q1",
+      "case": "Security composes Runtime execution, Harness cognition/tools, Security admission and provider mechanics without one gateway owner",
+      "pressure": "cross-owner layered composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C28",
+      "sourceCase": "Q2",
+      "case": "Three evidence modes from one LLVM provider family are diverse evidence but not independent provider failure domains",
+      "pressure": "evidence diversity vs redundancy",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C29",
+      "sourceCase": "Q3",
+      "case": "Independent ASan replay initially fails because reproducer changed decision-relevant semantics",
+      "pressure": "semantic compatibility",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C30",
+      "sourceCase": "Q4",
+      "case": "Guardian runtime budget shorter than instrumentation envelope invalidates experiment before durable Guest result",
+      "pressure": "limiting envelope bottleneck",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C31",
+      "sourceCase": "G1",
+      "case": "Fixture/policy Agents substitute for live models only when hypothesis does not require richer cognition",
+      "pressure": "hypothesis-scoped substitution",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C32",
+      "sourceCase": "G2",
+      "case": "Game cognition can be policy/model/human/hierarchy; role and admission shape determine composition",
+      "pressure": "heterogeneous component role",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C33",
+      "sourceCase": "G3",
+      "case": "Action admission binds exact Subject × Cognition × Actor × Intent at one planning/world revision",
+      "pressure": "action-scoped composition identity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C34",
+      "sourceCase": "G4",
+      "case": "Studio asset/output composes into Game presentation while Game retains gameplay-rule authority",
+      "pressure": "cross-owner semantic composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C35",
+      "sourceCase": "H1",
+      "case": "Human+model capability depends on model, interface, context, tools/access and Human direction/verification",
+      "pressure": "joint-system composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C36",
+      "sourceCase": "H2",
+      "case": "Joint-system output does not imply retained Human capability after assistant removal",
+      "pressure": "boundary-relative capability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C37",
+      "sourceCase": "H3",
+      "case": "Founder personal attention can be the limiting resource even when legal ownership and other assets exist",
+      "pressure": "attention bottleneck",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERLOAD"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C38",
+      "sourceCase": "H4",
+      "case": "Human allocation distinguishes durability/control value from representation/retrievability and attention cost",
+      "pressure": "conversion modifier vs destination",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERCOMMIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C39",
+      "sourceCase": "HA1",
+      "case": "Harness ToolProgram reduces model calls 7→2 with same five physical Tool calls",
+      "pressure": "coordination catalyst/modifier",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    },
+    {
+      "id": "C40",
+      "sourceCase": "HA2",
+      "case": "Installed mechanism, Run-admitted composition and exact turn action surface are distinct",
+      "pressure": "admission-scoped composition",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-FLAT"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-GLOBAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-BUNDLE"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-RAC"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "F": 36,
+      "A": 4
+    },
+    "B": {
+      "P": 6,
+      "F": 28,
+      "A": 6
+    },
+    "C": {
+      "P": 32,
+      "A": 8
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "relationLedger": [
+    {
+      "concept": "Requirement",
+      "placement": "transition/domain-authored semantic condition",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C01",
+        "C17",
+        "C35",
+        "C40"
+      ],
+      "reason": "Without explicit requirements, partial resources cannot be composed and lower-owner exports cannot be distinguished from unmet conjunctions."
+    },
+    {
+      "concept": "Assignment",
+      "placement": "projection from ResourceFor/ActionableResourceFor to one requirement",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C03",
+        "C09",
+        "C13",
+        "C31"
+      ],
+      "reason": "The same Resource can satisfy one transition/purpose and fail another; satisfaction is contextual mapping, not a global edge."
+    },
+    {
+      "concept": "Compatibility",
+      "placement": "constraint over assignments/effect boundary",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C20",
+        "C25",
+        "C29",
+        "C33"
+      ],
+      "reason": "Nominal capabilities can fail when view, semantics, revision or action binding differ."
+    },
+    {
+      "concept": "Authority/currentness",
+      "placement": "native constraints consumed by projection",
+      "verdict": "REQUIRED_CONSTRAINT_NOT_COMPOSITION_OWNER",
+      "cases": [
+        "C04",
+        "C10",
+        "C16",
+        "C40"
+      ],
+      "reason": "Composition cannot launder authority; current native admission facts qualify assignments."
+    },
+    {
+      "concept": "Capacity/load",
+      "placement": "native quantity/rate/budget constraints with units",
+      "verdict": "REQUIRED_WHEN_BINDING",
+      "cases": [
+        "C08",
+        "C14",
+        "C30",
+        "C37"
+      ],
+      "reason": "Capability existence and executable quantity diverge; bottlenecks emerge only relative to requested load."
+    },
+    {
+      "concept": "Substitution",
+      "placement": "derived relation between alternative feasible assignments for same requirement/context",
+      "verdict": "DERIVED_NOT_GLOBAL_EDGE",
+      "cases": [
+        "C03",
+        "C06",
+        "C11",
+        "C24",
+        "C31"
+      ],
+      "reason": "Substitution changes with transition, purpose, current access, semantic ceiling and disturbance."
+    },
+    {
+      "concept": "Complementarity",
+      "placement": "derived joint-feasibility or interaction relation among assignments",
+      "verdict": "DERIVED_NOT_GLOBAL_EDGE",
+      "cases": [
+        "C17",
+        "C22",
+        "C25",
+        "C35"
+      ],
+      "reason": "Resources complement when joint assignment satisfies requirements or creates a transition neither supplies alone; not an intrinsic pair label."
+    },
+    {
+      "concept": "Prerequisite",
+      "placement": "hard temporal/admission requirement/constraint",
+      "verdict": "DERIVED_CONSTRAINT",
+      "cases": [
+        "C10",
+        "C18",
+        "C19",
+        "C40"
+      ],
+      "reason": "Prerequisite describes ordering/admission for one transition; it is not a universal resource type and may be version/time scoped."
+    },
+    {
+      "concept": "Conversion modifier / catalyst",
+      "placement": "derived effect on cost, latency, reliability, attention or conversion rate without necessarily changing feasible set",
+      "verdict": "SURVIVES_AS_MODIFIER_RELATION",
+      "cases": [
+        "C15",
+        "C23",
+        "C38",
+        "C39"
+      ],
+      "reason": "Some resources/mechanisms improve conversion efficiency while adding no new physical transition; deleting this distinction misclassifies real gains."
+    },
+    {
+      "concept": "Bottleneck",
+      "placement": "derived binding constraint / least slack under requested load",
+      "verdict": "DERIVED_NOT_RESOURCE_TYPE",
+      "cases": [
+        "C08",
+        "C14",
+        "C30",
+        "C37"
+      ],
+      "reason": "Bottleneck can move as load/capacity changes and may be quota, liquidity, time, attention or control envelope."
+    },
+    {
+      "concept": "Failure-domain independence",
+      "placement": "native evidence + disturbance-scoped relation over alternative assignments",
+      "verdict": "REQUIRED_FOR_REDUNDANCY_CLAIM",
+      "cases": [
+        "C05",
+        "C06",
+        "C07",
+        "C12",
+        "C28"
+      ],
+      "reason": "Alternative count or provider labels cannot establish survival under a disturbance."
+    },
+    {
+      "concept": "Redundancy",
+      "placement": "derived set of >=2 feasible substitutes with sufficient independence against declared disturbance",
+      "verdict": "DERIVED",
+      "cases": [
+        "C05",
+        "C07",
+        "C12",
+        "C28"
+      ],
+      "reason": "Redundancy is not resource count; it requires substitutability, actionability and independence under the target disturbance."
+    },
+    {
+      "concept": "Bundle identity",
+      "placement": "owner-native effect/recovery boundary only when exact members materially define action/effect",
+      "verdict": "CONDITIONAL_PERSISTENCE",
+      "cases": [
+        "C21",
+        "C33",
+        "C40"
+      ],
+      "reason": "Exact bundle persistence is justified for replay/recovery/action identity, not for every planning composition."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "delete transition-specific requirements",
+      "result": "FAIL",
+      "cases": [
+        "C01",
+        "C17",
+        "C35"
+      ],
+      "why": "Cannot distinguish partial capability inventory from a sufficient composition proof."
+    },
+    {
+      "mutation": "delete assignment relation and use capability labels globally",
+      "result": "FAIL",
+      "cases": [
+        "C03",
+        "C04",
+        "C11",
+        "C31"
+      ],
+      "why": "Same nominal capability has different admissibility/fitness across contexts."
+    },
+    {
+      "mutation": "delete compatibility/semantic binding constraints",
+      "result": "FAIL",
+      "cases": [
+        "C20",
+        "C25",
+        "C29",
+        "C33"
+      ],
+      "why": "Nominally matching components can compose into the wrong bytes, semantics, revision or action binding."
+    },
+    {
+      "mutation": "delete capacity/load constraints",
+      "result": "FAIL",
+      "cases": [
+        "C08",
+        "C14",
+        "C30",
+        "C37"
+      ],
+      "why": "Feasible capability claims become false under zero shared capacity, liquidity freeze, runtime envelope or attention bottleneck."
+    },
+    {
+      "mutation": "delete disturbance/failure-domain evidence from redundancy",
+      "result": "FAIL",
+      "cases": [
+        "C05",
+        "C07",
+        "C12",
+        "C28"
+      ],
+      "why": "Correlated alternatives are misclassified as resilient redundancy."
+    },
+    {
+      "mutation": "add global substitute edges",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C04",
+        "C06",
+        "C11",
+        "C24",
+        "C31"
+      ],
+      "why": "Substitution is transition/purpose/as_of/disturbance scoped."
+    },
+    {
+      "mutation": "add global complement edges",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C17",
+        "C22",
+        "C25",
+        "C35"
+      ],
+      "why": "Complementarity follows from joint requirement satisfaction/interaction and changes with target transition."
+    },
+    {
+      "mutation": "promote prerequisite to universal Resource type",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C10",
+        "C18",
+        "C19",
+        "C40"
+      ],
+      "why": "Prerequisite is a temporal/admission constraint and may refer to authority, bytes, parent capability or prior observation."
+    },
+    {
+      "mutation": "promote catalyst to universal Resource class",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C15",
+        "C23",
+        "C38",
+        "C39"
+      ],
+      "why": "The useful invariant is conversion modification; the same resource can be necessary in one transition and merely efficiency-improving in another."
+    },
+    {
+      "mutation": "promote bottleneck to fixed Resource property/type",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C08",
+        "C14",
+        "C30",
+        "C37"
+      ],
+      "why": "Binding constraint changes with requested load, capacities and surrounding assignments."
+    },
+    {
+      "mutation": "persist every feasible composition as global bundle/dependency graph",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C02",
+        "C13",
+        "C27",
+        "C34"
+      ],
+      "why": "Lower owners already export semantic capabilities and cross-owner planning compositions often need no durable shared identity."
+    },
+    {
+      "mutation": "treat adding resources as non-decreasing capability/value",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C15",
+        "C23",
+        "C25",
+        "C39"
+      ],
+      "why": "Extra context/tools can add cost/friction without new capability; modifiers can be positive, zero or negative."
+    }
+  ],
+  "freshProjectionTests": [
+    {
+      "id": "R5Y01",
+      "case": "Two API providers satisfy the same semantic requirement, but both depend on the same upstream identity provider; they are substitutes for ordinary provider failure but not for identity-provider outage.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-DISTURBANCE"
+        }
+      }
+    },
+    {
+      "id": "R5Y02",
+      "case": "One GPU and one CPU can each execute a small model, but a larger batch requires GPU memory plus host RAM simultaneously; substitution at low load becomes complementarity at high load.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-LOAD-CHANGES-RELATION"
+        }
+      }
+    },
+    {
+      "id": "R5Y03",
+      "case": "A cache does not change the set of tasks the system can perform but reduces repeated provider cost enough to make a workload economically admissible.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONVERSION-MODIFIER"
+        }
+      }
+    },
+    {
+      "id": "R5Y04",
+      "case": "A signed entitlement is a hard prerequisite for one provider call, while the same entitlement is irrelevant to an offline fallback path.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PATH-SCOPED-PREREQ"
+        }
+      }
+    },
+    {
+      "id": "R5Y05",
+      "case": "Three resources are all individually current, but two cannot be composed because their licenses forbid the target redistribution while the third can pair with either for internal analysis.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-COMPAT-AUTHORITY"
+        }
+      }
+    },
+    {
+      "id": "R5Y06",
+      "case": "A durable effect records exact input bundle identity for replay, while a planning-only alternative bundle is recomputed after current capacity changes.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONDITIONAL-PERSISTENCE"
+        }
+      }
+    },
+    {
+      "id": "R5Y07",
+      "case": "Two independent routes are both feasible substitutes, but one has only 10% of required throughput; it contributes partial capacity but is not full redundancy for the requested load.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CAPACITY-REDUNDANCY"
+        }
+      }
+    },
+    {
+      "id": "R5Y08",
+      "case": "A Human reviewer is not required for low-consequence drafts but becomes a hard admission requirement for a high-consequence publication using the same model/tool resources.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONSEQUENCE-REQUIREMENT"
+        }
+      }
+    }
+  ],
+  "implementationProbes": {
+    "clientRequestId": "world-r5-current-composition-gap-probes-20260815-01",
+    "count": 4,
+    "result": "PASS",
+    "observations": [
+      "current per-resource evaluator cannot satisfy conjunctive demand x+y from separate x and y candidates",
+      "one lower-owner exported composite x+y capability satisfies the same demand",
+      "same nominal x capability is not a current substitute when transport unavailable",
+      "same x resource changes admissibility between research and commercial purpose"
+    ]
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Requirement–Assignment–Constraint Projection",
+    "status": "PROVISIONAL_FOR_R6_NOT_CANONICAL_DOCTRINE",
+    "compression": "Composition is a context-bound satisfiability/proof problem, not a global Resource graph. For actor/transition/demand/load/as_of, domain-authored requirements are assigned current ResourceFor/ActionableResourceFor projections under native compatibility, authority/currentness, capacity, temporal/effect/recovery and disturbance constraints. Substitution/complementarity/prerequisite/modifier/bottleneck/redundancy are derived relations. Persist exact bundle identity only at an owner-native action/effect/recovery boundary that requires it."
+  },
+  "contentDigest": "sha256:ae77167dde45c0fe421adcd9a10c47af3ee618fa7fb32f9e40376fb37787989b"
+}
