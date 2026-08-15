@@ -23,6 +23,8 @@ jobs:
           python-version: '3.12'
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
+          enable-cache: false
+        with:
           version: '0.11.7'
       - run: uv lock --check
       - run: uv sync --locked
@@ -53,6 +55,8 @@ jobs:
         with:
           python-version: '3.12'
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: false
         with:
           version: '0.11.7'
       - run: pnpm install --dir providers/cloudflare --frozen-lockfile
