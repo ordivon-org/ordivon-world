@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r1-research-coverage-receipt",
+  "truthRole": "research-coverage-receipt",
+  "observedWorldBaseRevision": "ab85ed75e544ab0c43f1a80d8c4e89bf1b9a7c79",
+  "r0": {
+    "path": "docs/resource-ontology-r0-census.md",
+    "sha256": "572091ddafbd79e6c95d584a16b753ac96b6f94493bbf9721a690aa464b1b3a9",
+    "episodeCount": 48
+  },
+  "r1": {
+    "path": "docs/resource-ontology-r1-theory-triangulation.md",
+    "sha256": "63bd83b0ba94fab4e74c4bea999ce43b39d131393a9964b101dea8a5727d9dc2",
+    "theoryFamilyCount": 13,
+    "contradictionCount": 13,
+    "carryForwardPropositionCount": 12,
+    "uniqueR0EpisodesReferenced": 48
+  },
+  "theoryFamilies": [
+    {"id":"T1","name":"ecological-affordance","r0Cases":["H02","N05","S05","W06"],"minimumCaseCoverage":true},
+    {"id":"T2","name":"sen-capability-conversion","r0Cases":["F04","G03","H03","S01"],"minimumCaseCoverage":true},
+    {"id":"T3","name":"penrose-productive-services","r0Cases":["G06","H03","S01","S03","S07"],"minimumCaseCoverage":true},
+    {"id":"T4","name":"resource-based-view","r0Cases":["F01","G04","N01","N07","Q01","S07"],"minimumCaseCoverage":true},
+    {"id":"T5","name":"dynamic-capabilities","r0Cases":["F05","G06","N10","N11","W08"],"minimumCaseCoverage":true},
+    {"id":"T6","name":"real-options","r0Cases":["N08","Q05","S02","S06"],"minimumCaseCoverage":true},
+    {"id":"T7","name":"requisite-variety","r0Cases":["G05","N02","N06","N07"],"minimumCaseCoverage":true},
+    {"id":"T8","name":"exploration-exploitation","r0Cases":["F04","H04","N08","N10"],"minimumCaseCoverage":true},
+    {"id":"T9","name":"absorptive-capacity-knowledge-integration","r0Cases":["F03","F04","H04","N10","Q02"],"minimumCaseCoverage":true},
+    {"id":"T10","name":"information-quantity-versus-decision-value","r0Cases":["F04","H04","N07","Q02"],"minimumCaseCoverage":true},
+    {"id":"T11","name":"capacity-bottlenecks","r0Cases":["F04","H04","N04","N11"],"minimumCaseCoverage":true},
+    {"id":"T12","name":"resilience-versus-stability","r0Cases":["N02","N06","N09","N10","N11","Q05","S02","S07"],"minimumCaseCoverage":true},
+    {"id":"T13","name":"formal-resource-convertibility","r0Cases":["F04","G03","G06","Q03","Q05","S07","W03","W04","W08"],"minimumCaseCoverage":true}
+  ],
+  "contradictions": [
+    "C1 object-or-asset emphasis versus relational actionability",
+    "C2 demand-scoped Resource versus pre-workload convertibility space",
+    "C3 utilize unused productive services versus wait to preserve option value",
+    "C4 response variety versus coordination and maintenance burden",
+    "C5 current throughput efficiency versus disturbance resilience and slack",
+    "C6 information amount versus decision value and absorptive capacity",
+    "C7 possessed asset versus rendered service or capability",
+    "C8 successful conversion or Effect versus domain Outcome",
+    "C9 formal free transformation versus owner-native authority",
+    "C10 path dependence versus replaceable underlying mechanisms",
+    "C11 human normative capability versus generic system capability",
+    "C12 persistence and resilience versus rational retirement",
+    "C13 scalar resource value versus partial or incomparable convertibility"
+  ],
+  "centralUnresolved": "C2: R1 strongly supports relational actionability and realized value, but does not establish that Resource existence itself must be demand-scoped. R2 must compare broader-potential, relational-affordance, conversion-theoretic, and option-set definitions.",
+  "r2RequiredDefinitionFamilies": [
+    "A reality-object-or-broad-potential",
+    "B relational-affordance",
+    "C conversion-theoretic",
+    "D option-set"
+  ],
+  "productionChangesAuthorized": false,
+  "resourceOntologyPromoted": false,
+  "globalRegistryAuthorized": false,
+  "scalarValueFunctionAuthorized": false
+}
