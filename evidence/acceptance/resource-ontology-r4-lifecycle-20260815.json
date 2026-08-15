@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r4-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "6ab6e3cfa09cb9c34f86af8b0748cc66b73bb636",
+  "artifacts": {
+    "r4": {
+      "path": "docs/resource-ontology-r4-lifecycle-falsification.md",
+      "sha256": "b480bbae80d9e685bb3d79971c5d8960f4930a9faf4c2c6e6771206609685fb4"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r4-lifecycle-matrix-20260815.json",
+      "sha256": "69fb1f9c33e8bacbd5f04a9ed86edadb4b597026a71c6cad6e033114c83b10c7",
+      "contentDigest": "sha256:06d1c0cb71140c6bff53f59d37c0913fe6be5eddf7bbdc4db389d88fc2b4ae9c"
+    }
+  },
+  "coverage": {
+    "lifecycleDiscriminators": 40,
+    "freshPostFreeze": 8,
+    "totalSurvivorSurface": 48,
+    "labelLedger": 15,
+    "deletionTests": 12,
+    "requiredStructuralDeletions": 3,
+    "rejectedRootStateAdditions": 9,
+    "executedProductionProbes": 7
+  },
+  "modelCounts": {
+    "A": {
+      "F": 37,
+      "A": 3
+    },
+    "B": {
+      "A": 5,
+      "P": 15,
+      "F": 20
+    },
+    "C": {
+      "P": 23,
+      "A": 5,
+      "F": 12
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Claim/Event Projection Model",
+    "status": "PROVISIONAL_FOR_R5_NOT_CANONICAL_DOCTRINE",
+    "compression": "No universal Resource lifecycle state survives. Keep three basic planes separate: (1) Reality/relation support for Resource; (2) epistemic/native claim evidence with claim-local currentness; (3) historical events/effects. Derive ActionableResourceFor/Option and workflow lanes as demand/as_of projections. Candidate is an epistemic role, not lifecycle state."
+  },
+  "centralResult": "No universal Resource lifecycle state survives. Persist/reconcile owner-native Events and claim-specific truth; derive Resource/ActionableResourceFor/Option and workflow lanes as actor/demand/as_of projections. State machines belong at owner-native boundaries where one owner defines and reconciles the transitions.",
+  "rootCompression": {
+    "primitiveLikeStructures": [
+      "Event",
+      "Claim",
+      "Projection"
+    ],
+    "epistemicRole": "ResourceCandidate is a hypothesis, not lifecycle state",
+    "resourceRole": "Resource/ResourceFor are supported relation projections",
+    "actionabilityRole": "ActionableResourceFor is demand/transition/as_of projection",
+    "workflowRole": "queues/decisions are policy+demand projections, not Reality state"
+  },
+  "implementationEvidence": {
+    "nonlinearProbe": {
+      "clientRequestId": "world-r4-nonlinear-lifecycle-probes-20260815-01",
+      "count": 6,
+      "result": "PASS",
+      "observations": [
+        "anonymous consumable-now without AuthorityEvidence/acquisition",
+        "same resource simultaneous consumable-now and not-fit across demands",
+        "same resource simultaneous consumable and blocked-by-terms across purposes",
+        "historical ConsumptionOutcome survives current owner-verification regression",
+        "authority remains active while transport toggles unavailable/available",
+        "same candidate/owner/acquisition facts yield acquire-now or defer-acquisition solely from demand threshold"
+      ]
+    },
+    "multiWorkloadProbe": {
+      "clientRequestId": "world-r4-multi-workload-queue-probe-20260815-01",
+      "result": "PASS",
+      "observations": [
+        "same Resource/native facts at one as_of -> workload A consumable-now",
+        "same Resource/native facts at one as_of -> workload B not-fit",
+        "same Resource/native facts at one as_of -> workload C blocked-by-terms"
+      ],
+      "interpretation": "decision/queue class is workload-scoped projection and cannot be a single Resource lifecycle state"
+    },
+    "carriedDebt": [
+      "R3F01 claim-level transition provenance",
+      "R3F02 resource-level owner provenance does not prove capability claim"
+    ]
+  },
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r4Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionLifecycleEnum": false,
+    "resourceRegistry": false,
+    "globalStateVector": false,
+    "milestoneAuthority": false
+  },
+  "next": "R5 composition/substitution/complementarity/bottleneck falsification after canonical main revalidation."
+}
