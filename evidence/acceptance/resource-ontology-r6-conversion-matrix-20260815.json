@@ -1,0 +1,1687 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r6-conversion-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "9e60e1b3c5d99d8dce1ec8168a99ba2fc791d2d8",
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "9e60e1b3c5d99d8dce1ec8168a99ba2fc791d2d8"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "7d812d8d41d5ba6b8aa619886beddca94327b11f"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "sourceFiles": {
+    "W_R4": {
+      "path": "docs/resource-ontology-r4-lifecycle-falsification.md",
+      "sha256": "sha256:b480bbae80d9e685bb3d79971c5d8960f4930a9faf4c2c6e6771206609685fb4"
+    },
+    "W_R5": {
+      "path": "docs/resource-ontology-r5-composition-falsification.md",
+      "sha256": "sha256:154fae1112e3c5ff453a91699382752b0ad5ec3ba5f33c5633805090500e50a6"
+    },
+    "W_DISC": {
+      "path": "src/ordivon_world/resource_discovery.py",
+      "sha256": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840"
+    },
+    "R_STATUS": {
+      "path": "/root/projects/ordivon-runtime/docs/status.md",
+      "sha256": "sha256:ec7eed14815f964ab9dc5ca402aaeece3acf36f5d63106384c6918ea11a6c09c"
+    },
+    "R_UX": {
+      "path": "/root/projects/ordivon-runtime/docs/agent-ux.md",
+      "sha256": "sha256:11f451907f472f2be3e6f238e729551216d25439de6ff175cb91a2b4ba24f114"
+    },
+    "R_REC": {
+      "path": "/root/projects/ordivon-runtime/docs/recovery.md",
+      "sha256": "sha256:a48c8789bc2c1f9b0a47f51cf262c5d893ae4a073a437e6448a2bdd5638481f6"
+    },
+    "R_EFFECT": {
+      "path": "/root/projects/ordivon-runtime/docs/effect-kernel.md",
+      "sha256": "sha256:42610afe1163550caa550f107a7bf8a7a69eac2d2b836247d2330a6e0f691d77"
+    },
+    "F_RECON": {
+      "path": "/root/projects/ordivon-finance/design/RECONCILIATION-ATTRIBUTION-KERNEL.md",
+      "sha256": "sha256:f242b61ea680659310c50ac3ebfc442ea101d2f9803a8cc02c41366ccbc91ece"
+    },
+    "F_PERF": {
+      "path": "/root/projects/ordivon-finance/design/OWNER-OBJECTIVE-PERFORMANCE.md",
+      "sha256": "sha256:296206d5016e7dc9a84475ae9ac033b107c033c0386e24e58c237a897dcd46bb"
+    },
+    "F_ARCH": {
+      "path": "/root/projects/ordivon-finance/design/AGENT-FIRST-ARCHITECTURE.md",
+      "sha256": "sha256:ac43e29ae96c23f7fccdba4d2f8412854a7c7147ebd26e12ef1d4a02ac37dc2d"
+    },
+    "F_QB": {
+      "path": "/root/projects/ordivon-finance/design/QUANT-BEDROCK.md",
+      "sha256": "sha256:fd714c30c32fd81f55ca841abe4e6c55ce1c4541783c3e62f8fad6cc44119922"
+    },
+    "F_EXEC": {
+      "path": "/root/projects/ordivon-finance/deploy/executor/README.md",
+      "sha256": "sha256:f579cee03c7a2996c437d895e0527692c919f0852d487becb9b57d2a62fde51e"
+    },
+    "G_GV": {
+      "path": "/root/projects/ordivon-game/docs/STATION_ZERO_V3_DOMAIN_VALUE_GV.md",
+      "sha256": "sha256:1af7135e306069835457a0f86807d532d5887fbabb605e0bbe17637779a398df"
+    },
+    "G_DEV": {
+      "path": "/root/projects/ordivon-game/docs/DEVELOPMENT_MODEL.md",
+      "sha256": "sha256:93462b906fd8856bc6c1a3f37fb1c3d45ac1d9a3453ba83dda776631a63bf6c0"
+    },
+    "S_README": {
+      "path": "/root/projects/ordivon-studio/README.md",
+      "sha256": "sha256:fd35e49400c349b5e087f4bf5b95c797556a6b41562fbae197a52101682e703c"
+    },
+    "S_RUNTIME": {
+      "path": "/root/projects/ordivon-studio/productions/runtime-introduction/README.md",
+      "sha256": "sha256:a10b59958cf09c420cf1fb6015f6217d2f1fa064bd73bd161c9f6dcc7fbb923e"
+    },
+    "S_LOOP": {
+      "path": "/root/projects/ordivon-studio/docs/fast-inner-loop.md",
+      "sha256": "sha256:de9f400643f4dcfe2a484bfff80e246fd0826fc05a90b4571a5ece9e759bdb7f"
+    },
+    "S_REVIEW": {
+      "path": "/root/projects/ordivon-studio/docs/review-consumption.md",
+      "sha256": "sha256:c75664e4a5d143b7cd4d73ba21e1b7c24f6b855852947f05e8d1fa4103ea496e"
+    },
+    "S_MEDIA": {
+      "path": "/root/projects/ordivon-studio/docs/media-model.md",
+      "sha256": "sha256:b2768d3c95605cf627eaaacad6089df851771adb72773678aae4c584c96ebf49"
+    },
+    "Q_CASEB": {
+      "path": "/root/projects/ordivon-security/docs/CASEB-RESEARCH-CLOSEOUT.md",
+      "sha256": "sha256:2c697ea0417118980ddf0a5f6fe6728e85d10d5bc01a6fa6ff076f5f961dc545"
+    },
+    "Q_AGENT": {
+      "path": "/root/projects/ordivon-security/docs/AGENT-EXPERIMENT-P0.md",
+      "sha256": "sha256:746fd20485e479243ff61b464678ad37dad4f62c4500066e6843ced18e73a1f3"
+    },
+    "H_TRANSFER": {
+      "path": "/root/projects/ordivon-human/methods/m0/HUMAN-AI-CAPABILITY-TRANSFER.md",
+      "sha256": "sha256:c05bd44c844d600cce3e7ae91e88a16078b08404828fbe6a012030d4002381de"
+    },
+    "HA_STATUS": {
+      "path": "/root/projects/ordivon-harness/docs/STATUS.md",
+      "sha256": "sha256:158a890227a64ecfb1b762bff1cb3f80d0a7a33aba8d42c2175e8f4cbe4f646f"
+    },
+    "HA_P1": {
+      "path": "/root/projects/ordivon-harness/docs/P1-REUSABLE-KNOWLEDGE-PROCEDURAL-CAPITAL-CLOSEOUT.md",
+      "sha256": "sha256:1900a2da14866337c8cf361fa5dee8a3d2ae0ebab8707b4625ea438178d6712c"
+    },
+    "HA_P2": {
+      "path": "/root/projects/ordivon-harness/docs/P2-PROGRAMMATIC-TOOL-COMPOSITION-CLOSEOUT.md",
+      "sha256": "sha256:3d7931e50179493a638bb2bf062c77b16a430abe8ec96ebe274b3ca9f68510ed"
+    }
+  },
+  "sourceRefs": {
+    "R01": {
+      "fileKey": "R_STATUS",
+      "needle": "a successful process exit is not proof of semantic completion or external-world success"
+    },
+    "R02": {
+      "fileKey": "R_UX",
+      "needle": "`resultAvailable` means a durable Runtime terminal result exists, not that the result is semantically correct"
+    },
+    "R03": {
+      "fileKey": "R_REC",
+      "needle": "A missing Result does not prove success or failure"
+    },
+    "R04": {
+      "fileKey": "R_EFFECT",
+      "needle": "The kernel owns only the narrow commitment between admitted operation and physical reality"
+    },
+    "R05": {
+      "fileKey": "R_EFFECT",
+      "needle": "may reconcile a prepared receipt to `unknown` when physical files are mixed"
+    },
+    "R06": {
+      "fileKey": "R_EFFECT",
+      "needle": "external receipt may become terminal before the generic Job lifecycle converges"
+    },
+    "R07": {
+      "fileKey": "R_EFFECT",
+      "needle": "cannot prove or reconcile external side effects already performed by the target"
+    },
+    "F01": {
+      "fileKey": "F_RECON",
+      "needle": "It does not infer success from a submit response alone"
+    },
+    "F02": {
+      "fileKey": "F_RECON",
+      "needle": "A fill proves execution quantity/price. It does **not** by itself create a cash-ledger entry."
+    },
+    "F03": {
+      "fileKey": "F_RECON",
+      "needle": "Not every capital change is caused by an A7 effect"
+    },
+    "F04": {
+      "fileKey": "F_PERF",
+      "needle": "Positive nominal return is not automatically positive real return"
+    },
+    "F05": {
+      "fileKey": "F_PERF",
+      "needle": "An empty Capital Ledger is not proof that no external capital flow occurred"
+    },
+    "F06": {
+      "fileKey": "F_PERF",
+      "needle": "Unresolved effects receive **zero causal cash credit** until reconciliation closes"
+    },
+    "F07": {
+      "fileKey": "F_PERF",
+      "needle": "This still does not prove Agent alpha"
+    },
+    "F08": {
+      "fileKey": "F_PERF",
+      "needle": "nonLedgerEquityChange"
+    },
+    "F09": {
+      "fileKey": "F_QB",
+      "needle": "about 2.16x, without changing final selection or sealed result"
+    },
+    "F10": {
+      "fileKey": "F_EXEC",
+      "needle": "independent Finance reconciliation proves order/fill/bill/post-portfolio consequence before completion"
+    },
+    "G01": {
+      "fileKey": "G_GV",
+      "needle": "This proves the two current products are executable. It does **not** prove they provide two materially distinct human experiences."
+    },
+    "G02": {
+      "fileKey": "G_GV",
+      "needle": "Commander choices have causal leverage      PROVEN at machine level"
+    },
+    "G03": {
+      "fileKey": "G_GV",
+      "needle": "It is whether players can anticipate, interpret, and act on that pressure before punishment."
+    },
+    "G04": {
+      "fileKey": "G_GV",
+      "needle": "live cognition improves player value       UNPROVEN"
+    },
+    "G05": {
+      "fileKey": "G_GV",
+      "needle": "Pressure again stopped at L2."
+    },
+    "G06": {
+      "fileKey": "G_DEV",
+      "needle": "Do not confuse these with evidence that a feature is fun."
+    },
+    "S01": {
+      "fileKey": "S_RUNTIME",
+      "needle": "remains **`rendered / review`**, not approved or published"
+    },
+    "S02": {
+      "fileKey": "S_REVIEW",
+      "needle": "technical success and a bounded semantic improvement do not automatically promote a candidate into the selected Production Asset"
+    },
+    "S03": {
+      "fileKey": "S_REVIEW",
+      "needle": "Render evidence explains what artifact was observed. Decision context explains what judgment boundary was applied to it."
+    },
+    "S04": {
+      "fileKey": "S_README",
+      "needle": "It cannot establish that people understood, preferred, trusted, remembered, or enjoyed the work."
+    },
+    "S05": {
+      "fileKey": "S_MEDIA",
+      "needle": "`Production.status` and `Output.status` answer different questions"
+    },
+    "Q01": {
+      "fileKey": "Q_CASEB",
+      "needle": "Procedural outcome, containment outcome, and scientific assessment are separate truth domains."
+    },
+    "Q02": {
+      "fileKey": "Q_CASEB",
+      "needle": "the consumed Activation remains consumed"
+    },
+    "Q03": {
+      "fileKey": "Q_CASEB",
+      "needle": "The failure is scientifically invalid for loader causality but methodologically productive."
+    },
+    "Q04": {
+      "fileKey": "Q_AGENT",
+      "needle": "It does not yet prove multi-tick continuity, injected cancellation recovery, or strategic value."
+    },
+    "Q05": {
+      "fileKey": "Q_AGENT",
+      "needle": "Testing all layers as one opaque Agent would make failures and improvements\nunattributable"
+    },
+    "Q_AGENT": {
+      "fileKey": "Q_AGENT",
+      "needle": "failed after model completion but before Trial sealing"
+    },
+    "H01": {
+      "fileKey": "H_TRANSFER",
+      "needle": "immediate output is not human capability"
+    },
+    "H02": {
+      "fileKey": "H_TRANSFER",
+      "needle": "A strong composite system is valuable even when the capability is not internalized by the person."
+    },
+    "H03": {
+      "fileKey": "H_TRANSFER",
+      "needle": "improved immediate performance but reduced later unassisted performance"
+    },
+    "H04": {
+      "fileKey": "H_TRANSFER",
+      "needle": "H0 rejects a single augmentation score"
+    },
+    "HA01": {
+      "fileKey": "HA_STATUS",
+      "needle": "they are not final Task/domain acceptance"
+    },
+    "HA02": {
+      "fileKey": "HA_P1",
+      "needle": "not semantic completion or automatic persistent learning"
+    }
+  },
+  "models": {
+    "A": {
+      "name": "Collapsed Effect/Success Model",
+      "frozen": "A selected/admitted capability that executes successfully is treated as the realized Outcome; process/provider/domain success collapse into one effect/result, causal credit is implicit, consumption is associated with successful use, and only successful effects normally update Knowledge."
+    },
+    "B": {
+      "name": "Action–Effect Ledger",
+      "frozen": "Action and Effect are distinct. An Action is an admitted/committed attempt and owner-native Effect history may be succeeded, failed or unknown. Domain Outcome remains folded into Effect/result semantics, Attribution is implicit or optional metadata, and Knowledge is derived from retained Action/Effect history without a separate semantic promotion boundary."
+    },
+    "C": {
+      "name": "Full Linear Conversion Chain",
+      "frozen": "One selected Option/feasible assignment advances through a directional chain: Action -> resource consumption -> Effect -> Outcome -> Attribution -> Knowledge. The stages are semantically distinct and may be unavailable/negative, but the episode remains fundamentally linear: Outcome is downstream of Action/Effect, Attribution is downstream of Outcome, and Knowledge is downstream of Outcome/Attribution."
+    },
+    "D": {
+      "name": "Action/Effect Events + Outcome/Attribution Projections",
+      "frozen": "Selection/Decision may commit an Action: an identity-bound admitted attempt to cause or obtain a transition. Owner-native Effect events/claims record direct physical or semantic consequences and may be success, failure, no-effect or unknown. Outcome is a domain-owned evaluation projection over one or many Effects, exogenous facts, objective/observer/horizon and comparison context; it may be positive, negative, neutral or unavailable. Attribution is a separate causal/credit claim with explicit evidence and uncertainty and may remain unavailable even when Outcome is known. Knowledge is an externally/domain-promoted reusable claim that can arise from successful, failed, invalid or uncertain episodes when evidence changes future prediction/selection. Consumption is resource-family-specific Event/quantity accounting during the attempt/effect window, not a universal stage. Relations are many-to-many rather than one mandatory lifecycle."
+    }
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "sourceCase": "R6P01",
+      "case": "A real Runtime Job exited zero and produced the requested marker while semanticCompletionEvaluated remained false",
+      "pressure": "physical success vs semantic outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "sourceCase": "R6P02",
+      "case": "A real admitted Runtime Job produced a marker then exited 23; durable result/evidence exist while executionDisposition is failed",
+      "pressure": "action vs failed effect",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "sourceCase": "R02",
+      "case": "Runtime resultAvailable can coexist with reconciliation-required/unknown and does not mean semantic correctness",
+      "pressure": "terminal result vs certainty/correctness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "sourceCase": "R03",
+      "case": "Missing Runtime Result does not prove either physical success or physical failure",
+      "pressure": "effect uncertainty",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "sourceCase": "R01",
+      "case": "Successful process exit does not prove semantic completion or external-world success",
+      "pressure": "effect vs domain outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "sourceCase": "R06",
+      "case": "Structured release external receipt can become terminal before generic Job lifecycle converges",
+      "pressure": "nonlinear effect timing",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERLINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "sourceCase": "R05",
+      "case": "Workspace Patch prepared state can reconcile to unknown when physical files are mixed",
+      "pressure": "partial/unknown effect",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "sourceCase": "R07",
+      "case": "Runtime cancellation controls lifecycle but cannot prove external side effects already performed by target",
+      "pressure": "control action vs prior effects",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "sourceCase": "F01",
+      "case": "Finance A8 does not infer external financial success from submit response; independent observations are required",
+      "pressure": "action/dispatch vs effect",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "sourceCase": "F02",
+      "case": "Venue Fill proves execution quantity/price but does not itself create a cash-ledger entry",
+      "pressure": "multiple effect truth types",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-ACTION-EFFECT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "sourceCase": "F03",
+      "case": "Funding, interest, distributions and other bills can change capital while Agent takes no A7 action",
+      "pressure": "exogenous effect/outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-LINEARITY-BREAK"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "sourceCase": "F10",
+      "case": "Reconciled order/fill/bill/post-portfolio consequence establishes execution truth before completion but not owner-value success",
+      "pressure": "effect completion vs domain outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "sourceCase": "F04",
+      "case": "Positive nominal owner return is not automatically positive real return",
+      "pressure": "outcome depends on comparison/context",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "sourceCase": "F05",
+      "case": "Empty Capital Ledger is not proof of no external flow; performance can remain unavailable without coverage",
+      "pressure": "outcome evidence completeness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "sourceCase": "F06",
+      "case": "Only finalized effect-linked ledger entries receive causal cash credit; unresolved effects receive zero credit",
+      "pressure": "attribution gate",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "sourceCase": "F07",
+      "case": "Effect-linked causal cash credit still does not prove Agent alpha; counterfactual value-added remains unavailable",
+      "pressure": "attribution vs causal value claim",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "sourceCase": "F08",
+      "case": "Snapshot equity can move by mark-to-market and other non-ledger mechanisms outside exact Agent effect lineage",
+      "pressure": "outcome without action lineage",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-LINEARITY-BREAK"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "sourceCase": "F09",
+      "case": "Full diagnostic treatment used about 2.16x tokens without changing sealed selection/result",
+      "pressure": "resource consumption vs outcome gain",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "sourceCase": "G01",
+      "case": "Two 20-Turn browser products are executable but materially distinct human experience is unproven",
+      "pressure": "technical effect vs human outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "sourceCase": "G02",
+      "case": "Commander choices have machine-level causal leverage while strategic ownership/prediction/acceptance remain unproven",
+      "pressure": "mechanical causal effect vs player outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C21",
+      "sourceCase": "G03",
+      "case": "Pressure meters reach planning/damage thresholds while anticipation/fairness remains the open player question",
+      "pressure": "world effect vs experience outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C22",
+      "sourceCase": "G04",
+      "case": "Live cognition changes local behavior but improvement in player value and indispensability remain unproven",
+      "pressure": "behavior effect vs product outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C23",
+      "sourceCase": "G05",
+      "case": "Reproduced player-facing implementation leak was fixed at L2 and re-probed without changing planning/World core",
+      "pressure": "localized attribution",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-ACCIDENTAL"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-PARTIAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C24",
+      "sourceCase": "G06",
+      "case": "Browser/E2E and simulation completion are explicitly not evidence that a feature is fun",
+      "pressure": "test effect vs player value",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C25",
+      "sourceCase": "S01",
+      "case": "Exact reproducible A/V candidate is rendered/review but not approved/published because voice naturalness is human-uncertain",
+      "pressure": "render effect vs production/human outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C26",
+      "sourceCase": "S02",
+      "case": "Technical success plus bounded semantic improvement does not automatically promote candidate Asset",
+      "pressure": "effect vs promotion",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C27",
+      "sourceCase": "S03",
+      "case": "Studio separates render evidence from decision context used for semantic judgment",
+      "pressure": "effect evidence vs outcome criteria",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-PARTIAL"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C28",
+      "sourceCase": "S04",
+      "case": "Agent can falsify obvious issues but cannot establish human understanding/preference/trust/recall/enjoyment",
+      "pressure": "machine judgment vs human outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C29",
+      "sourceCase": "S05",
+      "case": "One Output may be approved while parent Production remains review",
+      "pressure": "multiple nested outcome scopes",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERLINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C30",
+      "sourceCase": "Q01",
+      "case": "Security separates procedural outcome, containment outcome and scientific assessment",
+      "pressure": "multiple outcome domains",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-OVERLINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C31",
+      "sourceCase": "Q02",
+      "case": "Single-use Activation remains consumed even though trial failed before Windows boot and scientific question stayed unresolved",
+      "pressure": "consumption without target effect/outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C32",
+      "sourceCase": "Q03",
+      "case": "Scientifically invalid loader trial still produced methodological knowledge about projection provenance",
+      "pressure": "knowledge from invalid/no scientific outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-PARTIAL"
+        },
+        "C": {
+          "status": "F",
+          "reasonCode": "C-LINEARITY-BREAK"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C33",
+      "sourceCase": "Q04",
+      "case": "Runtime-backed Security P0-C proves physical lifecycle but does not prove strategic value",
+      "pressure": "physical effect vs strategic outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C34",
+      "sourceCase": "Q_AGENT",
+      "case": "One model completion failed before Trial sealing; Runtime/software fact survives without a sealed domain Trial",
+      "pressure": "layer result vs domain episode",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C35",
+      "sourceCase": "Q05",
+      "case": "Treating the whole Agent stack as opaque makes failures/improvements unattributable; layer isolation is required",
+      "pressure": "attribution as separate claim",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C36",
+      "sourceCase": "H01",
+      "case": "Immediate assisted output is not retained Human capability",
+      "pressure": "assisted effect vs retained outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C37",
+      "sourceCase": "H02",
+      "case": "Human+model system capability can be valuable without internalized Human capability",
+      "pressure": "boundary-relative outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C38",
+      "sourceCase": "H03",
+      "case": "AI assistance can improve immediate performance while reducing later unassisted performance",
+      "pressure": "outcome horizon reversal",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C39",
+      "sourceCase": "H04",
+      "case": "Human research rejects one augmentation score and keeps a multidimensional outcome vector",
+      "pressure": "non-scalar outcome",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C40",
+      "sourceCase": "HA02",
+      "case": "Harness structured CompletionProposal/procedure candidate requires external evaluation/promotion before reusable knowledge",
+      "pressure": "candidate/effect vs knowledge promotion",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-CONFLATES"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-NO-DOMAIN-OUTCOME"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-LINEAR"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-PROJECTION"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "F": 38,
+      "A": 2
+    },
+    "B": {
+      "P": 9,
+      "F": 28,
+      "A": 3
+    },
+    "C": {
+      "P": 34,
+      "A": 3,
+      "F": 3
+    },
+    "D": {
+      "P": 40
+    }
+  },
+  "relationLedger": [
+    {
+      "concept": "Decision/Selection",
+      "placement": "upstream choice of Option/feasible assignment",
+      "verdict": "RETAIN_SEPARATE_FROM_ACTION",
+      "cases": [
+        "C09",
+        "C18",
+        "C20"
+      ],
+      "reason": "A decision can exist without external dispatch; changing decision quality and executing it are separate truths."
+    },
+    {
+      "concept": "Action",
+      "placement": "identity-bound admitted/committed attempt to cause or obtain transition",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C01",
+        "C02",
+        "C08",
+        "C09"
+      ],
+      "reason": "Deleting Action erases the difference between attempted/admitted work and what physically or semantically happened."
+    },
+    {
+      "concept": "Effect",
+      "placement": "owner-native direct consequence Event/Claim: success/failure/no-effect/unknown",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C03",
+        "C05",
+        "C09",
+        "C10",
+        "C33"
+      ],
+      "reason": "Physical/semantic consequence history remains true independently from higher-domain value."
+    },
+    {
+      "concept": "Outcome",
+      "placement": "domain-owned evaluation projection over effects + exogenous context + objective/observer/horizon/comparison",
+      "verdict": "REQUIRED_BUT_NOT_GLOBAL_SCHEMA",
+      "cases": [
+        "C12",
+        "C19",
+        "C25",
+        "C30",
+        "C36"
+      ],
+      "reason": "Execution truth cannot answer whether capital, player experience, creative work, science or retained Human capability improved."
+    },
+    {
+      "concept": "Outcome context/horizon",
+      "placement": "parameters of domain evaluation",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C13",
+        "C21",
+        "C28",
+        "C38"
+      ],
+      "reason": "The same effects can evaluate differently under inflation benchmark, player perception, audience, or delayed retention horizon."
+    },
+    {
+      "concept": "Attribution",
+      "placement": "separate causal/credit Claim with evidence and uncertainty",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C15",
+        "C16",
+        "C23",
+        "C35"
+      ],
+      "reason": "Observed Outcome does not automatically identify which action/resource/agent/environment caused it."
+    },
+    {
+      "concept": "Knowledge",
+      "placement": "owner/domain-promoted reusable Claim that changes future prediction/selection",
+      "verdict": "REQUIRED_PROMOTION_BOUNDARY",
+      "cases": [
+        "C32",
+        "C40"
+      ],
+      "reason": "Evidence or a completion candidate does not automatically deserve durable reusable Knowledge; failures/invalid trials may still teach."
+    },
+    {
+      "concept": "Consumption",
+      "placement": "resource-family-specific Event/quantity relation during Action/Effect window",
+      "verdict": "PARALLEL_NOT_STAGE",
+      "cases": [
+        "C18",
+        "C31",
+        "C38"
+      ],
+      "reason": "Tokens, attention or single-use authority may be consumed even when target Effect/Outcome fails; non-rival knowledge may be reused without depletion."
+    },
+    {
+      "concept": "Effect uncertainty",
+      "placement": "owner-native unresolved/unknown effect state or claim",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C03",
+        "C04",
+        "C07"
+      ],
+      "reason": "Unknown is not success/failure and must block unsafe inference/retry while preserving the Action identity."
+    },
+    {
+      "concept": "Multiplicity",
+      "placement": "many-to-many relation among Actions, Effects and Outcomes",
+      "verdict": "REQUIRED",
+      "cases": [
+        "C06",
+        "C10",
+        "C17",
+        "C29"
+      ],
+      "reason": "One action can create several effects; one long-horizon outcome can aggregate many effects; some effects/outcomes are exogenous."
+    },
+    {
+      "concept": "Evidence completeness",
+      "placement": "support condition for Effect/Outcome/Attribution claims",
+      "verdict": "REQUIRED_CONDITION_NOT_NEW_OWNER",
+      "cases": [
+        "C14",
+        "C27",
+        "C40"
+      ],
+      "reason": "Empty/missing observations cannot be promoted to absence or outcome truth; source/domain owners retain evidence semantics."
+    },
+    {
+      "concept": "Promotion/persistence",
+      "placement": "owner/domain decision to retain consequential Knowledge/Outcome/Attribution evidence",
+      "verdict": "CONDITIONAL",
+      "cases": [
+        "C26",
+        "C32",
+        "C40"
+      ],
+      "reason": "Technical success, critique or candidate completion should not automatically become selected asset, scientific conclusion or reusable procedure."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "delete Action as distinct from Effect",
+      "result": "FAIL",
+      "cases": [
+        "C01",
+        "C02",
+        "C08",
+        "C09"
+      ],
+      "why": "Cannot distinguish admitted attempt/dispatch from succeeded, failed, unknown or absent consequences."
+    },
+    {
+      "mutation": "delete Effect as distinct from Outcome",
+      "result": "FAIL",
+      "cases": [
+        "C05",
+        "C12",
+        "C19",
+        "C25",
+        "C33"
+      ],
+      "why": "Physical/semantic execution truth would be misused as domain-value truth."
+    },
+    {
+      "mutation": "delete Outcome/domain evaluation",
+      "result": "FAIL",
+      "cases": [
+        "C12",
+        "C19",
+        "C25",
+        "C30",
+        "C36"
+      ],
+      "why": "The system loses the actual consumer/domain objective and can optimize substrate success instead."
+    },
+    {
+      "mutation": "delete Attribution",
+      "result": "FAIL",
+      "cases": [
+        "C15",
+        "C16",
+        "C23",
+        "C35"
+      ],
+      "why": "Outcome observation alone cannot assign causal credit or blame to Action, Resource, Agent or environment."
+    },
+    {
+      "mutation": "delete Knowledge promotion boundary",
+      "result": "FAIL",
+      "cases": [
+        "C32",
+        "C40"
+      ],
+      "why": "Raw failure/completion evidence would automatically become durable reusable knowledge without semantic evaluation."
+    },
+    {
+      "mutation": "force Outcome to be downstream of an Agent Action",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C11",
+        "C17"
+      ],
+      "why": "Capital and other domain outcomes can change through exogenous effects without an Agent action lineage."
+    },
+    {
+      "mutation": "force one Action -> one Effect -> one Outcome",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C06",
+        "C10",
+        "C29"
+      ],
+      "why": "Multiplicity and nested outcomes are real; exact one-to-one lineage is not universal."
+    },
+    {
+      "mutation": "force Knowledge to require resolved positive Outcome + Attribution",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C32",
+        "C34"
+      ],
+      "why": "Invalid/failed/uncertain episodes can produce methodological or recovery knowledge."
+    },
+    {
+      "mutation": "make Consumption a universal stage between Action and Effect",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C31",
+        "C18",
+        "C38"
+      ],
+      "why": "Consumption is resource-family accounting; it may occur before failure, be partial, renewable, rival, or non-rival."
+    },
+    {
+      "mutation": "collapse Outcome into one scalar useful/value score",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C13",
+        "C30",
+        "C38",
+        "C39",
+        "R6P03"
+      ],
+      "why": "Outcome can be multidimensional, horizon-dependent and distributional; current scalar prior loses failure structure."
+    },
+    {
+      "mutation": "allow Effect owner/receipt to assert higher-domain Outcome",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C05",
+        "C12",
+        "C25",
+        "C33"
+      ],
+      "why": "Runtime/provider/render receipts do not own Finance/Game/Studio/Security/Human semantic value."
+    },
+    {
+      "mutation": "automatically persist every effect/review/completion as Knowledge",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C26",
+        "C32",
+        "C40"
+      ],
+      "why": "Durable promotion requires consequential semantic evaluation; most critique/results remain local evidence."
+    }
+  ],
+  "freshProjectionTests": [
+    {
+      "id": "R6Y01",
+      "case": "One admitted API action writes a provider object, emits a bill, and updates an audit log; one Action has several distinct Effects with different owners.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-MULTI-EFFECT"
+        }
+      }
+    },
+    {
+      "id": "R6Y02",
+      "case": "A monthly capital Outcome is evaluated over hundreds of trades, funding bills, mark-to-market changes and owner flows rather than one Action.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-MULTI-ACTION-OUTCOME"
+        }
+      }
+    },
+    {
+      "id": "R6Y03",
+      "case": "A venue funding payment changes capital while the Agent takes no action; Outcome observation exists without Action lineage.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-EXOGENOUS"
+        }
+      }
+    },
+    {
+      "id": "R6Y04",
+      "case": "An order is correctly filled and reconciled but the position subsequently loses money; Effect succeeds while domain Outcome is negative.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NEGATIVE-OUTCOME"
+        }
+      }
+    },
+    {
+      "id": "R6Y05",
+      "case": "An external request becomes outcome-unknown, later reconciliation resolves the Effect, while the earlier ambiguity teaches a recovery rule before any value Outcome is known.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-UNKNOWN-KNOWLEDGE"
+        }
+      }
+    },
+    {
+      "id": "R6Y06",
+      "case": "A rate-limit token, Human attention block or single-use Activation is consumed by an attempt that fails before its intended Effect.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-CONSUMPTION-PARALLEL"
+        }
+      }
+    },
+    {
+      "id": "R6Y07",
+      "case": "A portfolio Outcome is positive and fully measured but Agent contribution remains unavailable because no evidence-backed counterfactual exists.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-ATTRIBUTION-UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "R6Y08",
+      "case": "An invalid experiment answers none of the target scientific question but exposes a measurement/provenance flaw that is promoted into future method Knowledge.",
+      "models": {
+        "D": {
+          "status": "P",
+          "reasonCode": "D-FAILURE-KNOWLEDGE"
+        }
+      }
+    }
+  ],
+  "implementationProbes": {
+    "R6P01": {
+      "clientRequestId": "world-r6-action-effect-success-probe-20260815-01",
+      "jobId": "job-01a00588-999d-7491-8a64-cec8fa64f2c2",
+      "result": "execution-succeeded-semantic-completion-not-evaluated"
+    },
+    "R6P02": {
+      "clientRequestId": "world-r6-action-effect-failure-probe-20260815-01",
+      "jobId": "job-01a00588-b48e-7842-8220-c3135db6d835",
+      "result": "execution-failed-exit-23-with-durable-result"
+    },
+    "R6P03": {
+      "clientRequestId": "world-r6-current-outcome-compression-probe-20260815-01",
+      "jobId": "job-01a0058a-293b-7f41-a713-93eac51330a0",
+      "result": "mixed-excellent-plus-failed-history-equals-one-moderate-useful-history-in-current-ranking"
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Action/Effect Events + Outcome/Attribution Projections",
+    "status": "PROVISIONAL_FOR_R7_NOT_CANONICAL_DOCTRINE",
+    "compression": "Conversion is not one success pipeline. Selection may commit an Action; owner-native Effect events/claims preserve what directly happened or remains unknown; domain-owned Outcome projections evaluate consequences under objective/observer/horizon/context; Attribution is a separate causal claim; Knowledge requires semantic promotion and may arise from successful, failed, invalid or uncertain evidence. Consumption is family-specific accounting parallel to the attempt/effect window. Relations are many-to-many and exogenous effects/outcomes are allowed."
+  },
+  "productionDebt": {
+    "currentConsumptionOutcome": "Current `ConsumptionOutcome(resource_id, workload_id, useful, value)` is a useful narrow ranking prior but not a general Outcome model.",
+    "probe": "R6P03 proves it collapses excellent+failed bimodal history and one moderate useful observation to identical potential/evidence/decision under equal other facts.",
+    "decision": "Record debt only. Do not replace it with a universal Outcome schema in R6."
+  },
+  "contentDigest": "sha256:7500b23582a0b653f4e49dd24d2685cb3551b5f79dc9a21604f4af17e9680931"
+}
