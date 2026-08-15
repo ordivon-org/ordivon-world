@@ -1,0 +1,2010 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r7-ecology-falsifier",
+  "truthRole": "research-falsifier-evidence",
+  "worldBaseRevision": "50abd7e9d84a4f02604e3fd59a3500f6f26064c1",
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "50abd7e9d84a4f02604e3fd59a3500f6f26064c1"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "7d812d8d41d5ba6b8aa619886beddca94327b11f"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "sourceFiles": {
+    "W_R6": {
+      "path": "docs/resource-ontology-r6-conversion-falsification.md",
+      "sha256": "sha256:d422166286a218605b2fedaedf0fd752db8733bcba44214257fb25dc3104c5d7"
+    },
+    "W_DISC": {
+      "path": "src/ordivon_world/resource_discovery.py",
+      "sha256": "sha256:d78e7a0fa274847e83b737c06baedd8b7047a50312b92a9d6a33cbf3b4dca840"
+    },
+    "R_RUNTIME": {
+      "path": "/root/projects/ordivon-runtime/docs/runtime.md",
+      "sha256": "sha256:27bd20900470283afcfa542ecebf38e8be40db5a71b6e1303d2660bf4743df81"
+    },
+    "R_OPS": {
+      "path": "/root/projects/ordivon-runtime/docs/operations.md",
+      "sha256": "sha256:9d8bac671d1d503fe0ea71c939fb7e0d8dc4fdae586daec81931b57954c4d8f6"
+    },
+    "F_A7": {
+      "path": "/root/projects/ordivon-finance/design/AUTHORITY-EXECUTION-KERNEL.md",
+      "sha256": "sha256:d01a3c71a15391062d23e5d306c116ed8578b978422cbf7d2ae92295277999f1"
+    },
+    "F_EXEC": {
+      "path": "/root/projects/ordivon-finance/design/F6-EXTERNAL-EXECUTOR-BOUNDARY.md",
+      "sha256": "sha256:597886be237baac496ad47e0b7b043290f9938e42c2c1e3c4f951f4568f47329"
+    },
+    "F_PERF": {
+      "path": "/root/projects/ordivon-finance/design/OWNER-OBJECTIVE-PERFORMANCE.md",
+      "sha256": "sha256:296206d5016e7dc9a84475ae9ac033b107c033c0386e24e58c237a897dcd46bb"
+    },
+    "W_SEM": {
+      "path": "/root/workstation-lab/docs/semantic-mcp.md",
+      "sha256": "sha256:f090a773372fcb3d76a7dc87f6b37fb5261ba8bbadfe3086bed631edfaa28e50"
+    },
+    "W_NX6": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx6-strong-roots-node-expansion-20260812.json",
+      "sha256": "sha256:0567c4d5922ee1263277c349679a5be87aedbb08bcb8fd7ea267ae8bb0f9f501"
+    },
+    "W_NX4": {
+      "path": "/root/workstation-lab/evidence/acceptance/workstation-nx4-multi-owner-fabric-20260812.json",
+      "sha256": "sha256:38ef45032f9fe637fb8104fe834f275b406c187e118884987cc66e4c1fe740b4"
+    },
+    "S_RUN": {
+      "path": "/root/projects/ordivon-studio/productions/runtime-introduction/README.md",
+      "sha256": "sha256:a10b59958cf09c420cf1fb6015f6217d2f1fa064bd73bd161c9f6dcc7fbb923e"
+    },
+    "S_EQ": {
+      "path": "/root/projects/ordivon-studio/research/equipment/README.md",
+      "sha256": "sha256:bbbcbf37e5f8da59fd75541b3692a2c098269d7b8e30ffcb12ca0eadbe070c65"
+    },
+    "S_RES": {
+      "path": "/root/projects/ordivon-studio/docs/resolve-compatibility/resolve-free-21.0.3.7.md",
+      "sha256": "sha256:90cf524aa56a5ac7e66807e4b5a4dee56784eb80037d1146f3fa2f7a963617a6"
+    },
+    "Q_ACT": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/windows-kvm-p1-case-a-d3-invalid-envelope-3fa9fa6.json",
+      "sha256": "sha256:f211646b266c1f098f10354e8193eba79709dc3039076686e50912ceb5b87b16"
+    },
+    "Q_SAMPLE": {
+      "path": "/root/projects/ordivon-security/research/cases/windows-kvm-p1-case-a-transform.json",
+      "sha256": "sha256:551e7b14b9a0f267b5068207caa819db21c28e03429dbff8f762ce0d693671f9"
+    },
+    "Q_LIC": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/ca-lic-r1-e919ea5.json",
+      "sha256": "sha256:ca68d1c161ae33268791eb8ad74bc1a55a9277bb590f2881fd180a5ed24457a7"
+    },
+    "Q_CA3": {
+      "path": "/root/projects/ordivon-security/evidence/acceptance/ca3-post-compromise-state-27de2f9.json",
+      "sha256": "sha256:f8a89311617bb6547789a0e8d9a9f48d3e3f95b9e1a4bc8e38e068dffca6975e"
+    },
+    "H_CAP": {
+      "path": "/root/projects/ordivon-human/research/h0/systems/CAPABILITY.md",
+      "sha256": "sha256:e1e4149b74343998e8d046cfc71b9d2df80ad6982c1743fdd51c7d1cd605c2d9"
+    },
+    "H_M0": {
+      "path": "/root/projects/ordivon-human/methods/m0/HUMAN-AI-CAPABILITY-TRANSFER.md",
+      "sha256": "sha256:c05bd44c844d600cce3e7ae91e88a16078b08404828fbe6a012030d4002381de"
+    },
+    "H_EXP": {
+      "path": "/root/projects/ordivon-human/research/agentic-capability/EXPERIMENTS.md",
+      "sha256": "sha256:e0d361a9351e597ffc88ec6d43e48f94df97dfed975c14fc6d0de0b1ad7fdd1e"
+    },
+    "HA_P1": {
+      "path": "/root/projects/ordivon-harness/docs/P1-REUSABLE-KNOWLEDGE-PROCEDURAL-CAPITAL-CLOSEOUT.md",
+      "sha256": "sha256:1900a2da14866337c8cf361fa5dee8a3d2ae0ebab8707b4625ea438178d6712c"
+    },
+    "HA_P2": {
+      "path": "/root/projects/ordivon-harness/docs/P2-PROGRAMMATIC-TOOL-COMPOSITION-CLOSEOUT.md",
+      "sha256": "sha256:3d7931e50179493a638bb2bf062c77b16a430abe8ec96ebe274b3ca9f68510ed"
+    }
+  },
+  "sourceRefs": {
+    "R01": {
+      "fileKey": "R_RUNTIME",
+      "needle": "consumes a concurrency reservation"
+    },
+    "R02": {
+      "fileKey": "R_RUNTIME",
+      "needle": "cancellation, natural completion, and recovery release it with the terminal state transaction"
+    },
+    "R03": {
+      "fileKey": "R_RUNTIME",
+      "needle": "retains its reservation while its recorded unit"
+    },
+    "R04": {
+      "fileKey": "R_RUNTIME",
+      "needle": "Current policy gates only new admission"
+    },
+    "R05": {
+      "fileKey": "R_RUNTIME",
+      "needle": "Power Request of type `SystemRequired`"
+    },
+    "R06": {
+      "fileKey": "R_RUNTIME",
+      "needle": "Exact replay of a terminal Job does not start the launcher"
+    },
+    "R07": {
+      "fileKey": "R_OPS",
+      "needle": "Cache reclamation is capacity-driven rather than a blind age sweep"
+    },
+    "R08": {
+      "fileKey": "R_OPS",
+      "needle": "Global package-manager caches are measured but not interpreted or deleted by Runtime"
+    },
+    "R09": {
+      "fileKey": "R_RUNTIME",
+      "needle": "`workspace.close` removes that Workspace's disposable"
+    },
+    "R10": {
+      "fileKey": "R_RUNTIME",
+      "needle": "Budgets constrain physical consumption; they are not a scheduler"
+    },
+    "F01": {
+      "fileKey": "F_A7",
+      "needle": "Daily authority budget is consumed at **effect reservation**"
+    },
+    "F02": {
+      "fileKey": "F_A7",
+      "needle": "counts every reservation under the lease for that UTC day"
+    },
+    "F03": {
+      "fileKey": "F_A7",
+      "needle": "A8 reconciliation may later introduce evidence-backed release/accounting semantics"
+    },
+    "F04": {
+      "fileKey": "F_EXEC",
+      "needle": "The remote ledger owns daily reservation truth"
+    },
+    "F05": {
+      "fileKey": "F_EXEC",
+      "needle": "All executor replicas in one authority domain must share the same durable ledger"
+    },
+    "F06": {
+      "fileKey": "F_EXEC",
+      "needle": "An exact replay returns historical admission truth without consuming budget twice"
+    },
+    "F07": {
+      "fileKey": "F_PERF",
+      "needle": "External owner capital contributions and withdrawals are removed from investment performance"
+    },
+    "F08": {
+      "fileKey": "F_PERF",
+      "needle": "Snapshot equity can also change through mark-to-market and other non-ledger mechanisms"
+    },
+    "F09": {
+      "fileKey": "F_PERF",
+      "needle": "It does not install a universal drawdown threshold"
+    },
+    "N01": {
+      "fileKey": "W_SEM",
+      "needle": "accepts only an exact saved observation digest and exact prior path digest"
+    },
+    "N02": {
+      "fileKey": "W_SEM",
+      "needle": "writes a fresh observation only after successful qualification"
+    },
+    "N03": {
+      "fileKey": "W_SEM",
+      "needle": "refuses to replace a different active anchor selection"
+    },
+    "N04": {
+      "fileKey": "W_NX6",
+      "needle": "catalogCardinalityIsNotRootAvailability"
+    },
+    "N05": {
+      "fileKey": "W_NX6",
+      "needle": "provider-mechanism diversity is not a current independent pair when one root is unavailable"
+    },
+    "N06": {
+      "fileKey": "W_NX6",
+      "needle": "negative current observations are retained rather than retried until green"
+    },
+    "N07": {
+      "fileKey": "W_NX4",
+      "needle": "Stopped or replaced relations invalidate exact bindings; readmission never resurrects an old generation binding."
+    },
+    "N08": {
+      "fileKey": "W_NX4",
+      "needle": "the same Snowflake resource may be unavailable in one parent world and available in another"
+    },
+    "S01": {
+      "fileKey": "S_RUN",
+      "needle": "committed the picture Asset digest without moving the selected bytes into durable storage"
+    },
+    "S02": {
+      "fileKey": "S_RUN",
+      "needle": "first recovery `created`, exact replay `existing`"
+    },
+    "S03": {
+      "fileKey": "S_RUN",
+      "needle": "destructive-loss acceptance"
+    },
+    "S04": {
+      "fileKey": "S_RUN",
+      "needle": "recoverable working copy of the exact selected Blob, not a separate master"
+    },
+    "S05": {
+      "fileKey": "S_EQ",
+      "needle": "cost / maintenance / failure surface"
+    },
+    "S06": {
+      "fileKey": "S_RES",
+      "needle": "A future Resolve update must run the compatibility probe again"
+    },
+    "Q01": {
+      "fileKey": "Q_ACT",
+      "needle": "do not reuse the consumed activation"
+    },
+    "Q02": {
+      "fileKey": "Q_SAMPLE",
+      "needle": "\"sampleBytesChanged\": false"
+    },
+    "Q03": {
+      "fileKey": "Q_LIC",
+      "needle": "\"cachedExactResultSurvivesOutage\": true"
+    },
+    "Q04": {
+      "fileKey": "Q_LIC",
+      "needle": "\"newUniqueJobDuringOutage\": false"
+    },
+    "Q05": {
+      "fileKey": "Q_CA3",
+      "needle": "persistent artifact and activated service can survive while usable controller control is absent after credential revocation"
+    },
+    "H01": {
+      "fileKey": "H_EXP",
+      "needle": "| time / Human attention | cost of the policy |"
+    },
+    "H02": {
+      "fileKey": "H_CAP",
+      "needle": "Capability can decay through non-use"
+    },
+    "H03": {
+      "fileKey": "H_M0",
+      "needle": "relearning rate after interruption"
+    },
+    "H04": {
+      "fileKey": "H_CAP",
+      "needle": "Tools can simultaneously increase system capability and reduce practice of internal skill"
+    },
+    "H05": {
+      "fileKey": "H_CAP",
+      "needle": "Capability → resources, reputation, autonomy, and further learning opportunities"
+    },
+    "HA01": {
+      "fileKey": "HA_P1",
+      "needle": "two independent Run reuse"
+    },
+    "HA02": {
+      "fileKey": "HA_P1",
+      "needle": "Reusable source presence ≠ Selection"
+    },
+    "HA03": {
+      "fileKey": "HA_P2",
+      "needle": "Each inner step consumes one existing Tool-call budget unit"
+    },
+    "HA04": {
+      "fileKey": "HA_P2",
+      "needle": "2 model calls / the same 5 physical Tool calls"
+    },
+    "WQ01": {
+      "fileKey": "W_DISC",
+      "needle": "quota_class: str"
+    },
+    "R6C": {
+      "fileKey": "W_R6",
+      "needle": "Consumption is resource-family-specific Event/quantity accounting during the attempt/effect window, not a universal stage."
+    }
+  },
+  "models": {
+    "A": {
+      "name": "Universal Stock Account",
+      "frozen": "Every Resource has one scalar balance in a resource-specific unit. Admission/reservation/consumption subtracts balance; release, renewal, replenishment or reacquisition adds balance; decay is balance loss. Dynamic Resource reasoning is fundamentally accounting over that one stock."
+    },
+    "B": {
+      "name": "Universal Stock–Flow–Capacity Vector",
+      "frozen": "Every Resource is projected into one common time-indexed vector containing quantity, inflow, outflow, reserved, available, capacity/rate, decay and replenishment in native units. Resource change is represented by updates to that vector; identity/currentness/authority facts may qualify the vector but are not separate dynamic topologies."
+    },
+    "C": {
+      "name": "Single Family-Specific Lifecycle",
+      "frozen": "Every Resource belongs to exactly one canonical dynamics family (for example stock, flow, capacity, entitlement, availability, reusable reference, skill or replicated artifact). Each family has its own owner-native lifecycle/state rules; cross-family composition is allowed, but one Resource identity has one dynamics family and one family lifecycle."
+    },
+    "D": {
+      "name": "Owner-Native Dynamic Claims + Ecology Projection",
+      "frozen": "Resource identity remains independent from one global dynamics type. Native owners expose only transition-relevant dynamic Claims/Events—quantity, stock, rate, capacity, reservation/release, quota window, availability/currentness, expiry/revocation, replica/materialization, decay/maintenance, renewal/reacquisition or non-rival reuse—using native units, clocks and identities. World forms demand/actor/transition/as_of ecology projections from those claims. A Resource may participate in several dynamic aspects at once. Renewal/reacquisition need not invert prior history; reservation is distinct from consumption/depletion; recursive creation and negative feedback require R6 evidence/Attribution rather than temporal adjacency."
+    }
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "sourceCase": "R7P02",
+      "case": "A live Runtime Job holds the sole Workspace execution slot and a second exact request is rejected not_started with the exact holder identity",
+      "pressure": "reservation blocks option",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "sourceCase": "R02",
+      "case": "Runtime terminal convergence releases the durable concurrency reservation atomically",
+      "pressure": "reservation release",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "sourceCase": "R03",
+      "case": "An identity-uncertain Runtime Attempt retains its reservation while the recorded unit/process/cgroup may still own work",
+      "pressure": "uncertainty holds capacity",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "sourceCase": "R04",
+      "case": "A policy change applies to new Runtime admission while exact replay preserves the old Job and old effective limits",
+      "pressure": "policy window vs historical commitment",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "sourceCase": "R05",
+      "case": "Windows Attempt acquires an Attempt-scoped SystemRequired Power Request only while physical work is active",
+      "pressure": "ephemeral lease",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "sourceCase": "R06",
+      "case": "Terminal replay does not restart the launcher and therefore does not reacquire the Power Request",
+      "pressure": "history vs renewed lease",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "sourceCase": "R07",
+      "case": "Runtime cache reclamation is driven by high/low capacity watermarks and only eligible bytes are reclaimed",
+      "pressure": "stock pressure plus policy",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "sourceCase": "R08",
+      "case": "Global package-manager caches are measured but not interpreted/deleted by Runtime because another owner controls their lifecycle",
+      "pressure": "ownership of stock dynamics",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "sourceCase": "R09",
+      "case": "Workspace closure removes Workspace-scoped disposable caches while shared trusted-local package caches survive",
+      "pressure": "different lifecycles under one execution",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "sourceCase": "R10",
+      "case": "Timeout/output/memory/process/CPU budgets constrain physical consumption but are explicitly not scheduling/priority/approval semantics",
+      "pressure": "budget vs resource state",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "sourceCase": "F01",
+      "case": "Finance consumes daily authority budget at ExternalEffect reservation before venue submission",
+      "pressure": "reservation before effect",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "sourceCase": "F02",
+      "case": "Finance counts every daily reservation regardless of eventual venue outcome instead of guessing failure/UNKNOWN returned the budget",
+      "pressure": "reserved vs consumed/released",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "sourceCase": "F03",
+      "case": "A later reconciliation may establish evidence-backed release/accounting semantics without rewriting the original reservation event",
+      "pressure": "release after evidence",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "sourceCase": "F04",
+      "case": "Remote Finance ledger owns daily reservation truth so deleting/restarting local state cannot reset available budget",
+      "pressure": "durable windowed capacity",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "sourceCase": "F05",
+      "case": "All executor replicas in one authority domain must share the same durable daily ledger or capacity splits falsely",
+      "pressure": "shared capacity owner",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "sourceCase": "F06",
+      "case": "Exact replay returns historical admission without consuming daily budget twice",
+      "pressure": "idempotent accounting",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "sourceCase": "F07",
+      "case": "Owner capital contributions/withdrawals change capital stock but are removed from investment performance",
+      "pressure": "stock flow vs outcome",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "sourceCase": "F08",
+      "case": "Portfolio equity changes through mark-to-market and other non-ledger mechanisms without a cash-flow event",
+      "pressure": "valuation stock without flow",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "sourceCase": "F09",
+      "case": "Finance measures drawdown/minimum equity but explicitly refuses one universal drawdown threshold",
+      "pressure": "state measure vs policy",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "sourceCase": "N01",
+      "case": "Workstation revalidation accepts only an exact saved path/observation identity; using the path does not deplete it",
+      "pressure": "currentness not depletion",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C21",
+      "sourceCase": "N02",
+      "case": "Successful Workstation qualification creates a fresh observation before readmission",
+      "pressure": "refresh claim not refill stock",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C22",
+      "sourceCase": "N03",
+      "case": "Anchor admission refuses silent replacement of a different active selection",
+      "pressure": "generation/selection identity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C23",
+      "sourceCase": "N04",
+      "case": "A catalog of 98 public candidates is not 98 currently executable roots",
+      "pressure": "candidate cardinality vs current capacity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C24",
+      "sourceCase": "N05",
+      "case": "Provider/mechanism diversity does not form a current independent pair when one root is unavailable",
+      "pressure": "availability and independence",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C25",
+      "sourceCase": "N06",
+      "case": "Negative current root observations are retained rather than retried until they become green",
+      "pressure": "historical negative truth",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C26",
+      "sourceCase": "N07",
+      "case": "Stopped/replaced network relations invalidate exact bindings; readmission never resurrects the old generation",
+      "pressure": "reacquisition is new relation identity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C27",
+      "sourceCase": "N08",
+      "case": "The same Snowflake Resource is available in one parent relation and unavailable in another at the same time",
+      "pressure": "relation-scoped dynamics",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C28",
+      "sourceCase": "S01",
+      "case": "Studio Asset digest existed while selected bytes had not yet been moved into durable storage before Workspace close",
+      "pressure": "identity vs materialized stock",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C29",
+      "sourceCase": "S02",
+      "case": "Studio materialize creates the missing working copy once; exact replay returns existing without creating a second semantic master",
+      "pressure": "materialization vs identity",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C30",
+      "sourceCase": "S03",
+      "case": "After destructive local-CAS loss, an independently verified R2 replica restores the same exact Blob identity",
+      "pressure": "replication/reacquisition",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C31",
+      "sourceCase": "S04",
+      "case": "A materialized review MP4 is a recoverable working copy, not a separate master Resource merely because another byte copy exists",
+      "pressure": "copy count vs resource identity",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C32",
+      "sourceCase": "S05",
+      "case": "Studio tool retention weighs maintenance/failure surface and can keep powerful tools specialist/on-demand rather than maximizing utilization",
+      "pressure": "maintenance and idle optionality",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C33",
+      "sourceCase": "S06",
+      "case": "A future Resolve version requires compatibility re-probe before reusing the old profile",
+      "pressure": "compatibility decay/currentness",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C34",
+      "sourceCase": "Q01",
+      "case": "A Security single-run Activation remains consumed after an invalid trial and must be replaced for rerun",
+      "pressure": "rival single-use authority",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C35",
+      "sourceCase": "Q02",
+      "case": "Security retains exact sample bytes unchanged while disposable execution environments/activations are consumed separately",
+      "pressure": "reusable bytes vs consumable authority",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C36",
+      "sourceCase": "Q03",
+      "case": "A cached exact Security result remains usable historical truth during outage",
+      "pressure": "non-rival retained result",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C37",
+      "sourceCase": "Q04",
+      "case": "The same outage blocks a new unique Security job while cached exact result remains available",
+      "pressure": "historical result vs current capability",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C38",
+      "sourceCase": "Q05",
+      "case": "Persistent artifact/service can remain while usable controller authority disappears after credential revocation",
+      "pressure": "object persistence vs authority decay",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C39",
+      "sourceCase": "H01",
+      "case": "Human attention/time is measured as a policy cost and interruption count consumes synchronization attention",
+      "pressure": "flow/capacity resource",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C40",
+      "sourceCase": "H02",
+      "case": "Human capability can decay through non-use, changing environments, illness, automation or obsolete knowledge",
+      "pressure": "degradable capability",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "P",
+          "reasonCode": "B-VECTOR-FIT"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C41",
+      "sourceCase": "H03",
+      "case": "Relearning rate after interruption is evidence about retained Human capability",
+      "pressure": "decay is not deletion",
+      "models": {
+        "A": {
+          "status": "P",
+          "reasonCode": "A-STOCK-FIT"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C42",
+      "sourceCase": "H04",
+      "case": "Tools can increase joint-system capability while reducing practice of internal Human skill",
+      "pressure": "positive and negative coupled feedback",
+      "models": {
+        "A": {
+          "status": "A",
+          "reasonCode": "A-PARTIAL-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C43",
+      "sourceCase": "H05",
+      "case": "Human capability can produce resources, reputation, autonomy and further learning opportunities",
+      "pressure": "recursive resource creation",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C44",
+      "sourceCase": "HA01",
+      "case": "One externally promoted exact Harness procedure is reused across two independent Runs without being depleted by first use",
+      "pressure": "non-rival reusable resource",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C45",
+      "sourceCase": "HA02",
+      "case": "Harness reusable source presence does not mean selection into a Run",
+      "pressure": "resource presence vs current use",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C46",
+      "sourceCase": "HA03",
+      "case": "Each ToolProgram inner step consumes one existing Tool-call budget unit while procedural knowledge remains intact",
+      "pressure": "consumed budget vs non-rival knowledge",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C47",
+      "sourceCase": "HA04",
+      "case": "ToolProgram reduces model calls from seven to two while preserving the same five physical Tool calls",
+      "pressure": "conversion modifier changes one flow only",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "A",
+          "reasonCode": "B-OVERPROJECTS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C48",
+      "sourceCase": "R7P01",
+      "case": "Current World produces identical ResourceEvaluation when owner quota text changes from remaining-1-request to remaining-100-requests",
+      "pressure": "production quantitative blind spot",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C49",
+      "sourceCase": "WQ01",
+      "case": "Current World stores quota only as opaque quota_class text and has no quantity/reserved/replenishment projection in ResourceEvaluation",
+      "pressure": "representation gap",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "P",
+          "reasonCode": "C-FAMILY-FIT"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    },
+    {
+      "id": "C50",
+      "sourceCase": "R6C",
+      "case": "R6 already established resource-family-specific consumption accounting rather than one universal consumption stage",
+      "pressure": "prior boundary constraint",
+      "models": {
+        "A": {
+          "status": "F",
+          "reasonCode": "A-NOT-STOCK"
+        },
+        "B": {
+          "status": "F",
+          "reasonCode": "B-VECTOR-TOPOLOGY-LOSS"
+        },
+        "C": {
+          "status": "A",
+          "reasonCode": "C-FAMILY-BOUNDARY-AMBIG"
+        },
+        "D": {
+          "status": "P",
+          "reasonCode": "D-NATIVE-DYNAMIC-PROJECTION"
+        }
+      }
+    }
+  ],
+  "counts": {
+    "A": {
+      "P": 16,
+      "F": 24,
+      "A": 10
+    },
+    "B": {
+      "P": 19,
+      "A": 10,
+      "F": 21
+    },
+    "C": {
+      "P": 39,
+      "A": 11
+    },
+    "D": {
+      "P": 50
+    }
+  },
+  "relationLedger": [
+    {
+      "concept": "Resource identity",
+      "verdict": "KEEP_SEPARATE_FROM_DYNAMIC_AMOUNT",
+      "cases": [
+        "C28",
+        "C30",
+        "C31",
+        "C38"
+      ],
+      "reason": "Local materialization, replica count or current authority can change while the underlying bounded Resource aspect remains identifiable."
+    },
+    {
+      "concept": "Stock/quantity",
+      "verdict": "OPTIONAL_OWNER_NATIVE_DIMENSION",
+      "cases": [
+        "C07",
+        "C17",
+        "C18"
+      ],
+      "reason": "Bytes/capital can have meaningful quantities, but many Resources do not have a useful scalar stock."
+    },
+    {
+      "concept": "Flow/rate",
+      "verdict": "OPTIONAL_OWNER_NATIVE_DIMENSION",
+      "cases": [
+        "C17",
+        "C18",
+        "C39",
+        "C47"
+      ],
+      "reason": "Cash flows, attention use and call rates matter without becoming the identity of the Resource."
+    },
+    {
+      "concept": "Capacity",
+      "verdict": "OPTIONAL_OWNER_NATIVE_DIMENSION",
+      "cases": [
+        "C01",
+        "C15",
+        "C23",
+        "C39"
+      ],
+      "reason": "Capacity limits simultaneous/repeated transitions and may be shared across consumers; count of resources is not capacity."
+    },
+    {
+      "concept": "Reservation",
+      "verdict": "REQUIRED_WHEN_OWNER_PRECOMMITS_CAPACITY",
+      "cases": [
+        "C01",
+        "C03",
+        "C11",
+        "C12"
+      ],
+      "reason": "Reserved capacity blocks Options before actual Effect/consumption and can remain held under uncertainty."
+    },
+    {
+      "concept": "Release",
+      "verdict": "SEPARATE_EVENT_OR_OWNER_TRANSITION",
+      "cases": [
+        "C02",
+        "C13"
+      ],
+      "reason": "Release restores available capacity only after owner-native terminal/reconciliation evidence; it does not erase the reservation history."
+    },
+    {
+      "concept": "Consumption/depletion",
+      "verdict": "FAMILY_SPECIFIC_NOT_UNIVERSAL",
+      "cases": [
+        "C34",
+        "C35",
+        "C44",
+        "C46"
+      ],
+      "reason": "Single-use authority depletes, Tool-call budget consumes, sample/procedure knowledge may be reused without depletion."
+    },
+    {
+      "concept": "Renewal/replenishment",
+      "verdict": "OWNER_NATIVE_MECHANISM_NOT_INVERSE_LIFECYCLE",
+      "cases": [
+        "C04",
+        "C14",
+        "C21",
+        "C26"
+      ],
+      "reason": "New policy/window/fresh observation/readmission may restore Actionability without reversing historical events or reusing old generation identity."
+    },
+    {
+      "concept": "Currentness/availability",
+      "verdict": "RELATIONAL_DYNAMIC_CLAIM",
+      "cases": [
+        "C20",
+        "C21",
+        "C24",
+        "C27",
+        "C33",
+        "C37"
+      ],
+      "reason": "Use need not deplete a Resource; Actionability can instead change because current evidence, parent relation, compatibility or provider availability changes."
+    },
+    {
+      "concept": "Expiry/revocation",
+      "verdict": "CLAIM_OR_AUTHORITY_INVALIDATION",
+      "cases": [
+        "C37",
+        "C38"
+      ],
+      "reason": "Authority/capability may disappear while historical results or physical artifacts persist."
+    },
+    {
+      "concept": "Replica/materialization",
+      "verdict": "SEPARATE_FROM_RESOURCE_IDENTITY",
+      "cases": [
+        "C28",
+        "C29",
+        "C30",
+        "C31"
+      ],
+      "reason": "Copies and current materializations affect durability/recovery, not necessarily semantic Resource cardinality."
+    },
+    {
+      "concept": "Decay",
+      "verdict": "FAMILY_SPECIFIC_EVIDENCE",
+      "cases": [
+        "C33",
+        "C40",
+        "C41"
+      ],
+      "reason": "Compatibility and skill can decay through different mechanisms and clocks; decay is not generic quantity subtraction."
+    },
+    {
+      "concept": "Maintenance burden",
+      "verdict": "SEPARATE_NEGATIVE_FEEDBACK_DIMENSION",
+      "cases": [
+        "C08",
+        "C32"
+      ],
+      "reason": "More retained Resources can increase maintenance/failure/ownership burden even when current capability count rises."
+    },
+    {
+      "concept": "Recursive creation",
+      "verdict": "REQUIRES_EFFECT_OUTCOME_ATTRIBUTION",
+      "cases": [
+        "C43"
+      ],
+      "reason": "Capability may create future resources/opportunities, but R6 forbids inferring causality from temporal adjacency alone."
+    },
+    {
+      "concept": "Conversion modifier",
+      "verdict": "DYNAMIC_RELATION_NOT_RESOURCE_STOCK",
+      "cases": [
+        "C47"
+      ],
+      "reason": "A procedure can reduce model-call flow while leaving physical Tool-call flow unchanged."
+    },
+    {
+      "concept": "Non-rival reuse",
+      "verdict": "REQUIRED_COUNTEREXAMPLE_TO_DEPLETION",
+      "cases": [
+        "C36",
+        "C44",
+        "C45"
+      ],
+      "reason": "Historical results/procedures can be reused without being diminished by use; selection remains separate."
+    },
+    {
+      "concept": "Policy threshold",
+      "verdict": "NOT_RESOURCE_DYNAMICS_BY_DEFAULT",
+      "cases": [
+        "C04",
+        "C19"
+      ],
+      "reason": "Changing admission/drawdown policy can change decisions without changing the underlying Resource stock."
+    },
+    {
+      "concept": "Feedback",
+      "verdict": "SIGNED_AND_ATTRIBUTED",
+      "cases": [
+        "C42",
+        "C43"
+      ],
+      "reason": "Resource/capability loops may be positive or negative; assistance can increase joint capability while decreasing internal practice."
+    }
+  ],
+  "deletionTests": [
+    {
+      "mutation": "delete Reservation as distinct from Consumption",
+      "result": "FAIL",
+      "cases": [
+        "C01",
+        "C11",
+        "C12"
+      ],
+      "why": "Capacity can be blocked before physical/financial Effect and remain held when outcome is UNKNOWN."
+    },
+    {
+      "mutation": "delete Release as a separate owner-native event/transition",
+      "result": "FAIL",
+      "cases": [
+        "C02",
+        "C13"
+      ],
+      "why": "Available capacity changes after terminal/reconciliation without rewriting historical reservation/Effect truth."
+    },
+    {
+      "mutation": "delete currentness/availability dynamics and model all loss as depletion",
+      "result": "FAIL",
+      "cases": [
+        "C20",
+        "C24",
+        "C27",
+        "C33",
+        "C37"
+      ],
+      "why": "Paths, compatibility and provider access can become unusable without being consumed."
+    },
+    {
+      "mutation": "delete replica/materialization distinction",
+      "result": "FAIL",
+      "cases": [
+        "C28",
+        "C30",
+        "C31"
+      ],
+      "why": "Local bytes can disappear while exact Resource identity remains recoverable from another replica."
+    },
+    {
+      "mutation": "delete non-rival reuse",
+      "result": "FAIL",
+      "cases": [
+        "C36",
+        "C44"
+      ],
+      "why": "Exact results/procedures remain reusable after use; a depletion-only model predicts false scarcity."
+    },
+    {
+      "mutation": "delete decay/relearning distinction and treat absent performance as deletion",
+      "result": "FAIL",
+      "cases": [
+        "C40",
+        "C41"
+      ],
+      "why": "Human skill can degrade and later relearn faster; retained substrate is not binary possession."
+    },
+    {
+      "mutation": "delete maintenance/negative feedback",
+      "result": "FAIL",
+      "cases": [
+        "C32",
+        "C42"
+      ],
+      "why": "More tools/assistance can add capability while increasing maintenance or reducing internal practice."
+    },
+    {
+      "mutation": "force every Resource into one scalar balance",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C20",
+        "C27",
+        "C38",
+        "C44"
+      ],
+      "why": "Availability relations, authority and non-rival knowledge are distorted as inventory."
+    },
+    {
+      "mutation": "force every Resource to materialize a universal stock-flow-capacity vector",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C27",
+        "C31",
+        "C45",
+        "C50"
+      ],
+      "why": "Meaningless nullable dimensions add ontology without changing owner-native predictions and still lose relation identity."
+    },
+    {
+      "mutation": "force exactly one canonical dynamics family per Resource",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C18",
+        "C27",
+        "C38",
+        "C42",
+        "C47"
+      ],
+      "why": "One Resource/aspect can participate simultaneously in valuation, availability, authority, skill and modifier relations depending on transition/boundary."
+    },
+    {
+      "mutation": "treat renewal/reacquisition as reversal to a prior state",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C21",
+        "C26"
+      ],
+      "why": "Fresh observation/readmission can create a new generation/claim while old historical failure remains true."
+    },
+    {
+      "mutation": "credit recursive resource growth to the immediately preceding Action without Attribution",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C43"
+      ],
+      "why": "R6 requires causal evidence; exogenous changes and shared causes remain possible."
+    },
+    {
+      "mutation": "maximize utilization as ecology objective",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C32",
+        "C44"
+      ],
+      "why": "Idle/on-demand tools and reusable knowledge can retain option value; utilization can increase wear, cost or deskilling."
+    },
+    {
+      "mutation": "interpret candidate/resource count as available capacity",
+      "result": "REJECT_ADD",
+      "cases": [
+        "C23",
+        "C24"
+      ],
+      "why": "Catalog cardinality and provider diversity do not prove current actionable capacity or independence."
+    }
+  ],
+  "freshProjectionTests": [
+    {
+      "id": "R7Y01",
+      "case": "A public dataset is copied locally: local materialization bytes increase while the public source Resource is not depleted.",
+      "status": "P",
+      "reasonCode": "D-REPLICA-NONRIVAL"
+    },
+    {
+      "id": "R7Y02",
+      "case": "A quota reservation receives exact not-committed proof and releases; the same ambiguous reservation without proof remains held.",
+      "status": "P",
+      "reasonCode": "D-RESERVATION-EVIDENCE"
+    },
+    {
+      "id": "R7Y03",
+      "case": "Credential renewal rotates a token generation while the account-level Resource and historical expired credential evidence persist.",
+      "status": "P",
+      "reasonCode": "D-RENEWAL-NOT-REVERSAL"
+    },
+    {
+      "id": "R7Y04",
+      "case": "Human fatigue temporarily reduces available capability while retained skill evidence is unchanged; rest restores availability without relearning the skill from zero.",
+      "status": "P",
+      "reasonCode": "D-MULTI-ASPECT-CAPABILITY"
+    },
+    {
+      "id": "R7Y05",
+      "case": "Deleting a reconstructible build cache lowers local byte stock but leaves task Capability unchanged until rebuild latency becomes a binding constraint.",
+      "status": "P",
+      "reasonCode": "D-STOCK-NOT-CAPABILITY"
+    },
+    {
+      "id": "R7Y06",
+      "case": "Adding a powerful tool creates a new Option but also adds maintenance/attack-surface burden, so ecology value need not move monotonically with Resource count.",
+      "status": "P",
+      "reasonCode": "D-SIGNED-FEEDBACK"
+    },
+    {
+      "id": "R7Y07",
+      "case": "Promoted Knowledge changes a later discovery strategy; only a measured discovery/acquisition difference can support the claim that Knowledge created new Resources/Options.",
+      "status": "P",
+      "reasonCode": "D-ATTRIBUTED-RECURSION"
+    },
+    {
+      "id": "R7Y08",
+      "case": "A renewable API window resets available calls at a clock boundary while yesterday’s consumption history remains true and current provider eligibility can independently expire.",
+      "status": "P",
+      "reasonCode": "D-MULTI-CLOCK"
+    },
+    {
+      "id": "R7Y09",
+      "case": "A concurrently completed Finance FR2 requires both effective time and observed_at/knowledge time, with bounded transition windows returning UNKNOWN rather than mutating one current Resource row.",
+      "status": "P",
+      "reasonCode": "D-MULTI-CLOCK-CLAIMS",
+      "source": "postFreezeConcurrentEvidence.financeFr2"
+    },
+    {
+      "id": "R7Y10",
+      "case": "Finance FR2 keeps one economic object across multiple temporal identity/reference regimes; IdentityEvent can invalidate comparability without meaning the object stock was depleted or replaced.",
+      "status": "P",
+      "reasonCode": "D-IDENTITY-RELATION-DYNAMICS",
+      "source": "postFreezeConcurrentEvidence.financeFr2"
+    }
+  ],
+  "implementationProbes": {
+    "R7P01": {
+      "clientRequestId": "world-r7-current-quota-blindness-probe-20260815-01",
+      "jobId": "job-01a00599-e094-7ca2-9a59-0d54b57d987b",
+      "result": "quota remaining-1 vs remaining-100 produces identical ResourceEvaluation"
+    },
+    "R7P02": {
+      "blockedClientRequestId": "world-r7-capacity-holder-sleep-20260815-02",
+      "holderJobId": "job-01a0059a-43e4-75c3-8e66-f255b4111b62",
+      "admittedAfterReleaseJobId": "job-01a0059a-bd33-7882-9d21-a4a2c351a276",
+      "result": "same exact request not_started under live reservation then admitted after terminal release"
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Owner-Native Dynamic Claims + Ecology Projection",
+    "status": "PROVISIONAL_FOR_R8_NOT_CANONICAL_DOCTRINE",
+    "compression": "Resource ecology is not one balance or lifecycle. Preserve Resource identity; let native owners state only the dynamic quantities, rates, reservations, currentness, authority, replicas, decay, maintenance and renewal facts they can prove; derive current ecology/Options for a named actor/transition/as_of. Reservation differs from consumption, renewal need not reverse history, non-rival reuse exists, and recursive growth/negative feedback require evidence-backed Attribution."
+  },
+  "productionDebt": {
+    "currentQuotaProjection": "OwnerVerification.quota_class is opaque and current ResourceEvaluation does not consume quantitative quota/reservation/replenishment facts.",
+    "probe": "R7P01 proves remaining-1 and remaining-100 quota descriptions produce byte-equivalent ResourceEvaluation under equal other facts.",
+    "decision": "Record a quantitative dynamics projection gap. Do not add universal Resource balance/vector/family schemas until a real consumer proves the missing shared interface."
+  },
+  "contentDigest": "sha256:e6b96a6fa86d953f437bd30cb5efcaddc5bd43acbe11f88846ba2892ea0728a1",
+  "postFreezeConcurrentEvidence": {
+    "financeFr2": {
+      "repository": "/root/projects/ordivon-finance",
+      "revision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d",
+      "path": "research/financial_resource/FR2-MODEL-COMPETITION.md",
+      "sha256": "sha256:cf0a4f7620527749d6ce08c762bf6dfd2bcccd45b898331c6e3525151f7b0170",
+      "observedAfterModelFreeze": true,
+      "selectedFrozenR7FinanceFilesUnchangedFrom": "7d812d8d41d5ba6b8aa619886beddca94327b11f",
+      "needles": [
+        "Time is two-dimensional:",
+        "A later transition must not leak backwards through an older interval.",
+        "These cases confirm that an `IdentityEvent` is not synonymous with a new company/security."
+      ]
+    }
+  },
+  "antiStrawmanCorrection": {
+    "model": "C",
+    "reason": "Single-family typed lifecycles are expressive: hybrid families and cross-family transitions can absorb the former hard cases. R7 therefore treats those cases as pass/ambiguity rather than false, and compares D on deletion/minimality/ownership rather than manufactured impossibility.",
+    "before": {
+      "P": 36,
+      "A": 7,
+      "F": 7
+    },
+    "after": {
+      "P": 39,
+      "A": 11
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "kind": "ordivon.world.resource-ontology-r7-acceptance-receipt",
+  "truthRole": "research-acceptance-receipt",
+  "worldBaseRevision": "50abd7e9d84a4f02604e3fd59a3500f6f26064c1",
+  "artifacts": {
+    "r7": {
+      "path": "docs/resource-ontology-r7-ecology-dynamics-falsification.md",
+      "sha256": "3217f88b9ca6d0fe0ec804778826715ea8a6be6dc579eb6b739f3d4e987754b8"
+    },
+    "matrix": {
+      "path": "evidence/acceptance/resource-ontology-r7-ecology-matrix-20260815.json",
+      "sha256": "4816ff5716529a9bdc25869989f09bb76e83164f3abb2c492fef9fed0ef95533",
+      "contentDigest": "sha256:e6b96a6fa86d953f437bd30cb5efcaddc5bd43acbe11f88846ba2892ea0728a1"
+    }
+  },
+  "frozenRepositories": {
+    "world": {
+      "path": "/root/projects/ordivon-world",
+      "revision": "50abd7e9d84a4f02604e3fd59a3500f6f26064c1"
+    },
+    "finance": {
+      "path": "/root/projects/ordivon-finance",
+      "revision": "7d812d8d41d5ba6b8aa619886beddca94327b11f"
+    },
+    "runtime": {
+      "path": "/root/projects/ordivon-runtime",
+      "revision": "c6e45d9e41d3b4d64b5b3dace01497c53e574026"
+    },
+    "workstation": {
+      "path": "/root/workstation-lab",
+      "revision": "85f904635e856612b78e8b13acc553b1e80d292a"
+    },
+    "studio": {
+      "path": "/root/projects/ordivon-studio",
+      "revision": "52f646022cc606985a63a5fd290c417fd337e80e"
+    },
+    "security": {
+      "path": "/root/projects/ordivon-security",
+      "revision": "6a7a8f9b22cb4995d436da2968b135248f8f6bb3"
+    },
+    "game": {
+      "path": "/root/projects/ordivon-game",
+      "revision": "0c8581c6b5eebceaf33aeb8907fa91a8b53708dc"
+    },
+    "human": {
+      "path": "/root/projects/ordivon-human",
+      "revision": "f7725dfc9b391c3e9a0c509d49795994931c9d63"
+    },
+    "harness": {
+      "path": "/root/projects/ordivon-harness",
+      "revision": "286985c82874d293308297f66b23152c1ed53369"
+    }
+  },
+  "coverage": {
+    "frozenEcologyDiscriminators": 50,
+    "freshPostFreeze": 10,
+    "totalSurvivorSurface": 60,
+    "relationLedger": 18,
+    "deletionTests": 14,
+    "executedCurrentSystemProbes": 2,
+    "frozenHistoricalSourceRefs": 49,
+    "selectedFrozenSourceFiles": 22,
+    "postFreezeConcurrentFinanceEvidence": 1
+  },
+  "modelCounts": {
+    "A": {
+      "P": 16,
+      "F": 24,
+      "A": 10
+    },
+    "B": {
+      "P": 19,
+      "A": 10,
+      "F": 21
+    },
+    "C": {
+      "P": 39,
+      "A": 11
+    },
+    "D": {
+      "P": 50
+    }
+  },
+  "antiStrawmanCorrection": {
+    "model": "C",
+    "reason": "Single-family typed lifecycles are expressive: hybrid families and cross-family transitions can absorb the former hard cases. R7 therefore treats those cases as pass/ambiguity rather than false, and compares D on deletion/minimality/ownership rather than manufactured impossibility.",
+    "before": {
+      "P": 36,
+      "A": 7,
+      "F": 7
+    },
+    "after": {
+      "P": 39,
+      "A": 11
+    }
+  },
+  "provisionalSurvivor": {
+    "model": "D",
+    "name": "Owner-Native Dynamic Claims + Ecology Projection",
+    "status": "PROVISIONAL_FOR_R8_NOT_CANONICAL_DOCTRINE",
+    "compression": "Resource ecology is not one balance or lifecycle. Preserve Resource identity; let native owners state only the dynamic quantities, rates, reservations, currentness, authority, replicas, decay, maintenance and renewal facts they can prove; derive current ecology/Options for a named actor/transition/as_of. Reservation differs from consumption, renewal need not reverse history, non-rival reuse exists, and recursive growth/negative feedback require evidence-backed Attribution."
+  },
+  "centralResult": "Resource ecology is not one universal balance, vector or lifecycle. Preserve Resource identity and native owner dynamics; derive transition-scoped ecology from quantitative capacity/reservation where real, relation currentness/authority where real, replica/materialization facts, decay/maintenance and non-rival reuse. Renewal need not reverse history; recursive feedback requires R6 Attribution and may be positive or negative.",
+  "rootCompression": {
+    "resourceIdentity": "separate from dynamic quantity/materialization/current authority",
+    "stockQuantity": "optional owner-native claim in native units",
+    "flowRate": "optional owner-native claim",
+    "capacity": "owner-native amount/rate/concurrency claim for named transition/load",
+    "reservation": "precommitted capacity relation/event distinct from consumption",
+    "release": "later owner-native event/transition changing current availability without erasing history",
+    "consumptionDepletion": "resource-family-specific, not universal",
+    "renewalReplenishmentReacquisition": "distinct owner mechanisms, not inverse lifecycle",
+    "currentnessAvailability": "relational dynamic claim",
+    "replicaMaterialization": "relations to Resource identity, not semantic Resource count",
+    "decayMaintenance": "mechanism-specific and signed",
+    "nonRivalReuse": "first-class counterexample to depletion",
+    "recursiveCreation": "requires evidence-backed Attribution; may coexist with negative feedback"
+  },
+  "implementationEvidence": {
+    "R7P01": {
+      "clientRequestId": "world-r7-current-quota-blindness-probe-20260815-01",
+      "jobId": "job-01a00599-e094-7ca2-9a59-0d54b57d987b",
+      "result": "quota remaining-1 vs remaining-100 produces identical ResourceEvaluation"
+    },
+    "R7P02": {
+      "blockedClientRequestId": "world-r7-capacity-holder-sleep-20260815-02",
+      "holderJobId": "job-01a0059a-43e4-75c3-8e66-f255b4111b62",
+      "admittedAfterReleaseJobId": "job-01a0059a-bd33-7882-9d21-a4a2c351a276",
+      "result": "same exact request not_started under live reservation then admitted after terminal release"
+    }
+  },
+  "postFreezeConcurrentEvidence": {
+    "financeFr2": {
+      "repository": "/root/projects/ordivon-finance",
+      "revision": "1499b0b48c83cc1a16ec6c68504f77a88433b96d",
+      "path": "research/financial_resource/FR2-MODEL-COMPETITION.md",
+      "sha256": "sha256:cf0a4f7620527749d6ce08c762bf6dfd2bcccd45b898331c6e3525151f7b0170",
+      "observedAfterModelFreeze": true,
+      "selectedFrozenR7FinanceFilesUnchangedFrom": "7d812d8d41d5ba6b8aa619886beddca94327b11f",
+      "needles": [
+        "Time is two-dimensional:",
+        "A later transition must not leak backwards through an older interval.",
+        "These cases confirm that an `IdentityEvent` is not synonymous with a new company/security."
+      ]
+    }
+  },
+  "productionDebt": {
+    "currentQuotaProjection": "OwnerVerification.quota_class is opaque and current ResourceEvaluation does not consume quantitative quota/reservation/replenishment facts.",
+    "probe": "R7P01 proves remaining-1 and remaining-100 quota descriptions produce byte-equivalent ResourceEvaluation under equal other facts.",
+    "decision": "Record a quantitative dynamics projection gap. Do not add universal Resource balance/vector/family schemas until a real consumer proves the missing shared interface."
+  },
+  "sourceIntegrity": {
+    "frozenRepositories": 9,
+    "selectedFrozenFiles": 22,
+    "exactFrozenSourceRefs": 49,
+    "concurrentFinanceSelectedFrozenFilesUnchanged": true,
+    "postFreezeFinanceFr2ExactCommitBound": true,
+    "result": "PASS"
+  },
+  "localValidation": {
+    "worldUnitTests": 154,
+    "worldUnitTestsStatus": "PASS",
+    "ruff": "PASS",
+    "dependencies": "PASS",
+    "contracts": "PASS",
+    "docs": "PASS",
+    "r7Specific": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "promotions": {
+    "canonicalDoctrine": false,
+    "productionResourceBalance": false,
+    "productionStockFlowVector": false,
+    "productionResourceFamilyRegistry": false,
+    "productionGlobalReservationService": false,
+    "productionRenewalScheduler": false,
+    "productionQuantitativeQuotaSchema": false,
+    "globalResourceValueScalar": false
+  },
+  "next": "R8 Evidence Resource branch: evidence existence/actionability, source vs claim support, freshness/applicability/transportability, epistemic redundancy/independence, negative evidence, evidence-to-Knowledge promotion and value-of-information under reversibility/cost/risk."
+}
