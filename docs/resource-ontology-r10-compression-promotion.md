@@ -290,5 +290,7 @@ R10 is complete when all are true:
 [yes] R9P02 remains explicit non-goal rather than forgotten debt
 [yes] R9P03 remains explicit non-goal rather than speculative Capacity service
 [yes] canonical Resource doctrine and opportunity flywheel agree with implementation
-[pending until final gate] complete World regression / GitHub CI / CodeQL / canonical merge
+[yes] complete local World regression and R10-specific acceptance validation
+[external repository gate] GitHub CI / CodeQL must validate the exact committed PR head before merge
+[external continuity gate] canonical merge/sync and final Host Task closure are repository/Host facts recorded after this pre-merge artifact
 ```
