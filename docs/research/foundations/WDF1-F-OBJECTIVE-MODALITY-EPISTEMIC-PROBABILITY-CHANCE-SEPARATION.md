@@ -1,10 +1,10 @@
-# WDF1-1E — Objective Modality / Epistemic Openness / Probability / Chance Separation
+# WDF1-F — Objective Modality / Epistemic Openness / Probability / Chance Separation
 
-Status: complete for WDF1-1E. No interpretation of probability or metaphysics of chance is selected. TARA survives and is refined by separating **support/admissibility**, **measure/kernel**, and **interpretation/truth role**. Probability is not retained as one World primitive; a probability value is a formal/model quantity whose semantic role must be typed. `ObjectiveChance` remains an unresolved Reality-facing candidate, not a synonym for probability measure, frequency, credence, uncertainty or propensity. Exact next sub-round: **WDF1-1F — Modal Architecture Reconstruction / Falsification / WDF1-1 Closeout**.
+Status: complete for WDF1-F. No interpretation of probability or metaphysics of chance is selected. TARA survives and is refined by separating **support/admissibility**, **measure/kernel**, and **interpretation/truth role**. Probability is not retained as one World primitive; a probability value is a formal/model quantity whose semantic role must be typed. `ObjectiveChance` remains an unresolved Reality-facing candidate, not a synonym for probability measure, frequency, credence, uncertainty or propensity. Exact next sub-round: **WDF1-G — Modal Architecture Reconstruction / Falsification / WDF1 Closeout**.
 
 ## 0. Question
 
-WDF1-1D reconstructed probabilistic control claims such as:
+WDF1-E reconstructed probabilistic control claims such as:
 
 ```text
 ∃π_A : μ(success | π_A) ≥ p
@@ -12,7 +12,7 @@ WDF1-1D reconstructed probabilistic control claims such as:
 
 but intentionally left `μ` uninterpreted.
 
-WDF1-1E asks:
+WDF1-F asks:
 
 > What does a probability number mean? Is it an Agent's degree of belief, a statistical model weight, a long-run frequency, a stochastic law, an objective single-case chance, a propensity/disposition, or something else?
 
@@ -443,7 +443,7 @@ and:
 BeliefState != RealityState
 ```
 
-WDF0-D and WDF1-1D remain binding.
+WDF0-D and WDF1-E remain binding.
 
 ## 15. Parameter uncertainty adds a third layer
 
@@ -634,7 +634,7 @@ from:
 Weight/Measure
 ```
 
-This refines WDF1-1B.
+This refines WDF1-C.
 
 A Boolean modal layer asks:
 
@@ -781,7 +781,7 @@ NOT SELECTED
 
 A broader powers view can regard probabilistic tendencies as manifestations of real powers/dispositions under partner/background conditions.
 
-This connects WDF1-1E to the unresolved WDF1 law/powers branch.
+This connects WDF1-F to the unresolved WDF1 law/powers branch.
 
 But WDF1 retains:
 
@@ -1033,7 +1033,7 @@ aleatory = irreducible randomness in Reality
  epistemic = ignorance
 ```
 
-WDF1-1E finds this useful but too coarse because practical predictive distributions can mix:
+WDF1-F finds this useful but too coarse because practical predictive distributions can mix:
 
 ```text
 hidden-state uncertainty
@@ -1148,7 +1148,7 @@ ObjectiveChanceReality
 ProbabilisticPlanningDoesNotRequireSolvedChanceMetaphysics
 ```
 
-This parallels WDF1-1C's:
+This parallels WDF1-D's:
 
 ```text
 UsingLawModel != HavingSolvedLawMetaphysics
@@ -1325,7 +1325,7 @@ AlmostSureLawlikeStatement != Necessity by formal probability alone
 
 Statistical mechanics and dynamical-systems foundations sometimes use typicality measures to characterize which microstates/histories are typical without necessarily interpreting normalized measure directly as single-case chance or credence.
 
-WDF1-1E flags:
+WDF1-F flags:
 
 ```text
 TypicalityMeasure
@@ -1347,7 +1347,7 @@ provisionally.
 
 Quantum mechanics assigns probabilities to measurement outcomes through its formalism, but the metaphysical interpretation of those probabilities depends on the broader interpretation/theory.
 
-WDF1-1E does not use quantum probability to settle:
+WDF1-F does not use quantum probability to settle:
 
 - objective chance;
 - collapse;
@@ -1377,7 +1377,7 @@ ProbabilisticDependence != Causation
 Causation != RequiresStochasticity
 ```
 
-This preserves the WDF1-0 firewall before later causal reconstruction.
+This preserves the WDF1-A firewall before later causal reconstruction.
 
 ## 54. Probabilistic causation remains a later residual
 
@@ -1506,7 +1506,7 @@ ObservationalProbability != InterventionalProbability by default
 
 ## 61. Probability source taxonomy — research roles
 
-WDF1-1E retains the following role taxonomy:
+WDF1-F retains the following role taxonomy:
 
 ### CRED
 
@@ -1600,7 +1600,7 @@ TypedMeasure/KernelRole: RETAINED
 
 ## 64. Strongest result 2 — chance remains genuinely unresolved
 
-Unlike Capability, `ObjectiveChance` cannot yet be fully reduced by WDF1-1E.
+Unlike Capability, `ObjectiveChance` cannot yet be fully reduced by WDF1-F.
 
 The surviving rivals ground it differently:
 
@@ -1755,9 +1755,9 @@ Nomological/physical setup Θ,S
 
 But the arrow's metaphysics is exactly what remains unresolved.
 
-WDF1-1E refuses to fill it with `because probability axioms`.
+WDF1-F refuses to fill it with `because probability axioms`.
 
-## 71. WDF1-1E hard anti-laws
+## 71. WDF1-F hard anti-laws
 
 1. `ProbabilityMeasure != ProbabilityInterpretation`.
 2. `SameFormalProbability != SameTruthRole`.
@@ -1855,11 +1855,11 @@ probability/epistemic/chance roles
 
 The correct next action is no longer another expansion sub-round.
 
-The remaining task inside WDF1-1 is to destructively reconstruct the whole modal architecture, determine whether TARA actually survives the accumulated falsifiers, and identify the next irreducible residual toward counterfactual/causal foundations.
+The remaining task inside WDF1 is to destructively reconstruct the whole modal architecture, determine whether TARA actually survives the accumulated falsifiers, and identify the next irreducible residual toward counterfactual/causal foundations.
 
 Therefore next exact sub-round:
 
-# WDF1-1F — Modal Architecture Reconstruction / Falsification / WDF1-1 Closeout
+# WDF1-G — Modal Architecture Reconstruction / Falsification / WDF1 Closeout
 
 It must:
 
@@ -1870,21 +1870,21 @@ It must:
 4. freeze hard modal anti-laws and classify provisional laws;
 5. build cross-domain modal coverage ledger;
 6. identify exact open interfaces to law/chance/causality/counterfactual theories;
-7. admit WDF1-2 only from the largest irreducible residual;
+7. admit WDF2 only from the largest irreducible residual;
 8. explicitly compare with production Ordivon World without auto-refactor.
 ```
 
 No objective-chance theory or causal theory is selected before F.
 
-## 76. WDF1-1E closeout
+## 76. WDF1-F closeout
 
 ```text
-WDF1-1E1 objective vs epistemic matched cases      COMPLETE
-WDF1-1E2 probability-role/rival comparison          COMPLETE
-WDF1-1E3 P=0 / P=1 modal-collapse attack            COMPLETE
-WDF1-1E4 hidden-state/parameter/model uncertainty    COMPLETE
-WDF1-1E5 chance theories vs control/probability      COMPLETE
-WDF1-1E6 TARA measure-layer reconstruction           COMPLETE
+WDF1-F1 objective vs epistemic matched cases      COMPLETE
+WDF1-F2 probability-role/rival comparison          COMPLETE
+WDF1-F3 P=0 / P=1 modal-collapse attack            COMPLETE
+WDF1-F4 hidden-state/parameter/model uncertainty    COMPLETE
+WDF1-F5 chance theories vs control/probability      COMPLETE
+WDF1-F6 TARA measure-layer reconstruction           COMPLETE
 
 Probability root primitive: REJECTED
 Uncertainty root primitive: REJECTED
@@ -1895,5 +1895,5 @@ ObjectiveChance: UNRESOLVED CANDIDATE
 TARA: SURVIVES WITH SUPPORT/MEASURE/INTERPRETATION SEPARATION
 
 Next:
-WDF1-1F Modal Architecture Reconstruction / Falsification / Closeout
+WDF1-G Modal Architecture Reconstruction / Falsification / Closeout
 ```

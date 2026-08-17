@@ -1,6 +1,6 @@
-# WDF1-1F — Modal Architecture Reconstruction / Falsification / Closeout
+# WDF1-G — Modal Architecture Reconstruction / Falsification / Closeout
 
-Status: complete. **WDF1-1 Modal Architecture v1 is frozen at the research level.** TARA survives only as a **typed modal claim/question grammar**, not as a Reality ontology and not as a production schema. Derived convenience nouns are demoted where deletion succeeds. Law metaphysics, objective chance, counterfactual generation and causation remain explicit open interfaces. Exact next round admitted by residual ranking: **WDF1-2 — Counterfactual Architecture: Alteration / Invariance / Alternative Generation / Similarity / Structural Surgery**.
+Status: complete. **WDF1 Modal Architecture v1 is frozen at the research level.** TARA survives only as a **typed modal claim/question grammar**, not as a Reality ontology and not as a production schema. Derived convenience nouns are demoted where deletion succeeds. Law metaphysics, objective chance, counterfactual generation and causation remain explicit open interfaces. Exact next major round admitted by residual ranking: **WDF2 — Counterfactual Architecture**. Its exact first canonical sub-round is **WDF2-A — Counterfactual Current-Use / Term Separation / Hidden-Assumption Inventory**.
 
 WDF0 Meta-Foundation v1 remains frozen. No WDF0 reopen condition fired. No production refactor is admitted by this closeout.
 
@@ -8,7 +8,7 @@ WDF0 Meta-Foundation v1 remains frozen. No WDF0 reopen condition fired. No produ
 
 ## 0. Purpose
 
-WDF1-1A–E expanded and separated the modal field:
+WDF1-B–F expanded and separated the modal field:
 
 ```text
 A — matched modal separation
@@ -386,7 +386,7 @@ Cap_{A,K}(
 )
 ```
 
-No WDF1-1 falsifier requires a separate ontological `Capability` substance.
+No WDF1 falsifier requires a separate ontological `Capability` substance.
 
 ### Disposition
 
@@ -969,9 +969,9 @@ This is its correct frozen scope.
 
 ---
 
-# PART III — Frozen WDF1-1 modal foundation
+# PART III — Frozen WDF1 modal foundation
 
-## 33. WDF1-1 Modal Foundation v1
+## 33. WDF1 Modal Foundation v1
 
 The positive frozen core is intentionally thin.
 
@@ -1133,7 +1133,7 @@ when evidence/surprise indicates structural inadequacy.
 
 ## 34. Frozen compressed grammar
 
-The smallest useful WDF1-1 grammar is:
+The smallest useful WDF1 grammar is:
 
 ```text
 MODAL CLAIM
@@ -1262,7 +1262,7 @@ ControlSuccess != MechanisticExplanation
 ProbabilisticDependence != Causation
 ```
 
-These are **not** a completed causal theory. They are boundary conditions on WDF1-2+.
+These are **not** a completed causal theory. They are boundary conditions on WDF2+.
 
 ---
 
@@ -1284,7 +1284,7 @@ primitive governing / constraint
 local/effective/plural law accounts
 ```
 
-WDF1-1 supplies the interface, not the winner.
+WDF1 supplies the interface, not the winner.
 
 ---
 
@@ -1305,7 +1305,7 @@ The measure calculus does not settle the truthmaker.
 
 ## 42. Open interface O3 — Metaphysical modality
 
-No WDF1-1 consumer/falsifier forced a distinct metaphysical possibility layer beyond logical, nomological, identity/constitution and model-relative modalities.
+No WDF1 consumer/falsifier forced a distinct metaphysical possibility layer beyond logical, nomological, identity/constitution and model-relative modalities.
 
 ### Disposition
 
@@ -1335,7 +1335,7 @@ omission
 enabling conditions
 ```
 
-WDF1-1 deliberately did not select among them.
+WDF1 deliberately did not select among them.
 
 ---
 
@@ -1355,7 +1355,7 @@ institutional policy asks what follows if a rule changes
 chance/counterfactual dependence evaluates alternative outcomes/backgrounds
 ```
 
-But WDF1-1 only says a counterfactual needs a typed alternative generator and invariant background. It does not specify how to choose them.
+But WDF1 only says a counterfactual needs a typed alternative generator and invariant background. It does not specify how to choose them.
 
 ---
 
@@ -1363,7 +1363,7 @@ But WDF1-1 only says a counterfactual needs a typed alternative generator and in
 
 ## 45. Digital/computational systems — STRONG
 
-WDF1-1 reconstructs cleanly:
+WDF1 reconstructs cleanly:
 
 ```text
 program execution alternatives
@@ -1416,7 +1416,7 @@ Still open:
 - hierarchical/delegated authority semantics;
 - deontic paradoxes.
 
-These belong partly to later institution foundations, not WDF1-1 root modality.
+These belong partly to later institution foundations, not WDF1 root modality.
 
 ---
 
@@ -1496,7 +1496,7 @@ fundamental stochasticity
 law metaphysics
 ```
 
-This remains a major domain residual, but it is not the most upstream immediate WDF1-2 residual because counterfactual/causal architecture cuts across more domains.
+This remains a major domain residual, but it is not the most upstream immediate WDF2 residual because counterfactual/causal architecture cuts across more domains.
 
 ---
 
@@ -1525,7 +1525,7 @@ These are neighboring representation/world-model foundations.
 
 # PART VII — Residual ranking
 
-## 53. Candidate residuals after WDF1-1
+## 53. Candidate residuals after WDF1
 
 F ranks remaining WDF1 residuals by:
 
@@ -1579,7 +1579,7 @@ But a clean attack is difficult until counterfactual alteration/invariance seman
 
 ### R3 — Law metaphysics — CRITICAL
 
-Still deep and upstream, but WDF1-1C successfully isolates a usable nomological interface. Counterfactual research is likely to pressure law theories directly.
+Still deep and upstream, but WDF1-D successfully isolates a usable nomological interface. Counterfactual research is likely to pressure law theories directly.
 
 ### R4 — Objective chance — HIGH/CRITICAL
 
@@ -1603,13 +1603,17 @@ The ordering is methodological, not a claim of ontological priority.
 
 ---
 
-# PART VIII — WDF1-2 admission
+# PART VIII — WDF2 admission
 
 ## 54. Exact next round
 
-WDF1-2 is admitted as:
+WDF2 is admitted as:
 
-# **WDF1-2 — Counterfactual Architecture: Alteration / Invariance / Alternative Generation / Similarity / Structural Surgery**
+# **WDF2 — Counterfactual Architecture**
+
+Exact first canonical sub-round:
+
+# **WDF2-A — Counterfactual Current-Use / Term Separation / Hidden-Assumption Inventory**
 
 It must begin without preselecting Lewisian similarity, Stalnaker selection functions, SCM counterfactuals, interventionism, powers semantics or causal models.
 
@@ -1649,7 +1653,7 @@ No winner is preselected.
 
 # PART IX — Production Ordivon World comparison
 
-## 55. Current production remains intentionally narrower than WDF1-1
+## 55. Current production remains intentionally narrower than WDF1
 
 Current World production boundary remains:
 
@@ -1662,11 +1666,11 @@ Bind → Observe → Act → Reconcile
 
 with owner-preserving Resource / Message / Entity trajectories and Agent-facing effect-path selection.
 
-WDF1-1 does not change this scope.
+WDF1 does not change this scope.
 
 ---
 
-## 56. Production semantics already aligned with WDF1-1
+## 56. Production semantics already aligned with WDF1
 
 ### Currentness
 
@@ -1718,7 +1722,7 @@ Capability = supported ability of a system boundary
              under bounded conditions.
 ```
 
-WDF1-1 now reconstructs this `ability` more deeply as a scoped modal/control projection.
+WDF1 now reconstructs this `ability` more deeply as a scoped modal/control projection.
 
 This does **not** make the production doctrine wrong.
 
@@ -1740,7 +1744,7 @@ No consumer currently needs the full policy/strategy/measure grammar exposed in 
 
 ## 58. Do not create a ModalManager / TARA service
 
-WDF1-1 provides no justification for:
+WDF1 provides no justification for:
 
 ```text
 ModalManager
@@ -1784,7 +1788,7 @@ They should appear only if a concrete consumer requires the distinction and curr
 
 # PART X — Reopen conditions
 
-## 60. WDF1-1 reopen only if
+## 60. WDF1 reopen only if
 
 1. A major modal domain cannot be expressed by the typed modal claim grammar without destructive loss.
 2. A currently derived notion (Capability, Access, Feasibility, Probability, Uncertainty) proves irreducible in a major domain.
@@ -1795,27 +1799,27 @@ They should appear only if a concrete consumer requires the distinction and curr
 7. Counterfactual/causal research shows that the current alternative-generator grammar cannot represent the required contrasts.
 8. Structural model revision cannot be incorporated without abandoning the modal grammar entirely.
 
-Otherwise later findings belong in WDF1-2+ or physical/institutional/information foundations.
+Otherwise later findings belong in WDF2+ or physical/institutional/information foundations.
 
 ---
 
 # PART XI — Final closeout
 
-## 61. WDF1-1 completion state
+## 61. WDF1 completion state
 
 ```text
-WDF1-1A matched modal separation                  COMPLETE
-WDF1-1B candidate architecture comparison         COMPLETE
-WDF1-1C law/background/constraint separation      COMPLETE
-WDF1-1D control/capability/intervention            COMPLETE
-WDF1-1E probability/chance separation             COMPLETE
-WDF1-1F reconstruction/falsification/closeout      COMPLETE
+WDF1-B matched modal separation                  COMPLETE
+WDF1-C candidate architecture comparison         COMPLETE
+WDF1-D law/background/constraint separation      COMPLETE
+WDF1-E control/capability/intervention            COMPLETE
+WDF1-F probability/chance separation             COMPLETE
+WDF1-G reconstruction/falsification/closeout      COMPLETE
 ```
 
 ### Frozen
 
 ```text
-WDF1-1 Modal Foundation v1
+WDF1 Modal Foundation v1
 = Typed Modal Claim Grammar
 + anti-collapse laws
 + derived-vs-open interface ledger
@@ -1866,14 +1870,14 @@ Fundamental physical modal structure
 ### Next
 
 ```text
-WDF1-2 Counterfactual Architecture
+WDF2-A Counterfactual Current-Use / Term Separation / Hidden-Assumption Inventory
 ```
 
 ---
 
 ## 62. Final compressed statement
 
-The central result of WDF1-1 is:
+The central result of WDF1 is:
 
 > **There is no single universal property called `possibility` from which Ordivon should derive reachability, feasibility, permission, capability, uncertainty and probability. Modal claims are typed claims over explicitly scoped alternatives, relations/generators/evaluators and operators. Many familiar nouns are downstream projections. Shared formal structure does not imply shared ontology. Reality-facing law and chance remain open, while model/evidence-relative modal claims must never silently upgrade themselves into Reality truth.**
 
@@ -1890,4 +1894,4 @@ Convenient noun
 != root ontology.
 ```
 
-That is sufficient to freeze WDF1-1 and move to counterfactual foundations without reopening WDF0.
+That is sufficient to freeze WDF1 and move to counterfactual foundations without reopening WDF0.

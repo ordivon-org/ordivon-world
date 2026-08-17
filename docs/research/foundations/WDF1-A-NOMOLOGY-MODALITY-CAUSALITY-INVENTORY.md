@@ -1,6 +1,6 @@
-# WDF1-0 — Nomology / Modality / Causality Current-Use & Hidden-Assumption Inventory
+# WDF1-A — Nomology / Modality / Causality Current-Use & Hidden-Assumption Inventory
 
-Status: complete for WDF1-0. No law, modal or causal theory is selected. WDF0 Meta-Foundation v1 remains frozen. The exact next residual-driven round admitted by WDF1-0 is **WDF1-1 — Modal Architecture: Alternative Spaces / Reachability / Feasibility / Permission / Epistemic Openness**. Law and causation theory comparison remains open and must not be decided before the modal kinds are separated.
+Status: complete for WDF1-A. No law, modal or causal theory is selected. WDF0 Meta-Foundation v1 remains frozen. The exact next residual-driven round admitted by WDF1-A is **WDF1-B — Matched Modal Separation Cases**; WDF1-B–G then carry the Modal Architecture program through falsification and closeout. Law and causation theory comparison remains open and must not be decided before the modal kinds are separated.
 
 ## 0. Why WDF1 begins here
 
@@ -38,13 +38,13 @@ The danger is not simply vague terminology. These words currently sit underneath
 - Agent planning and recovery;
 - claims about what would happen under changed conditions.
 
-WDF1-0 therefore does not ask `which theory of causation is right?` first. It asks:
+WDF1-A therefore does not ask `which theory of causation is right?` first. It asks:
 
 > What different questions has Ordivon already been using the same words to answer, which distinctions are already earned by engineering/research failures, and which rival theories would silently redefine those questions?
 
 ## 1. Method
 
-WDF1-0 uses five passes:
+WDF1-A uses five passes:
 
 ```text
 A. Current-use inventory
@@ -144,7 +144,7 @@ time
 semantic constraints
 ```
 
-This is a strong practical doctrine, but WDF1-0 finds that `feasible` is acting as an umbrella over heterogeneous exclusion relations.
+This is a strong practical doctrine, but WDF1-A finds that `feasible` is acting as an umbrella over heterogeneous exclusion relations.
 
 ### Hidden assumption RO-1 — one feasibility predicate hides several gates
 
@@ -461,7 +461,7 @@ LogicalPossible != PhysicalPossible
 
 Philosophy often asks whether something could obtain given the essences/identity/nature of things, not merely logic and not merely actual physical laws.
 
-WDF1-0 does not assume this is a distinct objective modal layer.
+WDF1-A does not assume this is a distinct objective modal layer.
 
 It retains the question because rival law/disposition theories disagree sharply about it.
 
@@ -484,7 +484,7 @@ physical possibility is often defined by laws,
 while some law theories define laws through the space of physical possibilities.
 ```
 
-WDF1-0 marks this as **Circularity N1** rather than resolving it.
+WDF1-A marks this as **Circularity N1** rather than resolving it.
 
 ## 16. Dynamical reachability
 
@@ -607,7 +607,7 @@ This extends WDF0's Reality/model firewall into modality.
 
 A proposition can be possible with probability/chance near zero, or impossible with probability zero depending on the formalism and event-space subtleties.
 
-WDF1-0 therefore freezes only the negative distinction:
+WDF1-A therefore freezes only the negative distinction:
 
 ```text
 Possible != Probable
@@ -631,7 +631,7 @@ Possible
 → Realized
 ```
 
-WDF0-C used this as a candidate chain. WDF1-0 now finds that it is **not a universal total order**.
+WDF0-C used this as a candidate chain. WDF1-A now finds that it is **not a universal total order**.
 
 Why:
 
@@ -687,7 +687,7 @@ Pressure points:
 - whether laws have explanatory/governing force or merely systematize;
 - how special-science/local/ceteris-paribus regularities relate to the best fundamental system.
 
-WDF1-0 disposition:
+WDF1-A disposition:
 
 ```text
 SERIOUS RIVAL; NOT SELECTED.
@@ -780,7 +780,7 @@ Pressure points:
 Disposition:
 
 ```text
-SERIOUS RIVAL; ESPECIALLY IMPORTANT FOR WDF1-1/PHYSICALITY.
+SERIOUS RIVAL; ESPECIALLY IMPORTANT FOR WDF1/PHYSICALITY.
 ```
 
 ## 29. Rival law theory L5 — Capacities / local laws / model-pluralist pressure
@@ -826,7 +826,7 @@ G6 define model equations used for prediction
 
 These are not equivalent.
 
-### WDF1-0 anti-law
+### WDF1-A anti-law
 
 ```text
 Governing != OneMechanism
@@ -995,7 +995,7 @@ REQUIRED FOR STOCHASTIC DOMAINS; THEORY DEFERRED UNTIL CHANCE IS SEPARATED.
 
 ## 37. Rival causation C7 — Causal pluralism
 
-WDF0 already found that `cause`, `constraint` and `constitution` answer different questions. WDF1-0 now sees internal diversity even within causation:
+WDF0 already found that `cause`, `constraint` and `constitution` answer different questions. WDF1-A now sees internal diversity even within causation:
 
 ```text
 production
@@ -1139,7 +1139,7 @@ ProbabilisticLaw = law containing objective chances/probabilities
 
 Humean best-system views, propensity views and governing-law views break or embrace this relation differently.
 
-WDF1-0 cannot resolve chance before law/modality architecture is clearer.
+WDF1-A cannot resolve chance before law/modality architecture is clearer.
 
 ## 44. Circularity audit — Capability and cause
 
@@ -1175,7 +1175,7 @@ WDF0-C/D later established:
 Cause != Constitution
 ```
 
-WDF1-0 therefore tightens the doctrine conceptually:
+WDF1-A therefore tightens the doctrine conceptually:
 
 - institutional rule/status may **constitute** authority/permission;
 - implementation/enforcement/incentive channels may **cause** behavior/outcomes;
@@ -1208,9 +1208,9 @@ InstitutionRelevantToCounterfactual != InstitutionFactIsPurelyCausal
 | Mechanism | protocol/authority mechanism OR causal explanation | lexical collision |
 | Law | project doctrine OR law of nature | lexical collision |
 
-## 47. WDF1-0 modal anti-laws
+## 47. WDF1-A modal anti-laws
 
-WDF1-0 now freezes the following **term-separation anti-laws** for future WDF1 rounds:
+WDF1-A now freezes the following **term-separation anti-laws** for future WDF1 rounds:
 
 1. `Actual != Necessary`.
 2. `Possible != Actual`.
@@ -1233,7 +1233,7 @@ WDF1-0 now freezes the following **term-separation anti-laws** for future WDF1 r
 19. `Disposition != Manifestation`.
 20. `CapabilityLabel != IndependentCausalMechanism`.
 
-## 48. WDF1-0 causal/nomological anti-laws
+## 48. WDF1-A causal/nomological anti-laws
 
 1. `Regularity != Law` by default.
 2. `Correlation != Cause`.
@@ -1251,7 +1251,7 @@ WDF1-0 now freezes the following **term-separation anti-laws** for future WDF1 r
 14. `LawOfNature != OrdivonDoctrineLaw`.
 15. `ProtocolMechanism != CausalMechanism`.
 
-## 49. What WDF1-0 rejects now
+## 49. What WDF1-A rejects now
 
 ### R0-1 — one untyped possibility predicate
 
@@ -1299,7 +1299,7 @@ Rejected. Institutional rules can constitute statuses/permissions and separately
 
 ## 50. External rival map retained for later falsification
 
-WDF1-0 records, without selecting:
+WDF1-A records, without selecting:
 
 ### Law families
 
@@ -1346,7 +1346,7 @@ Representative primary/near-primary pressure retained for WDF1:
 
 ## 52. Deep result 1 — `modality` is not one axis
 
-WDF1-0's strongest result is analogous to WDF0-E's result for `level`.
+WDF1-A's strongest result is analogous to WDF0-E's result for `level`.
 
 Just as:
 
@@ -1453,7 +1453,7 @@ while CausalVariables are model interfaces to that structure.
 
 Theories must explain when a chosen variable set is valid rather than merely predictive.
 
-## 57. WDF1-0 provisional research grammar
+## 57. WDF1-A provisional research grammar
 
 Not frozen ontology:
 
@@ -1491,9 +1491,9 @@ ACTUALITY
 
 The arrows among these blocks remain contested.
 
-## 58. Exact WDF1-1 admission
+## 58. Exact WDF1 admission
 
-WDF1-0 cannot yet fairly compare law theories because each rival presupposes a different answer to:
+WDF1-A cannot yet fairly compare law theories because each rival presupposes a different answer to:
 
 > What are the alternatives over which a law, disposition, counterfactual or intervention ranges?
 
@@ -1501,9 +1501,9 @@ Likewise it cannot fairly compare causal theories while `possible`, `reachable`,
 
 Therefore the largest immediate residual is:
 
-# WDF1-1 — Modal Architecture: Alternative Spaces / Reachability / Feasibility / Permission / Epistemic Openness
+# WDF1 — Modal Architecture: Alternative Spaces / Reachability / Feasibility / Permission / Epistemic Openness
 
-WDF1-1 must:
+WDF1 must:
 
 ```text
 1. build matched cases that separate modal kinds;
@@ -1515,19 +1515,19 @@ WDF1-1 must:
 7. separate epistemic possibility from objective modality;
 8. test cross-domain composition of modal constraints;
 9. determine what a counterfactual alternative must preserve;
-10. expose the exact interface WDF1-2 must use for law/nomology theory.
+10. expose the exact interface WDF2 must use for law/nomology theory.
 ```
 
 Only after this can WDF1 select the next residual.
 
-## 59. WDF1-0 closeout
+## 59. WDF1-A closeout
 
 ```text
-WDF1-0A current Ordivon use inventory       COMPLETE
-WDF1-0B modal term separation               COMPLETE
-WDF1-0C rival law-family map                COMPLETE
-WDF1-0D rival causation-family map          COMPLETE
-WDF1-0E circularity/dependency audit        COMPLETE
+WDF1-A1 current Ordivon use inventory       COMPLETE
+WDF1-A2 modal term separation               COMPLETE
+WDF1-A3 rival law-family map                COMPLETE
+WDF1-A4 rival causation-family map          COMPLETE
+WDF1-A5 circularity/dependency audit        COMPLETE
 
 No law theory selected.
 No causation theory selected.
@@ -1535,7 +1535,7 @@ No chance ontology selected.
 WDF0 remains frozen.
 
 Next:
-WDF1-1 Modal Architecture
+WDF1-B Matched Modal Separation Cases
 ```
 
 The most important conclusion is negative but powerful:

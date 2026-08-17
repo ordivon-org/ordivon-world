@@ -1,10 +1,10 @@
-# WDF1-1D — Dynamic Reachability / Control / Intervention Architecture
+# WDF1-E — Dynamic Reachability / Control / Intervention Architecture
 
-Status: complete for WDF1-1D. No universal causal theory is selected. TARA survives and is strengthened by a policy/strategy layer. `Capability` is **not retained as a World root primitive**: it can be reconstructed as a supported, scoped projection over typed control/attainment relations, Actor interfaces, resources, authority/access, observation structure, horizon and success criterion. However, the compressed term remains useful operationally. `Intervention` is also not promoted as a universal primitive; it is reconstructed as a typed **mechanism-replacement / alternative-generation operation relative to a causal model and target query**, with an important separation from ordinary endogenous action. Exact next sub-round: **WDF1-1E — Objective Modality / Epistemic Openness / Probability / Chance Separation**.
+Status: complete for WDF1-E. No universal causal theory is selected. TARA survives and is strengthened by a policy/strategy layer. `Capability` is **not retained as a World root primitive**: it can be reconstructed as a supported, scoped projection over typed control/attainment relations, Actor interfaces, resources, authority/access, observation structure, horizon and success criterion. However, the compressed term remains useful operationally. `Intervention` is also not promoted as a universal primitive; it is reconstructed as a typed **mechanism-replacement / alternative-generation operation relative to a causal model and target query**, with an important separation from ordinary endogenous action. Exact next sub-round: **WDF1-F — Objective Modality / Epistemic Openness / Probability / Chance Separation**.
 
 ## 0. Question
 
-WDF1-1A proved:
+WDF1-B proved:
 
 ```text
 there exists a trajectory to T
@@ -12,9 +12,9 @@ there exists a trajectory to T
 Actor A can control T.
 ```
 
-WDF1-1B then suggested that dynamic/control modalities can be represented within TARA using typed transition relations and strategy operators. WDF1-1C isolated law/actuality/boundary roles so that control can condition on a declared nomological/dynamical model without claiming that the law metaphysics is solved.
+WDF1-C then suggested that dynamic/control modalities can be represented within TARA using typed transition relations and strategy operators. WDF1-D isolated law/actuality/boundary roles so that control can condition on a declared nomological/dynamical model without claiming that the law metaphysics is solved.
 
-WDF1-1D now asks:
+WDF1-E now asks:
 
 > What is the minimum structure needed to say that an Actor can intentionally bring about, obtain, maintain, avoid, recover or influence an outcome — and when does an Actor action count as a causal intervention rather than merely another endogenous event?
 
@@ -50,7 +50,7 @@ Traj_Θ(a | π_A, e, background)
 
 for policy `π_A ∈ Π_A` and environment/disturbance/opponent realization `e`.
 
-The central WDF1-1D task is to type the quantifiers and criteria over this family.
+The central WDF1-E task is to type the quantifiers and criteria over this family.
 
 ## 2. Natural reachability
 
@@ -102,7 +102,7 @@ PassiveAttainment != Control
 PassiveAttainment != Production
 ```
 
-This matters because current Capability wording says `cause or obtain`; WDF1-1D finds that `obtain` is too broad unless its mode is typed.
+This matters because current Capability wording says `cause or obtain`; WDF1-E finds that `obtain` is too broad unless its mode is typed.
 
 ## 4. Selectable enrollment / mediated attainment
 
@@ -426,7 +426,7 @@ or:
 
 This introduces a measure/chance/model layer.
 
-WDF1-1D does not decide whether `μ` is objective chance or model probability.
+WDF1-E does not decide whether `μ` is objective chance or model probability.
 
 ### Separation
 
@@ -505,7 +505,7 @@ This belongs under resource/feasibility rather than nomological possibility.
 
 ## 20. Access as control coupling
 
-WDF1-1B suspected that Access can be reduced to typed coupling/reachability.
+WDF1-C suspected that Access can be reduced to typed coupling/reachability.
 
 D refines this into two main forms:
 
@@ -563,7 +563,7 @@ Institutional authorization can also restrict the policy/action set used for **a
 = Π_A^effective ∩ AuthorizedActions_A
 ```
 
-but WDF1-1B/C established that authorization may first require constitutive status evaluation.
+but WDF1-C/D established that authorization may first require constitutive status evaluation.
 
 Therefore:
 
@@ -673,7 +673,7 @@ CurrentControlSuccess
 RetainedCapabilityProduction
 ```
 
-WDF1-1D retains this existing doctrine unchanged.
+WDF1-E retains this existing doctrine unchanged.
 
 ## 27. What is an ordinary endogenous action?
 
@@ -714,7 +714,7 @@ Observe(X=x) != do(X=x)
 EndogenousOccurrence(X=x) != do(X=x)
 ```
 
-This is one of the most important WDF1-1D separations.
+This is one of the most important WDF1-E separations.
 
 ## 29. Policy intervention
 
@@ -920,7 +920,7 @@ SCM and interventionist formalisms gain power by choosing variables on which int
 
 WDF0-D/E already established that variables/scales are model-selected.
 
-WDF1-1D therefore retains:
+WDF1-E therefore retains:
 
 ```text
 GoodCausalHandle != FundamentalRealityVariable
@@ -943,7 +943,7 @@ ControlAbstractionValidity
 is intervention/regime/realization-relative.
 ```
 
-This links WDF1-1D back to WDF0-E macro validity.
+This links WDF1-E back to WDF0-E macro validity.
 
 ## 41. Safety/viability exposes a crucial difference from causal effect
 
@@ -1085,7 +1085,7 @@ RobustCapability
 
 ## 48. Capability reconstruction
 
-WDF1-1D can now reconstruct Capability without a root primitive.
+WDF1-E can now reconstruct Capability without a root primitive.
 
 For Actor/system boundary A, target criterion K and conditions Γ:
 
@@ -1153,7 +1153,7 @@ Thus `Capability` is a family of scoped modal/control projections.
 
 ### Ontologically/root-wise: YES, provisionally
 
-No WDF1-1D falsifier requires a separate primitive `Capability` property beyond:
+No WDF1-E falsifier requires a separate primitive `Capability` property beyond:
 
 ```text
 Actor/system boundary
@@ -1272,7 +1272,7 @@ WDF0/Runtime had:
 Intent != Action != Realization != Effect != Observation
 ```
 
-WDF1-1D adds:
+WDF1-E adds:
 
 ```text
 ActionOccurrence
@@ -1317,7 +1317,7 @@ This is a direct foundational reconstruction of current World engineering semant
 
 ## 57. Control failure taxonomy
 
-Given `CapabilityClaim=false/UNKNOWN`, WDF1-1D distinguishes:
+Given `CapabilityClaim=false/UNKNOWN`, WDF1-E distinguishes:
 
 ```text
 NOMIC/DYNAMIC GAP
@@ -1627,7 +1627,7 @@ physical experimental intervention:
 
 Neither is identical to generic Agent action.
 
-## 72. WDF1-1D hard anti-laws
+## 72. WDF1-E hard anti-laws
 
 1. `NaturalReachability != ActorCapability`.
 2. `PassiveAttainment != Control`.
@@ -1687,7 +1687,7 @@ Primary/authoritative pressure:
 
 ## 74. What D does not solve
 
-WDF1-1D intentionally leaves open:
+WDF1-E intentionally leaves open:
 
 ```text
 objective chance vs model probability
@@ -1703,7 +1703,7 @@ counterfactual similarity/background selection
 
 These are not hidden by the control reconstruction.
 
-## 75. Exact residual entering WDF1-1E
+## 75. Exact residual entering WDF1-F
 
 D can express stochastic/probabilistic capability only by injecting a measure/model:
 
@@ -1717,7 +1717,7 @@ Likewise an Agent's uncertainty over hidden state or response-loss alternatives 
 
 The next sharp residual is therefore:
 
-# WDF1-1E — Objective Modality / Epistemic Openness / Probability / Chance Separation
+# WDF1-F — Objective Modality / Epistemic Openness / Probability / Chance Separation
 
 It must attack:
 
@@ -1736,15 +1736,15 @@ It must attack:
 
 No law/causal theory is selected before E.
 
-## 76. WDF1-1D closeout
+## 76. WDF1-E closeout
 
 ```text
-WDF1-1D1 natural/open-loop/feedback/robust/viable separation  COMPLETE
-WDF1-1D2 Actor actions/observations/policies/resources         COMPLETE
-WDF1-1D3 action vs intervention                               COMPLETE
-WDF1-1D4 resource/access/authority integration                COMPLETE
-WDF1-1D5 multi-Agent/strategic control                        COMPLETE
-WDF1-1D6 Capability destructive reconstruction                COMPLETE
+WDF1-E1 natural/open-loop/feedback/robust/viable separation  COMPLETE
+WDF1-E2 Actor actions/observations/policies/resources         COMPLETE
+WDF1-E3 action vs intervention                               COMPLETE
+WDF1-E4 resource/access/authority integration                COMPLETE
+WDF1-E5 multi-Agent/strategic control                        COMPLETE
+WDF1-E6 Capability destructive reconstruction                COMPLETE
 
 Capability root primitive: REJECTED
 Capability derived scoped projection: STRONGLY RETAINED
@@ -1754,5 +1754,5 @@ Intervention typed causal-model surgery/operator: RETAINED
 TARA: SURVIVES AND STRENGTHENED
 
 Next:
-WDF1-1E Objective Modality / Epistemic Openness / Probability / Chance Separation
+WDF1-F Objective Modality / Epistemic Openness / Probability / Chance Separation
 ```

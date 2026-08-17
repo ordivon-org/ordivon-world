@@ -1,12 +1,12 @@
-# WDF1-1A — Matched Modal Separation Cases
+# WDF1-B — Matched Modal Separation Cases
 
-Status: complete for WDF1-1A. This sub-round does **not** select a final modal architecture. It constructs matched cases whose only purpose is to force modal coordinates apart when they can vary independently. Exact next sub-round: **WDF1-1B — Candidate Modal Architectures**.
+Status: complete for WDF1-B. This sub-round does **not** select a final modal architecture. It constructs matched cases whose only purpose is to force modal coordinates apart when they can vary independently. Exact next sub-round: **WDF1-C — Candidate Modal Architectures**.
 
 ## 0. Question
 
-WDF1-0 separated several uses of `possible`, `reachable`, `feasible`, `accessible`, `authorized`, `epistemically possible` and `chance`, but separation by vocabulary is not enough.
+WDF1-A separated several uses of `possible`, `reachable`, `feasible`, `accessible`, `authorized`, `epistemically possible` and `chance`, but separation by vocabulary is not enough.
 
-WDF1-1A asks:
+WDF1-B asks:
 
 > Can we construct cases where one modal claim is true while another is false, under an otherwise matched target? If yes, the two claims cannot be universally identified.
 
@@ -214,7 +214,7 @@ However, **mere existence of an A-labeled input sequence is still weaker than ro
 - authority to issue the input;
 - ability to realize the input.
 
-Therefore WDF1-1A does not delete `C_A` yet.
+Therefore WDF1-B does not delete `C_A` yet.
 
 ## 6. Case A5 — Abstract control-reachable but resource-infeasible now
 
@@ -261,7 +261,7 @@ FeasibleUnderCurrentResources
 
 If resource limits are inserted directly into the admissible action set, feasibility can be represented as a restricted reachability problem.
 
-This produces a central architecture candidate for WDF1-1B:
+This produces a central architecture candidate for WDF1-C:
 
 ```text
 Modal distinctions may sometimes be different typed constraints on one alternative/trajectory space,
@@ -514,7 +514,7 @@ Both outcomes belong to the theory's outcome space and have non-zero assigned pr
 
 Thus both are possible in the model, but not equally probable.
 
-Standard quantum theory formally assigns probabilities to measurement outcomes through the Born rule. WDF1-1A does **not** infer from this formalism that a particular metaphysics of objective chance is correct; it uses the case only to establish that a probability coordinate carries information not contained in a Boolean possibility predicate.
+Standard quantum theory formally assigns probabilities to measurement outcomes through the Born rule. WDF1-B does **not** infer from this formalism that a particular metaphysics of objective chance is correct; it uses the case only to establish that a probability coordinate carries information not contained in a Boolean possibility predicate.
 
 ### Separation earned
 
@@ -619,7 +619,7 @@ This is not a violation of Reality objectivity. It shows:
 Institutional modality supervenes on a broader Reality base than bare local physical trajectory.
 ```
 
-WDF1-1A does not attempt a reduction thesis beyond this.
+WDF1-B does not attempt a reduction thesis beyond this.
 
 ## 19. Case A18 — Same institution, different access
 
@@ -810,7 +810,7 @@ Legend:
 
 ## 27. Pairwise independence results actually established
 
-WDF1-1A now has explicit witnesses for the following non-identities:
+WDF1-B now has explicit witnesses for the following non-identities:
 
 ```text
 NomologicalPossibility != ReachabilityFromActuality
@@ -846,7 +846,7 @@ Changing `AllowedInputs/Constraints` can represent:
 
 This is a serious compression candidate.
 
-But WDF1-1A finds three reasons not to reduce everything to reachability:
+But WDF1-B finds three reasons not to reduce everything to reachability:
 
 ### 28.1 Epistemic openness
 
@@ -889,7 +889,7 @@ However it fails as a universal ontology for three reasons:
 2. authorization can change what an act counts as rather than merely exclude a trajectory;
 3. epistemic openness is an Agent/model relation and may contain objectively impossible alternatives.
 
-Thus `intersection of filters` is retained as one architecture rival for WDF1-1B, not accepted now.
+Thus `intersection of filters` is retained as one architecture rival for WDF1-C, not accepted now.
 
 ## 30. Third compression candidate — product/vector modality
 
@@ -931,7 +931,7 @@ No claim is made that these instantiate one common metaphysical genus beyond the
 
 This typed pluralism has low false-unification risk but may miss real shared modal structure.
 
-WDF1-1B must compare it against reachability/filter/product architectures.
+WDF1-C must compare it against reachability/filter/product architectures.
 
 ## 32. Law vs initial/boundary condition pressure already visible in A
 
@@ -947,14 +947,14 @@ changes reachability.
 
 Therefore a model that labels every restriction on possible trajectories `law` would erase important roles.
 
-WDF1-1A freezes only:
+WDF1-B freezes only:
 
 ```text
 LawRole != InitialConditionRole
 LawRole != HorizonRole
 ```
 
-while boundary-condition theory remains for WDF1-1C.
+while boundary-condition theory remains for WDF1-D.
 
 ## 33. Constraint taxonomy pressure from cases
 
@@ -992,7 +992,7 @@ The explanatory value of typed modality is not merely philosophical. It localize
 
 ## 34. Modal independence is relative to the claim universe
 
-WDF1-1A does not claim every pair is logically independent under every formalization.
+WDF1-B does not claim every pair is logically independent under every formalization.
 
 For example, if `R` is defined as reachable through physically law-conforming trajectories, then:
 
@@ -1033,7 +1033,7 @@ AlternativeSpace
 
 However, institutional permission and dispositional modality may not reduce cleanly to this without importing constitutive rules or causal powers into `admissibility`.
 
-This is a key WDF1-1B question.
+This is a key WDF1-C question.
 
 ## 36. Counterfactual implication
 
@@ -1078,15 +1078,15 @@ A future chance theory must explain whether objective chance belongs to:
 - frequency/ensemble structure;
 - something else.
 
-WDF1-1A does not choose.
+WDF1-B does not choose.
 
 ## 38. External anchors used in this sub-round
 
 - RFC 9110, HTTP Semantics: `401 Unauthorized`, `403 Forbidden`, and authoritative-access semantics provide a concrete standards-level witness that protocol reachability/understanding and authorization/refusal are distinct.
-- Kalman's 1960 control-theory work is retained as historical pressure for treating controllability as a system/input-relative question rather than plain state possibility; WDF1-1A deliberately uses simple toy systems rather than importing one control-theory definition as universal World ontology.
+- Kalman's 1960 control-theory work is retained as historical pressure for treating controllability as a system/input-relative question rather than plain state possibility; WDF1-B deliberately uses simple toy systems rather than importing one control-theory definition as universal World ontology.
 - Standard quantum theory's Born-rule probability assignments are used only to demonstrate that a probability value carries structure beyond binary possibility; no interpretation of quantum chance is selected.
 
-## 39. WDF1-1A anti-laws
+## 39. WDF1-B anti-laws
 
 1. `NomologicalPossibility != ReachabilityFromActuality`.
 2. `ReachabilityWithoutHorizon/InputSet != FullySpecifiedReachability`.
@@ -1109,9 +1109,9 @@ WDF1-1A does not choose.
 19. `LawRole != HorizonRole`.
 20. `ActorControlClaim != MereExistenceOfATrajectory`.
 
-## 40. Exact residual entering WDF1-1B
+## 40. Exact residual entering WDF1-C
 
-WDF1-1A has now proved enough non-coextensiveness to reject one untyped possibility predicate, but has not established the best common structure.
+WDF1-B has now proved enough non-coextensiveness to reject one untyped possibility predicate, but has not established the best common structure.
 
 Four architectures survive:
 
@@ -1126,7 +1126,7 @@ Each can reconstruct some cases; none yet reconstructs all without either redund
 
 Therefore next exact sub-round:
 
-# WDF1-1B — Candidate Modal Architectures
+# WDF1-C — Candidate Modal Architectures
 
 It must construct and deletion-test these rivals against the A1–A24 case suite, especially:
 
@@ -1144,7 +1144,7 @@ No law theory, causal theory or chance ontology is selected yet.
 ## 41. Sub-round closeout
 
 ```text
-WDF1-1A matched modal separation cases: COMPLETE
+WDF1-B matched modal separation cases: COMPLETE
 Cases constructed: A1–A24
 Universal scalar possibility: REJECTED
 Universal linear modal ladder: REJECTED
@@ -1153,6 +1153,6 @@ Filter/intersection architecture: SURVIVES AS RIVAL
 Vector/product architecture: SURVIVES AS RIVAL
 Typed modal pluralism: SURVIVES AS RIVAL
 
-Next: WDF1-1B Candidate Modal Architectures
+Next: WDF1-C Candidate Modal Architectures
 ```
 

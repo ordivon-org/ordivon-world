@@ -1,10 +1,10 @@
-# WDF1-1B — Candidate Modal Architectures
+# WDF1-C — Candidate Modal Architectures
 
-Status: complete for WDF1-1B. No final World-level modal ontology is frozen. The four architectures admitted by WDF1-1A are formalized and deletion-tested against the A1–A24 separation suite. Three are demoted to local/projection roles. A fifth reconstructed candidate — **Typed Alternative-Relation Architecture (TARA)** — survives as the smallest common meta-architecture so far, but remains provisional until WDF1-1C–F attack law/background, control, epistemic/objective and counterfactual interfaces. Exact next sub-round: **WDF1-1C — Law / Initial Condition / Boundary Condition / Constraint Separation**.
+Status: complete for WDF1-C. No final World-level modal ontology is frozen. The four architectures admitted by WDF1-B are formalized and deletion-tested against the A1–A24 separation suite. Three are demoted to local/projection roles. A fifth reconstructed candidate — **Typed Alternative-Relation Architecture (TARA)** — survives as the smallest common meta-architecture so far, but remains provisional until WDF1-D–G attack law/background, control, epistemic/objective and counterfactual interfaces. Exact next sub-round: **WDF1-D — Law / Initial Condition / Boundary Condition / Constraint Separation**.
 
 ## 0. Question
 
-WDF1-1A proved that the following cannot be universally collapsed:
+WDF1-B proved that the following cannot be universally collapsed:
 
 ```text
 nomological possibility
@@ -22,7 +22,7 @@ The remaining question is architectural:
 
 > Are these merely unrelated predicates, different coordinates of one vector, nested restrictions of one possible-world set, or different operators over a more general alternative structure?
 
-WDF1-1B compares the four survivors from A and attempts destructive reconstruction.
+WDF1-C compares the four survivors from A and attempts destructive reconstruction.
 
 ## 1. Requirements for a successful architecture
 
@@ -146,7 +146,7 @@ candidate actions
 
 ### 2.3 A8/A9 falsifier — authorization and feasibility are not nested
 
-WDF1-1A constructed:
+WDF1-B constructed:
 
 ```text
 A8: authorized but infeasible
@@ -359,7 +359,7 @@ The modal operator is indexed by a transition-generating object.
 
 Alternating-time temporal logic goes further: ordinary path existence and the ability of a coalition/Agent to enforce temporal outcomes are distinct because strategic quantification ranges only over paths compatible with a strategy while other players/environment retain choices.
 
-This strongly supports WDF1-1A's distinction:
+This strongly supports WDF1-B's distinction:
 
 ```text
 ∃ path to T
@@ -407,7 +407,7 @@ rather than merely blocks an otherwise identical physical transition.
 
 If lawhood is global/all-at-once, variational, boundary-based or otherwise not fundamentally a local update rule, representing nomological possibility as graph reachability can already bias WDF1 toward dynamical law theories.
 
-This is prohibited by WDF1-0.
+This is prohibited by WDF1-A.
 
 ### 4.8 Weakness C4 — chance requires measure, not only graph connectivity
 
@@ -627,7 +627,7 @@ as type-specific even if it can sometimes be encoded through possible-world/acti
 
 The four rivals suggest a smaller common structure.
 
-WDF1-1B introduces, provisionally:
+WDF1-C introduces, provisionally:
 
 # **TARA — Typed Alternative-Relation Architecture**
 
@@ -921,7 +921,7 @@ time
 required complements
 ```
 
-But WDF1-1B retains the **reason labels** for failed feasibility because different blockers imply different actions.
+But WDF1-C retains the **reason labels** for failed feasibility because different blockers imply different actions.
 
 Thus:
 
@@ -949,7 +949,7 @@ Access likely does not require an independent root modal category.
 
 It survives as a typed coupling/reachability relation because its failure provenance remains action-relevant.
 
-This is not yet frozen; WDF1-1D can still attack it.
+This is not yet frozen; WDF1-E can still attack it.
 
 ## 20. Authorization requires both constitutive and modal structure
 
@@ -1117,7 +1117,7 @@ background/dependence
 
 while preserving type-specific semantics.
 
-That is exactly the middle position WDF1-1B was searching for.
+That is exactly the middle position WDF1-C was searching for.
 
 ## 27. Architecture scorecard
 
@@ -1140,7 +1140,7 @@ This table is heuristic research scoring, not empirical measurement.
 
 ## 28. Deletion test on TARA itself
 
-WDF1-1B now attempts to remove each proposed TARA component.
+WDF1-C now attempts to remove each proposed TARA component.
 
 ### Remove AlternativeDomain
 
@@ -1186,7 +1186,7 @@ AlternativeDomain
 
 ## 29. New distinction — Alternative Space vs Alternative Generator
 
-WDF1-1B finds these must separate.
+WDF1-C finds these must separate.
 
 An alternative space can be defined extensionally:
 
@@ -1292,7 +1292,7 @@ Support != Weight
 
 and even `probability zero` requires care in continuous spaces, where individual outcomes may have zero measure without being excluded from the support.
 
-WDF1-1B therefore refuses a naive rule:
+WDF1-C therefore refuses a naive rule:
 
 ```text
 P(E)=0 => impossible
@@ -1470,7 +1470,7 @@ TARA handles this only meta-theoretically by allowing the alternative domain its
 
 TARA can represent a `τ=metaphysical` relation/operator if WDF1 later earns one.
 
-But WDF1-1B has no case requiring a distinct metaphysical modal relation beyond:
+But WDF1-C has no case requiring a distinct metaphysical modal relation beyond:
 
 - logical consistency;
 - nomological/physical possibility;
@@ -1525,7 +1525,7 @@ Alternative Domain
 
 This gives common structure without common ontology.
 
-## 41. WDF1-1B anti-laws
+## 41. WDF1-C anti-laws
 
 1. `UniversalNestedModalChain != ModalArchitecture`.
 2. `ModalVector != ModalSemantics`.
@@ -1582,8 +1582,8 @@ Semantic type plurality: RETAIN
 
 ```text
 Typed Alternative-Relation Architecture:
-PROVISIONAL WINNER FOR WDF1-1B
-NOT FROZEN UNTIL WDF1-1C–F
+PROVISIONAL WINNER FOR WDF1-C
+NOT FROZEN UNTIL WDF1-D–G
 ```
 
 ## 43. External evidence retained in B
@@ -1599,7 +1599,7 @@ Primary/authoritative pressure used:
 
 These sources show reusable mathematical architecture across modal families, but none establishes that all modalities share one metaphysical accessibility relation.
 
-## 44. Exact residual entering WDF1-1C
+## 44. Exact residual entering WDF1-D
 
 TARA now exposes a sharper unresolved than A did:
 
@@ -1644,7 +1644,7 @@ All three restrict histories, but not in the same explanatory/nomic role.
 
 Therefore next exact sub-round:
 
-# WDF1-1C — Law / Initial Condition / Boundary Condition / Constraint Separation
+# WDF1-D — Law / Initial Condition / Boundary Condition / Constraint Separation
 
 It must test:
 
@@ -1660,14 +1660,14 @@ It must test:
 
 No law theory is selected in B.
 
-## 45. WDF1-1B closeout
+## 45. WDF1-C closeout
 
 ```text
-WDF1-1B1 nested modal filters              COMPLETE — universal form rejected
-WDF1-1B2 product/vector profile            COMPLETE — projection only
-WDF1-1B3 parameterized reachability        COMPLETE — dynamic subkernel retained
-WDF1-1B4 typed pluralism                   COMPLETE — type plurality retained
-WDF1-1B5 destructive reconstruction        COMPLETE
+WDF1-C1 nested modal filters              COMPLETE — universal form rejected
+WDF1-C2 product/vector profile            COMPLETE — projection only
+WDF1-C3 parameterized reachability        COMPLETE — dynamic subkernel retained
+WDF1-C4 typed pluralism                   COMPLETE — type plurality retained
+WDF1-C5 destructive reconstruction        COMPLETE
 
 Provisional reconstructed architecture:
 TARA — Typed Alternative-Relation Architecture
@@ -1675,5 +1675,5 @@ TARA — Typed Alternative-Relation Architecture
 TARA status: CANDIDATE, NOT FROZEN
 
 Next:
-WDF1-1C Law / Initial / Boundary / Constraint Separation
+WDF1-D Law / Initial / Boundary / Constraint Separation
 ```
