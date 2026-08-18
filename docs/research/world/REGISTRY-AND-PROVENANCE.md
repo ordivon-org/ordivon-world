@@ -50,4 +50,6 @@ The canonical research ancestry was pinned, without rewriting commits, to:
 
 at the exact pre-materialization tip `8efea81cca235d4d4c0c0f7b6bbc42cd5b277edf` before any integration or cleanup was considered.
 
+The first materialization commit is `774ffb864e4d2f4a723cbd81daf5af2cfb7679f3` (`docs(world): materialize canonical research root`), whose parent is exactly `8efea81cca235d4d4c0c0f7b6bbc42cd5b277edf`.
+
 This directory is a compression/navigation layer added **on top of that original ancestry**. Detailed WDF/TSA evidence remains preserved unchanged under [`../foundations/`](../foundations/).
