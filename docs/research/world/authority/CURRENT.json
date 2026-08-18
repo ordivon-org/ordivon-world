@@ -1,0 +1,8 @@
+{
+  "authorityRef": "authority:ordivon:research-owner:world",
+  "currentAuthorityVersionRef": "sha256:76f3ebc35cc72a67e65cacbcb899d8ccf0919059577c97191c85dc9aed9ede8f",
+  "kind": "ordivon.research-owner-current",
+  "ownerResearchRef": "research-owner:world",
+  "publication": "authority/publications/76f3ebc35cc72a67e65cacbcb899d8ccf0919059577c97191c85dc9aed9ede8f.json",
+  "schemaVersion": 1
+}
