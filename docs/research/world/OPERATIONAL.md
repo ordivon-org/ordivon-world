@@ -32,3 +32,7 @@ Stable practical laws include owner-native currentness, UNKNOWN-before-redispatc
 ## Consumption rule
 
 Consume a research result into engineering only when a current workload demonstrates that the result constrains a real responsibility, interface, failure mode, or evidence requirement. Do not translate the research ontology wholesale into services, schemas, managers, or registries.
+
+## Latest-foundation delta audit
+
+The 2026-08-18 WDF4/WDF5/TSAF0 engineering audit is recorded in [`../../history/WORLD-LATEST-FOUNDATIONS-ENGINEERING-DELTA-20260818.md`](../../history/WORLD-LATEST-FOUNDATIONS-ENGINEERING-DELTA-20260818.md). Current disposition: no new Causal/Measurement/Temporal product subsystem is admitted. Existing production already preserves the load-bearing owner/evidence/time distinctions; future measurement or causal claims require explicit target/query semantics rather than promotion from receipt order, numeric output, or structural validity.

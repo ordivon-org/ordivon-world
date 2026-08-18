@@ -48,6 +48,10 @@ The large W/HP/Sense–Connect–Act research programme has been contracted into
 
 Exact experiments, receipts, counterexamples, and reopening conditions remain in [`docs/research-closeouts.md`](docs/research-closeouts.md), [`docs/high-pressure-survival-hp6-hp8.md`](docs/high-pressure-survival-hp6-hp8.md), and the archived research tree.
 
+## Latest research-to-engineering reconciliation — 2026-08-18
+
+WDF4 Causal Reality, WDF5 Property Evaluation and TSAF0 Temporal Structure have been audited against the current production surface. The audit admits no new Causal/Measurement/Temporal subsystem: current World already separates owner-native occurrence/admission from causal truth, bundle/observation integrity from measurement validity, and provider/World/Host time coordinates from claim currentness. See [`docs/history/WORLD-LATEST-FOUNDATIONS-ENGINEERING-DELTA-20260818.md`](docs/history/WORLD-LATEST-FOUNDATIONS-ENGINEERING-DELTA-20260818.md).
+
 ## Known limits
 
 - World has no independent daemon or database; durable typed trajectory state is retained through Host extension state and owner/provider systems.
