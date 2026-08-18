@@ -219,7 +219,8 @@ A new shared World abstraction requires a named current workload, a reproduced f
 | understand how resources become options, redundancy and capability without a global registry | [`docs/resource-option-capability-model.md`](docs/resource-option-capability-model.md) |
 | reason about Actor capability, environment exposure, institutional rules, selection and causal attribution without a global context ontology | [`docs/capability-context-doctrine.md`](docs/capability-context-doctrine.md) |
 | understand why the retained boundary is narrow | [`docs/retained-boundaries.md`](docs/retained-boundaries.md) |
-| inspect closed research and reopening conditions | [`docs/research-closeouts.md`](docs/research-closeouts.md) |
+| navigate the World / Reality research owner, Foundations, deep history, coverage and provenance | [`docs/research/world/README.md`](docs/research/world/README.md) |
+| inspect closed operational research and reopening conditions | [`docs/research-closeouts.md`](docs/research-closeouts.md) |
 
 ## Development
 
