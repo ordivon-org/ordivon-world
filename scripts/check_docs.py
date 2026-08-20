@@ -22,6 +22,7 @@ REQUIRED = (
     "docs/verification.md",
 )
 LINK = re.compile(r"(?<!!)\[[^]]+\]\(([^)]+)\)")
+INLINE_CODE = re.compile(r"`[^`\n]*`")
 
 
 class DocumentationError(RuntimeError):
@@ -39,6 +40,30 @@ def markdown_files() -> list[Path]:
     )
 
 
+def markdown_link_source(text: str) -> str:
+    """Remove Markdown code regions before interpreting link syntax."""
+
+    visible: list[str] = []
+    fence: str | None = None
+    for line in text.splitlines(keepends=True):
+        stripped = line.lstrip()
+        if fence is not None:
+            if stripped.startswith(fence):
+                fence = None
+            visible.append("\n" if line.endswith("\n") else "")
+            continue
+        if stripped.startswith("```"):
+            fence = "```"
+            visible.append("\n" if line.endswith("\n") else "")
+            continue
+        if stripped.startswith("~~~"):
+            fence = "~~~"
+            visible.append("\n" if line.endswith("\n") else "")
+            continue
+        visible.append(INLINE_CODE.sub("", line))
+    return "".join(visible)
+
+
 def main() -> int:
     missing = [name for name in REQUIRED if not (ROOT / name).is_file()]
     if missing:
@@ -49,7 +74,7 @@ def main() -> int:
         text = path.read_text(encoding="utf-8")
         if "\t" in text:
             raise DocumentationError(f"tab character in Markdown: {path.relative_to(ROOT)}")
-        for target in LINK.findall(text):
+        for target in LINK.findall(markdown_link_source(text)):
             target = target.strip()
             if (
                 not target
