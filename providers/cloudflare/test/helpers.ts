@@ -1,9 +1,10 @@
+import { Buffer } from "node:buffer";
 import { createHash, createHmac, randomBytes } from "node:crypto";
 
 import type { Env } from "../src/index.js";
 
 export const TEST_SECRET_BYTES = randomBytes(32);
-export const TEST_SECRET = TEST_SECRET_BYTES.toString("base64url");
+export const TEST_SECRET = Buffer.from(TEST_SECRET_BYTES).toString("base64url");
 export const TEST_ENV_BASE = {
   EDGE_HMAC_KEY_ID: "runtime-v1",
   EDGE_HMAC_SECRET: TEST_SECRET,
