@@ -41,6 +41,8 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 ### Changed
 
+- The default package facade no longer wildcard-exports the demand-scoped `resource_discovery` planning model. Its explicit `ordivon_world` attributes and module APIs remain available; this keeps Resource/Option/Capability doctrine usable without making an unadopted planning projection part of every fresh import.
+
 - World is now described as a recoverable external capability adapter and condition-observation boundary rather than only a repository containing provider and workstation tools;
 - the reactivated Host-facing seam remains an absorbed direct integration, not an independent World runtime or universal interaction layer;
 - Worker source provenance and test-only TypeScript compilation scopes are kept separate;
