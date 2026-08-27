@@ -71,7 +71,7 @@ A successful oneshot service normally returns to `inactive` with `Result=success
 
 ## Live W1 acceptance
 
-The live scenario performs one bounded allowlisted Fetch, deliberately discards the successful POST response, replaces the Host process, queries the original Receipt, and reads and verifies the Artifact. It constructs an acceptance-local `VerificationReceipt` for evidence checking but does not write a Host core verification Event or complete the Task; World durable state remains limited to World-owned observation/reconciliation evidence.
+The live scenario performs one bounded allowlisted Fetch, deliberately discards the successful POST response, replaces the Host process, queries the original Receipt, and reads and verifies the Artifact. It constructs an acceptance-local `VerificationReceipt` for evidence checking but does not write a Host core verification Event or complete the Task; World durable state remains limited to World-owned observation/reconciliation evidence. The acceptance Host state is persistent under `<output>.state` (or explicit `--state-root`) rather than a process-temporary directory, so a controller/job deadline cannot erase the exact prepared/UNKNOWN relation after an external Effect may already have committed.
 
 It requires a clean source commit:
 
@@ -83,7 +83,18 @@ uv run python scripts/live_host_cloudflare_w1.py \
   --output "/root/projects/ordivon-world/target/acceptance/world-w1-${revision:0:7}.json"
 ```
 
-The output is written with mode `0600`. It contains no Secret or Artifact body.
+The output is written with mode `0600`. It contains no Secret or Artifact body. The adjacent state root is local/private recovery evidence and must remain Git-ignored. If the first-execution wrapper is interrupted after the prepared/UNKNOWN state is durable, **do not rerun the first-execution path**. Reconcile the exact retained request instead:
+
+```bash
+uv run python scripts/live_host_cloudflare_w1.py \
+  --source-repo /root/projects/ordivon-world \
+  --source-revision "$revision" \
+  --state-root "/root/projects/ordivon-world/target/acceptance/world-w1-${revision:0:7}.json.state" \
+  --recover-only \
+  --output "/root/projects/ordivon-world/target/acceptance/world-w1-${revision:0:7}-recovered.json"
+```
+
+`--recover-only` requires the retained UNKNOWN original dispatch and performs zero external POSTs; it queries the original provider Receipt and verifies its referenced Artifact(s).
 
 ## Live P2 Browser acceptance
 

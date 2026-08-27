@@ -16,8 +16,8 @@ import json
 import os
 from pathlib import Path
 import subprocess
-import tempfile
 import time
+from contextlib import contextmanager
 from typing import Any, Literal
 
 from ordivon_host import (
@@ -152,6 +152,24 @@ def write_private_json(path: Path, value: dict[str, Any]) -> None:
             pass
         temporary.unlink(missing_ok=True)
         raise
+
+
+@contextmanager
+def new_acceptance_state_root(path: Path):
+    """Create a persistent, empty Host state root for one first-execution gate.
+
+    The state intentionally survives process/controller failure so an ambiguous
+    external Effect can be reconciled later without inventing a new request.
+    """
+
+    root = path.resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    if any(root.iterdir()):
+        raise AcceptanceError(
+            f"live acceptance state root is not empty: {root}; "
+            "use --recover-only for an interrupted run or choose a new state root"
+        )
+    yield root
 
 
 def artifact_summary(artifact: RetrievedArtifact) -> dict[str, Any]:
@@ -312,6 +330,7 @@ def run_acceptance(
     source_revision: str,
     config_path: Path,
     url: str,
+    state_root: Path,
     operation: Operation = "fetch",
 ) -> dict[str, Any]:
     revision = verify_source(repository, source_revision)
@@ -330,8 +349,7 @@ def run_acceptance(
     dispatch_id = f"dispatch:world-{stage}:{suffix}:{operation}:r1"
     clock = itertools.count(int(time.time() * 1000)).__next__
 
-    with tempfile.TemporaryDirectory(prefix=f"ordivon-world-{stage}-") as directory:
-        state_root = Path(directory) / "host-state"
+    with new_acceptance_state_root(state_root) as state_root:
         with HostStorage(state_root) as storage:
             kernel = HostKernel(
                 storage,
@@ -464,6 +482,7 @@ def run_acceptance(
             else "host-cloudflare-browser-bundle-response-loss-reconciliation"
         ),
         "operation": operation,
+        "acceptanceMode": "first-execution",
         "task": {
             "taskId": task_id,
             "goalId": goal_id,
@@ -514,6 +533,132 @@ def run_acceptance(
     return receipt
 
 
+def recover_acceptance(
+    *,
+    repository: Path,
+    source_revision: str,
+    config_path: Path,
+    state_root: Path,
+    operation: Operation = "fetch",
+) -> dict[str, Any]:
+    """Reconcile an interrupted live gate from retained Host state only.
+
+    This path never dispatches the external Effect. It requires the exact
+    prepared/UNKNOWN relation produced by the first-execution path and queries
+    only the original provider request plus its referenced Artifacts.
+    """
+
+    revision = verify_source(repository, source_revision)
+    suffix = revision[:12]
+    stage = "w1" if operation == "fetch" else "p2-browser"
+    provider_operation = "fetch" if operation == "fetch" else "browser.run"
+    task_id = f"task:world-{stage}:{suffix}"
+    effect_id = f"effect:world-{stage}:{suffix}:{operation}"
+    dispatch_id = f"dispatch:world-{stage}:{suffix}:{operation}:r1"
+    root = state_root.resolve()
+    if not root.is_dir() or not any(root.iterdir()):
+        raise AcceptanceError(f"recovery state root is absent or empty: {root}")
+
+    clock = itertools.count(int(time.time() * 1000)).__next__
+    recovery_transport = DropCommittedResponseTransport(
+        SignedHttpTransport(CloudflareConfig.load(config_path), attempts=3)
+    )
+    adapter = CloudflareWorldAdapter(recovery_transport)
+    with HostStorage(root) as storage:
+        prior_snapshot = storage.read_task_event(task_id)
+        prior_dispatch = prior_snapshot.data.get("worldDispatches", {}).get(dispatch_id, {})
+        if prior_dispatch.get("worldOutcomeState") != "unknown":
+            raise AcceptanceError(
+                "recovery requires a retained UNKNOWN original dispatch"
+            )
+        kernel = HostKernel(
+            storage,
+            clock_ms=clock,
+            owner_id=f"host:world-{stage}:recovery",
+        )
+        world = HostWorldExtension(HostExtensionPort(storage, kernel))
+        restored = world.load_prepared(task_id)
+        if restored.dispatch.dispatch_id != dispatch_id or restored.dispatch.effect_id != effect_id:
+            raise AcceptanceError("retained prepared dispatch identity differs from requested gate")
+        recovered = world.reconcile(task_id, adapter)
+        if recovered.observation is None:
+            raise AcceptanceError("recovery did not produce a final Observation")
+        if recovered.status != "succeeded" or not recovered.reconciled:
+            raise AcceptanceError("recovery did not converge to a succeeded original Receipt")
+        observation = recovered.observation
+        if observation.receipt.get("operation") != provider_operation:
+            raise AcceptanceError("recovered Receipt operation differs")
+        artifacts, verification, operation_details, operation_checks = verify_operation_evidence(
+            adapter,
+            observation,
+            operation=operation,
+            dispatch_id=dispatch_id,
+        )
+        final_snapshot = storage.read_task_event(task_id)
+
+    checks = {
+        "sourceRevisionExact": revision == source_revision,
+        "retainedUnknownObservedBeforeRecovery": True,
+        "freshHostRecoveredPreparedDispatch": restored.provider_request_id == observation.receipt["receipt_id"],
+        "freshHostQueriedOriginalRequest": observation.receipt["receipt_id"] == restored.provider_request_id,
+        "noExternalPostDuringRecovery": recovery_transport.post_count == 0,
+        "worldObservationAvailabilityRecorded": isinstance(observation.available_at, str) and bool(observation.available_at),
+        "providerCompletionTimeRetained": isinstance(observation.receipt.get("completed_at"), str) and bool(observation.receipt.get("completed_at")),
+        "receiptDigestMatchesRequest": observation.receipt["request_digest"] == restored.provider_request_digest,
+        "operationIdentityMatches": observation.receipt["operation"] == provider_operation,
+        "verificationAccepted": verification.accepted,
+        "verificationCoversAllArtifacts": len(verification.result_items) == len(artifacts),
+        "taskStatePreserved": not final_snapshot.projection.state.terminal,
+        "noTaskCompletionClaim": not final_snapshot.projection.state.terminal,
+        **operation_checks,
+    }
+    if not all(checks.values()):
+        raise AcceptanceError(f"live recovery checks failed: {checks}")
+
+    receipt: dict[str, Any] = {
+        "schemaVersion": 1,
+        "kind": "ordivon.world-live-recovery-receipt",
+        "sourceRevision": revision,
+        "scenario": f"host-cloudflare-{operation}-interrupted-gate-reconciliation",
+        "operation": operation,
+        "acceptanceMode": "recovery-only",
+        "task": {
+            "taskId": task_id,
+            "priorRevision": prior_snapshot.projection.revision,
+            "observationRevision": recovered.task_revision,
+            "finalState": final_snapshot.projection.state.value,
+        },
+        "effect": {
+            "effectId": effect_id,
+            "dispatchId": dispatch_id,
+            "providerRequestId": restored.provider_request_id,
+            "providerRequestDigest": restored.provider_request_digest,
+            "capabilityConditionDigest": restored.capability_condition_digest,
+            "capabilityVersion": restored.capability_version,
+        },
+        "provider": {
+            "postCountDuringRecovery": recovery_transport.post_count,
+            "receiptStatus": observation.receipt["status"],
+            "receiptPayloadDigest": observation.envelope.payload_digest,
+            "startedAt": observation.receipt["started_at"],
+            "completedAt": observation.receipt.get("completed_at"),
+            "worldObservationAvailableAt": observation.available_at,
+        },
+        "artifacts": [artifact_summary(item) for item in artifacts],
+        "verification": {
+            "digest": sha256_digest(verification.to_dict()),
+            "method": verification.method,
+            "accepted": verification.accepted,
+            "observationDigest": verification.observation_digest,
+            "resultItems": len(verification.result_items),
+        },
+        **operation_details,
+        "checks": checks,
+    }
+    receipt["integrity"] = {"payloadDigest": sha256_digest(receipt)}
+    return receipt
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-repo", default="/root/projects/ordivon-world")
@@ -532,23 +677,44 @@ def main() -> int:
         default="fetch",
     )
     parser.add_argument("--output", required=True)
+    parser.add_argument(
+        "--state-root",
+        help="persistent Host state root; defaults to <output>.state",
+    )
+    parser.add_argument(
+        "--recover-only",
+        action="store_true",
+        help="reconcile a retained interrupted gate without dispatching a POST",
+    )
     args = parser.parse_args()
 
-    receipt = run_acceptance(
-        repository=Path(args.source_repo),
-        source_revision=args.source_revision,
-        config_path=Path(args.config),
-        url=args.url,
-        operation=args.operation,
-    )
     output = Path(args.output)
+    state_root = (
+        Path(args.state_root)
+        if args.state_root
+        else Path(str(output) + ".state")
+    )
+    common = {
+        "repository": Path(args.source_repo),
+        "source_revision": args.source_revision,
+        "config_path": Path(args.config),
+        "state_root": state_root,
+        "operation": args.operation,
+    }
+    receipt = (
+        recover_acceptance(**common)
+        if args.recover_only
+        else run_acceptance(url=args.url, **common)
+    )
     write_private_json(output, receipt)
     print(
         json.dumps(
             {
                 "ok": True,
                 "operation": receipt["operation"],
+                "acceptanceMode": receipt["acceptanceMode"],
                 "receipt": str(output),
+                "stateRoot": str(state_root),
                 "sourceRevision": receipt["sourceRevision"],
                 "providerRequestId": receipt["effect"]["providerRequestId"],
                 "payloadDigest": receipt["integrity"]["payloadDigest"],

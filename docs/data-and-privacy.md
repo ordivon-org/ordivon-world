@@ -14,7 +14,7 @@ World does not become the source of truth for connected systems. Data remains ow
 | Cloudflare R2 Fetch/Browser paths | response bodies, screenshots, HTML and manifests | R2 lifecycle policy |
 | Cloudflare R2 `cleanup/v2/` | deferred cleanup tombstones | R2 lifecycle policy and GC |
 | `/root/backups/ordivon-world/` | private release and GC receipts | local operator |
-| `target/acceptance/` | local commit-bound acceptance receipts | local operator; Git-ignored |
+| `target/acceptance/` | local commit-bound acceptance receipts and persistent live-gate Host recovery state | local operator; Git-ignored |
 | systemd journal | controller result and bounded error text | local system policy |
 | network measurement directories | route, egress and connectivity observations | local operator |
 

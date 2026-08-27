@@ -72,6 +72,12 @@ class LiveAcceptanceTransportTests(unittest.TestCase):
         self.assertIsNone(transport.committed_response_replayed)
         self.assertEqual(transport.post_count, 1)
 
+    def test_live_acceptance_state_is_persistent_not_temporary(self) -> None:
+        source = _SCRIPT.read_text(encoding="utf-8")
+        self.assertNotIn("TemporaryDirectory", source)
+        self.assertIn("--recover-only", source)
+        self.assertIn("noExternalPostDuringRecovery", source)
+
     def test_live_acceptance_never_bypasses_world_owner_boundary(self) -> None:
         tree = ast.parse(_SCRIPT.read_text(encoding="utf-8"))
         direct_host_appends = [
