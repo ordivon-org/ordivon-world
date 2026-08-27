@@ -38,9 +38,7 @@ src/ordivon_world/
 ├── host.py             opaque Host extension persistence
 ├── resource_egress.py  source-World Resource Egress contract
 ├── resource_transfer.py durable Resource Transfer / Host journal
-├── resource_wire.py    Resource destination wire mapping and failure classification
 ├── message_delivery.py Message issuance/delivery contracts and Host journal
-├── message_wire.py     Message destination wire mapping and failure classification
 ├── entity_migration.py Entity departure/migration contracts and Host journal
 ├── entity_wire.py      Entity destination wire mapping and failure classification
 ├── schemas.py          local Draft 2020-12 Schema Registry

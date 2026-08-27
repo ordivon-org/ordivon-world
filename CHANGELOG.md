@@ -60,6 +60,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 ### Removed
 
+- Unconsumed Python `resource_wire` and `message_wire` destination adapters and their adapter-only tests. Resource/Message trajectory semantics, packaged JSON contracts, Host-backed reconciliation, and Security-owned destination consumers remain; no current production repo imports the removed World adapter classes.
 - pre-0.6 `WorldTaskInspector.inspect_replacement_readiness()` and transparent flat Host-extension auto-upgrade behavior. Migration: consume `inspect_task()` for World-owned outstanding commitment/recovery standing; let Harness/controller policy decide replacement. Recover/migrate separately retained pre-P4/P5/M5 flat World state with a pre-0.6 client before upgrading.
 - pre-0.5 explicit `ordivon_world` Resource planning attributes and the `ordivon_world.resource_discovery` module. Migration: consume `docs/research/world/RESOURCE-AND-CAPABILITY.md` for shared semantic constraints and use the relevant owner/domain decision surface for acquisition, ranking, composition and value judgments. Retained provider Receipts and durable external trajectory semantics are unchanged.
 

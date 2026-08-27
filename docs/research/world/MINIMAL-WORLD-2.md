@@ -10,9 +10,10 @@ This page is the current compact recovery surface for the 2026-08-28 **Minimal W
 |---|---|---|
 | `WorldTaskInspector.inspect_task()` | **RETAIN** | World-owned, revision-fenced projection of retained Provider/Resource/Message/Entity commitments; Host remains schema-blind and owns the namespace revision fence |
 | `inspect_replacement_readiness()` | **RETIRE** | collapsed World relation standing into controller/morphology policy; Harness/controller owns the replacement judgment and must inherit exact outstanding reconciliation obligations |
-| Resource Transfer | **RETAIN** | current Security production-side JSON/wire consumer plus exact UNKNOWN/Receipt recovery |
-| Message Delivery | **RETAIN** | current Security production-side JSON/wire consumer plus exact UNKNOWN/Receipt recovery |
-| Entity Migration | **RETAIN** | current Security KVM/entity destination and reconciliation consumer |
+| Resource Transfer semantics + JSON contracts | **RETAIN** | current Security production-side destination consumer plus exact UNKNOWN/Receipt recovery; Security emits/accepts the shared wire shape without importing World Python transport adapters |
+| Message Delivery semantics + JSON contracts | **RETAIN** | current Security production-side destination consumer plus exact UNKNOWN/Receipt recovery; Security emits/accepts the shared wire shape without importing World Python transport adapters |
+| World Python `resource_wire` / `message_wire` adapters | **RETIRE** | repository-wide production-import scan found no consumer; removing both adapters and their adapter-only tests preserves the Resource/Message trajectory core, packaged contracts, Host recovery, wheel surface and Security destination behavior |
+| Entity Migration | **RETAIN** | current Security KVM/entity destination and reconciliation consumer; World also retains a production acceptance consumer of `entity_wire` |
 | private `_host_trajectory` mechanics | **RETAIN** | already earned by three trajectory families; third-consumer pressure did not justify a public universal `WorldTrajectory` |
 | transparent pre-P4/P5/M5 flat Host-state upgrader | **RETIRE** | current Host authority audit found zero `world` extension namespace rows; current v5 map state does not consume the upgrader |
 | pre-HP5 `TraceContext` decoder | **RETAIN-FROZEN** | only 31 LOC and still protects readability/round-trip of separately retained historical `PreparedWorldDispatch`; no new work authors Trace Context |
@@ -29,6 +30,8 @@ The 0.6 contraction commit `b398d35f83ba3eb0772f269fc130c734dd54206c` removes 51
 - large compatibility fixtures whose only purpose was proving those historical automatic migrations.
 
 Two compact regressions preserve the new boundary: encountering historical flat provider or Resource state fails closed with an explicit requirement to recover/migrate using a pre-0.6 client. Modern Provider/Resource/Message/Entity/Inspector recovery tests remain green.
+
+A subsequent Existence Gauntlet 2.0 pass removed another **705 lines** of implementation/test residue: the unconsumed World Python `resource_wire` and `message_wire` adapters plus their adapter-only tests. The distinction is deliberate: **trajectory semantics and interoperable JSON wire contracts remain current; one unused World-side Python transport implementation does not.** Full World portable acceptance remained green at 115 Python tests plus the provider/packaging gates, and a separate Security regression passed 33/33 Resource/Message destination and surface tests, including explicit assertions that the destination CLIs do not import `ordivon_world`.
 
 ## Current Host evidence cut
 
