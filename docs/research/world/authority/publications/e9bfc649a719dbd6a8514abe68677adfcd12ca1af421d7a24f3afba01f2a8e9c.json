@@ -1,0 +1,826 @@
+{
+  "authorityRef": "authority:ordivon:research-owner:world",
+  "closeouts": [
+    {
+      "closure": [
+        {
+          "scope": "WDF0_META_FOUNDATION",
+          "status": "ESTABLISHED"
+        },
+        {
+          "scope": "WDF1_MODAL_FOUNDATION",
+          "status": "ESTABLISHED"
+        },
+        {
+          "scope": "WDF4_CAUSAL_LOCAL_FOUNDATION",
+          "status": "ESTABLISHED"
+        },
+        {
+          "scope": "WDF5_PROPERTY_EVALUATION_LOCAL_FOUNDATION",
+          "status": "ESTABLISHED"
+        },
+        {
+          "scope": "TSAF0_TEMPORAL_STRUCTURE_LOCAL_FOUNDATION",
+          "status": "ESTABLISHED"
+        },
+        {
+          "scope": "WDF2_COUNTERFACTUAL_PROGRAMME",
+          "status": "STAGE_COMPLETE_NO_FROZEN_FOUNDATION"
+        },
+        {
+          "scope": "WDF3_CATEGORIAL_PROGRAMME",
+          "status": "STAGE_COMPLETE_NO_FROZEN_FOUNDATION"
+        },
+        {
+          "scope": "WHOLE_WORLD",
+          "status": "NOT_ESTABLISHED"
+        },
+        {
+          "scope": "TEMPORAL_WHOLE_DOMAIN",
+          "status": "NOT_ESTABLISHED"
+        },
+        {
+          "scope": "TEMPORAL_PROJECT",
+          "status": "NOT_ESTABLISHED"
+        }
+      ],
+      "epistemicVerdict": "ESTABLISHED_IN_SCOPE",
+      "evidenceScope": "Current materialized World / Reality research root at Git source revision 78980cbee6333cf0de0d972913f5a612a77ab357; detailed WDF/TSA evidence remains under docs/research/foundations and historical Host/Git provenance.",
+      "materialLineage": [
+        "WDF2-O was once proposed after WDF2-N and is historical-preserved/superseded/not-admitted as canonical next.",
+        "WDF3-M remains unknown/not-admitted; WDF4-G and WDF5-J remain not admitted; WDF6 is not admitted; TSAF1 is unknown/not admitted.",
+        "Measurement / Quantification ceased to be the primitive WDF5 owner referent and was rebased under Property Evaluation Architecture.",
+        "A single primitive Time did not survive Temporal Structure decomposition.",
+        "WDF2 and WDF3 complete deep research without a final frozen Foundation; that non-promotion is substantive, not missing documentation.",
+        "The 2026-08-18 WDF4/WDF5/TSAF0 engineering delta admitted no generic Causal/Measurement/Temporal product subsystem; research constrains interpretation without ontology-to-schema promotion."
+      ],
+      "profile": "LEGACY_EXTRACTION",
+      "provenance": [
+        "docs/research/world/README.md",
+        "docs/research/world/FOUNDATIONS.md",
+        "docs/research/world/COVERAGE-AND-REOPEN.md",
+        "docs/research/world/HISTORY.md",
+        "docs/research/world/INTERFACES.md",
+        "docs/research/world/REGISTRY-AND-PROVENANCE.md",
+        "docs/research/world/OPERATIONAL.md",
+        "docs/history/WORLD-LATEST-FOUNDATIONS-ENGINEERING-DELTA-20260818.md"
+      ],
+      "reopenPolicy": "Reopen frozen WDF0/WDF1/WDF4/WDF5/TSAF0 only under their recorded concrete falsifiers. WDF2/WDF3 completed research is revisited only by stronger claim-specific cross-domain falsifiers. Residual lists and numbering do not admit WDF6, TSAF1, or a next route.",
+      "researchRef": "research:world:core-materialization-20260818",
+      "residualState": "WHOLE_WORLD_NOT_ESTABLISHED; NEXT_WORLD_ROUTE_UNKNOWN; WDF6_NOT_ADMITTED; TSAF1_UNKNOWN_NOT_ADMITTED",
+      "resultRefs": [
+        "result:world:owner-boundary-current",
+        "result:world:wdf0-meta-foundation-current-frozen",
+        "result:world:wdf1-modal-foundation-current-frozen",
+        "result:world:wdf4-causal-reality-current-frozen",
+        "result:world:wdf5-property-evaluation-current-frozen",
+        "result:world:tsaf0-temporal-structure-current-frozen",
+        "result:world:wdf2-counterfactual-deep-history-nonfoundation",
+        "result:world:wdf3-categorial-deep-history-nonfoundation",
+        "result:world:wdf2-o-historical-superseded-not-admitted",
+        "result:world:wdf3-m-not-admitted",
+        "result:world:wdf4-g-not-admitted",
+        "result:world:wdf5-j-not-admitted",
+        "result:world:wdf6-not-admitted",
+        "result:world:tsaf1-not-admitted",
+        "result:world:whole-world-closure-not-established",
+        "result:world:temporal-whole-domain-closure-not-established",
+        "result:world:temporal-project-closure-not-established",
+        "result:world:next-world-route-unknown",
+        "result:world:latest-foundations-engineering-nonpromotion"
+      ],
+      "scopeRefs": [
+        "research-owner:world"
+      ],
+      "standing": [
+        "CURRENT",
+        "FROZEN"
+      ]
+    },
+    {
+      "closure": [
+        {
+          "scope": "RESOURCE_R0_R10_PROGRAMME",
+          "status": "COMPLETE_CLOSED"
+        },
+        {
+          "scope": "CAPABILITY_FIELD_CF0_CF9_PROGRAMME",
+          "status": "COMPLETE_CLOSED"
+        },
+        {
+          "scope": "GENERIC_RESOURCE_PLANNING_PRODUCTION",
+          "status": "RETIRED_NO_CURRENT_CONSUMER"
+        }
+      ],
+      "epistemicVerdict": "ESTABLISHED_IN_SCOPE",
+      "evidenceScope": "World Resource R0-R10 and Capability Field CF0-CF9 current compact recovery at Git source revision cdc2dba19b279aad4f03083c98feeb28c4810321; detailed evidence remains in the owner repository outside the compact corpusRoot and is reached through exact relative provenance links.",
+      "materialLineage": [
+        "Resource R0-R10 compressed cross-domain Resource/Actionability/Option/Capability semantics while rejecting universal registries, value scalars, composition engines and resource state machines.",
+        "Capability Field CF0-CF9 retained Actor/Environment/Institution causal and query-relative distinctions while adding zero production field/environment/institution objects or services.",
+        "The generic World resource_discovery planning implementation was demoted from the default facade on 2026-08-24, then retired on 2026-08-27 after repository-wide current-code search found no production consumer outside its own tests/compatibility surface and a 1,492-line deletion probe preserved the owner-environment regression.",
+        "Current acquisition, ranking, composition and value decisions remain with the consuming owner/domain; World retains shared semantic constraints and external consequence boundaries."
+      ],
+      "profile": "OWNER_NATIVE_EXTENSION",
+      "provenance": [
+        "docs/research/world/RESOURCE-AND-CAPABILITY.md",
+        "docs/resource-ontology-r10-compression-promotion.md",
+        "docs/resource-option-capability-model.md",
+        "docs/capability-field-cf1-cf9-closeout.md",
+        "docs/capability-context-doctrine.md",
+        "CHANGELOG.md",
+        "docs/compatibility.md"
+      ],
+      "reopenPolicy": "Reopen executable shared Resource/Capability machinery only when at least two materially different current consumers reproduce the same missing executable responsibility, owner-local resolution fails, and moving the responsibility into World reduces total complexity without importing consumer value/decision authority.",
+      "researchRef": "research:world:resource-capability-recovery-20260827",
+      "residualState": "RESOURCE_AND_CAPABILITY_SEMANTICS_CURRENT; GENERIC_RESOURCE_PLANNING_RETIRED; NO_CAPABILITY_FIELD_OBJECT; NO_GLOBAL_RESOURCE_REGISTRY_OR_VALUE_SCALAR",
+      "resultRefs": [
+        "result:world:resource-r0-r10-current-closed",
+        "result:world:capability-field-cf0-cf9-current-closed",
+        "result:world:generic-resource-planning-retired"
+      ],
+      "scopeRefs": [
+        "research-owner:world"
+      ],
+      "standing": [
+        "CURRENT",
+        "CLOSED"
+      ]
+    }
+  ],
+  "currentRecovery": {
+    "locator": "docs/research/world/README.md",
+    "targetRole": "OWNER_RESEARCH_CORPUS"
+  },
+  "kind": "ordivon.research-owner-publication",
+  "ownerResearchRef": "research-owner:world",
+  "profile": "LEGACY_EXTRACTION",
+  "schemaVersion": 1,
+  "source": {
+    "authorityBranch": "refs/heads/main",
+    "corpusRoot": "docs/research/world",
+    "kind": "git",
+    "repository": "git@github.com:zycxfyh/ordivon-world.git",
+    "sourceRevision": "cdc2dba19b279aad4f03083c98feeb28c4810321"
+  },
+  "statements": [
+    {
+      "predicate": "OWNER_BINDING",
+      "scope": "OWNER",
+      "subjectRef": "research-owner:world",
+      "value": "world"
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "OWNER",
+      "subjectRef": "research-owner:world",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:owner-boundary-current",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:owner-boundary-current",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:owner-boundary-current",
+      "value": "Current World / Reality semantic research owner boundary and cross-owner firewalls at 78980cb."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:owner-boundary-current",
+      "value": [
+        "FOUNDATION_BOUNDARY"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf0-meta-foundation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:FROZEN",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf0-meta-foundation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf0-meta-foundation-current-frozen",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf0-meta-foundation-current-frozen",
+      "value": "WDF0 Meta-Foundation v1 frozen root stratum."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf0-meta-foundation-current-frozen",
+      "value": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf1-modal-foundation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:FROZEN",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf1-modal-foundation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf1-modal-foundation-current-frozen",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf1-modal-foundation-current-frozen",
+      "value": "WDF1 Modal Foundation v1 frozen root stratum."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf1-modal-foundation-current-frozen",
+      "value": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-causal-reality-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:FROZEN",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-causal-reality-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-causal-reality-current-frozen",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-causal-reality-current-frozen",
+      "value": "WDF4 Causal Reality Architecture Foundation v1; local Foundation closure established."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-causal-reality-current-frozen",
+      "value": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-property-evaluation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:FROZEN",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-property-evaluation-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-property-evaluation-current-frozen",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-property-evaluation-current-frozen",
+      "value": "WDF5 Property Evaluation Architecture Foundation v1; local Foundation closure established."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-property-evaluation-current-frozen",
+      "value": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf0-temporal-structure-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:FROZEN",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf0-temporal-structure-current-frozen",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf0-temporal-structure-current-frozen",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf0-temporal-structure-current-frozen",
+      "value": "TSAF0 Temporal Structure Foundation v1; local Foundation closure established."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf0-temporal-structure-current-frozen",
+      "value": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "predicate": "STANDING:HISTORICAL_PRESERVED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-counterfactual-deep-history-nonfoundation",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-counterfactual-deep-history-nonfoundation",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-counterfactual-deep-history-nonfoundation",
+      "value": "WDF2-A→N complete Counterfactual Architecture deep research history; explicitly not a frozen Foundation."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-counterfactual-deep-history-nonfoundation",
+      "value": [
+        "DERIVED_THEORY"
+      ]
+    },
+    {
+      "predicate": "STANDING:HISTORICAL_PRESERVED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-categorial-deep-history-nonfoundation",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-categorial-deep-history-nonfoundation",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-categorial-deep-history-nonfoundation",
+      "value": "WDF3-A→L complete Categorial Reality Architecture deep research history; explicitly not a frozen Foundation."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-categorial-deep-history-nonfoundation",
+      "value": [
+        "DERIVED_THEORY"
+      ]
+    },
+    {
+      "predicate": "STANDING:HISTORICAL_PRESERVED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:SUPERSEDED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": "WDF2-O historical proposed next route was superseded and is not admitted as canonical next."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf2-o-historical-superseded-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-m-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-m-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-m-not-admitted",
+      "value": "UNDERDETERMINED"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-m-not-admitted",
+      "value": "WDF3-M remains unknown/not admitted."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf3-m-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-g-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-g-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-g-not-admitted",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-g-not-admitted",
+      "value": "WDF4-G is explicitly not admitted."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf4-g-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-j-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-j-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-j-not-admitted",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-j-not-admitted",
+      "value": "WDF5-J is explicitly not admitted."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf5-j-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf6-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf6-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf6-not-admitted",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf6-not-admitted",
+      "value": "WDF6 is not assumed/not admitted; numbering is not a roadmap."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:wdf6-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf1-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "STANDING:NOT_ADMITTED",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf1-not-admitted",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf1-not-admitted",
+      "value": "UNDERDETERMINED"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf1-not-admitted",
+      "value": "TSAF1 is unknown/not admitted."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:tsaf1-not-admitted",
+      "value": [
+        "NEGATIVE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:whole-world-closure-not-established",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:whole-world-closure-not-established",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:whole-world-closure-not-established",
+      "value": "WholeWorldClosure is currently NOT ESTABLISHED; engineering-consumption pause is not exhaustive Reality closure."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:whole-world-closure-not-established",
+      "value": [
+        "CLOSURE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-whole-domain-closure-not-established",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-whole-domain-closure-not-established",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-whole-domain-closure-not-established",
+      "value": "TemporalWholeDomainClosure is currently NOT ESTABLISHED."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-whole-domain-closure-not-established",
+      "value": [
+        "CLOSURE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-project-closure-not-established",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-project-closure-not-established",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-project-closure-not-established",
+      "value": "TemporalProjectClosure is currently NOT ESTABLISHED."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:temporal-project-closure-not-established",
+      "value": [
+        "CLOSURE_RESULT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:next-world-route-unknown",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:next-world-route-unknown",
+      "value": "UNDERDETERMINED"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:next-world-route-unknown",
+      "value": "NextWorldRoute is UNKNOWN; residual maps are coverage memory, not route selection."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:next-world-route-unknown",
+      "value": [
+        "OPEN_RESIDUAL"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:latest-foundations-engineering-nonpromotion",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:latest-foundations-engineering-nonpromotion",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:latest-foundations-engineering-nonpromotion",
+      "value": "Latest WDF4/WDF5/TSAF0 engineering audit admits no generic Causal/Measurement/Temporal subsystem; existing owner/evidence/time separations remain the supported consumption pattern."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:latest-foundations-engineering-nonpromotion",
+      "value": [
+        "ENGINEERING_CONSTRAINT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:resource-r0-r10-current-closed",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:resource-r0-r10-current-closed",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:resource-r0-r10-current-closed",
+      "value": "Resource Ontology R0-R10 complete/closed; owner-native truth plus relation-relative Resource/Actionability/Option/Capability semantics remain current."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:resource-r0-r10-current-closed",
+      "value": [
+        "RESEARCH_DOCTRINE",
+        "FOUNDATION_CLOSEOUT"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:capability-field-cf0-cf9-current-closed",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:capability-field-cf0-cf9-current-closed",
+      "value": "ESTABLISHED_IN_SCOPE"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:capability-field-cf0-cf9-current-closed",
+      "value": "Capability Field CF0-CF9 complete/closed; Actor/Environment/Institution survive as causal/query roles without a persisted Capability Field or universal Environment/Institution object."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:capability-field-cf0-cf9-current-closed",
+      "value": [
+        "RESEARCH_DOCTRINE",
+        "CAUSAL_BOUNDARY"
+      ]
+    },
+    {
+      "predicate": "STANDING:CURRENT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:generic-resource-planning-retired",
+      "value": true
+    },
+    {
+      "predicate": "EPISTEMIC_VERDICT",
+      "scope": "RESULT",
+      "subjectRef": "result:world:generic-resource-planning-retired",
+      "value": "REJECTED_FOR_PRODUCTION"
+    },
+    {
+      "predicate": "EVIDENCE_SCOPE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:generic-resource-planning-retired",
+      "value": "Generic World ResourceOpportunityBoard/resource_discovery executable surface retired after no current natural production consumer survived deletion pressure; detailed research remains preserved."
+    },
+    {
+      "predicate": "STRUCTURAL_ROLE",
+      "scope": "RESULT",
+      "subjectRef": "result:world:generic-resource-planning-retired",
+      "value": [
+        "NEGATIVE_ENGINEERING_RESULT",
+        "RESPONSIBILITY_BOUNDARY"
+      ]
+    }
+  ]
+}
