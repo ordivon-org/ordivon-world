@@ -8,7 +8,7 @@ from pathlib import Path
 import stat
 import subprocess
 from typing import Any, Callable
-from .schemas import load_schema, validate_contract
+from .schemas import _CONTRACT_NAMES, load_schema, validate_contract
 from .version import __version__
 
 DEFAULT_REPOSITORY = Path("/root/projects/ordivon-world")
@@ -79,21 +79,17 @@ def repository_check(repository: Path, runner: CommandRunner) -> dict[str, Any]:
 
 
 def contract_check() -> dict[str, Any]:
-    names = (
-        "browser-manifest",
-        "browser-request",
-        "edge-capabilities",
-        "edge-receipt",
-        "fetch-request",
-        "world-observation",
-        "world-prepared-dispatch",
-    )
     try:
-        for name in names:
+        for name in _CONTRACT_NAMES:
             load_schema(name)
     except Exception as error:
         return check("contracts", "attention", error=str(error))
-    return check("contracts", "ok", count=len(names), draft="2020-12")
+    return check(
+        "contracts",
+        "ok",
+        count=len(_CONTRACT_NAMES),
+        draft="2020-12",
+    )
 
 
 def private_config_check(path: Path, name: str) -> dict[str, Any]:

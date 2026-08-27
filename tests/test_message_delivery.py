@@ -392,52 +392,6 @@ class HostMessageDeliveryTests(unittest.TestCase):
             self.assertEqual(destination.deliveries, 2)
             self.assertTrue(destination.proven_absent)
 
-    def test_pre_m5_flat_message_is_readable_and_first_new_message_migrates_atomically(
-        self,
-    ) -> None:
-        legacy = bundle(message_id="message:w2:m5:legacy")
-        current = bundle(message_id="message:w2:m5:new")
-        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(
-                storage, clock_ms=itertools.count(88_000).__next__, owner_id="host:w2-m5-legacy"
-            )
-            created = self.create_task(storage, kernel)
-            port = HostExtensionPort(storage, kernel)
-            provenance_object = port.put_object(
-                legacy.provenance, kind="world-message-source-provenance"
-            )
-            payload_object = port.put_object(legacy.payload, kind="world-message-payload")
-            plan_object = port.put_object(legacy.plan.to_dict(), kind="world-message-delivery-plan")
-            port.append_preserving(
-                task_id=created.task_id,
-                expected_revision=created.revision,
-                event_id="event:w2-m5:legacy-flat",
-                kind=EventKind("world.message-delivery-prepared"),
-                updates={
-                    "worldMessageId": legacy.plan.message_id,
-                    "worldMessageDeliveryPlanDigest": legacy.plan.digest,
-                    "worldMessageDeliveryPlanObjectDigest": plan_object.digest,
-                    "worldMessageProvenanceDigest": legacy.plan.provenance_digest,
-                    "worldMessageProvenanceObjectDigest": provenance_object.digest,
-                    "worldMessagePayloadDigest": legacy.plan.payload_digest,
-                    "worldMessagePayloadObjectDigest": payload_object.digest,
-                    "worldMessageDeliveryState": "prepared",
-                },
-                referenced_objects=(provenance_object, payload_object, plan_object),
-                label="World message delivery",
-            )
-            journal = HostMessageDeliveryJournal(port)
-            self.assertEqual(journal.load_bundle(created.task_id), legacy)
-            self.assertEqual(journal.message_ids(created.task_id), (legacy.plan.message_id,))
-            journal.prepare(created.task_id, current)
-            snapshot = storage.read_task_event(created.task_id)
-            entries = snapshot.data["worldMessageDeliveries"]
-            self.assertEqual(set(entries), {legacy.plan.message_id, current.plan.message_id})
-            self.assertNotIn("worldMessageId", snapshot.data)
-            self.assertNotIn("worldMessageDeliveryPlanDigest", snapshot.data)
-            self.assertNotIn("worldMessagePayloadDigest", snapshot.data)
-            self.assertEqual(journal.load_bundle(created.task_id, legacy.plan.message_id), legacy)
-            self.assertEqual(journal.load_bundle(created.task_id, current.plan.message_id), current)
 
 
 if __name__ == "__main__":

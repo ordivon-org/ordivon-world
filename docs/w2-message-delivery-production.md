@@ -105,7 +105,7 @@ Host Task
 
 When one Message exists, implicit lookup remains convenient. When multiple Messages exist, omission of `messageId` fails closed.
 
-Pre-W2 flat Message state remains readable as one virtual instance and migrates atomically to the map on the first later mutation.
+Current Message state uses the per-message map. The 0.6 line retires transparent pre-M5 flat-state migration; any retained historical flat Message state must be recovered/upgraded with a pre-0.6 client before package upgrade.
 
 ## UNKNOWN recovery has two different outcomes
 

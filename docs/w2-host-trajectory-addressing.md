@@ -67,29 +67,11 @@ trajectory B = unknown
 
 Reconciliation of B does not rewrite A. Host restart recovers the original B identity and performs no redispatch when the native/provider receipt already exists.
 
-## Durable upgrade law
+## Historical flat-state upgrade law
 
-0.2.0 persisted Resource and provider extension state in flat Task fields. A direct multi-instance rewrite initially stranded those durable Tasks.
+0.2.0 persisted Resource and provider extension state in flat Task fields. P4/P5 established that the safe migration was to expose one virtual trajectory and atomically rewrite it into the per-trajectory map on the first later mutation. Historical evidence covers pre-P4 Resource state plus pre-P5 provider `prepared` and `unknown` state, including recovery from the original provider Receipt without another POST.
 
-The corrected upgrade behavior is:
-
-```text
-read legacy flat state
-    -> expose one virtual trajectory instance
-
-first later mutation
-    -> write the instance map atomically
-    -> preserve the legacy trajectory
-    -> remove legacy flat fields
-```
-
-This is verified for:
-
-- pre-P4 flat Resource state;
-- pre-P5 flat provider `prepared` state;
-- pre-P5 flat provider `unknown` state recovered from the original provider Receipt without another POST.
-
-New writes use only the instance maps.
+That migration law remains valid history, but the 0.6 product no longer carries the transparent upgrader. At the 0.6 deletion cut, current Host authority contained zero `world` extension namespace rows, so no current durable World relation depended on the compatibility path. Any separately retained flat state must be recovered/upgraded with a pre-0.6 World client before using 0.6; encountering a flat primary digest in 0.6 fails closed instead of silently reinterpreting it. New/current writes use only the instance maps.
 
 ## Addressing is not authority
 

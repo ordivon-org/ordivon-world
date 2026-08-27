@@ -49,16 +49,6 @@ class HostWorldExtension:
     """
 
     instances_field = "worldDispatches"
-    _legacy_fields = (
-        "worldPreparedDispatchDigest",
-        "worldDispatchId",
-        "worldProviderRequestId",
-        "worldOutcomeState",
-        "worldUncertaintyDigest",
-        "worldObservationDigest",
-        "worldObservationPayloadDigest",
-        "worldObservationReconciled",
-    )
 
     def __init__(self, port: HostExtensionPort) -> None:
         self.port = port
@@ -445,21 +435,14 @@ class HostWorldExtension:
             reconciled=observation.reconciled,
         )
 
-    def _legacy_entry(self, data: dict[str, Any]) -> dict[str, Any] | None:
-        if data.get("worldPreparedDispatchDigest") is None:
-            return None
-        return {field: data[field] for field in self._legacy_fields if field in data}
-
     def _instances(self, data: dict[str, Any]) -> dict[str, dict[str, Any]]:
         raw = data.get(self.instances_field)
         if raw is None:
-            legacy = self._legacy_entry(data)
-            if legacy is None:
-                return {}
-            dispatch_id = legacy.get("worldDispatchId")
-            if not isinstance(dispatch_id, str) or not dispatch_id:
-                raise HostWorldError("Legacy Host Task World Dispatch identity is invalid")
-            return {dispatch_id: legacy}
+            if data.get("worldPreparedDispatchDigest") is not None:
+                raise HostWorldError(
+                    "pre-P5 flat World Dispatch state requires a pre-0.6 recovery client"
+                )
+            return {}
         if not isinstance(raw, dict):
             raise HostWorldError(f"Host Task {self.instances_field} must be an object")
         instances: dict[str, dict[str, Any]] = {}
@@ -533,8 +516,7 @@ class HostWorldExtension:
             entry.pop(field, None)
         entry.update(updates)
         instances[dispatch_id] = entry
-        legacy_remove = tuple(field for field in self._legacy_fields if field in data)
-        return {self.instances_field: instances}, legacy_remove
+        return {self.instances_field: instances}, ()
 
     def _require_current(
         self,

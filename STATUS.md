@@ -2,7 +2,7 @@
 
 ## Current release line
 
-Repository package version: `0.5.0`.
+Repository package version: `0.6.0`.
 
 Ordivon World is an operational owner-preserving adapter/trajectory boundary for the currently admitted provider and cross-World workloads. It is not a standalone World service or a global source of external truth.
 
@@ -55,12 +55,13 @@ WDF4 Causal Reality, WDF5 Property Evaluation and TSAF0 Temporal Structure have 
 
 - World has no independent daemon or database; durable typed trajectory state is retained through Host extension state and owner/provider systems.
 - Current production Resource/Message/Entity integrations use explicit trust profiles and do not claim universal source authentication through an untrusted relay.
-- Entity Migration remains one migration per Host Task in `0.5.0`; no real multi-migration failure has justified a map yet.
+- Entity Migration remains one migration per Host Task in `0.6.0`; no real multi-migration failure has justified a map yet.
 - `WorldTaskInspector` is World-local and does not establish a generic cross-domain Observation or Owner registry.
 - Historical receipts cannot establish current Presence, reachability, capability, or provider state without applicable owner-native re-observation.
 - World ships no local network observation/actuation surface; current network facts and path changes must come from Workstation/operating-system owners, while World may bind their projected evidence to an external consequence when required.
 - World does not own Runtime execution migration or immutable-input transport. Runtime now supports exact immutable-input materialization on both admitted execution targets within its proven target-specific authority boundaries; future physical execution/input gaps remain Runtime/Workstation responsibilities.
 - Provider success remains evidence for later Host/domain verification, not automatic completion.
+- The installed Cloudflare provider tooling, capabilities, lifecycle and GC are current, but the active Worker generation is still built from pre-security-patch Worker inputs (`a85a493`); provider-native release admission is required to converge the `undici 7.29.0` build-input digest. World does not reinterpret that drift as provider failure.
 
 ## Live state is owner-native
 

@@ -36,10 +36,15 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - Browser non-PNG output now fails before Artifact commit;
 - Receipt construction and JSON Schema reject succeeded operations without their required evidence and reject evidence on failed or pending outcomes;
 - zero-traffic Worker admission no longer treats one transient version-override hit as stable routing; read-only checks retry and every external smoke POST is guarded by three consecutive version-bound health observations;
-- World doctor includes the Browser Manifest and reports the current seven provider/Host-facing schema subset; the unused reserved `network-observation` public Schema was removed by HP0.
+- World doctor validates the complete packaged contract registry (25 schemas in the 0.6 line) rather than a stale seven-schema provider subset; the unused reserved `network-observation` public Schema remains removed.
 - `WorldTaskInspector` now names its denial as `actionAuthority` and marks UNKNOWN reconciliation hints `without-redispatch`, after fresh-Agent HP4 runs reproduced ambiguity in the older generic wording.
 
 ### Changed
+
+- The 0.6 line contracts legacy/replacement responsibilities: `WorldTaskInspector.inspect_task()` remains the World-owned read-only commitment/current-recovery projection, while controller replacement policy returns to Harness/the consuming controller; transparent pre-P4 Resource, pre-M5 Message and pre-P5 provider flat Host-state upgrades are retired after current Host authority showed zero `world` namespace rows. Encountering those historical flat states now fails closed and requires pre-0.6 recovery/migration. Current v5 namespace state and exact Receipt/UNKNOWN recovery semantics are unchanged.
+- World doctor now validates all packaged contract schemas from the package registry and the documented Host compatibility fence follows the current locked Host revision.
+- The Cloudflare provider remains provider-owned/extractable but co-located: change-coupling census found only three provider+World-core commits since initial integration, all concentrated in the early integration/HP5 period, so a repository split still does not earn its migration cost.
+- The frozen 31-line pre-HP5 `TraceContext` decoder remains for durable historical dispatch readability; new dispatches still do not author or propagate Trace Context.
 
 - The 0.5 line retires the demand-scoped `resource_discovery` / `ResourceOpportunityBoard` executable planning layer after repository-wide consumer search and deletion pressure found no current production consumer. Resource/Option/Capability research remains canonical doctrine; acquisition/value/priority reducers remain with consuming owners/domains.
 
@@ -55,6 +60,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 ### Removed
 
+- pre-0.6 `WorldTaskInspector.inspect_replacement_readiness()` and transparent flat Host-extension auto-upgrade behavior. Migration: consume `inspect_task()` for World-owned outstanding commitment/recovery standing; let Harness/controller policy decide replacement. Recover/migrate separately retained pre-P4/P5/M5 flat World state with a pre-0.6 client before upgrading.
 - pre-0.5 explicit `ordivon_world` Resource planning attributes and the `ordivon_world.resource_discovery` module. Migration: consume `docs/research/world/RESOURCE-AND-CAPABILITY.md` for shared semantic constraints and use the relevant owner/domain decision surface for acquisition, ranking, composition and value judgments. Retained provider Receipts and durable external trajectory semantics are unchanged.
 
 ### Verified

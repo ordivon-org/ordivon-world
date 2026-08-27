@@ -123,9 +123,9 @@ worldDispatches[dispatchId]
 
 These maps are Host extension evidence/correlation storage, not an authority system. Host remains authoritative for Effect/Binding/Dispatch admission and Task-level work semantics. World therefore does not infer cross-trajectory concurrency policy from another trajectory being `unknown`.
 
-Entity Migration is also semantically identified by `migrationId`, but 0.5.0 deliberately retains one migration per Task. No real multi-migration Task failure has yet justified another map.
+Entity Migration is also semantically identified by `migrationId`, but 0.6.0 deliberately retains one migration per Task. No real multi-migration Task failure has yet justified another map.
 
-Legacy flat Resource, Message and provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
+Current Resource, Message and provider extension state uses explicit per-trajectory maps. The 0.6 line no longer auto-upgrades pre-P4/P5/M5 flat namespace state; those historical states require pre-0.6 recovery/migration before upgrade.
 
 See [`docs/w2-host-trajectory-addressing.md`](docs/w2-host-trajectory-addressing.md).
 

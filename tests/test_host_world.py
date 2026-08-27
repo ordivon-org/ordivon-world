@@ -5,7 +5,6 @@ from ordivon_world.cloudflare import (
     CloudflareWorldAdapter,
     PreparedWorldDispatch,
     TransportError,
-    WorldOutcomeUnknown,
 )
 from ordivon_world.host import (
     HostWorldError,
@@ -156,6 +155,13 @@ class ProviderTransport:
                 return HttpResponse(404, {}, b'{"error":"receipt_not_found"}')
             return HttpResponse(200, {}, json.dumps(value).encode())
         raise AssertionError((method, path, body, request_id, extra_headers))
+
+
+class HostWorldLegacyRetirementTests(unittest.TestCase):
+    def test_pre_p5_flat_provider_state_fails_closed(self) -> None:
+        extension = HostWorldExtension.__new__(HostWorldExtension)
+        with self.assertRaisesRegex(HostWorldError, "pre-0.6 recovery client"):
+            extension._instances({"worldPreparedDispatchDigest": "sha256:legacy"})
 
 
 class HostWorldExtensionTests(unittest.TestCase):
@@ -530,168 +536,7 @@ class HostWorldExtensionTests(unittest.TestCase):
                 self.assertEqual(snapshot.projection.state, created.state)
                 self.assertEqual(snapshot.projection.ready_frontier, created.ready_frontier)
 
-    def test_pre_p5_flat_unknown_reconciles_without_redispatch_and_migrates(self) -> None:
-        capability = CapabilitySnapshot.from_document(
-            capability_document(),
-            "2026-08-08T00:00:00Z",
-        )
-        backend = ProviderBackend()
-        transport = ProviderTransport(backend)
-        adapter = CloudflareWorldAdapter(transport)
-        prepared = adapter.prepare_fetch(
-            dispatch_id="dispatch:world:w2-p5:legacy-unknown",
-            effect_id="effect:world:w2-p5:legacy-unknown",
-            url="https://example.invalid/w2-p5/legacy-unknown",
-            capability=capability,
-        )
-        transport.prepared = prepared
-        with self.assertRaises(WorldOutcomeUnknown):
-            adapter.deliver(prepared, check_conditions=False)
-        self.assertEqual(backend.posts, 1)
 
-        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(
-                storage,
-                clock_ms=itertools.count(35_000).__next__,
-                owner_id="host:w2-p5:legacy-unknown",
-            )
-            created = kernel.create_task(
-                event_id="event:w2-p5:legacy-unknown:create",
-                kind=EventKind.TASK_CREATED,
-                task_id="task:w2-p5:legacy-unknown",
-                goal_id="goal:w2-p5:legacy-unknown",
-                payload={"scenario": "pre-p5-flat-provider-unknown"},
-                frontier=("node:w2-p5:legacy-unknown",),
-            ).projection
-            port = HostExtensionPort(storage, kernel)
-            prepared_object = port.put_object(
-                prepared.to_dict(),
-                kind="world-prepared-dispatch",
-            )
-            uncertainty = {
-                "schemaVersion": 1,
-                "kind": "ordivon.world-outcome-uncertainty",
-                "dispatchId": prepared.dispatch.dispatch_id,
-                "provider": "cloudflare",
-                "providerRequestId": prepared.provider_request_id,
-                "providerRequestDigest": prepared.provider_request_digest,
-                "status": "unknown",
-                "reason": "legacy response loss",
-                "nextAction": "reconcile-original-request",
-            }
-            uncertainty_object = port.put_object(
-                uncertainty,
-                kind="world-outcome-uncertainty",
-            )
-            port.append_preserving(
-                task_id=created.task_id,
-                expected_revision=created.revision,
-                event_id="event:w2-p5:legacy-unknown:flat",
-                kind=EventKind("world.outcome-unknown"),
-                updates={
-                    "worldPreparedDispatchDigest": prepared_object.digest,
-                    "worldDispatchId": prepared.dispatch.dispatch_id,
-                    "worldProviderRequestId": prepared.provider_request_id,
-                    "worldOutcomeState": "unknown",
-                    "worldUncertaintyDigest": uncertainty_object.digest,
-                },
-                referenced_objects=(prepared_object, uncertainty_object),
-                label="World",
-            )
-            extension = HostWorldExtension(port)
-            self.assertEqual(extension.load_prepared(created.task_id), prepared)
-            recovered = extension.reconcile(created.task_id, adapter)
-            self.assertEqual(recovered.status, "succeeded")
-            self.assertTrue(recovered.reconciled)
-            self.assertEqual(backend.posts, 1)
-            snapshot = storage.read_task_event(created.task_id)
-            entry = snapshot.data["worldDispatches"][prepared.dispatch.dispatch_id]
-            self.assertEqual(entry["worldOutcomeState"], "succeeded")
-            self.assertNotIn("worldUncertaintyDigest", entry)
-            self.assertIn("worldObservationDigest", entry)
-            self.assertNotIn("worldPreparedDispatchDigest", snapshot.data)
-            self.assertNotIn("worldDispatchId", snapshot.data)
-            self.assertNotIn("worldOutcomeState", snapshot.data)
-            self.assertEqual(snapshot.projection.state, created.state)
-            self.assertEqual(snapshot.projection.ready_frontier, created.ready_frontier)
-
-    def test_pre_p5_flat_provider_dispatch_is_readable_and_migrates_with_second_dispatch(
-        self,
-    ) -> None:
-        capability = CapabilitySnapshot.from_document(
-            capability_document(),
-            "2026-08-08T00:00:00Z",
-        )
-        backend = ProviderBackend()
-        backend.drop_after_commit = False
-        transport = ProviderTransport(backend)
-        adapter = CloudflareWorldAdapter(transport)
-        first = adapter.prepare_fetch(
-            dispatch_id="dispatch:world:w2-p5:legacy:1",
-            effect_id="effect:world:w2-p5:legacy:1",
-            url="https://example.invalid/w2-p5/legacy/1",
-            capability=capability,
-        )
-        second = adapter.prepare_fetch(
-            dispatch_id="dispatch:world:w2-p5:legacy:2",
-            effect_id="effect:world:w2-p5:legacy:2",
-            url="https://example.invalid/w2-p5/legacy/2",
-            capability=capability,
-        )
-        with tempfile.TemporaryDirectory() as directory, HostStorage(directory) as storage:
-            kernel = HostKernel(
-                storage,
-                clock_ms=itertools.count(40_000).__next__,
-                owner_id="host:w2-p5:legacy",
-            )
-            created = kernel.create_task(
-                event_id="event:w2-p5:legacy:create",
-                kind=EventKind.TASK_CREATED,
-                task_id="task:w2-p5:legacy",
-                goal_id="goal:w2-p5:legacy",
-                payload={"scenario": "pre-p5-flat-provider"},
-                frontier=("node:w2-p5:legacy",),
-            ).projection
-            port = HostExtensionPort(storage, kernel)
-            prepared_object = port.put_object(first.to_dict(), kind="world-prepared-dispatch")
-            port.append_preserving(
-                task_id=created.task_id,
-                expected_revision=created.revision,
-                event_id="event:w2-p5:legacy:flat",
-                kind=EventKind("world.dispatch-prepared"),
-                updates={
-                    "worldPreparedDispatchDigest": prepared_object.digest,
-                    "worldDispatchId": first.dispatch.dispatch_id,
-                    "worldProviderRequestId": first.provider_request_id,
-                    "worldOutcomeState": "prepared",
-                },
-                referenced_objects=(prepared_object,),
-                label="World",
-            )
-            extension = HostWorldExtension(port)
-            self.assertEqual(extension.load_prepared(created.task_id), first)
-            self.assertEqual(extension.dispatch_ids(created.task_id), (first.dispatch.dispatch_id,))
-            extension.prepare(created.task_id, second)
-            snapshot = storage.read_task_event(created.task_id)
-            entries = snapshot.data["worldDispatches"]
-            self.assertEqual(
-                set(entries), {first.dispatch.dispatch_id, second.dispatch.dispatch_id}
-            )
-            self.assertEqual(
-                entries[first.dispatch.dispatch_id]["worldPreparedDispatchDigest"],
-                prepared_object.digest,
-            )
-            self.assertNotIn("worldPreparedDispatchDigest", snapshot.data)
-            self.assertNotIn("worldDispatchId", snapshot.data)
-            self.assertNotIn("worldProviderRequestId", snapshot.data)
-            self.assertEqual(
-                extension.load_prepared(created.task_id, first.dispatch.dispatch_id),
-                first,
-            )
-            self.assertEqual(
-                extension.load_prepared(created.task_id, second.dispatch.dispatch_id),
-                second,
-            )
 
 
 if __name__ == "__main__":
