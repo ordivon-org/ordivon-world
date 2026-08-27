@@ -1,3 +1,5 @@
+> **Current status (2026-08-27): research/planning treatment, not a production World API.** The executable `resource_discovery` / `ResourceOpportunityBoard` implementation was retired after repository-wide consumer search and deletion testing found no natural production consumer. The distinctions below remain historical evidence and reasoning vocabulary; current acquisition/value/priority decisions belong to the consuming owner/domain. See [`research/world/RESOURCE-AND-CAPABILITY.md`](research/world/RESOURCE-AND-CAPABILITY.md).
+
 # Resource Opportunity Flywheel
 
 Ordivon should search the external world broadly, acquire legitimate high-value resources aggressively, and keep discovery, acquisition, authority, transport, and actual utility as separate facts.

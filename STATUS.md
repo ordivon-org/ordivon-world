@@ -2,7 +2,7 @@
 
 ## Current release line
 
-Repository package version: `0.4.0`.
+Repository package version: `0.5.0`.
 
 Ordivon World is an operational owner-preserving adapter/trajectory boundary for the currently admitted provider and cross-World workloads. It is not a standalone World service or a global source of external truth.
 
@@ -55,7 +55,7 @@ WDF4 Causal Reality, WDF5 Property Evaluation and TSAF0 Temporal Structure have 
 
 - World has no independent daemon or database; durable typed trajectory state is retained through Host extension state and owner/provider systems.
 - Current production Resource/Message/Entity integrations use explicit trust profiles and do not claim universal source authentication through an untrusted relay.
-- Entity Migration remains one migration per Host Task in `0.4.0`; no real multi-migration failure has justified a map yet.
+- Entity Migration remains one migration per Host Task in `0.5.0`; no real multi-migration failure has justified a map yet.
 - `WorldTaskInspector` is World-local and does not establish a generic cross-domain Observation or Owner registry.
 - Historical receipts cannot establish current Presence, reachability, capability, or provider state without applicable owner-native re-observation.
 - World ships no local network observation/actuation surface; current network facts and path changes must come from Workstation/operating-system owners, while World may bind their projected evidence to an external consequence when required.

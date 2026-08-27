@@ -41,7 +41,7 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 
 ### Changed
 
-- The default package facade no longer wildcard-exports the demand-scoped `resource_discovery` planning model. Its explicit `ordivon_world` attributes and module APIs remain available; this keeps Resource/Option/Capability doctrine usable without making an unadopted planning projection part of every fresh import.
+- The 0.5 line retires the demand-scoped `resource_discovery` / `ResourceOpportunityBoard` executable planning layer after repository-wide consumer search and deletion pressure found no current production consumer. Resource/Option/Capability research remains canonical doctrine; acquisition/value/priority reducers remain with consuming owners/domains.
 
 - World is now described as a recoverable external capability adapter and condition-observation boundary rather than only a repository containing provider and workstation tools;
 - the reactivated Host-facing seam remains an absorbed direct integration, not an independent World runtime or universal interaction layer;
@@ -52,6 +52,10 @@ All notable changes are recorded here. The project follows a pre-1.0 compatibili
 - World doctor now consumes provider-owned capability and read-only lifecycle projections instead of duplicating Cloudflare control-plane logic;
 - closed W4/W5/Sense-Connect-Act narratives moved to historical research with one compact current closeout authority;
 - research-only Foreign Egress Capability / Effect Path Query Python modules and three packaged contracts were deleted after failing fresh-Agent decision-value and independent-consumer tests; packaged schemas contract from 28 to 25 and the product Python suite from 139 to 121 tests.
+
+### Removed
+
+- pre-0.5 explicit `ordivon_world` Resource planning attributes and the `ordivon_world.resource_discovery` module. Migration: consume `docs/research/world/RESOURCE-AND-CAPABILITY.md` for shared semantic constraints and use the relevant owner/domain decision surface for acquisition, ranking, composition and value judgments. Retained provider Receipts and durable external trajectory semantics are unchanged.
 
 ### Verified
 

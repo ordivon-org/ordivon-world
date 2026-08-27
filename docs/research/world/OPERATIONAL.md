@@ -23,11 +23,12 @@ Useful retained operational doctrine is summarized in:
 - [`../../research-closeouts.md`](../../research-closeouts.md)
 - [`../../capability-context-doctrine.md`](../../capability-context-doctrine.md)
 - [`../../resource-option-capability-model.md`](../../resource-option-capability-model.md)
+- [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md)
 - [`../../retained-boundaries.md`](../../retained-boundaries.md)
 - [`../../high-pressure-survival-hp6-hp8.md`](../../high-pressure-survival-hp6-hp8.md)
 - [`../../archive/research/`](../../archive/research/)
 
-Stable practical laws include owner-native currentness, UNKNOWN-before-redispatch recovery, recomputable pre-admission discovery/selection, delivery != cognition, source != destination semantics, distinct provider/World/Host time coordinates, provenance != universal authentication, and no replay authority from a new execution context.
+Stable practical laws include owner-native currentness, UNKNOWN-before-redispatch recovery, delivery != cognition, source != destination semantics, distinct provider/World/Host time coordinates, provenance != universal authentication, and no replay authority from a new execution context. Resource/Capability planning is now consumer/owner-local; the former generic World Resource Opportunity Board was retired after deletion pressure found no current executable consumer.
 
 ## Consumption rule
 

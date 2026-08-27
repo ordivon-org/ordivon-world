@@ -7,9 +7,10 @@ import json
 from pathlib import Path
 import subprocess
 import tempfile
+import tomllib
 import zipfile
 
-EXPECTED_VERSION = "0.4.0"
+ROOT = Path(__file__).resolve().parent.parent
 HOST_REVISION = "ebaf6ef90d87e7bc524e8f30d71521b371d17f2e"
 EXPECTED_SCHEMA_NAMES = (
     "browser-manifest",
@@ -42,6 +43,14 @@ EXPECTED_SCHEMA_NAMES = (
 
 class WheelError(RuntimeError):
     pass
+
+
+def expected_version() -> str:
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    value = project.get("version")
+    if not isinstance(value, str) or not value:
+        raise WheelError("pyproject project.version is missing")
+    return value
 
 
 def command(arguments: list[str], *, cwd: Path | None = None) -> str:
@@ -87,8 +96,8 @@ def inspect_wheel(wheel: Path) -> dict[str, object]:
         )
     if metadata["Name"] != "ordivon-world":
         raise WheelError("wheel project name differs")
-    if metadata["Version"] != EXPECTED_VERSION:
-        raise WheelError("wheel version differs")
+    if metadata["Version"] != expected_version():
+        raise WheelError("wheel version differs from pyproject project.version")
     python_range = metadata["Requires-Python"]
     normalized_range = tuple(
         sorted(part.strip() for part in python_range.split(",") if part.strip())

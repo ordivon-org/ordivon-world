@@ -23,11 +23,9 @@ _RESOURCE_PLANNING_NAMES = {
 
 
 class PublicSurfaceTests(unittest.TestCase):
-    def test_resource_planning_api_remains_explicitly_available(self) -> None:
+    def test_retired_resource_planning_api_is_absent_from_default_package(self) -> None:
         for name in _RESOURCE_PLANNING_NAMES:
-            self.assertTrue(hasattr(ordivon_world, name), name)
-
-    def test_default_wildcard_surface_excludes_resource_planning_model(self) -> None:
+            self.assertFalse(hasattr(ordivon_world, name), name)
         self.assertTrue(_RESOURCE_PLANNING_NAMES.isdisjoint(ordivon_world.__all__))
 
 

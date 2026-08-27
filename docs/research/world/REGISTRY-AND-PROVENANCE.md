@@ -27,6 +27,8 @@ Do not derive ontology priority, global owner priority, or a roadmap from a WDF/
 | WDF4 | Causal Reality Architecture | local subarchitecture Foundation | FROZEN Foundation v1 | WDF4 A→F closeout |
 | WDF5 | Property Evaluation Architecture | local subarchitecture Foundation | FROZEN Foundation v1 | WDF5 A→I closeout |
 | TSAF0 | Temporal Structure Architecture | local subarchitecture Foundation | FROZEN Foundation v1 | TSAF0 A→E closeout |
+| Resource R0–R10 | Resource / Option / Capability programme | closed cross-domain semantic doctrine | COMPLETE; generic planning implementation retired | [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md) |
+| Capability Field CF0–CF9 | Actor × Environment × Institution programme | closed causal/query-relative doctrine | COMPLETE; no production field/institution/environment object | [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md) |
 
 ## Git durability repair baseline — 2026-08-18
 

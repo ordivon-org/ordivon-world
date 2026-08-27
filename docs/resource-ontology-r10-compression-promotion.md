@@ -259,7 +259,7 @@ The old “five useful stocks”, near-linear lifecycle language and implicit gl
 
 `docs/resource-opportunity-flywheel.md` now states that current matching owner verification must also attest every required capability used by generic demand fit. This aligns the operational board with the canonical claim-bound evidence law.
 
-The opportunity board remains a planning surface. It does not become the ontology.
+At the R10 closeout the opportunity board remained a planning surface rather than the ontology. A later 2026-08-27 deletion tournament found no remaining natural production consumer and retired the executable generic board; the R0–R10 semantic laws remain current research standing. See `docs/research/world/RESOURCE-AND-CAPABILITY.md`.
 
 ## 9. Persistence and ownership conclusion
 

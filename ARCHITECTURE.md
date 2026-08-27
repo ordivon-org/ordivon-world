@@ -123,7 +123,7 @@ worldDispatches[dispatchId]
 
 These maps are Host extension evidence/correlation storage, not an authority system. Host remains authoritative for Effect/Binding/Dispatch admission and Task-level work semantics. World therefore does not infer cross-trajectory concurrency policy from another trajectory being `unknown`.
 
-Entity Migration is also semantically identified by `migrationId`, but 0.4.0 deliberately retains one migration per Task. No real multi-migration Task failure has yet justified another map.
+Entity Migration is also semantically identified by `migrationId`, but 0.5.0 deliberately retains one migration per Task. No real multi-migration Task failure has yet justified another map.
 
 Legacy flat Resource, Message and provider extension state is read as one virtual instance and migrates atomically on the first later mutation.
 

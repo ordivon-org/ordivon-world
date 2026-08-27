@@ -39,6 +39,7 @@ Numbering records research lineage. It is not ontology priority, hierarchy, or a
 - [`COVERAGE-AND-REOPEN.md`](COVERAGE-AND-REOPEN.md) — exact closure scope, unknowns, and reopen discipline.
 - [`HISTORY.md`](HISTORY.md) — negative, superseded, repaired, and non-admitted history.
 - [`OPERATIONAL.md`](OPERATIONAL.md) — engineering-consumption and operational research pointers.
+- [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md) — current Resource R0–R10 / Capability Field CF0–CF9 standing, production retirement boundary, and evidence navigation.
 - [`REGISTRY-AND-PROVENANCE.md`](REGISTRY-AND-PROVENANCE.md) — canonical registry semantics, durable Git ancestry, and provenance.
 
 Detailed round artifacts remain under [`../foundations/`](../foundations/). They are canonical evidence/provenance, not the preferred first lookup.

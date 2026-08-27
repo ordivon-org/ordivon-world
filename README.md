@@ -128,7 +128,7 @@ A historical migration receipt proves a historical trajectory. It does not prove
 
 ## Current release boundary
 
-The current package line is `0.4.0`. Its retained production boundary includes:
+The current package line is `0.5.0`. Its retained production boundary includes:
 
 - Host-facing Cloudflare Fetch and Browser Snapshot binding/reconciliation;
 - exact Browser bundle integrity across screenshot, rendered HTML and Manifest;

@@ -551,31 +551,21 @@ They may be reconsidered only when the extraction test in §14 is satisfied by r
 
 ---
 
-## 17. Implication for `resource_discovery`
+## 17. Current production implication after `resource_discovery` retirement
 
-The current generic Resource Opportunity Board remains a planning surface, not the ontology itself.
+At the R10 closeout the generic Resource Opportunity Board remained a bounded planning surface. The 2026-08-27 deletion tournament re-adjudicated that historical approximation against current Ordivon owner capability and found no remaining natural production consumer: real acquisition, value, admission and composition decisions are already owner/domain-local, while the generic module was consumed only by its own tests and compatibility facade.
 
-Its responsibilities are intentionally narrow:
+The executable `resource_discovery` / `ResourceOpportunityBoard` surface is therefore retired from World production. Its surviving semantics remain useful as reasoning constraints:
 
-```text
-cheap candidate discovery
-→ current owner verification
-→ authority/acquisition projection
-→ current transport when needed
-→ bounded demand evaluation
-→ opportunity lanes / ranking hints
-→ semantic consumer feedback
-```
+- candidate/discovery vocabulary is not owner truth;
+- owner-native current evidence must ground a capability claim;
+- Resource / Actionability / Option are relation- and demand-relative;
+- transport/currentness/value clocks remain distinct;
+- scalar ranking is at most a consumer-local heuristic, never World authority;
+- joint composition stays with the owner that owns the actual requirements/constraints;
+- shared machinery re-enters only through the R10 extraction law.
 
-Important current rules:
-
-- `ResourceCandidate.capabilities` is discovery vocabulary;
-- `OwnerVerification.verified_capabilities` is current owner-attested capability truth used for generic demand fit;
-- owner attestation must itself be current before it contributes fit;
-- `potential_score` is an ordering hint, never authority/truth;
-- `diversity_potential` is a discovery heuristic, never redundancy proof;
-- one-resource evaluation does not imply a global joint-composition engine;
-- quantitative Capacity remains owner-native unless a real shared consumer earns a projection surface.
+This is a responsibility-placement change, not a rejection of the R0–R10 research. The detailed planning implementation remains recoverable through Git history and the R0–R10 evidence corpus. Current recovery starts at [`research/world/RESOURCE-AND-CAPABILITY.md`](research/world/RESOURCE-AND-CAPABILITY.md).
 
 ---
 

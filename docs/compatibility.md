@@ -25,6 +25,8 @@ The package is experimental. Public Python names exported from `ordivon_world` a
 - updated contract and live acceptance evidence;
 - no reinterpretation of retained provider Receipts.
 
+The 0.5 line uses that policy to retire the pre-0.5 generic Resource planning API. Code importing `ordivon_world.resource_discovery`, `ResourceOpportunityBoard`, `AcquisitionAssessment`, `evaluate_resource`, or related ranking helpers must migrate to the consuming owner/domain. The R0–R10 semantic doctrine remains available as research; no retained external Dispatch/Receipt/UNKNOWN identity is reinterpreted.
+
 ## Durable compatibility
 
 The most important compatibility surface is not import syntax. It is the ability to reopen retained state and reconcile the same external action.
