@@ -21,6 +21,9 @@ dependencies = [
   "ordivon-host @ git+https://github.com/zycxfyh/ordivon-host.git@ebaf6ef90d87e7bc524e8f30d71521b371d17f2e",
 ]
 
+[dependency-groups]
+dev = ["ruff==0.15.17"]
+
 [project.scripts]
 ordivon-world-doctor = "ordivon_world.doctor:entrypoint"
 

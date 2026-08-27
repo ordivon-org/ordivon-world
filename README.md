@@ -225,7 +225,7 @@ A new shared World abstraction requires a named current workload, a reproduced f
 ## Development
 
 ```bash
-uv sync --locked
+scripts/owner-environment bootstrap
 cd providers/cloudflare && pnpm install --frozen-lockfile && cd ../..
 scripts/local-acceptance
 ```
