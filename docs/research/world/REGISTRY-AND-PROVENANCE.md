@@ -29,6 +29,7 @@ Do not derive ontology priority, global owner priority, or a roadmap from a WDF/
 | TSAF0 | Temporal Structure Architecture | local subarchitecture Foundation | FROZEN Foundation v1 | TSAF0 A→E closeout |
 | Resource R0–R10 | Resource / Option / Capability programme | closed cross-domain semantic doctrine | COMPLETE; generic planning implementation retired | [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md) |
 | Capability Field CF0–CF9 | Actor × Environment × Institution programme | closed causal/query-relative doctrine | COMPLETE; no production field/institution/environment object | [`RESOURCE-AND-CAPABILITY.md`](RESOURCE-AND-CAPABILITY.md) |
+| Minimal World 2.0 | destructive product-boundary re-adjudication | engineering/research closeout | CLOSED; 0.6 responsibility and compatibility contraction | [`MINIMAL-WORLD-2.md`](MINIMAL-WORLD-2.md) |
 
 ## Git durability repair baseline — 2026-08-18
 
