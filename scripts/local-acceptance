@@ -8,12 +8,9 @@ UV=${UV:-$(command -v uv)}
 UVX=${UVX:-$(command -v uvx)}
 
 "$UV" lock --check
-"$UV" sync --locked
-"$UV" run python -m compileall -q src tests scripts
-"$PYTHON" -m ruff check src tests scripts providers/cloudflare/scripts/ordivon_edge_gc.py providers/cloudflare/test/gc_test.py
-"$PYTHON" -W error::ResourceWarning -m unittest discover -s tests -v
-"$PYTHON" scripts/check_dependencies.py
-"$PYTHON" scripts/check_docs.py
+"$ROOT/scripts/owner-environment" test
+PYTHON="$ROOT/.venv/bin/python"
+"$PYTHON" -m compileall -q src tests scripts
 
 (
   cd providers/cloudflare

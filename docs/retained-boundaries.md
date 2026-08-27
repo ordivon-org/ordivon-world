@@ -14,8 +14,8 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-04
-summary: Decision retaining direct Host-facing provider adapters and private network tools while continuing to reject an independent World runtime or universal interaction layer.
+updated: 2026-08-27
+summary: Decision retaining direct Host-facing provider adapters while recording the later completed transfer of local network mechanics to Workstation and continuing to reject an independent World runtime or universal interaction layer.
 evidence_status: verified
 readiness: READY
 applies_to:
@@ -117,7 +117,7 @@ Release admission is based on the facts that changed:
 
 HP8 removes the research-only `ForeignEgressCapability` / `EffectPathQuery` Python modules and their three packaged contracts after HP4 failed to prove fresh-Agent decision value, HP6 preserved their unique laws/evidence in the research archive, and the Minimal World candidate passed the full portable gate plus the same 96 mixed-chaos invocations. Historical Computing research references do not reactivate the product surface.
 
-The same tournament deliberately retains legacy Trace decoding, the co-located provider implementation, and the current World network operator module for explicit compatibility/owner-handoff reasons. Minimality does not pre-empt an unfinished owner transfer.
+At HP5 the tournament still retained legacy Trace decoding, the co-located provider implementation, and a temporary World network operator module for compatibility during owner handoff. HP8 subsequently completed that handoff: the local network actuator is no longer present in World, while Workstation owns the physical mechanics and World consumes only owner-projected evidence when required. Minimality does not erase that historical transition.
 
 ## Reactivation rule
 

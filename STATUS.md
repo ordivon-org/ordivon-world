@@ -13,7 +13,7 @@ The active production surface consists of:
 - temporally explicit provider observations with separate provider and World availability coordinates;
 - production Resource Transfer, Message Delivery, and Entity Migration contracts;
 - bounded read-only owner inspection through `WorldTaskInspector`;
-- owner-native doctor aggregation and operator-scoped network condition tools.
+- owner-native doctor aggregation; local network observation and actuation remain Workstation-owned and are consumed only through owner-projected evidence when needed.
 
 The co-located Cloudflare Worker/operations subtree remains provider-owned and independently extractable. Foreign-egress/effect-path projection APIs and other research-only shared layers were removed from the product after high-pressure deletion tests failed to justify them as default Agent surfaces.
 
@@ -29,7 +29,6 @@ The co-located Cloudflare Worker/operations subtree remains provider-owned and i
 | temporal provider observation | verified narrow provenance | provider start/completion and World `availableAt` remain separate owner-native times; no generic temporal ontology |
 | WorldTaskInspector | verified read-only projection | revision-coherent retained commitment inspection; no action authority or external currentness |
 | World doctor | operational | aggregates owner-native repository/machine/provider health; does not become provider control-plane authority |
-| network condition tools | operational, operator-scoped | observe or explicitly alter operator-controlled paths; no automatic routing authority |
 
 ## Stable laws retained from research
 
@@ -59,7 +58,7 @@ WDF4 Causal Reality, WDF5 Property Evaluation and TSAF0 Temporal Structure have 
 - Entity Migration remains one migration per Host Task in `0.4.0`; no real multi-migration failure has justified a map yet.
 - `WorldTaskInspector` is World-local and does not establish a generic cross-domain Observation or Owner registry.
 - Historical receipts cannot establish current Presence, reachability, capability, or provider state without applicable owner-native re-observation.
-- Network observation tools do not automatically choose or activate routes for an Agent.
+- World ships no local network observation/actuation surface; current network facts and path changes must come from Workstation/operating-system owners, while World may bind their projected evidence to an external consequence when required.
 - World does not own Runtime execution migration or immutable-input transport. Runtime now supports exact immutable-input materialization on both admitted execution targets within its proven target-specific authority boundaries; future physical execution/input gaps remain Runtime/Workstation responsibilities.
 - Provider success remains evidence for later Host/domain verification, not automatic completion.
 

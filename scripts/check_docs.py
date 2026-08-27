@@ -68,6 +68,31 @@ def main() -> int:
     missing = [name for name in REQUIRED if not (ROOT / name).is_file()]
     if missing:
         raise DocumentationError(f"required documentation is missing: {missing}")
+
+    # Current capability representation must not resurrect the retired World-local
+    # network actuator after its completed handoff to Workstation. Historical
+    # research may describe the old module; current status/boundary documents may not.
+    current_status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
+    retained_boundaries = (ROOT / "docs/retained-boundaries.md").read_text(encoding="utf-8")
+    stale_current_network_claims = {
+        "STATUS.md": (
+            "| network condition tools | operational",
+            "operator-scoped network condition tools",
+        ),
+        "docs/retained-boundaries.md": (
+            "current World network operator module",
+        ),
+    }
+    current_text = {
+        "STATUS.md": current_status,
+        "docs/retained-boundaries.md": retained_boundaries,
+    }
+    for name, phrases in stale_current_network_claims.items():
+        for phrase in phrases:
+            if phrase in current_text[name]:
+                raise DocumentationError(
+                    f"retired World network capability is represented as current in {name}: {phrase!r}"
+                )
     broken: list[str] = []
     checked = 0
     for path in markdown_files():
