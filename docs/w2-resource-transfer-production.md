@@ -167,4 +167,4 @@ Resource Transfer does not introduce:
 - mandatory PKI;
 - generic Entity/Message promotion.
 
-Resource Transfer is the first production inter-World contract because it has an actual source producer, destination consumer, recovery story and deletion/failure evidence. Entity Migration and Message Delivery remain experimental until they receive equivalent production pressure.
+Resource Transfer was the first production inter-World contract because it was the first trajectory to acquire an actual source producer, destination consumer, recovery story and deletion/failure evidence. That statement is historical ordering, not current exclusivity: Message Delivery later acquired equivalent production pressure as the second production trajectory, and Entity Migration later acquired it as the third. Their current production boundaries are owned by `w2-message-delivery-production.md` and `w2-entity-migration-production.md`; this Resource contract does not promote their semantics into Resource Transfer.
