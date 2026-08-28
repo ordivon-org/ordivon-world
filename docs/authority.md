@@ -14,7 +14,7 @@ audience:
   - builder
   - operator
   - agent
-updated: 2026-08-10
+updated: 2026-08-29
 summary: Authority map for Host-facing World bindings, provider and World observation timing, Cloudflare provider truth, network operator state, operational health and archived experiments.
 evidence_status: not_applicable
 readiness: READY
@@ -40,6 +40,16 @@ related:
 - [`high-pressure-survival-hp6-hp8.md`](high-pressure-survival-hp6-hp8.md) owns the final HP-series contraction decision: knowledge GC, mixed-chaos result, removal of the research-only Foreign Egress / Effect Path executable surfaces, and the demand-triggered reopening rule.
 
 Executable source, locked dependencies and machine-readable Schemas are stronger than prose when a discrepancy exists.
+
+### Repository source-integration currentness
+
+For a present-tense claim about the **World implementation or callable repository surface**, first resolve the canonical upstream repository `main` after explicitly observing remote freshness. In the current Git topology this is the fetched commit corresponding to `origin/main`. A local `refs/heads/main`, worktree `HEAD`, detached Runtime Workspace, or Workspace name can bind exact source bytes, but does not by itself prove that those bytes still belong to the present source-integrated World surface.
+
+This matters in both directions. A stale source may be missing a capability added later, or it may still contain a capability that the current owner deliberately retired. The latter is a **phantom capability** failure: historical source existence is valid provenance, but it is not evidence that a present Agent may plan against that implementation. The retired `resource_wire` and `message_wire` Python adapters are a concrete example: their trajectory semantics and packaged JSON contracts remain current, while those unused Python implementations no longer do.
+
+Exact historical or experiment work may intentionally bind another commit and should describe the result as `current-to-this-source` (or an equivalent bounded claim) unless repository source-integration currentness has separately been resolved. A ref mismatch is therefore an attention signal rather than automatic semantic staleness; the relevant question is whether the operation's load-bearing World carrier changed.
+
+This repository relation is independent of provider currentness, Host state, live machine state, and owner-research publication standing. Git source integration selects the current World implementation surface; it does not mint current external Reality or reactivate/deactivate owner semantics by itself.
 
 ## Host-facing facts
 

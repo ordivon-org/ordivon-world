@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 import ordivon_world
 
@@ -27,6 +28,19 @@ class PublicSurfaceTests(unittest.TestCase):
         for name in _RESOURCE_PLANNING_NAMES:
             self.assertFalse(hasattr(ordivon_world, name), name)
         self.assertTrue(_RESOURCE_PLANNING_NAMES.isdisjoint(ordivon_world.__all__))
+
+    def test_repository_currentness_prevents_phantom_capability_reentry(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        authority = (root / "docs" / "authority.md").read_text(encoding="utf-8")
+        self.assertIn("Repository source-integration currentness", authority)
+        self.assertIn("canonical upstream repository `main`", authority)
+        self.assertIn("after explicitly observing remote freshness", authority)
+        self.assertIn("phantom capability", authority)
+        self.assertIn("`resource_wire` and `message_wire` Python adapters", authority)
+        self.assertIn("current-to-this-source", authority)
+        self.assertIn("load-bearing World carrier changed", authority)
+        self.assertFalse((root / "src" / "ordivon_world" / "resource_wire.py").exists())
+        self.assertFalse((root / "src" / "ordivon_world" / "message_wire.py").exists())
 
 
 if __name__ == "__main__":
