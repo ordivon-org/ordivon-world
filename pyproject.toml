@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["ruff==0.15.17"]
+dev = ["ruff==0.17.2"]
 
 [project.scripts]
 ordivon-world-doctor = "ordivon_world.doctor:entrypoint"
